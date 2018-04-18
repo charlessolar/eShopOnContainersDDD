@@ -14,4 +14,8 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Language\Identity.Language.csproj" />
+  </ItemGroup>
 </Project>

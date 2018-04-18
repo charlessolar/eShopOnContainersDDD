@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Catalog.Product
 {
-    class State
+    public class State : Aggregates.State<State>
     {
     }
 }

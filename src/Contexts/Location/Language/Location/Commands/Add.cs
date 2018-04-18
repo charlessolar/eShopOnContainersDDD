@@ -5,7 +5,7 @@ using Infrastructure.Commands;
 
 namespace eShop.Location.Location.Commands
 {
-    public class Added : StampedCommand
+    public class Add : StampedCommand
     {
         public Guid LocationId { get; set; }
         public string Code { get; set; }

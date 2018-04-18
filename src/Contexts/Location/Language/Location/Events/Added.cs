@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Infrastructure.Commands;
 
-namespace eShop.Location.Location.Commands
+namespace eShop.Location.Location.Events
 {
     public interface Added : IStampedEvent
     {
