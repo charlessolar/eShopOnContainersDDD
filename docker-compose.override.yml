@@ -1,0 +1,32 @@
+version: '3.4'
+
+networks:
+  default:
+    external:
+      name: nat
+services:
+  domain:
+    environment:
+      - TODOMVC_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
+      - TODOMVC_RabbitUserName=${RABBIT_USERNAME}
+      - TODOMVC_RabbitPassword=${RABBIT_PASSWORD}
+      - TODOMVC_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
+      - TODOMVC_EventStoreUserName=${EVENTSTORE_USERNAME}
+      - TODOMVC_EventStorePassword=${EVENTSTORE_PASSWORD}
+  application:
+    environment:
+      - TODOMVC_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
+      - TODOMVC_RabbitUserName=${RABBIT_USERNAME}
+      - TODOMVC_RabbitPassword=${RABBIT_PASSWORD}
+      - TODOMVC_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
+      - TODOMVC_EventStoreUserName=${EVENTSTORE_USERNAME}
+      - TODOMVC_EventStorePassword=${EVENTSTORE_PASSWORD}
+  presentation:
+    environment:
+      - TODOMVC_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
+      - TODOMVC_RabbitUserName=${RABBIT_USERNAME}
+      - TODOMVC_RabbitPassword=${RABBIT_PASSWORD}
+  frontend:
+    build:
+      args:
+        API_SERVER: http://localhost:8080

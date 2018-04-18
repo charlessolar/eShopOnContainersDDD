@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../../Common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>eShop.Marketing</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Title>eShop.Marketing</Title>
+    <AssemblyName>eShop.Marketing.Domain.Entities</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

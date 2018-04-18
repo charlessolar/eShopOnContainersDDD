@@ -1,0 +1,23 @@
+﻿{
+  "extends": "tslint:latest",
+  "rules": {
+    "no-empty-interface": false,
+    "quotemark": [ true, "single" ],
+    "object-literal-sort-keys": false,
+    "ordered-imports": [ false ],
+    "whitespace": [ true, "check-branch", "check-decl", "check-operator", "check-module", "check-separator", "check-type" ],
+    "interface-name": [ true, "never-prefix" ],
+    "no-shadowed-variable": false,
+    "no-string-literal": false,
+    "trailing-comma": [ false ],
+    "member-ordering": [ "fields-first" ],
+    "array-type": [ "array-simple" ],
+    "arrow-parens": false,
+    "max-classes-per-file": [ false ],
+    "prefer-for-of": false,
+    "prefer-conditional-expression": false,
+    "variable-name": [ true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case" ],
+    "max-line-length": [ false ],
+    "no-submodule-imports": [ true, "uuid", "nprogress", "font-awesome", "lodash", "history", "material-ui", "material-ui-icons" ]
+  }
+}

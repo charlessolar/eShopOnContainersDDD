@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <RepositoryUrl>https://github.com/volak/eShopOnContainersDDD</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/volak/eShopOnContainersDDD</PackageProjectUrl>
+  </PropertyGroup>
+</Project>
