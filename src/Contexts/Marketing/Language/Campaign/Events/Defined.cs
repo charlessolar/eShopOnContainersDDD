@@ -7,7 +7,7 @@ namespace eShop.Marketing.Campaign.Events
 {
     public interface Defined : IStampedEvent
     {
-        Guid Id { get; set; }
+        Guid CampaignId { get; set; }
 
         string Name { get; set; }
         string Description { get; set; }

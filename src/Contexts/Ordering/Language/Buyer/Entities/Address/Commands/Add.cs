@@ -10,10 +10,10 @@ namespace eShop.Ordering.Buyer.Entities.Address.Commands
         public Guid BuyerId { get;set; }
         public Guid AddressId { get; set; }
 
-        public String Street { get; set; }
-        public String City { get; set; }
-        public String State { get; set; }
-        public String Country { get; set; }
-        public String ZipCode { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string ZipCode { get; set; }
     }
 }

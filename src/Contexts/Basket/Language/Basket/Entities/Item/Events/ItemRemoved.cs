@@ -7,7 +7,7 @@ namespace eShop.Basket.Basket.Entities.Item.Events
 {
     public interface ItemRemoved : IStampedEvent
     {
-        public Guid BasketId { get; set; }
-        public Guid ItemId { get; set; }
+        Guid BasketId { get; set; }
+        Guid ItemId { get; set; }
     }
 }

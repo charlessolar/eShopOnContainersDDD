@@ -9,6 +9,7 @@ namespace eShop.Marketing.Campaign.Events
     {
         Guid CampaignId { get; set; }
 
-        string PictureUrl { get; set; }
+        byte[] Content { get; set; }
+        string ContentType { get; set; }
     }
 }

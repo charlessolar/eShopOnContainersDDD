@@ -7,7 +7,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Events
 {
     public interface Added : IStampedEvent
     {
-        Guid Id { get; set; }
+        Guid PaymentMethodId { get; set; }
         Guid BuyerId { get; set; }
 
         string Alias { get; set; }
