@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using Infrastructure.Commands;
+using Infrastructure.ServiceStack;
+using ServiceStack;
 
-namespace eShop.Marketing.Campaign.Commands
+
+namespace eShop.Marketing.Campaign.Services
 {
-    public class SetPeriod : StampedCommand
+    [Api("Marketing")]
+    [Route("/campaign/{CampaignId}/period", "POST")]
+    public class SetPeriodCampaign : DomainCommand
     {
         public Guid CampaignId { get; set; }
 

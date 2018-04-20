@@ -5,7 +5,8 @@ using Infrastructure.Queries;
 
 namespace eShop.Marketing.Campaign.Queries
 {
-    public class Campaigns : Paged
+    public class Campaign : Query
     {
+        public Guid CampaignId { get; set; }
     }
 }
