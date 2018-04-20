@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ServiceStack" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\..\Language\Identity.Language.csproj" />
   </ItemGroup>

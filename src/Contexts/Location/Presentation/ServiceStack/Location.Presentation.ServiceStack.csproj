@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\..\Language\Location.Language.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ServiceStack" Version="5.0.2" />
+  </ItemGroup>
 </Project>
