@@ -93,7 +93,7 @@ namespace eShop.Ordering.Order
             var method = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
-            order.PaymentMethod = method.CardType.DisplayName;
+            order.PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).DisplayName;
             order.PaymentMethodId = method.Id;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Add(e.OrderId, order).ConfigureAwait(false);

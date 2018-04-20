@@ -2,40 +2,51 @@ version: '3.4'
 
 services:
   domain:
-    image: todomvc/domain:${TAG:-latest}
+    image: eshop/domain:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Domain/Dockerfile
+      dockerfile: src/Endpoints/Domain/Dockerfile
     depends_on:
       - rabbitmq
       - eventstore
     restart: always
-  application:
-    image: todomvc/application:${TAG:-latest}
+  mongodb:
+    image: eshop/mongodb:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Application/Dockerfile
+      dockerfile: src/Endpoints/MongoDb/Dockerfile
     depends_on:
       - rabbitmq
       - eventstore
+      - mongodb
     restart: always
-  presentation:
-    image: todomvc/presentation:${TAG:-latest}
+  elastic:
+    image: eshop/elastic:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Presentation/Dockerfile
+      dockerfile: src/Endpoints/Elastic/Dockerfile
+    depends_on:
+      - rabbitmq
+      - eventstore
+      - elastic
+    restart: always
+  servicestack:
+    image: eshop/servicestack:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Endpoints/ServiceStack/Dockerfile
     depends_on:
       - rabbitmq
     ports:
       - "8080:80"
     restart: always
   frontend:
-    image: todomvc/frontend:${TAG:-latest}
+    image: eshop/frontend:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Web/Dockerfile
     depends_on:
-      - presentation
+      - servicestack
     ports:
       - "80:80"
   
@@ -57,3 +68,11 @@ services:
     ports:
       - "1113:1113"
       - "2113:2113"
+  mongo:
+    image: mongo:3.7-jessie
+    ports:
+      - "27017:27017"
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+    ports:
+      - "9200:9200"

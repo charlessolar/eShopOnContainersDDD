@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>ServiceStack</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
+    <PackageReference Include="NServiceBus.RabbitMQ" Version="5.0.0-rc0001" />
+    <PackageReference Include="Serilog" Version="2.6.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="ServiceStack" Version="5.0.2" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
+    <PackageReference Include="App.Metrics.Health" Version="2.0.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0-beta0001" />
+    <PackageReference Include="NServiceBus.StructureMap" Version="7.0.0-rc0001" />
+    <PackageReference Include="ServiceStack.Api.OpenApi" Version="5.0.2" />
+    <PackageReference Include="ServiceStack.Redis" Version="5.0.2" />
+    <PackageReference Include="ServiceStack.Server" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Contexts\Basket\Presentation\ServiceStack\Basket.Presentation.ServiceStack.csproj" />
+    <ProjectReference Include="..\..\Contexts\Catalog\Presentation\ServiceStack\Catalog.Presentation.ServiceStack.csproj" />
+    <ProjectReference Include="..\..\Contexts\Identity\Presentation\ServiceStack\Identity.Presentation.ServiceStack.csproj" />
+    <ProjectReference Include="..\..\Contexts\Location\Presentation\ServiceStack\Location.Presentation.ServiceStack.csproj" />
+    <ProjectReference Include="..\..\Contexts\Marketing\Presentation\ServiceStack\Marketing.Presentation.ServiceStack.csproj" />
+    <ProjectReference Include="..\..\Contexts\Ordering\Presentation\ServiceStack\Ordering.Presentation.ServiceStack.csproj" />
+    <ProjectReference Include="..\..\Contexts\Payment\Presentation\ServiceStack\Payment.Presentation.ServiceStack.csproj" />
+  </ItemGroup>
+</Project>

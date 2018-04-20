@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>MongoDb</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aggregates.NET" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.3.259" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
+    <PackageReference Include="NServiceBus" Version="7.0.0-rc0002" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0-beta0001" />
+    <PackageReference Include="NServiceBus.RabbitMQ" Version="5.0.0-rc0001" />
+    <PackageReference Include="NServiceBus.Serilog" Version="4.0.0-rc.1" />
+    <PackageReference Include="NServiceBus.StructureMap" Version="7.0.0-rc0001" />
+    <PackageReference Include="Serilog" Version="2.6.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Contexts\Basket\Applications\MongoDb\Basket.Applications.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Contexts\Catalog\Applications\MongoDb\Catalog.Applications.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Contexts\Identity\Applications\MongoDb\Identity.Applications.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Contexts\Location\Applications\MongoDb\Location.Applications.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Contexts\Marketing\Applications\MongoDb\Marketing.Applications.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Contexts\Ordering\Applications\MongoDb\Ordering.Applications.MongoDb.csproj" />
+  </ItemGroup>
+
+</Project>
