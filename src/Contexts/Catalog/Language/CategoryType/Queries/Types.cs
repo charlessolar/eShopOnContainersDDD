@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.Queries;
 
 namespace eShop.Catalog.CategoryType.Queries
 {
-    public class Types
+    public class Types : Paged
     {
+        public string Term { get; set; }
+        public int Limit { get; set; }
     }
 }

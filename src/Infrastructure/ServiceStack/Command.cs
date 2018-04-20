@@ -5,7 +5,7 @@ using ServiceStack;
 
 namespace Infrastructure.ServiceStack
 {
-    public class Command : IReturn<CommandResponse>, IReturn
+    public class DomainCommand : IReturn<CommandResponse>, IReturn
     {
     }
     public class CommandResponse
