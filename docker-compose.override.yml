@@ -13,7 +13,7 @@ services:
       - ESHOP_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
-  mongodb:
+  mongo:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
       - ESHOP_RabbitUserName=${RABBIT_USERNAME}
@@ -21,7 +21,7 @@ services:
       - ESHOP_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
-      - ESHOP_MongoDbConnection=${MONGODB_SERVER:-mongodb://mongo:27017}
+      - ESHOP_MongoDbConnection=${MONGODB_SERVER:-mongodb://mongodb:27017}
   elastic:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
