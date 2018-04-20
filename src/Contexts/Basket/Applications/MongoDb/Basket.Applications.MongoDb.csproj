@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Catalog\Language\Catalog.Language.csproj" />
     <ProjectReference Include="..\..\Language\Basket.Language.csproj" />
   </ItemGroup>
 </Project>

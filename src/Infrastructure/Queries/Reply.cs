@@ -8,6 +8,8 @@ namespace Infrastructure.Queries
     // Used when replying to a query
     public class Reply : Aggregates.Messages.IMessage
     {
+        public long ElapsedMs { get; set; }
+
         public string ETag { get; set; }
 
         public object Payload { get; set; }

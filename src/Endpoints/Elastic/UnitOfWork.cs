@@ -23,6 +23,7 @@ namespace eShop
         {
             _client = client;
             _logger = Log.Logger.With<UnitOfWork>();
+            _pendingDocs = new Dictionary<Id, IBulkOperation>();
         }
 
         public Task Begin()

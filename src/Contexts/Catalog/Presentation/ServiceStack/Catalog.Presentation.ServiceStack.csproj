@@ -17,5 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Language\Catalog.Language.csproj" />
   </ItemGroup>
 </Project>
