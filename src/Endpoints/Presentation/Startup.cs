@@ -158,6 +158,10 @@ namespace eShop
             JsConfig.TreatEnumAsInteger = true;
             JsConfig.DateHandler = DateHandler.ISO8601;
 
+            if (!AppSettings.Exists("ServiceStackLicense"))
+                throw new ArgumentException("You must define ServiceStackLicense in docker-compose.override.yml");
+            Licensing.RegisterLicense(AppSettings.Get<string>("ServiceStackLicense"));
+
             ServiceExceptionHandlers.Add((httpReq, request, exception) =>
             {
                 Log.Logger.Error(exception, "Service exception {ExceptionType} - {ExceptionMessage} on request {Request}", exception.GetType().Name, exception.Message, httpReq);

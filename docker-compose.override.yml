@@ -38,6 +38,7 @@ services:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
       - ESHOP_RabbitUserName=${RABBIT_USERNAME}
       - ESHOP_RabbitPassword=${RABBIT_PASSWORD}
+      - ESHOP_ServiceStackLicense=${SERVICESTACK_LICENSE}
   frontend:
     build:
       args:
