@@ -8,13 +8,15 @@ namespace eShop.Catalog.Product
     {
         private Product() { }
 
-        public void Add(string name, decimal price)
+        public void Add(string name, decimal price, CategoryBrand.State brand, CategoryType.State type)
         {
             Apply<Events.Added>(x =>
             {
                 x.ProductId = Id;
                 x.Name = name;
                 x.Price = price;
+                x.CategoryBrandId = brand.Id;
+                x.CategoryTypeId = type.Id;
             });
         }
 

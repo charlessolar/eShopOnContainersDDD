@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Basket.Basket.Models
 {
-    public class Bucket
+    public class Basket
     {
         public Guid Id { get; set; }
 

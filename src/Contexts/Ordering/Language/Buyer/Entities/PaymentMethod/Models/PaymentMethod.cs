@@ -6,8 +6,8 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Models
 {
     public class PaymentMethod
     {
+        public Guid Id { get; set; }
         public Guid BuyerId { get; set; }
-        public Guid PaymentMethodId { get; set; }
 
         public string Alias { get; set; }
         public string CardNumber { get; set; }
@@ -16,6 +16,6 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Models
 
         public DateTime Expiration { get; set; }
 
-        public CardType CardType { get; set; }
+        public string CardType { get; set; }
     }
 }

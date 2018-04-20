@@ -14,5 +14,7 @@ namespace eShop.Marketing.Campaign.Models
         public DateTime? Start { get; set; }
         public DateTime? End { get; set; }
 
+        public byte[] PictureContents { get; set; }
+        public string PictureContentType { get; set; }
     }
 }

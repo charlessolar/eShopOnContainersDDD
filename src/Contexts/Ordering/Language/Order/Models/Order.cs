@@ -18,6 +18,7 @@ namespace eShop.Ordering.Order.Models
         public string Address { get; set; }
         public string CityState { get; set; }
         public string ZipCode { get; set; }
+        public string Country { get; set; }
 
         public Guid PaymentMethodId { get; set; }
         public string PaymentMethod { get; set; }

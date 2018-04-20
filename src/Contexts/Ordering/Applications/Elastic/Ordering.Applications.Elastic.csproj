@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../../Common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>eShop.Ordering</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Title>eShop.Ordering</Title>
+    <AssemblyName>eShop.Ordering.Application.Elastic</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Basket\Language\Basket.Language.csproj" />
+    <ProjectReference Include="..\..\Language\Ordering.Language.csproj" />
+  </ItemGroup>
+</Project>
+

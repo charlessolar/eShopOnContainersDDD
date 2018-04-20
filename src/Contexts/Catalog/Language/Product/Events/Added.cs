@@ -11,5 +11,8 @@ namespace eShop.Catalog.Product.Events
 
         string Name { get; set; }
         decimal Price { get; set; }
+
+        Guid CategoryBrandId { get; set; }
+        Guid CategoryTypeId { get; set; }
     }
 }

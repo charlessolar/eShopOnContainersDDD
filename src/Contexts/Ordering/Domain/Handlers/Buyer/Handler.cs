@@ -13,7 +13,7 @@ namespace eShop.Ordering.Buyer
         public async Task Handle(Commands.Create command, IMessageHandlerContext ctx)
         {
             var buyer = await ctx.For<Buyer>().New(command.BuyerId).ConfigureAwait(false);
-            buyer.Create();
+            buyer.Create(command.GivenName);
         }
     }
 }

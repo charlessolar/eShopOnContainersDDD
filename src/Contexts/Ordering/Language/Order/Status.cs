@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.Enumeration;
 
 namespace eShop.Ordering.Order
 {
-    public class Status : Enumeration
+    public class Status : Enumeration<Status, string>
     {
         public static Status Submitted = new Status("SUBMITTED", "Submitted", "Order has been submitted for processing");
         public static Status WaitingValidation = new Status("WAITING_VALIDATION", "Waiting Validation", "Order is waiting automatic validation");

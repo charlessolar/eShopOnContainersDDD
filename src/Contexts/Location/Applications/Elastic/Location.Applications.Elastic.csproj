@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../../Common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>eShop.Location</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Title>eShop.Location</Title>
+    <AssemblyName>eShop.Location.Application.Elastic</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Identity\Language\Identity.Language.csproj" />
+    <ProjectReference Include="..\..\Language\Location.Language.csproj" />
+  </ItemGroup>
+</Project>
+

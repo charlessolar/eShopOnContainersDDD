@@ -24,5 +24,8 @@ namespace eShop.Catalog.Product.Models
         public decimal MaxStockThrshold { get; set; }
 
         public decimal OnReorder { get; set; }
+
+        public byte[] PictureContents { get; set; }
+        public string PictureContentType { get; set; }
     }
 }

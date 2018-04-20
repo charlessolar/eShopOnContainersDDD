@@ -11,5 +11,8 @@ namespace eShop.Catalog.Product.Commands
 
         public string Name { get; set; }
         public decimal Price { get; set; }
+
+        public Guid CategoryBrandId { get; set; }
+        public Guid CategoryTypeId { get; set; }
     }
 }

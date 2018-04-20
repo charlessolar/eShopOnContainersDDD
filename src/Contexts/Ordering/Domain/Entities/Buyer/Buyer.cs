@@ -8,11 +8,12 @@ namespace eShop.Ordering.Buyer
     {
         private Buyer() { }
 
-        public void Create()
+        public void Create(string givenName)
         {
             Apply<Events.Created>(x =>
             {
                 x.BuyerId = Id;
+                x.GivenName = givenName;
             });
         }
     }

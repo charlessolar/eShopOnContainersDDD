@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Aggregates.NET" Version="0.13.2.258" />
     <PackageReference Include="FluentValidation" Version="7.5.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NServiceBus" Version="7.0.0-rc0001" />
     <PackageReference Include="NServiceBus.Callbacks" Version="3.0.0-rc0001" />
     <PackageReference Include="Serilog" Version="2.6.0" />

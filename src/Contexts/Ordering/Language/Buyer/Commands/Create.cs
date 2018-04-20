@@ -9,6 +9,7 @@ namespace eShop.Ordering.Buyer.Commands
     {
         public Guid BuyerId { get; set; }
 
+        public string GivenName { get; set; }
 
     }
 }
