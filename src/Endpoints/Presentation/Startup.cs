@@ -193,6 +193,13 @@ namespace eShop
             ));
 
             Plugins.Add(new ValidationFeature());
+            Plugins.Add(new Basket.Plugin());
+            Plugins.Add(new Catalog.Plugin());
+            Plugins.Add(new Identity.Plugin());
+            Plugins.Add(new Location.Plugin());
+            Plugins.Add(new Marketing.Plugin());
+            Plugins.Add(new Ordering.Plugin());
+            Plugins.Add(new Payment.Plugin());
 
             var nativeTypes = this.GetPlugin<NativeTypesFeature>();
             nativeTypes.MetadataTypesConfig.GlobalNamespace = "DTOs";

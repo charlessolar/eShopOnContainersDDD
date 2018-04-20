@@ -10,7 +10,7 @@ services:
       - rabbitmq
       - eventstore
     restart: always
-  mongodb:
+  mongo:
     image: eshop/mongodb:${TAG:-latest}
     build:
       context: .
@@ -18,7 +18,7 @@ services:
     depends_on:
       - rabbitmq
       - eventstore
-      - mongo
+      - mongodb
     restart: always
   elastic:
     image: eshop/elastic:${TAG:-latest}
@@ -28,7 +28,7 @@ services:
     depends_on:
       - rabbitmq
       - eventstore
-      - elastic
+      - elasticdb
     restart: always
   presentation:
     image: eshop/presentation:${TAG:-latest}
@@ -68,11 +68,11 @@ services:
     ports:
       - "1113:1113"
       - "2113:2113"
-  mongo:
+  mongodb:
     image: mongo:3.7-jessie
     ports:
       - "27017:27017"
-  elastic:
+  elasticdb:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
     ports:
       - "9200:9200"
