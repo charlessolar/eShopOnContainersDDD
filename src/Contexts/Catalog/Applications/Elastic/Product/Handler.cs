@@ -41,7 +41,7 @@ namespace eShop.Catalog.Product
 
             product.Description = e.Description;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId).ConfigureAwait(false);
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
         }
         public async Task Handle(Events.PictureSet e, IMessageHandlerContext ctx)
         {
@@ -50,7 +50,7 @@ namespace eShop.Catalog.Product
             product.PictureContents = e.Content;
             product.PictureContentType = e.ContentType;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId).ConfigureAwait(false);
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
         }
         public async Task Handle(Events.PriceUpdated e, IMessageHandlerContext ctx)
         {
@@ -58,7 +58,7 @@ namespace eShop.Catalog.Product
 
             product.Price = e.Price;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId).ConfigureAwait(false);
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
         }
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {

@@ -18,7 +18,7 @@ services:
     depends_on:
       - rabbitmq
       - eventstore
-      - mongodb
+      - mongo
     restart: always
   elastic:
     image: eshop/elastic:${TAG:-latest}
@@ -30,11 +30,11 @@ services:
       - eventstore
       - elastic
     restart: always
-  servicestack:
-    image: eshop/servicestack:${TAG:-latest}
+  presentation:
+    image: eshop/presentation:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Endpoints/ServiceStack/Dockerfile
+      dockerfile: src/Endpoints/Presentation/Dockerfile
     depends_on:
       - rabbitmq
     ports:
@@ -46,7 +46,7 @@ services:
       context: .
       dockerfile: src/Web/Dockerfile
     depends_on:
-      - servicestack
+      - presentation
     ports:
       - "80:80"
   

@@ -11,8 +11,12 @@ using StructureMap;
 using System;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Elasticsearch.Net;
+using Nest;
+using Nest.JsonNetSerializer;
 
 namespace eShop
 {
@@ -53,9 +57,13 @@ namespace eShop
 
             NServiceBus.Logging.LogManager.Use<SerilogFactory>();
 
+            var client = GetElastic();
+
             _container = new Container(x =>
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
+                x.For<IElasticClient>().Use(client);
+                x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
 
                 x.Scan(y =>
                 {
@@ -117,6 +125,25 @@ namespace eShop
                 return $"host={host}";
 
             return $"host={host};username={user};password={password};";
+        }
+
+        private static IElasticClient GetElastic()
+        {
+            var url = Configuration["ElasticConnection"];
+            var user = Configuration["ElasticUserName"];
+            var password = Configuration["ElasticPassword"];
+
+            var node = new Uri(url);
+            var pool = new SingleNodeConnectionPool(node);
+
+            var regex = new Regex("([+\\-!\\(\\){}\\[\\]^\"~*?:\\\\\\/>< ]|[&\\|]{2}|AND|OR|NOT)", RegexOptions.Compiled);
+            var settings = new Nest.ConnectionSettings(pool, (builtin, param) => new JsonNetSerializer(builtin, param))
+                .BasicAuthentication(user, password)
+                .DefaultIndex("eShop")
+                .DefaultFieldNameInferrer(field => regex.Replace(field, ""))
+                .DefaultTypeNameInferrer(type => type.FullName);
+
+            return new ElasticClient(settings);
         }
         private static IEventStoreConnection GetEventStore()
         {

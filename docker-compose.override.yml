@@ -21,7 +21,7 @@ services:
       - ESHOP_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
-      - ESHOP_MongoDbConnection=${MONGODB_SERVER:-mongo}
+      - ESHOP_MongoDbConnection=${MONGODB_SERVER:-mongodb://mongo:27017}
   elastic:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
@@ -30,8 +30,10 @@ services:
       - ESHOP_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
-      - ESHOP_ElasticConnection=${ELASTIC_SERVER:-elastic}
-  servicestack:
+      - ESHOP_ElasticConnection=${ELASTIC_SERVER:-http://elastic:9200}
+      - ESHOP_ElasticUserName=${EVENTSTORE_USERNAME}
+      - ESHOP_ElasticPassword=${EVENTSTORE_PASSWORD}
+  presentation:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
       - ESHOP_RabbitUserName=${RABBIT_USERNAME}

@@ -151,7 +151,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elastic", "src\Endpoints\El
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDb", "src\Endpoints\MongoDb\MongoDb.csproj", "{1AE7B3A7-E3BA-41D4-AF17-6114798C7680}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceStack", "src\Endpoints\ServiceStack\ServiceStack.csproj", "{496F20A0-3AA1-4C9C-BFBE-A9ACA215961B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "src\Endpoints\Presentation\Presentation.csproj", "{496F20A0-3AA1-4C9C-BFBE-A9ACA215961B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Driver;
 
 namespace eShop
 {
@@ -53,9 +54,13 @@ namespace eShop
 
             NServiceBus.Logging.LogManager.Use<SerilogFactory>();
 
+            var client = GetMongoConnection();
+
             _container = new Container(x =>
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
+                x.For<IMongoDatabase>().Use(client.GetDatabase("eShop"));
+                x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
 
                 x.Scan(y =>
                 {
@@ -117,6 +122,13 @@ namespace eShop
                 return $"host={host}";
 
             return $"host={host};username={user};password={password};";
+        }
+
+        private static IMongoClient GetMongoConnection()
+        {
+            var connectionString = Configuration["MongoDbConnection"];
+
+            return new MongoClient(connectionString);
         }
         private static IEventStoreConnection GetEventStore()
         {

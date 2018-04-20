@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>ServiceStack</AssemblyName>
+    <AssemblyName>Presentation</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
