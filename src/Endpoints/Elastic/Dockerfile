@@ -49,6 +49,7 @@ COPY src/Endpoints/Domain/*.csproj ./src/Endpoints/Domain/
 COPY src/Endpoints/MongoDb/*.csproj ./src/Endpoints/MongoDb/
 COPY src/Endpoints/Elastic/*.csproj ./src/Endpoints/Elastic/
 COPY src/Endpoints/Presentation/*.csproj ./src/Endpoints/Presentation/
+COPY src/Infrastructure/*.csproj ./src/Infrastructure/
 
 RUN dotnet restore
 
