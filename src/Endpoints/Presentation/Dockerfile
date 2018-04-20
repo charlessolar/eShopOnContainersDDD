@@ -31,8 +31,8 @@ COPY src/Contexts/Location/Presentation/ServiceStack/*.csproj ./src/Contexts/Loc
 COPY src/Contexts/Location/Language/*.csproj ./src/Contexts/Location/Language/
 COPY src/Contexts/Marketing/Applications/Elastic/*.csproj ./src/Contexts/Marketing/Applications/Elastic/
 COPY src/Contexts/Marketing/Applications/MongoDb/*.csproj ./src/Contexts/Marketing/Applications/MongoDb/
-COPY src/Contexts/Marketing/Domain/Handlers/*.csproj ./src/Contexts/Basket/Marketing/Handlers/
-COPY src/Contexts/Marketing/Domain/Entities/*.csproj ./src/Contexts/Basket/Marketing/Entities/
+COPY src/Contexts/Marketing/Domain/Handlers/*.csproj ./src/Contexts/Marketing/Domain/Handlers/
+COPY src/Contexts/Marketing/Domain/Entities/*.csproj ./src/Contexts/Marketing/Domain/Entities/
 COPY src/Contexts/Marketing/Presentation/ServiceStack/*.csproj ./src/Contexts/Marketing/Presentation/ServiceStack/
 COPY src/Contexts/Marketing/Language/*.csproj ./src/Contexts/Marketing/Language/
 COPY src/Contexts/Ordering/Applications/Elastic/*.csproj ./src/Contexts/Ordering/Applications/Elastic/
