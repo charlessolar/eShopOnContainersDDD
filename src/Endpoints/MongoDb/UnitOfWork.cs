@@ -105,8 +105,6 @@ namespace eShop
         private readonly ILogger _logger;
         private readonly List<ICommitableCollection> _collections;
 
-        private readonly Dictionary<string, WriteModel<BsonDocument>> _pendingDocs;
-
 
         public UnitOfWork(IMongoDatabase client)
         {

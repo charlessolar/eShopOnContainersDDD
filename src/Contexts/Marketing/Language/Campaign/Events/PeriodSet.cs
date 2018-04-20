@@ -9,7 +9,7 @@ namespace eShop.Marketing.Campaign.Events
     {
         Guid CampaignId { get; set; }
 
-        DateTime From { get; set; }
-        DateTime To { get; set; }
+        DateTime Start { get; set; }
+        DateTime End { get; set; }
     }
 }

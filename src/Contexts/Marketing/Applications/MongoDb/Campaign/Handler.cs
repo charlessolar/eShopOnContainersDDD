@@ -40,8 +40,8 @@ namespace eShop.Marketing.Campaign
             var campaign = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Campaign>(e.CampaignId)
                 .ConfigureAwait(false);
 
-            campaign.Start = e.From;
-            campaign.End = e.To;
+            campaign.Start = e.Start;
+            campaign.End = e.End;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.CampaignId, campaign).ConfigureAwait(false);
         }

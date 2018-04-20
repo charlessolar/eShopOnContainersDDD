@@ -32,8 +32,8 @@ namespace eShop.Marketing.Campaign
             Apply<Events.PeriodSet>(x =>
             {
                 x.CampaignId = Id;
-                x.From = start;
-                x.To = end;
+                x.Start = start;
+                x.End = end;
             });
         }
 

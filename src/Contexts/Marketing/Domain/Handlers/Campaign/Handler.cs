@@ -28,7 +28,7 @@ namespace eShop.Marketing.Campaign
         public async Task Handle(Commands.SetPeriod command, IMessageHandlerContext ctx)
         {
             var campaign = await ctx.For<Campaign>().Get(command.CampaignId).ConfigureAwait(false);
-            campaign.SetPeriod(command.From, command.To);
+            campaign.SetPeriod(command.Start, command.End);
         }
         public async Task Handle(Commands.SetPicture command, IMessageHandlerContext ctx)
         {
