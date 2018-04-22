@@ -1,0 +1,40 @@
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-error.log
+
+# IDEs
+.vs
+.vscode
+.DS_Store
+.module-cache
+*.user
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+# Editor temporary files
+*~
+\#*#
+.#*
+
+# Build directory
+dist
+build
+obj
+bin
+
+# Typescript-related generated files
+src/**/*.js
+src/**/*.js.map
+test/**/*.js
+test/**/*.js.map
+*.awcache
+
+# Tests
+/test/*coverage
+/test/coverage*
+/.chrome

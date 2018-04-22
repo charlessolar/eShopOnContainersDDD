@@ -6,11 +6,11 @@ declare module '*.css' {
   export = styles;
 }
 
-declare const __DEV__: boolean;
-declare const VERSION: string;
-declare const COMMITHASH: string;
-declare const TIMESTAMP: string;
-declare const BRANCH: string;
-declare const DATE: string;
-declare const TIME: string;
-declare const API_SERVER: string;
+declare let __DEV__: boolean;
+declare let API_SERVER: string;
+declare let VERSION: string;
+declare let COMMITHASH: string;
+declare let BRANCH: string;
+declare let TIMESTAMP: string;
+declare let DATE: string;
+declare let TIME: string;

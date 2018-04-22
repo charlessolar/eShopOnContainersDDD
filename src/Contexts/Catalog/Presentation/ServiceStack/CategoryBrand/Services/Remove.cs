@@ -8,7 +8,7 @@ namespace eShop.Catalog.CategoryBrand.Services
 {
     [Api("Catalog")]
     [Route("/catalog/brand/{BrandId}", "DELETE")]
-    public class RemoveCategoryBrand : Command
+    public class RemoveCategoryBrand : DomainCommand
     {
         public Guid BrandId { get; set; }
     }

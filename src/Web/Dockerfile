@@ -1,7 +1,7 @@
 FROM alpine as build
 
 RUN apk add --update --no-cache nodejs git
-RUN npm i -g yarn webpack webpack-cli
+RUN npm i -g yarn nps
 
 WORKDIR /src
 
@@ -12,9 +12,6 @@ RUN yarn
 
 COPY . .
 WORKDIR /src/src/Web
-
-ARG API_SERVER
-
 RUN yarn build
 
 FROM nginx:stable as runtime

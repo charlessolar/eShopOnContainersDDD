@@ -8,7 +8,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
 {
     [Api("Basket")]
     [Route("/basket/item", "POST")]
-    public class AddBasketItem : Command
+    public class AddBasketItem : DomainCommand
     {
         public Guid BasketId { get; set; }
         public Guid ItemId { get; set; }

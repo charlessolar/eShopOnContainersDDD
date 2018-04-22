@@ -8,7 +8,7 @@ namespace eShop.Catalog.CategoryType.Services
 {
     [Api("Catalog")]
     [Route("/catalog/type/{TypeId}", "POST")]
-    public class RemoveCategoryType : Command
+    public class RemoveCategoryType : DomainCommand
     {
         public Guid TypeId { get; set; }
     }

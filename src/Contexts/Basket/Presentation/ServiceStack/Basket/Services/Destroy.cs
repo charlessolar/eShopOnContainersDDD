@@ -8,7 +8,7 @@ namespace eShop.Basket.Basket.Services
 {
     [Api("Basket")]
     [Route("/basket", "DELETE")]
-    public class BasketDestroy : Command
+    public class BasketDestroy : DomainCommand
     {
         public Guid BasketId { get; set; }
     }
