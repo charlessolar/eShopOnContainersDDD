@@ -64,6 +64,7 @@ namespace eShop
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
                 x.For<IElasticClient>().Use(client);
                 x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
+                x.For<Aggregates.IUnitOfWork>().Add(b => (Aggregates.IUnitOfWork)b.GetInstance<Infrastructure.IUnitOfWork>());
 
                 x.Scan(y =>
                 {

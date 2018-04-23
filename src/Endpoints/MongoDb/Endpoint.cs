@@ -61,6 +61,7 @@ namespace eShop
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
                 x.For<IMongoDatabase>().Use(client.GetDatabase("eShop"));
                 x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
+                x.For<Aggregates.IUnitOfWork>().Add(b => (Aggregates.IUnitOfWork)b.GetInstance<Infrastructure.IUnitOfWork>());
 
                 x.Scan(y =>
                 {
