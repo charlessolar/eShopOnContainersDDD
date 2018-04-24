@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure;
 using Infrastructure.Extensions;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -188,6 +189,11 @@ namespace eShop
         public Task Delete<T>(Guid id) where T : class
         {
             return Delete<T>(id.ToString());
+        }
+
+        public Task<IQueryResult<T>> Query<T>(QueryDefinition definition) where T : class
+        {
+            throw new NotImplementedException();
         }
     }
 }

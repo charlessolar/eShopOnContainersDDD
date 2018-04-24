@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Queries;
 using NServiceBus;
 
 namespace eShop.Catalog.Product
 {
     public class Handler :
+        IHandleQueries<Queries.List>,
         IHandleMessages<Events.Added>,
         IHandleMessages<Events.DescriptionUpdated>,
         IHandleMessages<Events.PictureSet>,
         IHandleMessages<Events.PriceUpdated>,
         IHandleMessages<Events.Removed>
     {
+        public async Task Handle(Queries.List query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.ProductIndex>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
 
         public async Task Handle(Events.Added e, IMessageHandlerContext ctx)
         {

@@ -110,7 +110,7 @@ namespace Infrastructure.Extensions
         public static async Task<object> RequestPaged<T, TResponse>(this IMessageSession bus, T message) where T : Paged where TResponse : class
         {
             var options = new SendOptions();
-            options.SetDestination("application");
+            options.SetDestination("elastic");
             options.SetHeader(Aggregates.Defaults.RequestResponse, "1");
 
             var response = bus.Request<PagedReply>(message, options);
@@ -127,7 +127,7 @@ namespace Infrastructure.Extensions
         public static async Task<object> RequestQuery<T, TResponse>(this IMessageSession bus, T message) where T : Query where TResponse : class
         {
             var options = new SendOptions();
-            options.SetDestination("application");
+            options.SetDestination("mongodb");
             options.SetHeader(Aggregates.Defaults.RequestResponse, "1");
 
             var response = bus.Request<Reply>(message, options);
