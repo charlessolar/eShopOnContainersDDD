@@ -11,10 +11,13 @@ using StructureMap;
 using System;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using Infrastructure.Extensions;
+using Infrastructure.Setup;
 using Nest;
 using Nest.JsonNetSerializer;
 
@@ -59,6 +62,10 @@ namespace eShop
 
             var client = GetElastic();
 
+            // Scan working directory for assemblies containing messages
+            var assemblies = new Assembly[] { Assembly.GetExecutingAssembly() }.Concat(
+                DIExtensions.GetAssembliesInDirectory(selector: (file) => file.Name.StartsWith("Aggregates") || file.Name.StartsWith("eShop"))).ToList();
+
             _container = new Container(x =>
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
@@ -68,11 +75,17 @@ namespace eShop
 
                 x.Scan(y =>
                 {
-                    y.TheCallingAssembly();
+                    // Note do not use structuremap's assembly scanning it will load EVERY package in nuget
+                    foreach (var a in assemblies)
+                        y.Assembly(a);
 
                     y.WithDefaultConventions();
+                    y.AddAllTypesOf<ISetup>();
                 });
             });
+            // Setup any app stuff that might exist
+            AppSetup.InitiateSetup(_container.GetAllInstances<ISetup>());
+            AppSetup.SetupApplication().Wait();
 
             // Start the bus
             _bus = InitBus().Result;
@@ -142,7 +155,8 @@ namespace eShop
                 .BasicAuthentication(user, password)
                 .DefaultIndex("eShop")
                 .DefaultFieldNameInferrer(field => regex.Replace(field, ""))
-                .DefaultTypeNameInferrer(type => type.FullName);
+                .DefaultTypeNameInferrer(type => type.FullName)
+                .DisableDirectStreaming();
 
             return new ElasticClient(settings);
         }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
+    <PackageReference Include="NEST" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>

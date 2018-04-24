@@ -27,7 +27,7 @@ namespace eShop
 
         public CommitableCollection(IMongoDatabase database)
         {
-            _collection = database.GetCollection<T>("", new MongoCollectionSettings {AssignIdOnInsert = false});
+            _collection = database.GetCollection<T>("eshop", new MongoCollectionSettings {AssignIdOnInsert = false});
             _retreived = new Dictionary<string, T>();
             _pendingSaves = new Dictionary<string, T>();
             _pendingUpdates = new Dictionary<string, T>();

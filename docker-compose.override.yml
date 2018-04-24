@@ -30,7 +30,7 @@ services:
       - ESHOP_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
-      - ESHOP_ElasticConnection=${ELASTIC_SERVER:-http://elastic:9200}
+      - ESHOP_ElasticConnection=${ELASTIC_SERVER:-http://elasticdb:9200}
       - ESHOP_ElasticUserName=${EVENTSTORE_USERNAME}
       - ESHOP_ElasticPassword=${EVENTSTORE_PASSWORD}
   presentation:
