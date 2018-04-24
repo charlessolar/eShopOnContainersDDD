@@ -66,6 +66,7 @@ namespace Infrastructure
         public Infrastructure.QueryDefinition Build()
         {
             var definition = new QueryDefinition();
+            definition.FieldDefinitions = new List<Tuple<Group, Infrastructure.FieldQueryDefinition[]>>();
             foreach (var group in _groups)
             {
                 definition.FieldDefinitions.Add(Tuple.Create(group._group, group._fields.ToArray()));
