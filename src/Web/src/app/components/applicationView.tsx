@@ -3,20 +3,19 @@ import { observer } from 'mobx-react';
 import glamorous from 'glamorous';
 
 import asyncView from './asyncView';
-import { Context } from '../context';
 
 import navbar from './navbar';
-import footer from './footer';
+import Footer from './footer';
 
 interface AppViewProps {
   authenticated: boolean;
   email: string;
+  title: string;
+  version: string;
 }
 
-export default function ApplicationView(context: Context) {
-  const { parts, theme } = context;
-  const Footer = footer();
-  const NavBar = navbar(context);
+export default function ApplicationView() {
+  const NavBar = navbar();
 
   const AppRoot = glamorous('div')({
     display: 'flex',
@@ -27,8 +26,7 @@ export default function ApplicationView(context: Context) {
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto',
-    color: theme.palette.primary.main
+    overflow: 'auto'
   }));
 
   const MainView = glamorous('main')({
@@ -44,16 +42,16 @@ export default function ApplicationView(context: Context) {
   return class extends React.Component<AppViewProps, {}> {
 
     public render() {
-      const { authenticated, email, children } = this.props;
+      const { authenticated, email, children, title, version } = this.props;
 
       return (
         <AppRoot>
           <AppView>
-            <NavBar title={context.config.title} authenticated={authenticated} email={email}/>
+            <NavBar title={title} authenticated={authenticated} email={email}/>
             <MainView>
               {children}
             </MainView>
-            <Footer title={context.config.title} version={context.config.build.version} />
+            <Footer title={title} version={version} />
           </AppView>
         </AppRoot>
       );

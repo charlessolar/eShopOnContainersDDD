@@ -25,7 +25,6 @@ namespace eShop.Catalog
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(1)
-                    .RefreshInterval(TimeSpan.FromSeconds(15))
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
                         .Analyzers(a => a
@@ -45,7 +44,6 @@ namespace eShop.Catalog
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(1)
-                    .RefreshInterval(TimeSpan.FromSeconds(15))
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
                         .Analyzers(a => a
@@ -66,7 +64,6 @@ namespace eShop.Catalog
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(1)
-                    .RefreshInterval(TimeSpan.FromSeconds(15))
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
                         .Analyzers(a => a

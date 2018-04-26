@@ -9,7 +9,6 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
 import MenuComponent, { Route } from './menu';
-import { Context } from '../context';
 
 interface NavBarProps {
   authenticated: boolean;
@@ -18,8 +17,6 @@ interface NavBarProps {
 }
 
 class Store {
-  constructor(private _context: Context) {
-  }
 
   @observable
   public open: boolean;
@@ -33,19 +30,18 @@ class Store {
   @action
   public navChange(menuItem: Route | string) {
     if (typeof menuItem === 'string') {
-      this._context.history.push(menuItem);
+      // this._context.history.push(menuItem);
     } else {
-      this._context.history.push(menuItem.route);
+      // this._context.history.push(menuItem.route);
     }
     this.close();
   }
 }
 
-export default function NavBar(context: Context) {
-  const { theme, config } = context;
-  const Menu = MenuComponent(context);
+export default function NavBar() {
+  const Menu = MenuComponent();
 
-  const store = new Store(context);
+  const store = new Store();
 
   const styles = {
     root: {

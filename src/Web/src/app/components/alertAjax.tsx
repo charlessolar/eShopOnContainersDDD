@@ -5,16 +5,14 @@ import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import Debug from 'debug';
 
 import Alert from './alert';
-import { Context } from '../context';
-import { Response } from '../utils/store';
 
 const debug = new Debug('alertAjax');
 
 interface AlertAjaxProps {
-  response: Response;
+  response: any;
 }
 
-export default function AlertAjax(context: Context) {
+export default function AlertAjax() {
   const styles = (theme: Theme) => ({});
 
   return withStyles(styles)(class extends React.Component<AlertAjaxProps & WithStyles<never>, {}> {

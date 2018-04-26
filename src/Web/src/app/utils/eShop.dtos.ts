@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-04-21 22:19:07
+Date: 2018-04-22 04:33:08
 Version: 5.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -46,59 +46,6 @@ export module DTOs
         updated: string;
     }
 
-    export class JsToken
-    {
-    }
-
-    export class JsBinding extends JsToken
-    {
-        binding: string;
-        bindingString: string;
-    }
-
-    export class JsExpression extends JsBinding
-    {
-        name: string;
-        nameString: string;
-        args: StringSegment[];
-        original: string;
-        originalString: string;
-        isBinding: boolean;
-        bindingString: string;
-    }
-
-    export class Command extends JsExpression
-    {
-        suffix: string;
-    }
-
-    export class Paged<T>
-    {
-    }
-
-    export class Items
-    {
-        basketId: string;
-        itemId: string;
-        productId: string;
-        productName: string;
-        productPrice: number;
-        quantity: number;
-        total: number;
-    }
-
-    export class CategoryBrand
-    {
-        id: string;
-        brand: string;
-    }
-
-    export class CategoryType
-    {
-        id: string;
-        type: string;
-    }
-
     // @DataContract
     export class ResponseError
     {
@@ -142,6 +89,33 @@ export module DTOs
 
     export class DomainCommand
     {
+    }
+
+    export class Paged<T>
+    {
+    }
+
+    export class Items
+    {
+        basketId: string;
+        itemId: string;
+        productId: string;
+        productName: string;
+        productPrice: number;
+        quantity: number;
+        total: number;
+    }
+
+    export class CategoryBrand
+    {
+        id: string;
+        brand: string;
+    }
+
+    export class CategoryType
+    {
+        id: string;
+        type: string;
     }
 
     export class Product
@@ -327,9 +301,11 @@ export module DTOs
     */
     // @Route("/basket", "DELETE")
     // @Api(Description="Basket")
-    export class BasketDestroy extends Command
+    export class BasketDestroy extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "BasketDestroy"; }
     }
 
     /**
@@ -349,12 +325,14 @@ export module DTOs
     */
     // @Route("/basket/item", "POST")
     // @Api(Description="Basket")
-    export class AddBasketItem extends Command
+    export class AddBasketItem extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
         itemId: string;
         productId: string;
         quantity: number;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "AddBasketItem"; }
     }
 
     /**
@@ -362,10 +340,12 @@ export module DTOs
     */
     // @Route("/basket/item/{ItemId}", "DELETE")
     // @Api(Description="Basket")
-    export class RemoveBasketItem extends Command
+    export class RemoveBasketItem extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
         itemId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RemoveBasketItem"; }
     }
 
     /**
@@ -373,11 +353,13 @@ export module DTOs
     */
     // @Route("/basket/item/{ItemId}/quantity", "POST")
     // @Api(Description="Basket")
-    export class UpdateBasketItemQuantity extends Command
+    export class UpdateBasketItemQuantity extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
         itemId: string;
         quantity: number;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "UpdateBasketItemQuantity"; }
     }
 
     /**
@@ -398,10 +380,12 @@ export module DTOs
     */
     // @Route("/catalog/brand", "POST")
     // @Api(Description="Catalog")
-    export class AddCategoryBrand extends Command
+    export class AddCategoryBrand extends DomainCommand implements IReturn<CommandResponse>
     {
         brandId: string;
         brand: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "AddCategoryBrand"; }
     }
 
     /**
@@ -409,9 +393,11 @@ export module DTOs
     */
     // @Route("/catalog/brand/{BrandId}", "DELETE")
     // @Api(Description="Catalog")
-    export class RemoveCategoryBrand extends Command
+    export class RemoveCategoryBrand extends DomainCommand implements IReturn<CommandResponse>
     {
         brandId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RemoveCategoryBrand"; }
     }
 
     /**
@@ -445,9 +431,11 @@ export module DTOs
     */
     // @Route("/catalog/type/{TypeId}", "POST")
     // @Api(Description="Catalog")
-    export class RemoveCategoryType extends Command
+    export class RemoveCategoryType extends DomainCommand implements IReturn<CommandResponse>
     {
         typeId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RemoveCategoryType"; }
     }
 
     export class GetProduct extends Query<Product> implements IReturn<QueryResponse<Product>>

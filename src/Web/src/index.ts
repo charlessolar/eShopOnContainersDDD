@@ -1,6 +1,6 @@
 
 import Debug from 'debug';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 
 import { config } from './app/config';
 import Log from './app/utils/log';
@@ -9,7 +9,7 @@ Log(config.debug.log);
 
 import { App } from './app';
 // enable MobX strict mode
-useStrict(true);
+configure({ enforceActions: true });
 
 const debug = new Debug('app.entry');
 

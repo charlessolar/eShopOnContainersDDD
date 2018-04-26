@@ -2,11 +2,11 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const GitRevisionPlugin = require("git-revision-webpack-plugin");
 const WebpackBundleAnalzyer = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
 
 const { TsConfigPathsPlugin, CheckerPlugin } = require('awesome-typescript-loader');
 
@@ -60,7 +60,7 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
     __filename: "mock",
     __dirname: "mock",
     Buffer: false,
-    setImmediate: false,
+    setImmediate: true,
     // workaround for webpack-dev-server issue
     // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
     fs: 'empty',
@@ -129,6 +129,7 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
           ],
         })
       },
+      // .ts, .tsx
       {
         test: /\.tsx?$/,
         use: development ?
@@ -188,7 +189,6 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
     new webpack.ProvidePlugin({
       "Promise": "bluebird"
     }),
-    new WebpackCleanupPlugin(),
     new HtmlWebpackPlugin({
       template: staticDir + '/index.ejs',
       metadata: {
@@ -198,9 +198,8 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
     }),
     // ignore moment locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new WebpackCleanupPlugin(),
     new WebpackBundleAnalzyer({analyzerMode: 'static', openAnalyzer: false}),
-    new TsConfigPathsPlugin(),
-    new CheckerPlugin(),
     new ExtractTextPlugin({
       disable: !extractCss,
       filename: production ? '[contenthash].css' : '[id].css',
@@ -215,11 +214,6 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
     ])),
     ...when(production, new webpack.optimize.AggressiveMergingPlugin()),
     ...when(production, [
-        new webpack.optimize.CommonsChunkPlugin({
-          name: ["common"],
-          minChunks: 2,
-          async: true
-      }),
       new UglifyJSPlugin({
         sourceMap: true,
         parallel: true,
@@ -233,7 +227,7 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
         }
       })
     ])
-  ].
+  ],
   devServer: {
     contentBase: srcDir,
     publicPath: baseUrl,
@@ -244,5 +238,5 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
     stats: 'minimal',
     host: 'localhost',
     port: 9000
-  },
+  }
 });

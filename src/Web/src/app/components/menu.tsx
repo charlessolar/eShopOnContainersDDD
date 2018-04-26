@@ -12,8 +12,6 @@ import ExitToApp from 'material-ui-icons/ExitToApp';
 import ArrowDropDown from 'material-ui-icons/ArrowDropDown';
 import Typography from 'material-ui/Typography';
 
-import { Context } from '../context';
-
 export interface Route {
   route: string;
   text?: string;
@@ -30,7 +28,7 @@ interface MenuState {
   anchorEl: HTMLElement;
 }
 
-export default function MenuComponent(context: Context) {
+export default function MenuComponent() {
   function menus(authenticated): Route[] {
     if (authenticated) {
       return [

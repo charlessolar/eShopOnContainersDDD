@@ -9,8 +9,6 @@ import amber from 'material-ui/colors/amber';
 
 import { SnackbarContent } from 'material-ui/Snackbar';
 
-import { Context } from '../context';
-
 interface AlertProps {
   type: 'info' | 'warn' | 'error';
   message: string;

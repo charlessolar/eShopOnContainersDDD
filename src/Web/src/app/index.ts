@@ -1,38 +1,48 @@
 
 import * as ReactDOM from 'react-dom';
+import { JsonServiceClient } from '@servicestack/client';
+import createBrowserHistory from 'history/createBrowserHistory';
 import Debug from 'debug';
 
-import { Context } from './context';
+import { config } from './config';
 import { Client } from './client';
+import { Store, StoreType } from './stores';
+import { createModules, Modules } from './modules';
 
 const debug = new Debug('app');
 
 export class App {
-  public context: Context;
+  private _store: StoreType | typeof Store.SnapshotType;
+  private _modules: Modules;
 
   constructor() {
-    this.context = new Context();
+    const jsonClient = new JsonServiceClient(config.apiUrl);
+    const history = createBrowserHistory();
 
-    this.context.rest.setJwtSelector(() => this.context.parts.auth.stores.auth.getToken());
+    this._store = Store.create({}, {
+      client: jsonClient,
+      history
+    });
+    this._modules = createModules(this._store as StoreType);
   }
 
   public async preAuth() {
-    const token = localStorage.getItem('JWT');
-    if (token) {
+    // const token = localStorage.getItem('JWT');
+    // if (token) {
       // auth set token
-      this.context.parts.auth.stores.auth.setToken(token);
-    }
-    await this.context.parts.auth.stores.me.fetch();
+      // this.context.parts.auth.stores.auth.setToken(token);
+    // }
+    // await this.context.parts.auth.stores.me.fetch();
   }
 
   public render() {
-    const client = new Client(this.context);
+    const client = new Client(this._store as StoreType, this._modules);
   }
 
   public async start() {
     debug('start');
     await Promise.all([
-      this.preAuth(),
+      // this.preAuth(),
       new Promise((resolve) => {
         setTimeout(() => resolve(), 1000);
       })

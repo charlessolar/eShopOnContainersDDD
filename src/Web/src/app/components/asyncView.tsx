@@ -1,31 +1,11 @@
 import * as React from 'react';
 import { observable, action, runInAction } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 
 import Fade from 'material-ui/transitions/Fade';
 import { CircularProgress } from 'material-ui/Progress';
 
-import { Store } from '../utils/store';
-import { Context } from '../context';
-
-interface AsyncViewProps {
-  url?: string;
-  component?: any;
-  store?: Store;
-
-  action?: Promise<{}>;
-  getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>;
-  loading?: () => any;
-}
-interface AsyncViewState {
-  componentData: any;
-  error: any;
-  loading: boolean;
-}
-
 class AsyncStore {
-  constructor(private _context: Context) {
-  }
 
   @observable
   public loading: boolean;
@@ -39,16 +19,16 @@ class AsyncStore {
   private waitingFor: number;
 
   @action
-  public loadComponent(store?: Store, component?: any, getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>) {
+  public loadComponent(promiseAction?: () => Promise<{}>, component?: any, getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>) {
     // cheap hack to not reload async route unless store name changes
-    if (this.loadedStore && store.constructor.name === this.loadedStore) {
+    if (this.loadedStore && promiseAction.constructor.name === this.loadedStore) {
       return;
     }
-    this.loadedStore = store.constructor.name;
+    this.loadedStore = promiseAction.constructor.name;
 
-    if (store) {
+    if (promiseAction) {
       this.loading = true;
-      store.fetch().then(action(async () => {
+      promiseAction().then(action(() => {
         this.loading = false;
       }));
     }
@@ -78,14 +58,16 @@ class AsyncStore {
       // IIFE to check if a later ending promise was creating a race condition
       // Check test case for more info
       (check => {
-        componentData.then(action((component: any) => {
+        componentData.then((component: any) => {
           // Checks that the promise last invoked is the one we load
           if (this.waitingFor !== check) {
             return;
           }
-          // component is `import` so call the default export with context
-          this.componentData = component.default(this._context);
-        })).catch(action((e: any) => {
+          runInAction(() => {
+            // component is `import`
+            this.componentData = component.default;
+          });
+        }).catch(action((e: any) => {
           this.error = e;
         }));
       })(this.waitingFor);
@@ -93,38 +75,52 @@ class AsyncStore {
   }
 }
 
-export default function AsyncView(context: Context) {
+interface AsyncViewProps {
+  async?: AsyncStore;
+  url?: string;
+  component?: any;
+  action?: () => Promise<{}>;
 
-  const store = new AsyncStore(context);
+  getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>;
+  loading?: () => any;
+}
+interface AsyncViewState {
+  componentData: any;
+  error: any;
+  loading: boolean;
+}
 
-  return observer(class extends React.Component<AsyncViewProps, AsyncViewState> {
+@inject((stores, props) => { props['async'] = new AsyncStore(); return props; })
+@observer
+export default class AsyncView extends React.Component<AsyncViewProps, AsyncViewState> {
 
-    public componentWillMount() {
-        store.loadComponent(this.props.store, this.props.component, this.props.getComponent);
+  public componentWillMount() {
+    const { async } = this.props;
+    async.loadComponent(this.props.action, this.props.component, this.props.getComponent);
+  }
+
+  public render() {
+    const { async } = this.props;
+    if (async.componentData && !async.loading) {
+      return React.createElement(async.componentData, this.props);
+    } else if (this.props.loading) {
+      const loadingComponent = this.props.loading();
+      return loadingComponent;
     }
-
-    public render() {
-      if (store.componentData && !store.loading) {
-        return React.createElement(store.componentData, this.props);
-      } else if (this.props.loading) {
-        const loadingComponent = this.props.loading();
-        return loadingComponent;
-      }
-      return (
-        <div style={{
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Fade
-            in={true}
-            unmountOnExit
-          >
-            <CircularProgress />
-          </Fade>
-        </div>
-      );
-    }
-  });
+    return (
+      <div style={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <Fade
+          in={true}
+          unmountOnExit
+        >
+          <CircularProgress />
+        </Fade>
+      </div>
+    );
+  }
 }
