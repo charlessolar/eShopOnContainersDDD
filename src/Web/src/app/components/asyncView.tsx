@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { observable, action, runInAction } from 'mobx';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
+import { IModelType } from 'mobx-state-tree';
 
 import Fade from 'material-ui/transitions/Fade';
 import { CircularProgress } from 'material-ui/Progress';
+
+import { inject_props } from '../utils';
+import { StoreType } from '../stores';
 
 class AsyncStore {
 
@@ -19,7 +23,7 @@ class AsyncStore {
   private waitingFor: number;
 
   @action
-  public loadComponent(promiseAction?: () => Promise<{}>, component?: any, getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>) {
+  public loadComponent(store: any, promiseAction?: (store: any) => Promise<{}>, component?: any, getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>) {
     // cheap hack to not reload async route unless store name changes
     if (this.loadedStore && promiseAction.constructor.name === this.loadedStore) {
       return;
@@ -28,7 +32,7 @@ class AsyncStore {
 
     if (promiseAction) {
       this.loading = true;
-      promiseAction().then(action(() => {
+      promiseAction(store).then(action(() => {
         this.loading = false;
       }));
     }
@@ -76,10 +80,12 @@ class AsyncStore {
 }
 
 interface AsyncViewProps {
-  async?: AsyncStore;
   url?: string;
   component?: any;
-  action?: () => Promise<{}>;
+  store?: any;
+
+  actionStore?: IModelType<{}, {}>;
+  action?: (store: any) => Promise<{}>;
 
   getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>;
   loading?: () => any;
@@ -90,19 +96,25 @@ interface AsyncViewState {
   loading: boolean;
 }
 
-@inject((stores, props) => { props['async'] = new AsyncStore(); return props; })
+@inject_props((props) => props.actionStore)
 @observer
 export default class AsyncView extends React.Component<AsyncViewProps, AsyncViewState> {
+  private _asyncStore: AsyncStore;
+
+  constructor(props: AsyncViewProps) {
+    super(props);
+    this._asyncStore = new AsyncStore();
+  }
 
   public componentWillMount() {
-    const { async } = this.props;
-    async.loadComponent(this.props.action, this.props.component, this.props.getComponent);
+    const { store } = this.props;
+
+    this._asyncStore.loadComponent(store, this.props.action, this.props.component, this.props.getComponent);
   }
 
   public render() {
-    const { async } = this.props;
-    if (async.componentData && !async.loading) {
-      return React.createElement(async.componentData, this.props);
+    if (this._asyncStore.componentData && !this._asyncStore.loading) {
+      return React.createElement(this._asyncStore.componentData, this.props);
     } else if (this.props.loading) {
       const loadingComponent = this.props.loading();
       return loadingComponent;

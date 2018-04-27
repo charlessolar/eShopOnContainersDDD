@@ -27,7 +27,7 @@ namespace eShop.Catalog.Product
         }
         public Task<object> Any(Services.ListProducts request)
         {
-            return _bus.RequestPaged<Queries.List, Models.Product>(new Queries.List
+            return _bus.RequestPaged<Queries.List, Models.ProductIndex>(new Queries.List
             {
             });
         }

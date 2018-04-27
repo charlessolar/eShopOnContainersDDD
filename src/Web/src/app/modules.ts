@@ -9,6 +9,6 @@ export interface Modules {
 export function createModules(store: StoreType) {
 
   return {
-    catalog: new CatalogModule(store.catalog)
+    catalog: new CatalogModule()
   };
 }

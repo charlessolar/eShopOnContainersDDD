@@ -6,7 +6,7 @@ import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
 import { inject, models, FormType } from '../../utils';
-import { Text } from '../inputs';
+import { Text, Select, TextArea, Number } from '../inputs';
 
 interface FormProps<T> {
   form: FormType<T>;
@@ -54,12 +54,43 @@ export class Field<T> extends React.Component<FieldProps<T>, {}> {
 
     const definition = form.form[field];
 
-    return React.createElement(Text, {
-      id: field,
-      required: definition.required,
-      error: form.validation,
-      label: definition.label,
-      onChange: (val) => this.handleChange(val)
-    });
+    switch (definition.input) {
+      case 'text':
+        return React.createElement(Text, {
+          id: field,
+          required: definition.required,
+          error: form.validation,
+          label: definition.label,
+          onChange: (val) => this.handleChange(val)
+        });
+      case 'select':
+        return React.createElement(Select, {
+          id: field,
+          required: definition.required,
+          error: form.validation,
+          label: definition.label,
+          onChange: (val) => this.handleChange(val),
+          projectionStore: definition.projectionStore,
+          projection: definition.projection
+        });
+        case 'textarea':
+          return React.createElement(TextArea, {
+            id: field,
+            required: definition.required,
+            error: form.validation,
+            label: definition.label,
+            onChange: (val) => this.handleChange(val)
+          });
+          case 'number':
+            return React.createElement(Number, {
+              id: field,
+              required: definition.required,
+              error: form.validation,
+              label: definition.label,
+              onChange: (val) => this.handleChange(val)
+            });
+      default:
+        throw new Error('unknown input type: ' + definition.input);
+    }
   }
 }

@@ -1,10 +1,14 @@
 import { IModelType, types, flow } from 'mobx-state-tree';
 import { Component } from 'react';
+import { StoreType } from '../stores';
 
 export interface ComponentDefinition {
-  input: string;
+  input: 'text' | 'select' | 'textarea' | 'number';
   label: string;
   required?: boolean;
+
+  projectionStore?: IModelType<{}, {}>;
+  projection?: (store: any, term: string) => Promise<{ id: string, label: string}[]>;
 }
 
 const ResponseError = types.model(
@@ -94,4 +98,40 @@ export function Form<S, T extends { readonly form: { [idx: string]: ComponentDef
       return { changeValue, submit };
     })
     .create({}, env);
+}
+export interface SelectType {
+  loading: boolean;
+  term: string;
+  records: { id: string, label: string }[];
+  list: () => Promise<{}>;
+  updateTerm: (newVal: string) => Promise<{}>;
+}
+export function Select<S, T>(rootStore: StoreType, projectionStore: any, projection: (store: any, term: string) => Promise<{ id: string, label: string}[]>) {
+
+  return types.model(
+    {
+      loading: types.optional(types.boolean, false),
+      term: types.optional(types.string, ''),
+      records: types.optional(types.array(types.model({
+        id: types.string,
+        label: types.string
+      })), [])
+    })
+    .actions(self => {
+      const list = flow(function*() {
+        self.loading = true;
+        try {
+          self.records = yield projection(projectionStore, self.term);
+        } catch (e) {
+          console.log('error fetching:', e);
+        }
+        self.loading = false;
+      });
+      const updateTerm = flow(function*(newVal: string) {
+        self.term = newVal;
+        yield list();
+      });
+      return { list, updateTerm };
+    })
+    .create({}, { api: rootStore.api });
 }

@@ -5,8 +5,6 @@ import { History } from 'history';
 
 import { DTOs } from './utils/eShop.dtos';
 
-import { CatalogStores, CatalogStoresType } from './parts/catalog/catalogModule';
-
 // requires https://github.com/mobxjs/mobx-state-tree/issues/117
 export interface ApiClientType {
   loading: boolean;
@@ -88,14 +86,18 @@ export interface StoreType {
   api: ApiClientType;
   history: HistoryType;
   alertStack: AlertStackType;
-  catalog: CatalogStoresType;
+  create<S, T>(subtype: IType<S, T>): T;
 }
 export const Store = types.model(
   'Store',
   {
     api: types.optional(ApiClient, { loading: false }),
     history: types.optional(History, {}),
-    alertStack: types.optional(AlertStack, { stack: {} }),
-    catalog: types.optional(CatalogStores, {})
+    alertStack: types.optional(AlertStack, { stack: {} })
   }
-);
+)
+.actions(self => ({
+  create<S, T>(subtype: IType<S, T>) {
+    return subtype.create(undefined, { api: self.api });
+  }
+}));

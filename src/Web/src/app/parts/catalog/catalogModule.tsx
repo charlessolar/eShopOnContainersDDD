@@ -3,34 +3,51 @@ import { types, getRoot } from 'mobx-state-tree';
 
 import AsyncView from '../../components/asyncView';
 import { Brands, BrandsType, Brand, BrandType } from './models/brands';
+import { Products, ProductsType, Product, ProductType } from './models/products';
 import { Types, TypesType } from './models/types';
 import { models } from '../../utils';
-
-export interface CatalogStoresType {
-  Brands: BrandsType;
-}
-export const CatalogStores = types.model(
-  'Catalog',
-  {
-    Brands: types.optional(Brands, {}),
-    Types: types.optional(Types, {})
-  }
-);
 
 export class CatalogModule {
   public routes: UniversalRouterRoute[];
 
-  constructor(private _store: CatalogStoresType) {
+  constructor() {
 
     this.routes = [
       {
-        path: '/',
+        path: '/brands',
         component: () => ({
-          title: 'Home',
+          title: 'Brands',
           component: (
             <AsyncView
-              action={this._store.Brands.List.list}
+              actionStore={Brands}
+              action={(brand: BrandsType) => brand.List.list()}
               getComponent={() => import('./views/brands')}
+            />
+          )
+        })
+      },
+      {
+        path: '/types',
+        component: () => ({
+          title: 'Type',
+          component: (
+            <AsyncView
+              actionStore={Types}
+              action={(type: TypesType) => type.List.list()}
+              getComponent={() => import('./views/types')}
+            />
+          )
+        })
+      },
+      {
+        path: '/products',
+        component: () => ({
+          title: 'Products',
+          component: (
+            <AsyncView
+              actionStore={Products}
+              action={(product: ProductsType) => product.List.list()}
+              getComponent={() => import('./views/products')}
             />
           )
         })

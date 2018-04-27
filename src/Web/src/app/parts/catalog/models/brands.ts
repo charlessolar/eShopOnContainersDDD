@@ -54,8 +54,8 @@ export const BrandForm = types
       request.brandId = self.id;
       request.brand = self.brand;
 
-      const client = getEnv(self).api as ApiClientType;
       try {
+        const client = getEnv(self).api as ApiClientType;
         const result: DTOs.CommandResponse = yield client.command(request);
 
       } catch (error) {
@@ -73,28 +73,22 @@ export interface BrandType {
 }
 export const Brand = types
   .model('Catalog_Brand', {
-    id: types.optional(types.identifier(types.string), uuid),
-    brand: types.optional(types.string, '')
+    id: types.identifier(types.string),
+    brand: types.string
   });
 
 export interface ListType {
   entries: Map<string, BrandType>;
   loading: boolean;
-  create: () => BrandType;
   list: (term?: string, limit?: number) => Promise<{}>;
-  add: (brand: BrandType) => Promise<{}>;
+  add: (brand: BrandType) => void;
   remove: (id: string) => Promise<{}>;
 }
 export const List = types
   .model('Catalog_Brand_List', {
-    entries: types.map(Brand),
-    loading: types.boolean
+    entries: types.optional(types.map(Brand), {}),
+    loading: types.optional(types.boolean, true)
   })
-  .views(self => ({
-    get client(): ApiClientType {
-      return getRoot(this).api;
-    }
-  }))
   .actions(self => {
     const list = flow(function*(term?: string, limit?: number) {
       const request = new DTOs.ListCategoryBrands();
@@ -104,7 +98,8 @@ export const List = types
 
       self.loading = true;
       try {
-        const results: DTOs.PagedResponse<DTOs.CategoryBrand> = yield self.client.paged(request);
+        const client = getEnv(self).api as ApiClientType;
+        const results: DTOs.PagedResponse<DTOs.CategoryBrand> = yield client.paged(request);
 
         self.loading = false;
         results.records.forEach(record => {
@@ -124,7 +119,8 @@ export const List = types
       request.brandId = id;
 
       try {
-        const result: DTOs.CommandResponse = yield self.client.command(request);
+        const client = getEnv(self).api as ApiClientType;
+        const result: DTOs.CommandResponse = yield client.command(request);
 
         self.entries.delete(id);
       } catch (error) {
@@ -142,11 +138,11 @@ export interface BrandsType {
 export const Brands = types.model(
   'Catalog_Brands',
   {
-    List: types.optional(List, { entries: {}, loading: true })
+    List: types.optional(List, {})
   }
 ).actions(self => ({
   brandForm() {
-    const api = getRoot(self).api;
+    const api = getEnv(self).api;
     return models.form(BrandForm, { api }, (model, success) => {
       if (!success) {
         return;

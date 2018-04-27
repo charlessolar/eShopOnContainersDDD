@@ -8,22 +8,20 @@ import { inject, models, FormType } from '../../../utils';
 import { Form, Field } from '../../../components/forms';
 
 import { StoreType } from '../../../stores';
-import { Brand, BrandFormType, BrandsType } from '../models/brands';
+import { Brand, Brands, BrandFormType, BrandsType } from '../models/brands';
 
 interface BrandsProps {
   store: BrandsType;
 }
 
-@inject((store) => store.catalog.Brands)
 @observer
-export default class Brands extends React.Component<BrandsProps, {}> {
+export default class BrandView extends React.Component<BrandsProps, {}> {
   private _brand: FormType<BrandFormType>;
 
   constructor(props) {
     super(props);
-    const { store } = this.props;
 
-    this._brand = store.brandForm();
+    this._brand = props.store.brandForm();
   }
 
   public handleChange(newVal: string) {
