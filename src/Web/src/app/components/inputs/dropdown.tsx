@@ -5,19 +5,20 @@ import { observer } from 'mobx-react';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
+import { MenuItem } from 'material-ui/Menu';
+import Select from 'material-ui/Select';
 
-interface TextProps {
+interface DropdownProps {
   id: string;
   required?: boolean;
   label: string;
   error?: any;
-  type?: string;
   value?: any;
-  autoComplete?: string;
   fieldProps?: any;
+  allowEmpty?: boolean;
+  options: { value: string, label: string }[];
 
   onChange?: (newVal: string) => void;
-  onKeyDown?: (key: number, value: string) => void;
 }
 
 const styles = theme => ({
@@ -28,29 +29,29 @@ const styles = theme => ({
   },
 });
 
-class TextControl extends React.Component<TextProps & WithStyles<'formControl'>, {}> {
+class DropdownControl extends React.Component<DropdownProps & WithStyles<'formControl'>, {}> {
 
-  private handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+  private handleChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
     if (this.props.onChange) {
       this.props.onChange(e.target.value.trim());
     }
   }
-  private handleKeydown(e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    if (this.props.onKeyDown) {
-      this.props.onKeyDown(e.which, (e.target as any).value.trim());
-    }
-  }
 
   public render() {
-    const { id, label, required, error, type, value, autoComplete, classes, fieldProps } = this.props;
+    const { id, label, required, error, value, options, classes, allowEmpty, fieldProps } = this.props;
 
     return (
       <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value || undefined} onKeyDown={(e) => this.handleKeydown(e)} {...fieldProps} />
+        <Select id={id} value={value} onChange={(e) => this.handleChange(e)} {...fieldProps}>
+          {allowEmpty === true || allowEmpty === undefined ? <MenuItem value=''><em>None</em></MenuItem> : <></>}
+          {options.map(option => (
+            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+          ))}
+        </Select>
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
       </FormControl>
     );
   }
 }
-export default withStyles(styles)<TextProps>(TextControl);
+export default withStyles(styles)<DropdownProps>(DropdownControl);

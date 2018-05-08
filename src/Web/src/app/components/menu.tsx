@@ -6,10 +6,10 @@ import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
-import AccountCircle from 'material-ui-icons/AccountCircle';
-import Face from 'material-ui-icons/Face';
-import ExitToApp from 'material-ui-icons/ExitToApp';
-import ArrowDropDown from 'material-ui-icons/ArrowDropDown';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Face from '@material-ui/icons/Face';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import Typography from 'material-ui/Typography';
 
 export interface Route {
@@ -28,17 +28,18 @@ interface MenuState {
   anchorEl: HTMLElement;
 }
 
-export default function MenuComponent() {
-  function menus(authenticated): Route[] {
+export default class extends React.Component<MenuProps, MenuState> {
+
+  private menus(authenticated): Route[] {
     if (authenticated) {
       return [
         {
-          icon: (<Face/>),
+          icon: (<Face />),
           route: '/profile',
           text: 'Profile'
         },
         {
-          icon: (<ExitToApp/>),
+          icon: (<ExitToApp />),
           route: '/logout',
           text: 'Logout'
         }
@@ -56,60 +57,55 @@ export default function MenuComponent() {
     ];
   }
 
-  const menuCommon: Route[] = [
-  ];
+  constructor(props) {
+    super(props);
 
-  return class extends React.Component<MenuProps, MenuState> {
-    constructor(props) {
-      super(props);
+    this.state = {
+      anchorEl: null
+    };
+  }
 
-      this.state = {
-        anchorEl: null
-      };
-    }
+  public handleMenu(event: React.MouseEvent<HTMLElement>) {
+    this.setState({ anchorEl: event.currentTarget });
+  }
 
-    public handleMenu(event: React.MouseEvent<HTMLElement>) {
-      this.setState({ anchorEl: event.currentTarget });
-    }
+  public handleClose() {
+    this.setState({ anchorEl: null });
+  }
 
-    public handleClose() {
-      this.setState({ anchorEl: null });
-    }
+  public render() {
+    const { authenticated, email, navChange } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
-    public render() {
-      const { authenticated, email, navChange } = this.props;
-      const { anchorEl } = this.state;
-      const open = Boolean(anchorEl);
+    return (
+      <div>
+        <Button onClick={(e) => this.handleMenu(e)} color='inherit'>
+          {email} <ArrowDropDown />
+        </Button>
+        <Menu id='profile-appbar'
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          open={open}
+          onClose={() => this.handleClose()}
+        >
+          {this.menus(authenticated)
+            .map((menu, key) => (
+              <MenuItem key={key} onClick={() => { navChange(menu); }}>
+                <ListItemIcon>{menu.icon}</ListItemIcon>
+                <ListItemText inset primary={menu.text} />
+              </MenuItem>
+            ))}
+        </Menu>
+      </div>
+    );
+  }
 
-      return (
-        <div>
-          <Button onClick={(e) => this.handleMenu(e)} color='inherit'>
-            {email} <ArrowDropDown/>
-          </Button>
-          <Menu id='profile-appbar'
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            open={open}
-            onClose={() => this.handleClose()}
-          >
-            {menus(authenticated).concat(menuCommon)
-              .map((menu, key) => (
-                <MenuItem key={key} onClick={() => { navChange(menu); }}>
-                  <ListItemIcon>{menu.icon}</ListItemIcon>
-                  <ListItemText inset primary={menu.text}/>
-                </MenuItem>
-              ))}
-          </Menu>
-        </div>
-      );
-    }
-
-  };
 }

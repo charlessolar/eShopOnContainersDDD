@@ -14,6 +14,7 @@ interface AnalyticsInfo {
 }
 
 export interface Config {
+  env: string;
   title: string;
   description: string;
   apiUrl: string;

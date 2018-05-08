@@ -1,9 +1,44 @@
-
 import { IType, types, getEnv, getRoot } from 'mobx-state-tree';
 import { JsonServiceClient } from '@servicestack/client';
 import { History } from 'history';
 
+import { Theme } from 'material-ui/styles';
 import { DTOs } from './utils/eShop.dtos';
+import theme from './theme';
+
+export interface AuthenticationType {
+  email: string;
+  token: string;
+  expires: number;
+  admin: boolean;
+  updateToken(email: string, token: string, expires: number): void;
+  reset(): void;
+}
+const Authentication = types.model(
+  'Authentication',
+  {
+    email: types.maybe(types.string),
+    token: types.maybe(types.string),
+    expires: types.maybe(types.number),
+    admin: types.optional(types.boolean, false)
+  })
+  .views(self => ({
+    get authenticated() {
+      return self.token && self.token !== ''; // && expires > now
+    }
+  }))
+  .actions(self => ({
+    updateToken(email: string, token: string, expires: number) {
+      self.email = email;
+      self.token = token;
+      self.expires = expires;
+    },
+    reset() {
+      self.email = '';
+      self.token = '';
+      self.expires = 0;
+    }
+  }));
 
 // requires https://github.com/mobxjs/mobx-state-tree/issues/117
 export interface ApiClientType {
@@ -86,16 +121,32 @@ export interface StoreType {
   api: ApiClientType;
   history: HistoryType;
   alertStack: AlertStackType;
+  auth: AuthenticationType;
+  theme: Theme;
+  history: History;
   create<S, T>(subtype: IType<S, T>): T;
+
+  readonly authenticated: boolean;
 }
 export const Store = types.model(
   'Store',
   {
     api: types.optional(ApiClient, { loading: false }),
-    history: types.optional(History, {}),
-    alertStack: types.optional(AlertStack, { stack: {} })
+    alertStack: types.optional(AlertStack, { stack: {} }),
+    auth: types.optional(Authentication, { token: '' })
   }
 )
+.views(self => ({
+  get authenticated() {
+    return self.auth.authenticated;
+  },
+  get theme() {
+    return getEnv(self).theme;
+  },
+  get history() {
+    return getEnv(self).history;
+  }
+}))
 .actions(self => ({
   create<S, T>(subtype: IType<S, T>) {
     return subtype.create(undefined, { api: self.api });

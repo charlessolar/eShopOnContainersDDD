@@ -11,23 +11,21 @@ interface TextProps {
   required?: boolean;
   label: string;
   error?: any;
-  type?: string;
   value?: any;
   autoComplete?: string;
+  fieldProps?: any;
+
   onChange?: (newVal: string) => void;
   onKeyDown?: (key: number, value: string) => void;
 }
 
-@observer
 class TextControl extends React.Component<TextProps & WithStyles<'formControl'>, {}> {
 
-  @action
   private handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (this.props.onChange) {
       this.props.onChange(e.target.value.trim());
     }
   }
-  @action
   private handleKeydown(e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (this.props.onKeyDown) {
       this.props.onKeyDown(e.which, (e.target as any).value.trim());
@@ -35,13 +33,13 @@ class TextControl extends React.Component<TextProps & WithStyles<'formControl'>,
   }
 
   public render() {
-    const { id, label, required, error, type, value, autoComplete, classes } = this.props;
+    const { id, label, required, error, value, autoComplete, classes, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input multiline rows='4' id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value} onKeyDown={(e) => this.handleKeydown(e)} />
-        {error && error[id] ? (<FormHelperText id={id + '-text'}>{error[id]}</FormHelperText>) : undefined}
+        <Input multiline rows='4' id={id} onChange={e => this.handleChange(e)} type='text' autoComplete={autoComplete} value={value || undefined} onKeyDown={(e) => this.handleKeydown(e)} {...fieldProps}/>
+        {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
       </FormControl>
     );
   }
@@ -55,4 +53,4 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(TextControl);
+export default withStyles(styles)<TextProps>(TextControl);

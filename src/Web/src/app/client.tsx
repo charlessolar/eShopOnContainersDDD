@@ -2,27 +2,28 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'mobx-react';
 
+import { hot } from 'react-hot-loader';
+
 import { parse } from 'qs';
 import Debug from 'debug';
 
 import { MuiThemeProvider } from 'material-ui/styles';
 
-import theme from './theme';
 import { createRouter } from './router';
 import { StoreType } from './stores';
 import { Modules } from './modules';
 import { config } from './config';
 
 import asyncView from './components/asyncView';
-import applicationView from './components/applicationView';
+import ApplicationView from './components/applicationView';
 import AlertStack from './components/alertStack';
 
 const debug = new Debug('client');
 
 export class Client {
   constructor(private _store: StoreType, private _modules: Modules) {
-    _store.history.history.listen((loc) => this.onLocationChange(loc as any));
-    this.onLocationChange(_store.history.history.location as any);
+    _store.history.listen((loc) => this.onLocationChange(loc as any));
+    this.onLocationChange(_store.history.location as any);
   }
 
   public onRenderComplete(route: any, location: UniversalRouterContext) {
@@ -50,21 +51,18 @@ export class Client {
     }
 
     if (component) {
-
-      const Layout = applicationView();
-
-      const layout = (
-        <MuiThemeProvider theme={theme()}>
+      const Layout = hot(module)(() => (
+        <MuiThemeProvider theme={this._store.theme}>
           <Provider store={this._store}>
-            <Layout authenticated={true} email={''} title={config.title} version={config.build.version}>
+            <ApplicationView authenticated={this._store.authenticated} email={this._store.auth.email} title={config.title} version={config.build.version}>
               {component}
               <AlertStack/>
-            </Layout>
+            </ApplicationView>
           </Provider>
         </MuiThemeProvider>
-      );
+      ));
       render(
-        layout,
+        <Layout />,
         document.getElementById('application'),
         () => this.onRenderComplete(route, location)
       );

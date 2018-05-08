@@ -7,7 +7,7 @@ import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import NumberFormat from 'react-number-format';
 import MaskedInput from 'react-text-mask';
-import numeral from 'numeral';
+import * as numeral from 'numeral';
 
 interface NumberProps {
   id: string;
@@ -18,14 +18,14 @@ interface NumberProps {
   value?: any;
   autoComplete?: string;
   format?: string;
+  fieldProps?: any;
+
   onChange?: (newVal: number) => void;
   onKeyDown?: (key: number, value: string) => void;
 }
 
-@observer
 class NumberControl extends React.Component<NumberProps & WithStyles<'formControl'>, {}> {
 
-  @action
   private handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (this.props.onChange) {
       const num = numeral(e.target.value);
@@ -33,7 +33,6 @@ class NumberControl extends React.Component<NumberProps & WithStyles<'formContro
       this.props.onChange(num.value());
     }
   }
-  @action
   private handleKeydown(e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (this.props.onKeyDown) {
       this.props.onKeyDown(e.which, (e.target as any).value.trim());
@@ -41,13 +40,13 @@ class NumberControl extends React.Component<NumberProps & WithStyles<'formContro
   }
 
   public render() {
-    const { id, label, required, error, type, value, autoComplete, classes } = this.props;
+    const { id, label, required, error, type, value, autoComplete, classes, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value} onKeyDown={(e) => this.handleKeydown(e)} />
-        {error && error[id] ? (<FormHelperText id={id + '-text'}>{error[id]}</FormHelperText>) : undefined}
+        <Input id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value || undefined} onKeyDown={(e) => this.handleKeydown(e)} {...fieldProps} />
+        {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
       </FormControl>
     );
   }
@@ -61,4 +60,4 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(NumberControl);
+export default withStyles(styles)<NumberProps>(NumberControl);

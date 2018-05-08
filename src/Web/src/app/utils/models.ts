@@ -1,15 +1,6 @@
-import { IModelType, types, flow } from 'mobx-state-tree';
+import { IModelType, types, flow, getSnapshot } from 'mobx-state-tree';
 import { Component } from 'react';
 import { StoreType } from '../stores';
-
-export interface ComponentDefinition {
-  input: 'text' | 'select' | 'textarea' | 'number';
-  label: string;
-  required?: boolean;
-
-  projectionStore?: IModelType<{}, {}>;
-  projection?: (store: any, term: string) => Promise<{ id: string, label: string}[]>;
-}
 
 const ResponseError = types.model(
   'ResponseError',
@@ -51,54 +42,6 @@ export function QueryResponse<S, T>(subtype: IModelType<S, T>) {
   });
 }
 
-export interface FormType<T> {
-  loading: boolean;
-  readonly valid: boolean;
-  readonly form: { [idx: string]: ComponentDefinition };
-  readonly validation: { [idx: string]: string };
-  changeValue(name: string, newVal: any): void;
-  submit(): void;
-  payload: T;
-}
-export function Form<S, T extends { readonly form: { [idx: string]: ComponentDefinition }, readonly valid: boolean, readonly validation: { [idx: string]: string }, submit(): void }>(subtype: IModelType<S, T>, env: any, sideEffect?: (model: T, success: boolean) => void): FormType<T> {
-  return types.model(
-    {
-      loading: types.optional(types.boolean, false),
-      payload: types.optional(subtype, {})
-    })
-    .views(self => ({
-      get valid() {
-        return self.payload.valid;
-      },
-      get form() {
-        return self.payload.form;
-      },
-      get validation() {
-        return self.payload.validation;
-      }
-    }))
-    .actions(self => {
-      const changeValue = (name: string, newVal: any) => {
-        self.payload[name] = newVal;
-      };
-      const submit = flow(function*() {
-        self.loading = true;
-        let success = false;
-        try {
-          yield self.payload.submit();
-          success = true;
-        } catch (e) {
-          console.log('submit error:', e);
-        }
-        if (sideEffect) {
-          sideEffect(self.payload, success);
-        }
-        self.loading = false;
-      });
-      return { changeValue, submit };
-    })
-    .create({}, env);
-}
 export interface SelectType {
   loading: boolean;
   term: string;
@@ -123,7 +66,7 @@ export function Select<S, T>(rootStore: StoreType, projectionStore: any, project
         try {
           self.records = yield projection(projectionStore, self.term);
         } catch (e) {
-          console.log('error fetching:', e);
+          // console.log('error fetching:', e);
         }
         self.loading = false;
       });

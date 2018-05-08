@@ -1,14 +1,14 @@
 const webpack = require('webpack');
 const path = require('path');
+const CleanPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const GitRevisionPlugin = require("git-revision-webpack-plugin");
 const WebpackBundleAnalzyer = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
-const { TsConfigPathsPlugin, CheckerPlugin } = require('awesome-typescript-loader');
 
 // config helpers:
 const ensureArray = (config) => config && (Array.isArray(config) ? config : [config]) || [];
@@ -19,7 +19,9 @@ const gitRevisionPlugin = new GitRevisionPlugin();
 
 const currentDateTime = new Date();
 const currentDate = currentDateTime.toLocaleDateString("en-GB").replace(/\//g, "-");
-const currentTime = currentDateTime.toLocaleTimeString("en-GB", { hour12: false }).replace(/:/g, "-");
+const currentTime = currentDateTime.toLocaleTimeString("en-GB", {
+  hour12: false
+}).replace(/:/g, "-");
 const fileDateTime = currentDate + "-" + currentTime;
 
 
@@ -32,13 +34,13 @@ const nodeModulesDir = path.resolve(__dirname, 'node_modules');
 const baseUrl = '/';
 
 
-module.exports = ({ production, development, server, extractCss, coverage } = {}) => ({
+module.exports = ({
+  production
+} = {}) => ({
   context: srcDir,
   entry: {
     app: [
-      ...when(development, [
-        'webpack-dev-server/client?http://localhost:9000',
-        'webpack/hot/only-dev-server',
+      ...when(!production, [
         'webpack-hud',
       ]),
       './index.ts'
@@ -75,10 +77,9 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
       'app': path.resolve(__dirname, 'src/app/')
     }
   },
-  devtool: development ? 'cheap-module-eval-source-map' : 'nosources-source-map',
+  devtool: !production ? 'cheap-module-eval-source-map' : 'nosources-source-map',
   module: {
-    rules: [
-      {
+    rules: [{
         enforce: "pre",
         test: /\.tsx?$/,
         use: "source-map-loader"
@@ -100,61 +101,66 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
       // only when the issuer is a .js/.ts file, so the loaders are not applied inside html templates
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              query: {
-                modules: true,
-                sourceMap: development,
-                minimize: production,
-                importLoaders: 1,
-                localIdentName: '[local]__[hash:base64:5]'
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                ident: 'postcss',
-                plugins: [
-                  require('postcss-import')({ addDependencyTo: webpack }),
-                  require('postcss-url')(),
-                  require('postcss-cssnext')(),
-                  require('postcss-reporter')(),
-                  require('postcss-browser-reporter')({ disabled: production }),
-                ]
-              }
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            query: {
+              sourceMap: !production,
+              minimize: production,
             }
-          ],
-        })
+          }
+        ],
       },
       // .ts, .tsx
       {
         test: /\.tsx?$/,
-        use: development ?
-          [
-            'react-hot-loader/webpack',
-            'awesome-typescript-loader'
-          ] : 'awesome-typescript-loader',
-        exclude: /(node_modules|test-utils|\.test\.ts$)/
+        exclude: /(node_modules|test-utils|\.test\.ts$)/,
+        use: ['awesome-typescript-loader']
       },
 
-      { test: /\.html$/i, loader: 'html-loader' },
-      { test: /\.json$/i, loader: 'json-loader' },
+      {
+        test: /\.html$/i,
+        loader: 'html-loader'
+      },
+      {
+        test: /\.json$/i,
+        loader: 'json-loader'
+      },
       // use Bluebird as the global Promise implementation:
-      { test: /[\/\\]node_modules[\/\\]bluebird[\/\\].+\.js$/, loader: 'expose-loader?Promise' },
+      {
+        test: /[\/\\]node_modules[\/\\]bluebird[\/\\].+\.js$/,
+        loader: 'expose-loader?Promise'
+      },
       // embed small images and fonts as Data Urls and larger ones as files:
-      { test: /\.(png|gif|jpg|cur)$/i, loader: 'url-loader', options: { limit: 8192 } },
-      { test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff2' } },
-      { test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff' } },
+      {
+        test: /\.(png|gif|jpg|cur)$/i,
+        loader: 'url-loader',
+        options: {
+          limit: 8192
+        }
+      },
+      {
+        test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'application/font-woff2'
+        }
+      },
+      {
+        test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'application/font-woff'
+        }
+      },
       // load these fonts normally, as files:
-      { test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'file-loader' },
-      ...when(coverage, {
-        test: /\.[jt]s$/i, loader: 'istanbul-instrumenter-loader',
-        include: srcDir, exclude: [/\.{spec,test}\.[jt]s$/i],
-        enforce: 'post', options: { esModules: true },
-      })
+      {
+        test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'file-loader'
+      }
     ]
   },
   optimization: {
@@ -175,6 +181,9 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
     runtimeChunk: true
   },
   plugins: [
+    ...when(production, [
+      new CleanPlugin([outDir]),
+    ]),
     new webpack.DefinePlugin({
       __DEV__: !production,
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
@@ -187,33 +196,38 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
       "TIME": JSON.stringify(currentTime)
     }),
     new webpack.ProvidePlugin({
+      // babel issue workaround? https://github.com/s-panferov/awesome-typescript-loader/issues/169
+      'regeneratorRuntime': 'regenerator-runtime/runtime',
       "Promise": "bluebird"
     }),
     new HtmlWebpackPlugin({
       template: staticDir + '/index.ejs',
       metadata: {
         // available in index.ejs //
-        title, server, baseUrl
+        title,
+        baseUrl
       }
     }),
     // ignore moment locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new WebpackCleanupPlugin(),
-    new WebpackBundleAnalzyer({analyzerMode: 'static', openAnalyzer: false}),
-    new ExtractTextPlugin({
-      disable: !extractCss,
-      filename: production ? '[contenthash].css' : '[id].css',
-      allChunks: true
+    new WebpackBundleAnalzyer({
+      analyzerMode: 'static',
+      openAnalyzer: false
     }),
-    ...when(development, [
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    }),
+    ...when(!production, [
+      new WebpackCleanupPlugin(),
       new webpack.NamedModulesPlugin(),
-      new webpack.HotModuleReplacementPlugin()
     ]),
-    ...when(production, new CopyWebpackPlugin([
-      { from: staticDir + '/favicon.ico', to: outDir + '/favicon.ico' }
-    ])),
-    ...when(production, new webpack.optimize.AggressiveMergingPlugin()),
     ...when(production, [
+      new CopyWebpackPlugin([{
+        from: staticDir + '/favicon.ico',
+        to: outDir + '/favicon.ico'
+      }]),
+      new webpack.optimize.AggressiveMergingPlugin(),
       new UglifyJSPlugin({
         sourceMap: true,
         parallel: true,
@@ -225,7 +239,13 @@ module.exports = ({ production, development, server, extractCss, coverage } = {}
             comments: false
           }
         }
-      })
+      }),
+      new CompressionPlugin({
+        asset: "[file].gz[query]",
+        algorithm: "gzip",
+        threshold: 10240,
+        minRatio: 0.8
+      }),
     ])
   ],
   devServer: {

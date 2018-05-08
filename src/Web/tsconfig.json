@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "sourceMap": true,
-    "target": "es2017",
+    "target": "esnext",
     "jsx": "react",
     "module": "esnext",
     "moduleResolution": "node",
@@ -17,10 +17,14 @@
     "sourceRoot": "src",
     "baseUrl": "src",
     "skipLibCheck": true,
-    "lib": [ "es2017", "dom" ]
+    "lib": [
+      "es2017",
+      "dom"
+    ]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ],
   "filesGlob": [
     "./src/**/*.ts",
@@ -31,6 +35,25 @@
     "rewriteTsconfig": false
   },
   "awesomeTypescriptLoaderOptions": {
-      "useCache": true
+    "useCache": true,
+    "useBabel": true,
+    "babelOptions": {
+      "babelrc": false, /* Important line */
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": "last 2 versions",
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": [
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-optional-catch-binding",
+        "react-hot-loader/babel"
+      ]
+    },
+    "babelCore": "@babel/core"
   }
 }

@@ -14,8 +14,6 @@ interface AlertProps {
   message: string;
   action?: React.ReactElement<any>;
 }
-interface AlertState {
-}
 
 const style = (theme: Theme) => ({
   info: {
@@ -29,7 +27,7 @@ const style = (theme: Theme) => ({
   }
 });
 
-class AlertControl extends React.Component<AlertProps & WithStyles<'info' | 'warn' | 'error'>, AlertState> {
+class AlertControl extends React.Component<AlertProps & WithStyles<'info' | 'warn' | 'error'>, {}> {
 
   public render() {
     const { message, type, classes, action } = this.props;
@@ -43,4 +41,4 @@ class AlertControl extends React.Component<AlertProps & WithStyles<'info' | 'war
     );
   }
 }
-export default withStyles(style)(AlertControl);
+export default withStyles(style)<AlertProps>(AlertControl);

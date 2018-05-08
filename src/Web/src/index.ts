@@ -2,10 +2,12 @@
 import Debug from 'debug';
 import { configure } from 'mobx';
 
+import install from './app/utils/validators';
 import { config } from './app/config';
 import Log from './app/utils/log';
 
 Log(config.debug.log);
+install();
 
 import { App } from './app';
 // enable MobX strict mode

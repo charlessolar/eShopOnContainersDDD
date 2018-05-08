@@ -1,6 +1,7 @@
 import * as React from 'react';
 import glamorous from 'glamorous';
 import { observable, action } from 'mobx';
+import { inject } from 'mobx-react';
 
 import { withStyles, WithStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
@@ -8,7 +9,8 @@ import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
-import MenuComponent, { Route } from './menu';
+import Menu, { Route } from './menu';
+import { StoreType } from '../stores';
 
 interface NavBarProps {
   authenticated: boolean;
@@ -17,6 +19,7 @@ interface NavBarProps {
 }
 
 class Store {
+  constructor(private _store: StoreType) {}
 
   @observable
   public open: boolean;
@@ -30,45 +33,47 @@ class Store {
   @action
   public navChange(menuItem: Route | string) {
     if (typeof menuItem === 'string') {
-      // this._context.history.push(menuItem);
+      this._store.history.push(menuItem);
     } else {
-      // this._context.history.push(menuItem.route);
+      this._store.history.push(menuItem.route);
     }
     this.close();
   }
 }
 
-export default function NavBar() {
-  const Menu = MenuComponent();
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  title: {
+    flex: 1,
+    cursor: 'pointer'
+  }
+});
 
-  const store = new Store();
+@inject('store')
+class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>, {}> {
+  private _store: Store;
+  constructor(props: any) {
+    super(props);
+    this._store = new Store(props.store);
+  }
 
-  const styles = {
-    root: {
-      flexGrow: 1,
-    },
-    title: {
-      flex: 1,
-      cursor: 'pointer'
-    }
-  };
+  public render() {
+    const { title, authenticated, email, classes } = this.props;
+    return (
+      <header>
+        <AppBar position='static'>
+          <Toolbar>
+            <Typography onClick={() => this._store.navChange('/')} variant='title' color='inherit' className={classes.title}>{title}</Typography>
+            {authenticated && (<Menu authenticated={authenticated} email={email} navChange={item => this._store.navChange(item)} />)}
+          </Toolbar>
+        </AppBar>
 
-  return withStyles(styles)(class extends React.Component<NavBarProps & WithStyles<'root' | 'title'>, {}> {
+      </header>
+    );
+  }
 
-    public render() {
-      const { title, authenticated, email, classes } = this.props;
-      return (
-        <header>
-          <AppBar position='static'>
-            <Toolbar>
-              <Typography onClick={() => store.navChange('/')} variant='title' color='inherit' className={classes.title}>{title}</Typography>
-              {authenticated && (<Menu authenticated={authenticated} email={email} navChange={item => store.navChange(item)}/>)}
-            </Toolbar>
-          </AppBar>
-
-        </header>
-      );
-    }
-
-  });
 }
+
+export default withStyles(styles)<NavBarProps>(NavBar);

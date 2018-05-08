@@ -6,6 +6,8 @@ import * as keycode from 'keycode';
 import Downshift from 'downshift';
 
 import { withStyles, WithStyles } from 'material-ui/styles';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 import { MenuItem } from 'material-ui/Menu';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
@@ -58,24 +60,6 @@ interface DownshiftState {
   selectedItem: string[];
 }
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    height: 250,
-  },
-  container: {
-    flexGrow: 1,
-    position: 'relative',
-  },
-  paper: {
-    position: 'absolute',
-    zIndex: 1,
-    marginTop: theme.spacing.unit,
-    left: 0,
-    right: 0,
-  }
-});
-
 interface SelectProps {
   id: string;
   required?: boolean;
@@ -84,12 +68,14 @@ interface SelectProps {
   type?: string;
   value?: any;
   onChange?: (newVal: string) => void;
+  fieldProps?: any;
 
   projectionStore?: IModelType<{}, { list(): Promise<{}>, updateTerm(val: string): Promise<{}> }>;
   projection?: (store: any, term: string) => Promise<{ id: string, label: string}[]>;
 }
 
-class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'root' | 'container' | 'paper'>, {}> {
+@inject('store')
+class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'root' | 'container' | 'paper' | 'formControl'>, {}> {
   private _store: SelectType;
   private _projectionStore: any;
 
@@ -112,24 +98,20 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'roo
   }
 
   public render() {
-    const { id, label, required, error, type, value, classes } = this.props;
+    const { id, label, required, error, type, value, classes, fieldProps } = this.props;
 
     return (
       <div className={classes.root}>
-        <Downshift onChange={(val) => this.selectionChanged(val)} itemToString={item => item.label}>
+        <Downshift onChange={(val) => this.selectionChanged(val)} itemToString={item => item && item.label}>
+
           {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex }) => (
             <div className={classes.container}>
-              {renderInput(
-                () => this.onFocus(),
-                (newVal: string) => this.onChange(newVal),
-                {
-                  fullWidth: true,
-                  classes,
-                  InputProps: getInputProps({
-                    placeholder: label,
-                    id,
-                  }),
-              })}
+
+              <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+                <InputLabel htmlFor={id}>{label}</InputLabel>
+                <Input id={id} onChange={e => this.onChange(e.target.value)} type='text' value={value} onFocus={() => this.onFocus()} {...getInputProps()} {...fieldProps} />
+        {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
+              </FormControl>
               {isOpen ? (
                 <Paper className={classes.paper} square>
                   {this._store.records.map((suggestion, index) =>
@@ -151,4 +133,21 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'roo
   }
 }
 
-export default inject('store')(withStyles(styles as any)(IntegrationDownshift));
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    height: 250,
+  },
+  container: {
+    flexGrow: 1,
+    position: 'relative',
+  },
+  paper: {
+    position: 'absolute',
+    zIndex: 1,
+    marginTop: theme.spacing.unit,
+    left: 0,
+    right: 0,
+  }
+});
+export default withStyles(styles as any)<SelectProps>(IntegrationDownshift);

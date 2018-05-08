@@ -6,7 +6,7 @@ import Debug from 'debug';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
+import CloseIcon from '@material-ui/icons/Close';
 
 import Alert from './alert';
 import { StoreType } from '../stores';
@@ -67,4 +67,4 @@ class AlertComponent extends React.Component<AlertStackProps & WithStyles<'close
   }
 }
 
-export default withStyles(style)(AlertComponent);
+export default withStyles(style)<AlertStackProps>(AlertComponent);

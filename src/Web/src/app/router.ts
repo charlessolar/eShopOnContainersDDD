@@ -10,9 +10,29 @@ const debug = new Debug('router');
 
 export function createRouter(store: StoreType, modules: Modules) {
 
+  function isAuthenticated(routerContext: UniversalRouterContext) {
+    const { path } = routerContext;
+    debug('isAuthenticated', path);
+    if (!store.authenticated) {
+      setTimeout(() => store.history.push(`/login?nextPath=${path}`), 1);
+      throw new Error('redirect');
+    }
+  }
+
   const routes: UniversalRouterRoute = {
     path: '',
     children: [
+      {
+        path: '',
+        action: async (routerContext) => {
+          if (!store.authenticated) {
+            setTimeout(() => store.history.push(`/login`), 1);
+            throw new Error('redirect');
+          }
+
+        }
+      },
+      ...modules.auth.routes,
       ...modules.catalog.routes
     ]
   };
@@ -26,7 +46,7 @@ export function createRouter(store: StoreType, modules: Modules) {
       }
 
       if (route.path !== '' && !route.path.startsWith('/login')) {
-        // isAuthenticated(routerContext);
+        isAuthenticated(routerContext);
       }
 
       if (typeof route.component === 'function') {

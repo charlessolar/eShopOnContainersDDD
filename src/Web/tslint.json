@@ -18,6 +18,6 @@
     "prefer-conditional-expression": false,
     "variable-name": [ true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case" ],
     "max-line-length": [ false ],
-    "no-submodule-imports": [ true, "uuid", "nprogress", "font-awesome", "lodash", "history", "material-ui", "material-ui-icons" ]
+    "no-submodule-imports": [ true, "uuid", "nprogress", "font-awesome", "lodash", "history", "material-ui", "@material-ui", "react-day-picker" ]
   }
 }

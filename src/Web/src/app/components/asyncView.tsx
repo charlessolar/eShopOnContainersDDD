@@ -18,17 +18,10 @@ class AsyncStore {
   @observable
   public componentData: any;
 
-  private loadedStore: string;
-
   private waitingFor: number;
 
   @action
   public loadComponent(store: any, promiseAction?: (store: any) => Promise<{}>, component?: any, getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>) {
-    // cheap hack to not reload async route unless store name changes
-    if (this.loadedStore && promiseAction.constructor.name === this.loadedStore) {
-      return;
-    }
-    this.loadedStore = promiseAction.constructor.name;
 
     if (promiseAction) {
       this.loading = true;
@@ -84,11 +77,14 @@ interface AsyncViewProps {
   component?: any;
   store?: any;
 
-  actionStore?: IModelType<{}, {}>;
+  existingStore?: any;
+  actionStore?: (store: StoreType) => any;
   action?: (store: any) => Promise<{}>;
 
   getComponent?: (check?: number, cb?: (props: AsyncViewProps) => void) => Promise<any>;
-  loading?: () => any;
+  loading?: (store: any) => boolean;
+
+  componentProps?: any;
 }
 interface AsyncViewState {
   componentData: any;
@@ -107,17 +103,16 @@ export default class AsyncView extends React.Component<AsyncViewProps, AsyncView
   }
 
   public componentWillMount() {
-    const { store } = this.props;
+    const { store, existingStore } = this.props;
 
-    this._asyncStore.loadComponent(store, this.props.action, this.props.component, this.props.getComponent);
+    this._asyncStore.loadComponent(store || existingStore, this.props.action, this.props.component, this.props.getComponent);
   }
 
   public render() {
-    if (this._asyncStore.componentData && !this._asyncStore.loading) {
-      return React.createElement(this._asyncStore.componentData, this.props);
-    } else if (this.props.loading) {
-      const loadingComponent = this.props.loading();
-      return loadingComponent;
+    const { store, existingStore } = this.props;
+
+    if (this._asyncStore.componentData && !this._asyncStore.loading && (!this.props.loading || !(this.props.loading(store || existingStore)))) {
+      return React.createElement(this._asyncStore.componentData, { store: store || existingStore, ...this.props, ...this.props.componentProps});
     }
     return (
       <div style={{
