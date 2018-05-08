@@ -32,7 +32,7 @@ export function createRouter(store: StoreType, modules: Modules) {
 
         }
       },
-      ...modules.auth.routes,
+      // ...modules.auth.routes,
       ...modules.catalog.routes
     ]
   };
@@ -46,7 +46,7 @@ export function createRouter(store: StoreType, modules: Modules) {
       }
 
       if (route.path !== '' && !route.path.startsWith('/login')) {
-        isAuthenticated(routerContext);
+        // isAuthenticated(routerContext);
       }
 
       if (typeof route.component === 'function') {

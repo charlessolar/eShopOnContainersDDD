@@ -70,7 +70,7 @@ interface SelectProps {
   onChange?: (newVal: string) => void;
   fieldProps?: any;
 
-  projectionStore?: IModelType<{}, { list(): Promise<{}>, updateTerm(val: string): Promise<{}> }>;
+  projectionStore?: any;
   projection?: (store: any, term: string) => Promise<{ id: string, label: string}[]>;
 }
 

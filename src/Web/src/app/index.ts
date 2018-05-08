@@ -1,5 +1,6 @@
 
 import * as ReactDOM from 'react-dom';
+import { JsonServiceClient } from '@servicestack/client';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { onSnapshot } from 'mobx-state-tree';
 import Debug from 'debug';
@@ -11,8 +12,6 @@ import { Client } from './client';
 import { Store, StoreType } from './stores';
 import { createModules, Modules } from './modules';
 
-import { Rest } from './utils/rest';
-
 const debug = new Debug('app');
 
 export class App {
@@ -20,13 +19,14 @@ export class App {
   private _modules: Modules;
 
   constructor() {
+    const jsonClient = new JsonServiceClient(config.apiUrl);
     const history = createBrowserHistory();
 
     const authStorage = localStorage.getItem('auth');
     const authState = authStorage ? JSON.parse(authStorage) : {};
 
     this._store = Store.create({ auth: authState }, {
-      client: new Rest(),
+      client: jsonClient,
       history,
       theme: theme()
     });

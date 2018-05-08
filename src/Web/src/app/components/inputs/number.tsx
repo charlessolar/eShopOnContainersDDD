@@ -45,7 +45,7 @@ class NumberControl extends React.Component<NumberProps & WithStyles<'formContro
     return (
       <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value || undefined} onKeyDown={(e) => this.handleKeydown(e)} {...fieldProps} />
+        <Input id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value || ''} onKeyDown={(e) => this.handleKeydown(e)} {...fieldProps} />
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
       </FormControl>
     );

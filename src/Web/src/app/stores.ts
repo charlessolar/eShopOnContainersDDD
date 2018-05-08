@@ -70,18 +70,6 @@ const ApiClient = types.model(
       return self.client.post(request);
     }
   }));
-export interface HistoryType {
-  history: History;
-}
-const History = types.model(
-  'History',
-  {
-  })
-  .views(self => ({
-    get history(): History {
-      return getEnv(this).history;
-    }
-  }));
 
 export interface AlertType {
   id: string;
@@ -119,7 +107,6 @@ const AlertStack = types.model(
 
 export interface StoreType {
   api: ApiClientType;
-  history: HistoryType;
   alertStack: AlertStackType;
   auth: AuthenticationType;
   theme: Theme;

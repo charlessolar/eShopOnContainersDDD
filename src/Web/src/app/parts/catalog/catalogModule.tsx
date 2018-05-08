@@ -2,10 +2,12 @@ import * as React from 'react';
 import { types, getRoot } from 'mobx-state-tree';
 
 import AsyncView from '../../components/asyncView';
-import { Brands, BrandsType, Brand, BrandType } from './models/brands';
-import { Products, ProductsType, Product, ProductType } from './models/products';
-import { Types, TypesType } from './models/types';
 import { models } from '../../utils';
+import { StoreType } from '../../stores';
+
+import { BrandsStoreModel, BrandsStoreType } from './stores/brands';
+import { TypesStoreModel, TypesStoreType } from './stores/types';
+import { ProductsStoreModel, ProductsStoreType } from './stores/products';
 
 export class CatalogModule {
   public routes: UniversalRouterRoute[];
@@ -19,8 +21,9 @@ export class CatalogModule {
           title: 'Brands',
           component: (
             <AsyncView
-              actionStore={Brands}
-              action={(brand: BrandsType) => brand.List.list()}
+              actionStore={(store: StoreType) => BrandsStoreModel.create({}, { api: store.api })}
+              action={(store: BrandsStoreType) => store.get()}
+              loading={(store: BrandsStoreType) => store.loading}
               getComponent={() => import('./views/brands')}
             />
           )
@@ -32,8 +35,9 @@ export class CatalogModule {
           title: 'Type',
           component: (
             <AsyncView
-              actionStore={Types}
-              action={(type: TypesType) => type.List.list()}
+              actionStore={(store: StoreType) => TypesStoreModel.create({}, { api: store.api })}
+              action={(store: TypesStoreType) => store.get()}
+              loading={(store: TypesStoreType) => store.loading}
               getComponent={() => import('./views/types')}
             />
           )
@@ -45,8 +49,9 @@ export class CatalogModule {
           title: 'Products',
           component: (
             <AsyncView
-              actionStore={Products}
-              action={(product: ProductsType) => product.List.list()}
+              actionStore={(store: StoreType) => ProductsStoreModel.create({}, { api: store.api })}
+              action={(store: ProductsStoreType) => store.get()}
+              loading={(store: ProductsStoreType) => store.loading}
               getComponent={() => import('./views/products')}
             />
           )

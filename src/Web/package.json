@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "@material-ui/icons": "^1.0.0-beta.43",
+    "@servicestack/client": "^1.0.12",
     "@types/history": "^4.6.2",
     "axios": "^0.18.0",
     "classnames": "^2.2.5",
