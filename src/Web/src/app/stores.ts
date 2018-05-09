@@ -111,7 +111,6 @@ export interface StoreType {
   auth: AuthenticationType;
   theme: Theme;
   history: History;
-  create<S, T>(subtype: IType<S, T>): T;
 
   readonly authenticated: boolean;
 }
@@ -132,10 +131,5 @@ export const Store = types.model(
   },
   get history() {
     return getEnv(self).history;
-  }
-}))
-.actions(self => ({
-  create<S, T>(subtype: IType<S, T>) {
-    return subtype.create(undefined, { api: self.api });
   }
 }));

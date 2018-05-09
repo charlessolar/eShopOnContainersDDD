@@ -35,8 +35,8 @@ export default class ProductView extends React.Component<ProductsProps, {}> {
           <Field field='name' />
           <Field field='description' />
           <Field field='price' />
-          <Field field='catalogTypeId' />
-          <Field field='catalogBrandId' />
+          <Field field='catalogType' />
+          <Field field='catalogBrand' />
           <Submit/>
         </Using>
       </div>

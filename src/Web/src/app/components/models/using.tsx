@@ -42,7 +42,7 @@ export class UsingType<T extends Payload & IStateTreeNode> {
     return this.payload && this.payload.validation ? this.payload.validation : {};
   }
 
-  public changeValue(name: string, newVal: string | number | Data | { from: string, to: string}) {
+  public changeValue(name: string, newVal: string | number | Data | { from: string, to: string} | any) {
     applyPatch(this.payload, { op: 'replace', path: name, value: newVal});
   }
   public pushValue(name: string, val: string | number) {

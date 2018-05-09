@@ -28,14 +28,10 @@ export default {
       }
     },
     catalogType: {
-      type: {
-        presence: true
-      }
+      presence: true
     },
     catalogBrand: {
-      brand: {
-        presence: true
-      }
+      presence: true
     }
   }
 };

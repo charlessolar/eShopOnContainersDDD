@@ -1,4 +1,4 @@
-import { types, IModelType, flow } from 'mobx-state-tree';
+import { types, IModelType, flow, IStateTreeNode } from 'mobx-state-tree';
 
 export { Using } from './using';
 export { Formatted } from './formatted';
@@ -28,4 +28,5 @@ export interface FieldDefinition {
 
   projectionStore?: any;
   projection?: (store: any, term: string) => Promise<{ id: string, label: string }[]>;
+  select?: (store: any, id: string) => any;
 }

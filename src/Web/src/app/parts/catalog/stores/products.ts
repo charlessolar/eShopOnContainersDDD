@@ -9,8 +9,8 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { TypeListModel, TypeListType } from '../models/types';
-import { BrandListModel, BrandListType } from '../models/brands';
+import { TypeType, TypeListModel, TypeModel, TypeListType } from '../models/types';
+import { BrandType, BrandListModel, BrandModel, BrandListType } from '../models/brands';
 import { ProductType, ProductListModel, ProductListType } from '../models/products';
 
 const debug = new Debug('category product store');
@@ -20,8 +20,8 @@ export interface ProductFormType {
   name: string;
   description: string;
   price: number;
-  catalogTypeId: string;
-  catalogBrandId: string;
+  catalogType: TypeType;
+  catalogBrand: BrandType;
 
   readonly form: { [idx: string]: FieldDefinition };
   submit: () => Promise<{}>;
@@ -32,14 +32,16 @@ export const ProductForm = types
     name: types.maybe(types.string),
     description: types.maybe(types.string),
     price: types.maybe(types.number),
-    catalogTypeId: types.maybe(types.string),
-    catalogBrandId: types.maybe(types.string)
+    catalogType: types.maybe(TypeModel),
+    catalogBrand: types.maybe(BrandModel)
   })
   .views(self => ({
     get validation() {
       const validation = {
         name: rules.product.name,
-        price: rules.product.price
+        price: rules.product.price,
+        catalogType: rules.product.catalogType,
+        catalogBrand: rules.product.catalogBrand
       };
 
       return validate(self, validation);
@@ -60,7 +62,7 @@ export const ProductForm = types
           label: 'Price',
           required: true
         },
-        catalogTypeId: {
+        catalogType: {
           input: 'selecter',
           label: 'Catalog Type',
           required: true,
@@ -68,9 +70,12 @@ export const ProductForm = types
           projection: async (store: TypeListType, term: string) => {
             await store.list(term);
             return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.type }));
+          },
+          select: (store: TypeListType, id: string) => {
+            return store.entries.get(id);
           }
         },
-        catalogBrandId: {
+        catalogBrand: {
           input: 'selecter',
           label: 'Catalog Brand',
           required: true,
@@ -78,6 +83,9 @@ export const ProductForm = types
           projection: async (store: BrandListType, term: string) => {
             await store.list(term);
             return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.brand }));
+          },
+          select: (store: BrandListType, id: string) => {
+            return store.entries.get(id);
           }
         }
       });
@@ -90,8 +98,8 @@ export const ProductForm = types
       request.productId = self.id;
       request.name = self.name;
       request.price = self.price;
-      request.categoryBrandId = self.catalogBrandId;
-      request.categoryTypeId = self.catalogTypeId;
+      request.categoryBrandId = self.catalogBrand.id;
+      request.categoryTypeId = self.catalogType.id;
 
       try {
         const client = getEnv(self).api as ApiClientType;
@@ -132,8 +140,17 @@ export const ProductsStoreModel = types.model(
     const get = flow(function*() {
       yield self.list.list();
     });
-    const add = (product: ProductType) => {
-      self.list.add(product);
+    const add = (product: ProductFormType) => {
+      self.list.add({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        catalogType: product.catalogType.type,
+        catalogTypeId: product.catalogType.id,
+        catalogBrand: product.catalogBrand.brand,
+        catalogBrandId: product.catalogBrand.id
+      });
       self.form = ProductForm.create({});
     };
 

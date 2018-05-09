@@ -31,7 +31,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
   const { using, field, fieldProps } = props;
   const definition = using.form[field];
 
-  const handleChange = (val: string | number | Data | { from: string, to: string}) => {
+  const handleChange = (val: string | number | Data | { from: string, to: string} | any) => {
     using.changeValue(field, val);
   };
   const handleCheckboxChange = (val: string, checked: boolean) => {
@@ -75,7 +75,8 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         label: definition.label,
         onChange: handleChange,
         projectionStore: definition.projectionStore,
-        projection: definition.projection
+        projection: definition.projection,
+        select: definition.select
       });
     case 'dropdown':
       return React.createElement(Dropdown, {

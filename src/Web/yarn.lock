@@ -523,9 +523,9 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@servicestack/client@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@servicestack/client/-/client-1.0.12.tgz#7c4b1e6e912d60088d7e441a8b31cda991e42d25"
+"@servicestack/client@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@servicestack/client/-/client-1.0.14.tgz#4165d75e1b1eade9875aa7260d70c637f8de9f92"
   dependencies:
     es6-shim "^0.35.3"
     eventsource "^0.2.2"
