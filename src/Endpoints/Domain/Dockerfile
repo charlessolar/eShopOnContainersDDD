@@ -17,6 +17,11 @@ COPY src/Contexts/Catalog/Domain/Handlers/*.csproj ./src/Contexts/Catalog/Domain
 COPY src/Contexts/Catalog/Domain/Entities/*.csproj ./src/Contexts/Catalog/Domain/Entities/
 COPY src/Contexts/Catalog/Presentation/ServiceStack/*.csproj ./src/Contexts/Catalog/Presentation/ServiceStack/
 COPY src/Contexts/Catalog/Language/*.csproj ./src/Contexts/Catalog/Language/
+COPY src/Contexts/Configuration/Applications/MongoDb/*.csproj ./src/Contexts/Configuration/Applications/MongoDb/
+COPY src/Contexts/Configuration/Domain/Handlers/*.csproj ./src/Contexts/Configuration/Domain/Handlers/
+COPY src/Contexts/Configuration/Domain/Entities/*.csproj ./src/Contexts/Configuration/Domain/Entities/
+COPY src/Contexts/Configuration/Presentation/ServiceStack/*.csproj ./src/Contexts/Configuration/Presentation/ServiceStack/
+COPY src/Contexts/Configuration/Language/*.csproj ./src/Contexts/Configuration/Language/
 COPY src/Contexts/Identity/Applications/Elastic/*.csproj ./src/Contexts/Identity/Applications/Elastic/
 COPY src/Contexts/Identity/Applications/MongoDb/*.csproj ./src/Contexts/Identity/Applications/MongoDb/
 COPY src/Contexts/Identity/Domain/Handlers/*.csproj ./src/Contexts/Identity/Domain/Handlers/
