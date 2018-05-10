@@ -142,7 +142,7 @@ namespace eShop
         private static IMongoClient GetMongoConnection()
         {
             var connectionString = Configuration["MongoDbConnection"];
-
+            
             return new MongoClient(connectionString);
         }
         private static IEventStoreConnection GetEventStore()
