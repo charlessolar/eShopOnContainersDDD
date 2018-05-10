@@ -41,7 +41,9 @@ namespace eShop
             if (_retreived.ContainsKey(id))
                 return _retreived[id];
 
-            var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>) "_id", id);
+            
+
+            var filter = Builders<T>.Filter.Eq((FieldDefinition<T, ObjectId>) "_id", ObjectId.Parse(id));
             var result = await _collection.FindAsync(filter).ConfigureAwait(false);
             var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
             _retreived[id] = document;
@@ -82,7 +84,7 @@ namespace eShop
             {
                 await _pendingUpdates.SelectAsync(doc =>
                 {
-                    var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", doc.Key);
+                    var filter = Builders<T>.Filter.Eq((FieldDefinition<T, ObjectId>)"_id", ObjectId.Parse(doc.Key));
                     return _collection.ReplaceOneAsync(filter, doc.Value);
                 }).ConfigureAwait(false);
             }
@@ -91,7 +93,7 @@ namespace eShop
             {
                 await _pendingDeletes.SelectAsync(doc =>
                 {
-                    var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", doc);
+                    var filter = Builders<T>.Filter.Eq((FieldDefinition<T, ObjectId>)"_id", ObjectId.Parse(doc));
                     return _collection.DeleteOneAsync(filter);
                 }).ConfigureAwait(false);
             }
