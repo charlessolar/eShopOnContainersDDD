@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-04-22 04:33:08
-Version: 5.02
+Date: 2018-05-10 05:28:24
+Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
 
@@ -148,7 +148,7 @@ export module DTOs
         catalogBrand: string;
         availableStock: number;
         restockThreshold: number;
-        maxStockThrshold: number;
+        maxStockThreshold: number;
         onReorder: number;
         pictureContents: Uint8Array;
         pictureContentType: string;
@@ -496,7 +496,7 @@ export module DTOs
     /**
     * Identity
     */
-    // @Route("/identity/register", "POST")
+    // @Route("/identity/users", "POST")
     // @Api(Description="Identity")
     export class UserRegister extends DomainCommand implements IReturn<CommandResponse>
     {
@@ -504,6 +504,117 @@ export module DTOs
         givenName: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "UserRegister"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users/{UserId}/enable", "POST")
+    // @Api(Description="Identity")
+    export class UserEnable extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "UserEnable"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users/{UserId}/disable", "POST")
+    // @Api(Description="Identity")
+    export class UserDisable extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "UserDisable"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users/{UserId}/assign", "POST")
+    // @Api(Description="Identity")
+    export class AssignRole extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userId: string;
+        roleId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "AssignRole"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users/{UserId}/revoke", "POST")
+    // @Api(Description="Identity")
+    export class RevokeRole extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userId: string;
+        roleId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RevokeRole"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/roles/{RoleId}/activate", "POST")
+    // @Api(Description="Identity")
+    export class RoleActivate extends DomainCommand implements IReturn<CommandResponse>
+    {
+        roleId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RoleActivate"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/roles/{RoleId}/deactivate", "POST")
+    // @Api(Description="Identity")
+    export class RoleDeactivate extends DomainCommand implements IReturn<CommandResponse>
+    {
+        roleId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RoleDeactivate"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/roles", "POST")
+    // @Api(Description="Identity")
+    export class RoleDefine extends DomainCommand implements IReturn<CommandResponse>
+    {
+        roleId: string;
+        name: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RoleDefine"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/roles/{RoleId}", "DELETE")
+    // @Api(Description="Identity")
+    export class RoleDestroy extends DomainCommand implements IReturn<CommandResponse>
+    {
+        roleId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RoleDestroy"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/roles/{RoleId}/revoke", "POST")
+    // @Api(Description="Identity")
+    export class RoleRevoke extends DomainCommand implements IReturn<CommandResponse>
+    {
+        roleId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "RoleRevoke"; }
     }
 
     /**

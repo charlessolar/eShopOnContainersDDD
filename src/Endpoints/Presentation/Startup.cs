@@ -204,6 +204,7 @@ namespace eShop
             Plugins.Add(new Marketing.Plugin());
             Plugins.Add(new Ordering.Plugin());
             Plugins.Add(new Payment.Plugin());
+            Plugins.Add(new Configuration.Plugin());
 
             var nativeTypes = this.GetPlugin<NativeTypesFeature>();
             nativeTypes.MetadataTypesConfig.GlobalNamespace = "DTOs";
