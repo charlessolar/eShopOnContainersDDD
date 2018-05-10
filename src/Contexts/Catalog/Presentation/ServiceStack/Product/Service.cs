@@ -32,6 +32,16 @@ namespace eShop.Catalog.Product
             });
         }
 
+        public Task<object> Any(Services.Catalog request)
+        {
+            return _bus.RequestPaged<Queries.Catalog, Models.ProductIndex>(new Queries.Catalog
+            {
+                BrandId = request.BrandId,
+                TypeId = request.TypeId,
+                Search = request.Search
+            });
+        }
+
         public Task Any(Services.AddProduct request)
         {
             return _bus.CommandToDomain(new Commands.Add

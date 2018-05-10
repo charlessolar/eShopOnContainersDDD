@@ -10,6 +10,12 @@ export function inject<S, T>(storeType: IModelType<S, T>, prop?: string) {
     return props;
   });
 }
+export function inject_factory(factory: (store: StoreType) => any, prop?: string) {
+  return mobx_inject((stores: { store: StoreType}, props) => {
+    props[prop || 'store'] = factory(stores.store);
+    return props;
+  });
+}
 
 export function inject_props<S, T>(accessor: (props: any) => (store: StoreType) => any, prop?: string) {
   return mobx_inject((stores: { store: StoreType }, props) => {

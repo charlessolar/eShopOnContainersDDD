@@ -13,7 +13,7 @@ import { TypeType, TypeListModel, TypeModel, TypeListType } from '../models/type
 import { BrandType, BrandListModel, BrandModel, BrandListType } from '../models/brands';
 import { ProductType, ProductListModel, ProductListType } from '../models/products';
 
-const debug = new Debug('category product store');
+const debug = new Debug('catalog product store');
 
 export interface ProductFormType {
   id: string;

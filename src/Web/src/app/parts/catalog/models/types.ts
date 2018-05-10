@@ -10,7 +10,7 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-const debug = new Debug('category types');
+const debug = new Debug('catalog types');
 
 export interface TypeType {
   id: string;

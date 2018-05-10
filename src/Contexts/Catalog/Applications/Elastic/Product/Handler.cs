@@ -12,6 +12,7 @@ namespace eShop.Catalog.Product
 {
     public class Handler :
         IHandleQueries<Queries.List>,
+        IHandleQueries<Queries.Catalog>,
         IHandleMessages<Events.Added>,
         IHandleMessages<Events.DescriptionUpdated>,
         IHandleMessages<Events.PictureSet>,
@@ -21,6 +22,24 @@ namespace eShop.Catalog.Product
         public async Task Handle(Queries.List query, IMessageHandlerContext ctx)
         {
             var builder = new QueryBuilder();
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.ProductIndex>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
+        public async Task Handle(Queries.Catalog query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+            if (query.BrandId.HasValue)
+                builder.Add("CatalogBrandId", query.BrandId.ToString(), Operation.EQUAL);
+            if (query.TypeId.HasValue)
+                builder.Add("CatalogTypeId", query.TypeId.ToString(), Operation.EQUAL);
+
+            if (!string.IsNullOrEmpty(query.Search))
+                builder.Grouped(Group.ANY)
+                    .Add("Name", query.Search, Operation.CONTAINS)
+                    .Add("Description", query.Search, Operation.CONTAINS);
+
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.ProductIndex>(builder.Build())
                 .ConfigureAwait(false);
 

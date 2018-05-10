@@ -13,7 +13,7 @@ import { ApiClientType } from '../../../stores';
 import { TypeModel, TypeType, TypeListModel, TypeListType } from './types';
 import { BrandModel, BrandType, BrandListModel, BrandListType } from './brands';
 
-const debug = new Debug('category products');
+const debug = new Debug('catalog products');
 
 export interface ProductType {
   id: string;

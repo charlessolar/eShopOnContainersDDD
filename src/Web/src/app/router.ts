@@ -19,21 +19,26 @@ export function createRouter(store: StoreType, modules: Modules) {
     }
   }
 
+  function isSetup() {
+    debug('isSetup', store.status.isSetup);
+    if (!store.status.isSetup) {
+      setTimeout(() => store.history.push('/seed'), 1);
+      throw new Error('redirect');
+    }
+  }
+
   const routes: UniversalRouterRoute = {
     path: '',
+    action: async (routerContext) => {
+      isSetup();
+    },
     children: [
       {
         path: '',
-        action: async (routerContext) => {
-          if (!store.authenticated) {
-            setTimeout(() => store.history.push(`/login`), 1);
-            throw new Error('redirect');
-          }
-
-        }
       },
       // ...modules.auth.routes,
-      ...modules.catalog.routes
+      ...modules.catalog.routes,
+      ...modules.configuration.routes
     ]
   };
 
@@ -42,7 +47,7 @@ export function createRouter(store: StoreType, modules: Modules) {
       const { route } = routerContext;
 
       if (typeof route.action === 'function') {
-        return route.action(routerContext, params);
+        route.action(routerContext, params);
       }
 
       if (route.path !== '' && !route.path.startsWith('/login')) {

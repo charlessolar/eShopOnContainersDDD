@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-10 05:28:24
+Date: 2018-05-10 06:03:15
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -253,6 +253,11 @@ export module DTOs
         productName: string;
         productPrice: number;
         quantity: number;
+    }
+
+    export class Status
+    {
+        isSetup: boolean;
     }
 
     export class Point
@@ -1064,6 +1069,28 @@ export module DTOs
         orderId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "RemoveOrderItem"; }
+    }
+
+    /**
+    * Configuration
+    */
+    // @Route("/configuration/status", "GET")
+    // @Api(Description="Configuration")
+    export class GetStatus extends Query<Status> implements IReturn<QueryResponse<Status>>
+    {
+        createResponse() { return new QueryResponse<Status>(); }
+        getTypeName() { return "GetStatus"; }
+    }
+
+    /**
+    * Configuration
+    */
+    // @Route("/configuration/setup/seed", "POST")
+    // @Api(Description="Configuration")
+    export class Seed extends DomainCommand implements IReturn<CommandResponse>
+    {
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "Seed"; }
     }
 
 }

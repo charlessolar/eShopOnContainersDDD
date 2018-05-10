@@ -6,6 +6,8 @@ using ServiceStack;
 
 namespace eShop.Catalog.Product.Services
 {
+    [Api("Catalog")]
+    [Route("/catalog/products/{ProductId}/price", "POST")]
     public class UpdatePriceProduct : DomainCommand
     {
         public Guid ProductId { get; set; }

@@ -63,4 +63,4 @@ const defaultConfig = {
     }
   }
 };
-export const config: Config = { ...defaultConfig.general, ...defaultConfig[process.env.NODE_ENV] };
+export const config: Config = { ...defaultConfig.general, ...(__DEV__ ? defaultConfig.development : defaultConfig.production) };

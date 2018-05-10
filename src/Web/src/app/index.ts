@@ -15,35 +15,24 @@ import { createModules, Modules } from './modules';
 const debug = new Debug('app');
 
 export class App {
-  private _store: StoreType | typeof Store.SnapshotType;
+  private _store: StoreType;
   private _modules: Modules;
 
   constructor() {
     const jsonClient = new JsonServiceClient(config.apiUrl);
     const history = createBrowserHistory();
 
-    const authStorage = localStorage.getItem('auth');
-    const authState = authStorage ? JSON.parse(authStorage) : {};
-
-    this._store = Store.create({ auth: authState }, {
+    this._store = Store.create({}, {
       client: jsonClient,
       history,
       theme: theme()
-    });
+    }) as StoreType;
 
-    onSnapshot(this._store.auth, state => {
-      localStorage.setItem('auth', JSON.stringify(state));
-    });
     this._modules = createModules(this._store as StoreType);
   }
 
   public async preAuth() {
-    // const token = localStorage.getItem('JWT');
-    // if (token) {
-      // auth set token
-      // this.context.parts.auth.stores.auth.setToken(token);
-    // }
-    // await this.context.parts.auth.stores.me.fetch();
+    await this._store.load();
   }
 
   public render() {
@@ -53,7 +42,7 @@ export class App {
   public async start() {
     debug('start');
     await Promise.all([
-      // this.preAuth(),
+      this.preAuth(),
       new Promise((resolve) => {
         setTimeout(() => resolve(), 1000);
       })

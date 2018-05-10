@@ -125,6 +125,31 @@ namespace eShop
             return Delete<T>(id.ToString());
         }
 
+        private QueryContainer addOperation<T>(QueryContainerDescriptor<T> descriptor,
+            FieldQueryDefinition definition) where T : class
+        {
+            switch (definition.Op)
+            {
+                case Operation.EQUAL:
+                    return descriptor.Term(term => term.Field(definition.Field).Value(definition.Value));
+                case Operation.CONTAINS:
+                    return descriptor.Term(term => term.Field(definition.Field).Value(definition.Value));
+                case Operation.GREATER_THAN:
+                    return descriptor.Range(number => number.Field(definition.Field).GreaterThan(double.Parse(definition.Value)));
+                case Operation.GREATER_THAN_OR_EQUAL:
+                    return descriptor.Range(number => number.Field(definition.Field).GreaterThanOrEquals(double.Parse(definition.Value)));
+                case Operation.LESS_THAN:
+                    return descriptor.Range(number => number.Field(definition.Field).LessThan(double.Parse(definition.Value)));
+                case Operation.LESS_THAN_OR_EQUAL:
+                    return descriptor.Range(number => number.Field(definition.Field).LessThanOrEquals(double.Parse(definition.Value)));
+                case Operation.NOT_EQUAL:
+                    return !descriptor.Term(term => term.Field(definition.Field).Value(definition.Value));
+
+            }
+
+            throw new ArgumentException($"operation {definition.Op} is not supported");
+        }
+
         public async Task<IQueryResult<T>> Query<T>(QueryDefinition definition) where T : class
         {
             Func<SearchDescriptor<T>, ISearchRequest> searchSelector = x =>
@@ -137,52 +162,35 @@ namespace eShop
                         {
                             case Group.ALL:
                                 {
-                                    q.Bool(b =>
-                                        b.Must(m =>
-                                        {
-                                            foreach (var match in group.Item2)
-                                            {
-                                                m.Term(term => term.Field(match.Field).Value(match.Value));
-                                            }
+                                    QueryContainer final = new MatchAllQuery();
+                                    foreach (var match in group.Item2)
+                                    {
+                                        final = final && addOperation(q, match);
+                                    }
 
-                                            return m;
-                                        })
-                                    );
-
+                                    q.Bool(b => b.Must(final));
                                     break;
                                 }
                             case Group.NOT:
                                 {
-                                    q.Bool(b =>
-                                        b.MustNot(m =>
-                                        {
-                                            foreach (var match in group.Item2)
-                                            {
-                                                m.Term(term => term.Field(match.Field).Value(match.Value));
-                                            }
+                                    QueryContainer final = new MatchAllQuery();
+                                    foreach (var match in group.Item2)
+                                    {
+                                        final = final && addOperation(q, match);
+                                    }
 
-                                            return m;
-                                        })
-                                    );
+                                    q.Bool(b => b.Must(!final));
                                     break;
                                 }
                             case Group.ANY:
                                 {
-                                    q.Bool(b =>
-                                        {
-                                            b.Should(m =>
-                                            {
-                                                foreach (var match in group.Item2)
-                                                {
-                                                    m.Term(term => term.Field(match.Field).Value(match.Value));
-                                                }
+                                    QueryContainer final = new MatchAllQuery();
+                                    foreach (var match in group.Item2)
+                                    {
+                                        final = final || addOperation(q, match);
+                                    }
 
-                                                return m;
-                                            });
-                                            b.MinimumShouldMatch(1);
-                                            return b;
-                                        }
-                                    );
+                                    q.Bool(b => b.Must(final));
                                     break;
                                 }
                         }

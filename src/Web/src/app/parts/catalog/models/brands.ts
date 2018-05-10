@@ -9,7 +9,7 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-const debug = new Debug('category brands');
+const debug = new Debug('catalog brands');
 
 export interface BrandType {
   id: string;

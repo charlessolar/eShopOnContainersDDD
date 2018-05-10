@@ -11,7 +11,7 @@ import { ApiClientType } from '../../../stores';
 
 import { BrandType, BrandListModel, BrandListType } from '../models/brands';
 
-const debug = new Debug('category brand store');
+const debug = new Debug('catalog brand store');
 
 export interface BrandFormType {
   id: string;
