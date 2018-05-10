@@ -41,7 +41,7 @@ namespace eShop.Configuration.Setup
                 {
                     Name = o.GetType().Name,
                     Depends = depends?.Depends,
-                    Category = category.Name,
+                    Category = category?.Name ?? "Unknown",
                     Operation = o,
                 };
             }).ToList();

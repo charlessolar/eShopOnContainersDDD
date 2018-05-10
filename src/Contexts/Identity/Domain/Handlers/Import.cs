@@ -4,10 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Extensions;
 using Infrastructure.Setup;
+using Infrastructure.Setup.Attributes;
 using NServiceBus;
 
 namespace eShop.Identity
 {
+    [Category("Identity")]
     public class Import : ISeed
     {
         private readonly IMessageSession _bus;
