@@ -7,7 +7,7 @@ namespace eShop.Identity.User.Entities.Role.Events
 {
     public interface Revoked : IStampedEvent
     {
-        Guid UserId { get; set; }
+        string UserName { get; set; }
         Guid RoleId { get; set; }
     }
 }

@@ -7,7 +7,8 @@ namespace eShop.Identity.User.Events
 {
     public interface Registered : IStampedEvent
     {
-        Guid UserId { get; set; }
         string GivenName { get; set; }
+        string UserName { get; set; }
+        string Password { get; set; }
     }
 }

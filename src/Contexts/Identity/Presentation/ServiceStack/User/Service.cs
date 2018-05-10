@@ -18,26 +18,57 @@ namespace eShop.Identity.User
             _bus = bus;
         }
 
+        public Task<object> Any(Services.GetIdentity request)
+        {
+            var session = GetSession();
+            return _bus.RequestQuery<Queries.Identity, Models.User>(new Queries.Identity
+            {
+                UserName = session.UserName
+            });
+        }
+
+        public Task<object> Any(Services.GetUsers request)
+        {
+            return _bus.RequestPaged<Queries.Users, Models.User>(new Queries.Users { });
+        }
+
         public Task Any(Services.UserRegister request)
         {
             return _bus.CommandToDomain(new Commands.Register
             {
-                UserId = request.UserId,
+                UserName = request.UserName,
                 GivenName = request.GivenName
+            });
+        }
+        public Task Any(Services.ChangeName request)
+        {
+            return _bus.CommandToDomain(new Commands.ChangeName
+            {
+                UserName = request.UserName,
+                GivenName=request.GivenName
+            });
+        }
+        public Task Any(Services.ChangePassword request)
+        {
+            return _bus.CommandToDomain(new Commands.ChangePassword
+            {
+                UserName = request.UserName,
+                Password = request.Password,
+                NewPassword = request.NewPassword
             });
         }
         public Task Any(Services.UserEnable request)
         {
             return _bus.CommandToDomain(new Commands.Enable
             {
-                UserId = request.UserId,
+                UserName = request.UserName,
             });
         }
         public Task Any(Services.UserDisable request)
         {
             return _bus.CommandToDomain(new Commands.Disable
             {
-                UserId = request.UserId,
+                UserName = request.UserName,
             });
         }
 
@@ -45,7 +76,7 @@ namespace eShop.Identity.User
         {
             return _bus.CommandToDomain(new Entities.Role.Commands.Assign
             {
-                UserId = request.UserId,
+                UserName = request.UserName,
                 RoleId = request.RoleId
             });
         }
@@ -53,7 +84,7 @@ namespace eShop.Identity.User
         {
             return _bus.CommandToDomain(new Entities.Role.Commands.Revoke
             {
-                UserId = request.UserId,
+                UserName = request.UserName,
                 RoleId = request.RoleId
             });
         }

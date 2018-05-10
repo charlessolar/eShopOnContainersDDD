@@ -7,10 +7,10 @@ using ServiceStack;
 namespace eShop.Identity.User.Services
 {
     [Api("Identity")]
-    [Route("/identity/users/{UserId}/revoke", "POST")]
+    [Route("/identity/users/{UserName}/revoke", "POST")]
     public class RevokeRole : DomainCommand
     {
-        public Guid UserId { get; set; }
+        public string UserName { get; set; }
         public Guid RoleId { get; set; }
     }
 }

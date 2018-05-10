@@ -7,10 +7,10 @@ using ServiceStack;
 namespace eShop.Identity.User.Services
 {
     [Api("Identity")]
-    [Route("/identity/users/{UserId}/assign", "POST")]
+    [Route("/identity/users/{UserName}/assign", "POST")]
     public class AssignRole : DomainCommand
     {
-        public Guid UserId { get; set; }
+        public string UserName { get; set; }
         public Guid RoleId { get; set; }
     }
 }

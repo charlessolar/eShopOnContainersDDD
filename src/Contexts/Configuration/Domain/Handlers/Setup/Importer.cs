@@ -30,7 +30,7 @@ namespace eShop.Configuration.Setup
         public static void LoadOperations(IContainer container)
         {
             Logger.Debug("Loading all operations");
-            if (_imports.Any())
+            if (_imports != null && _imports.Any())
                 return;
 
             _imports = container.GetAllInstances<ISeed>().Select(o =>

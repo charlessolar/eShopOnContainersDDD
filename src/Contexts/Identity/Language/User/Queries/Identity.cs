@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Infrastructure.Commands;
+using Infrastructure.Queries;
 
-namespace eShop.Identity.User.Commands
+namespace eShop.Identity.User.Queries
 {
-    public class Disable : StampedCommand
+    public class Identity : Query
     {
         public string UserName { get; set; }
     }

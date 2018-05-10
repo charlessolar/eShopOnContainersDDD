@@ -7,6 +7,6 @@ namespace eShop.Identity.User.Events
 {
     public interface Disabled : IStampedEvent
     {
-        Guid UserId { get; set; }
+        string UserName { get; set; }
     }
 }

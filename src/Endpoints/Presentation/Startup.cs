@@ -25,6 +25,7 @@ using Serilog;
 using App.Metrics.Health;
 using StructureMap;
 using App.Metrics.Health.Builder;
+using eShop.Presentation.Authentication;
 using ServiceStack.Api.OpenApi;
 
 namespace eShop
@@ -180,6 +181,13 @@ namespace eShop
 
             container.Adapter = new StructureMapContainerAdapter(_container);
 
+            Plugins.Add(new AuthFeature(() => new AuthUserSession(),
+                new IAuthProvider[]
+                {
+                    new JwtAuthProvider(AppSettings) { AuthKey = AesUtils.CreateKey(), RequireSecureConnection=false },
+                }));
+            container.Register<IUserSessionSource>(x => new IdentitySessionSource(_bus));
+            
             Plugins.Add(new OpenApiFeature());
 
             Plugins.Add(new PostmanFeature
@@ -187,10 +195,7 @@ namespace eShop
                 DefaultLabelFmt = new List<string> { "type: english", " ", "route" }
             });
             Plugins.Add(new CorsFeature(
-                allowOriginWhitelist: new[]
-                {
-                    "http://localhost:9000"
-                },
+                allowedOrigins: "*",
                 allowCredentials: true,
                 allowedHeaders: "Content-Type, Authorization",
                 allowedMethods: "GET, POST, PUT, DELETE, OPTIONS"

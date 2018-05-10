@@ -5,7 +5,7 @@ using Infrastructure.Commands;
 
 namespace eShop.Identity.User.Events
 {
-    public interface Enabled : IStampedEvent
+    public interface Identified : IStampedEvent
     {
         string UserName { get; set; }
     }

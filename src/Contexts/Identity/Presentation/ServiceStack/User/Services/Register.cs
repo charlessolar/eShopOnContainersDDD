@@ -10,7 +10,8 @@ namespace eShop.Identity.User.Services
     [Route("/identity/users", "POST")]
     public class UserRegister : DomainCommand
     {
-        public Guid UserId { get; set; }
         public string GivenName { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }

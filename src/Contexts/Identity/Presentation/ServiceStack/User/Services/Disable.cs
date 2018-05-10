@@ -7,9 +7,9 @@ using ServiceStack;
 namespace eShop.Identity.User.Services
 {
     [Api("Identity")]
-    [Route("/identity/users/{UserId}/disable", "POST")]
+    [Route("/identity/users/{UserName}/disable", "POST")]
     public class UserDisable : DomainCommand
     {
-        public Guid UserId { get; set; }
+        public string UserName { get; set; }
     }
 }

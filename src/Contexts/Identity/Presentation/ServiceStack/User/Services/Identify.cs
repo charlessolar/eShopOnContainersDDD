@@ -7,9 +7,10 @@ using ServiceStack;
 namespace eShop.Identity.User.Services
 {
     [Api("Identity")]
-    [Route("/identity/users/{UserName}/enable", "POST")]
-    public class UserEnable : DomainCommand
+    [Route("/identity/identify", "POST")]
+    public class Identify : DomainCommand
     {
         public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }
