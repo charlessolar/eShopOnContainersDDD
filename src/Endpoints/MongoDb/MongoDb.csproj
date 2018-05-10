@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.4.260" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.5.1" />
@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Contexts\Basket\Applications\MongoDb\Basket.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Catalog\Applications\MongoDb\Catalog.Applications.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Contexts\Configuration\Applications\MongoDb\Configuration.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Identity\Applications\MongoDb\Identity.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Location\Applications\MongoDb\Location.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Marketing\Applications\MongoDb\Marketing.Applications.MongoDb.csproj" />

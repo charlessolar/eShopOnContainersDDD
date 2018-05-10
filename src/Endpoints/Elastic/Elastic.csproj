@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.4.260" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
-    <PackageReference Include="NEST" Version="6.0.2" />
-    <PackageReference Include="NEST.JsonNetSerializer" Version="6.0.2" />
+    <PackageReference Include="NEST" Version="6.1.0" />
+    <PackageReference Include="NEST.JsonNetSerializer" Version="6.1.0" />
     <PackageReference Include="NServiceBus" Version="7.0.0-rc0002" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0-beta0001" />
     <PackageReference Include="NServiceBus.RabbitMQ" Version="5.0.0-rc0001" />

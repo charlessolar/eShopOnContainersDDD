@@ -26,5 +26,36 @@ namespace eShop.Identity.User
                 GivenName = request.GivenName
             });
         }
+        public Task Any(Services.UserEnable request)
+        {
+            return _bus.CommandToDomain(new Commands.Enable
+            {
+                UserId = request.UserId,
+            });
+        }
+        public Task Any(Services.UserDisable request)
+        {
+            return _bus.CommandToDomain(new Commands.Disable
+            {
+                UserId = request.UserId,
+            });
+        }
+
+        public Task Any(Services.AssignRole request)
+        {
+            return _bus.CommandToDomain(new Entities.Role.Commands.Assign
+            {
+                UserId = request.UserId,
+                RoleId = request.RoleId
+            });
+        }
+        public Task Any(Services.RevokeRole request)
+        {
+            return _bus.CommandToDomain(new Entities.Role.Commands.Revoke
+            {
+                UserId = request.UserId,
+                RoleId = request.RoleId
+            });
+        }
     }
 }

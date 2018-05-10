@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.3.259" />
-    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.3.259" />
+    <PackageReference Include="Aggregates.NET" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.4.260" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
     <PackageReference Include="NServiceBus" Version="7.0.0-rc0002" />
@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Contexts\Basket\Domain\Handlers\Basket.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Catalog\Domain\Handlers\Catalog.Domain.Handlers.csproj" />
+    <ProjectReference Include="..\..\Contexts\Configuration\Domain\Handlers\Configuration.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Identity\Domain\Handlers\Identity.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Location\Domain\Handlers\Location.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Marketing\Domain\Handlers\Marketing.Domain.Handlers.csproj" />

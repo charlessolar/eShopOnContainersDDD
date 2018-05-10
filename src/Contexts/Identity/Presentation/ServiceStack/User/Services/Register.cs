@@ -7,7 +7,7 @@ using ServiceStack;
 namespace eShop.Identity.User.Services
 {
     [Api("Identity")]
-    [Route("/identity/register", "POST")]
+    [Route("/identity/users", "POST")]
     public class UserRegister : DomainCommand
     {
         public Guid UserId { get; set; }

@@ -11,8 +11,11 @@ using StructureMap;
 using System;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Extensions;
+using Infrastructure.Setup;
 
 namespace eShop
 {
@@ -53,15 +56,23 @@ namespace eShop
 
             NServiceBus.Logging.LogManager.Use<SerilogFactory>();
 
+            // Scan working directory for assemblies containing messages
+            var assemblies = new Assembly[] { Assembly.GetExecutingAssembly() }.Concat(
+                DIExtensions.GetAssembliesInDirectory(selector: (file) => file.Name.StartsWith("Aggregates") || file.Name.StartsWith("eShop"))).ToList();
+
             _container = new Container(x =>
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
 
                 x.Scan(y =>
                 {
-                    y.TheCallingAssembly();
+                    // Note do not use structuremap's assembly scanning it will load EVERY package in nuget
+                    foreach (var a in assemblies)
+                        y.Assembly(a);
 
                     y.WithDefaultConventions();
+                    y.AddAllTypesOf<ISetup>();
+                    y.AddAllTypesOf<ISeed>();
                 });
             });
 

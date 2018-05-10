@@ -12,12 +12,10 @@ namespace Infrastructure.Setup
 {
     public static class AppSetup
     {
-        private static IEnumerable<SetupInfo> _operations;
-
         public static void InitiateSetup(IEnumerable<ISetup> setups)
         {
 
-            _operations = setups.Select(o =>
+            Setups = setups.Select(o =>
             {
                 var depends = o.GetType().GetCustomAttributes(typeof(DependsAttribute), true).FirstOrDefault() as DependsAttribute;
                 var category = o.GetType().GetCustomAttributes(typeof(CategoryAttribute), true).FirstOrDefault() as CategoryAttribute;
@@ -31,11 +29,11 @@ namespace Infrastructure.Setup
             }).ToList();
         }
 
-        public static IEnumerable<SetupInfo> Setups => _operations;
+        public static IEnumerable<SetupInfo> Setups { get; private set; }
 
         public static ISetup GetSetup(string operation)
         {
-            return _operations.SingleOrDefault(o => o.Name == operation)?.Operation;
+            return Setups.SingleOrDefault(o => o.Name == operation)?.Operation;
         }
 
         public static Task SetupApplication()
@@ -50,7 +48,7 @@ namespace Infrastructure.Setup
             var watch = new Stopwatch();
 
             // Depends will be either, ALL setup operations if info is null, or all the operations info depends on
-            var depends = _operations;
+            var depends = Setups;
             if (info != null)
                 depends = depends.Where(x => info.Depends.Any() && info.Depends.Contains(x.Name));
 

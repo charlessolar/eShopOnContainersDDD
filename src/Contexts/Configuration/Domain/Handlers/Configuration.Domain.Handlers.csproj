@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../../Common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>eShop.Configuration</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Title>eShop.Configuration</Title>
+    <AssemblyName>eShop.Configuration.Domain.Handlers</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Configuration.Domain.Entities.csproj" />
+  </ItemGroup>
+</Project>

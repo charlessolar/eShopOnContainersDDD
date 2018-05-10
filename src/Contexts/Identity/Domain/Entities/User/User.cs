@@ -16,5 +16,15 @@ namespace eShop.Identity.User
                 x.GivenName = givenName;
             });
         }
+
+        public void Disable()
+        {
+            Apply<Events.Disabled>(x => { x.UserId = Id; });
+        }
+
+        public void Enable()
+        {
+            Apply<Events.Enabled>(x => { x.UserId = Id; });
+        }
     }
 }
