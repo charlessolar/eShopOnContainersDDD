@@ -47,13 +47,13 @@ namespace eShop.Identity.User
 
         public async Task Handle(Commands.Enable command, IMessageHandlerContext ctx)
         {
-            var user = await ctx.For<User>().Get(command.UserId).ConfigureAwait(false);
+            var user = await ctx.For<User>().Get(command.UserName).ConfigureAwait(false);
             user.Enable();
         }
 
         public async Task Handle(Commands.Disable command, IMessageHandlerContext ctx)
         {
-            var user = await ctx.For<User>().Get(command.UserId).ConfigureAwait(false);
+            var user = await ctx.For<User>().Get(command.UserName).ConfigureAwait(false);
             user.Disable();
         }
     }

@@ -45,7 +45,7 @@ namespace eShop.Identity.Role
         {
             var role = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Role>(e.RoleId).ConfigureAwait(false);
 
-            var userIds = await ctx.Service<User.Services.UsersWithRole, Guid[]>(x => { x.RoleId = e.RoleId; })
+            var userIds = await ctx.Service<User.Services.UsersWithRole, string[]>(x => { x.RoleId = e.RoleId; })
                 .ConfigureAwait(false);
 
             // Remove the role from all users

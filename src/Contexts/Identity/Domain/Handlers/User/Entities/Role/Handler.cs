@@ -14,7 +14,7 @@ namespace eShop.Identity.User.Entities.Role
 
         public async Task Handle(Commands.Assign command, IMessageHandlerContext ctx)
         {
-            var user = await ctx.For<User>().Get(command.UserId).ConfigureAwait(false);
+            var user = await ctx.For<User>().Get(command.UserName).ConfigureAwait(false);
             var role = await user.For<Role>().TryGet(command.RoleId).ConfigureAwait(false);
             // Allows a role to already exist (was previously revoked)
             if (role == null)
@@ -25,7 +25,7 @@ namespace eShop.Identity.User.Entities.Role
         }
         public async Task Handle(Commands.Revoke command, IMessageHandlerContext ctx)
         {
-            var user = await ctx.For<User>().Get(command.UserId).ConfigureAwait(false);
+            var user = await ctx.For<User>().Get(command.UserName).ConfigureAwait(false);
             var role = await user.For<Role>().Get(command.RoleId).ConfigureAwait(false);
             role.Revoke();
         }

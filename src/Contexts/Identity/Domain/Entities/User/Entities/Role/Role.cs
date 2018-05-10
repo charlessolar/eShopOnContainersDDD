@@ -13,7 +13,7 @@ namespace eShop.Identity.User.Entities.Role
         {
             Apply<Events.Assigned>(x =>
             {
-                x.UserId = Parent.Id;
+                x.UserName = Parent.Id;
                 x.RoleId = Id;
             });
         }
@@ -22,7 +22,7 @@ namespace eShop.Identity.User.Entities.Role
         {
             Apply<Events.Revoked>(x =>
             {
-                x.UserId = Parent.Id;
+                x.UserName = Parent.Id;
                 x.RoleId = Id;
             });
         }

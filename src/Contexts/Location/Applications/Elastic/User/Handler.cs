@@ -23,7 +23,7 @@ namespace eShop.Location.User
                 Code = location.Code,
                 LocationId = location.Id,
                 Name = user.GivenName,
-                UserId = user.Id
+                UserName = user.Id
             };
 
             await ctx.App<Infrastructure.IUnitOfWork>().Add(e.RecordId, model).ConfigureAwait(false);
