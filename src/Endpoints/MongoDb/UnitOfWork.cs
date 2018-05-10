@@ -43,7 +43,7 @@ namespace eShop
 
             var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>) "Id", id);
             var result = await _collection.FindAsync(filter).ConfigureAwait(false);
-            var document = await result.FirstAsync<T>().ConfigureAwait(false);
+            var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
             _retreived[id] = document;
             return document;
         }
