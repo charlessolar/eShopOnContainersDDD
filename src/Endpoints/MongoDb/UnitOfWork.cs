@@ -20,41 +20,50 @@ namespace eShop
     {
         private readonly IMongoCollection<T> _collection;
         private readonly ILogger _logger;
-        private readonly Dictionary<string, T> _retreived;
-        private readonly Dictionary<string, T> _pendingSaves;
-        private readonly Dictionary<string, T> _pendingUpdates;
-        private readonly List<string> _pendingDeletes;
+        private readonly Dictionary<object, T> _retreived;
+        private readonly Dictionary<object, T> _pendingSaves;
+        private readonly Dictionary<object, T> _pendingUpdates;
+        private readonly List<object> _pendingDeletes;
 
         public CommitableCollection(IMongoDatabase database)
         {
             _collection = database.GetCollection<T>($"eshop;{typeof(T).FullName.ToLower()}", new MongoCollectionSettings {AssignIdOnInsert = false});
-            _retreived = new Dictionary<string, T>();
-            _pendingSaves = new Dictionary<string, T>();
-            _pendingUpdates = new Dictionary<string, T>();
-            _pendingDeletes = new List<string>();
+            _retreived = new Dictionary<object, T>();
+            _pendingSaves = new Dictionary<object, T>();
+            _pendingUpdates = new Dictionary<object, T>();
+            _pendingDeletes = new List<object>();
             _logger = Log.Logger.With<CommitableCollection<T>>();
         }
 
-        public async Task<T> Get(string id)
+        public async Task<T> Get(object id)
         {
             _logger.DebugEvent("Get", "Retreiving document {Id}", id);
             if (_retreived.ContainsKey(id))
                 return _retreived[id];
 
-            var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>) "_id", id);
+            FilterDefinition<T> filter;
+            if (id is string)
+            {
+                filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)id);
+            }
+            else
+            {
+                filter = Builders<T>.Filter.Eq((FieldDefinition<T, Guid>)"_id", (Guid)id);
+            }
+            
             var result = await _collection.FindAsync(filter).ConfigureAwait(false);
             var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
             _retreived[id] = document;
             return document;
         }
-
-        public void Add(string id, T document)
+        
+        public void Add(object id, T document)
         {
             _logger.DebugEvent("Add", "Queuing add document {Id}", id);
             _pendingSaves[id] = document;
         }
 
-        public void Update(string id, T document)
+        public void Update(object id, T document)
         {
             _logger.DebugEvent("Update", "Queuing update document {Id}", id);
             if (_pendingSaves.ContainsKey(id))
@@ -65,7 +74,7 @@ namespace eShop
             _pendingUpdates[id] = document;
         }
 
-        public void Delete(string id)
+        public void Delete(object id)
         {
             _logger.DebugEvent("Delete", "Queuing delete document {Id}", id);
             _pendingDeletes.Add(id);
@@ -82,7 +91,15 @@ namespace eShop
             {
                 await _pendingUpdates.SelectAsync(doc =>
                 {
-                    var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", doc.Key);
+                    FilterDefinition<T> filter;
+                    if (doc.Key is string)
+                    {
+                        filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)doc.Key);
+                    }
+                    else
+                    {
+                        filter = Builders<T>.Filter.Eq((FieldDefinition<T, Guid>)"_id", (Guid)doc.Key);
+                    }
                     return _collection.ReplaceOneAsync(filter, doc.Value);
                 }).ConfigureAwait(false);
             }
@@ -91,7 +108,15 @@ namespace eShop
             {
                 await _pendingDeletes.SelectAsync(doc =>
                 {
-                    var filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", doc);
+                    FilterDefinition<T> filter;
+                    if (doc is string)
+                    {
+                        filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)doc);
+                    }
+                    else
+                    {
+                        filter = Builders<T>.Filter.Eq((FieldDefinition<T, Guid>)"_id", (Guid)doc);
+                    }
                     return _collection.DeleteOneAsync(filter);
                 }).ConfigureAwait(false);
             }
@@ -153,7 +178,7 @@ namespace eShop
 
         public Task Add<T>(Guid id, T document) where T : class
         {
-            return Add(id.ToString(), document);
+            return Add(id, document);
         }
 
         public Task Update<T>(string id, T document) where T : class
@@ -165,7 +190,7 @@ namespace eShop
 
         public Task Update<T>(Guid id, T document) where T : class
         {
-            return Update(id.ToString(), document);
+            return Update(id, document);
         }
 
         public Task<T> Get<T>(string id) where T : class
@@ -176,7 +201,7 @@ namespace eShop
 
         public Task<T> Get<T>(Guid id) where T : class
         {
-            return Get<T>(id.ToString());
+            return Get<T>(id);
         }
 
         public Task Delete<T>(string id) where T : class
@@ -188,7 +213,7 @@ namespace eShop
 
         public Task Delete<T>(Guid id) where T : class
         {
-            return Delete<T>(id.ToString());
+            return Delete<T>(id);
         }
 
         public Task<IQueryResult<T>> Query<T>(QueryDefinition definition) where T : class
