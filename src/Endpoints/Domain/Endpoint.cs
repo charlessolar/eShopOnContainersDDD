@@ -63,6 +63,7 @@ namespace eShop
             _container = new Container(x =>
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
+                x.For<IMessageSession>().Use(() => Aggregates.Bus.Instance);
 
                 x.Scan(y =>
                 {

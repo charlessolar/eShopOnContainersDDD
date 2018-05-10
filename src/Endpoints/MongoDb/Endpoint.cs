@@ -66,6 +66,7 @@ namespace eShop
             _container = new Container(x =>
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
+                x.For<IMessageSession>().Use(() => Aggregates.Bus.Instance);
                 x.For<IMongoDatabase>().Use(client.GetDatabase("eShop"));
                 x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
                 x.For<Aggregates.IUnitOfWork>().Add(b => (Aggregates.IUnitOfWork)b.GetInstance<Infrastructure.IUnitOfWork>());
