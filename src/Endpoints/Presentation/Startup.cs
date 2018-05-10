@@ -195,10 +195,14 @@ namespace eShop
                 DefaultLabelFmt = new List<string> { "type: english", " ", "route" }
             });
             Plugins.Add(new CorsFeature(
-                allowedOrigins: "*",
+                allowOriginWhitelist: new[]
+                {
+                    "http://localhost:9000",
+                    "http://localhost",
+                },
                 allowCredentials: true,
                 allowedHeaders: "Content-Type, Authorization",
-                allowedMethods: "GET, POST, PUT, DELETE, OPTIONS"
+                allowedMethods: "GET, POST, DELETE, OPTIONS"
             ));
 
             Plugins.Add(new ValidationFeature());
