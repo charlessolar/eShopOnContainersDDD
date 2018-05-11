@@ -12,7 +12,10 @@ namespace eShop.Catalog.Product
         IHandleMessages<Commands.Remove>,
         IHandleMessages<Commands.SetPicture>,
         IHandleMessages<Commands.UpdateDescription>,
-        IHandleMessages<Commands.UpdatePrice>
+        IHandleMessages<Commands.UpdatePrice>,
+        IHandleMessages<Commands.UpdateStock>,
+        IHandleMessages<Commands.MarkReordered>,
+        IHandleMessages<Commands.UnMarkReordered>
     {
         public async Task Handle(Commands.Add command, IMessageHandlerContext ctx)
         {
@@ -41,6 +44,21 @@ namespace eShop.Catalog.Product
         {
             var product = await ctx.For<Product>().Get(command.ProductId).ConfigureAwait(false);
             product.UpdatePrice(command.Price);
+        }
+        public async Task Handle(Commands.UpdateStock command, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.For<Product>().Get(command.ProductId).ConfigureAwait(false);
+            product.UpdateStock(command.Stock);
+        }
+        public async Task Handle(Commands.MarkReordered command, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.For<Product>().Get(command.ProductId).ConfigureAwait(false);
+            product.MarkReordered();
+        }
+        public async Task Handle(Commands.UnMarkReordered command, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.For<Product>().Get(command.ProductId).ConfigureAwait(false);
+            product.UnMarkReordered();
         }
 
     }

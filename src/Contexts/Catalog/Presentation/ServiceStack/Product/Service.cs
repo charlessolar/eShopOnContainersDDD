@@ -81,6 +81,28 @@ namespace eShop.Catalog.Product
                 Description = request.Description
             });
         }
+        public Task Any(Services.MarkReordered request)
+        {
+            return _bus.CommandToDomain(new Commands.MarkReordered
+            {
+                ProductId = request.ProductId
+            });
+        }
+        public Task Any(Services.UnMarkReordered request)
+        {
+            return _bus.CommandToDomain(new Commands.UnMarkReordered
+            {
+                ProductId = request.ProductId
+            });
+        }
+        public Task Any(Services.UpdateStock request)
+        {
+            return _bus.CommandToDomain(new Commands.UpdateStock
+            {
+                ProductId = request.ProductId,
+                Stock = request.Stock
+            });
+        }
 
         public Task Any(Services.UpdatePriceProduct request)
         {

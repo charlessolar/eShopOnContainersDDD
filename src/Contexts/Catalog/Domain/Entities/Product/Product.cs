@@ -55,5 +55,24 @@ namespace eShop.Catalog.Product
                 x.ProductId = Id;
             });
         }
+
+        public void UpdateStock(decimal stock)
+        {
+            Apply<Events.StockUpdated>(x =>
+            {
+                x.ProductId = Id;
+                x.Stock = stock;
+            });
+        }
+
+        public void MarkReordered()
+        {
+            Apply<Events.ReorderMarked>(x => { x.ProductId = Id; });
+        }
+
+        public void UnMarkReordered()
+        {
+            Apply<Events.ReorderUnMarked>(x => { x.ProductId = Id; });
+        }
     }
 }
