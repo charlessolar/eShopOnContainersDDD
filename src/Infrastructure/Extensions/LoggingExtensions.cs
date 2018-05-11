@@ -10,11 +10,6 @@ namespace Infrastructure.Extensions
 {
     public static class LoggingExtensions
     {
-        public static Lazy<string> EntryAssembly = new Lazy<string>(() =>
-        {
-            var entry = Assembly.GetEntryAssembly();
-            return entry.FullName;
-        });
 
         public static void LogEvent(this ILogger logger, LogEventLevel level, string eventId, string messageTemplate, params object[] propertyValues)
         {
@@ -75,11 +70,11 @@ namespace Infrastructure.Extensions
 
         public static ILogger For(this ILogger logger, string value)
         {
-            return logger.ForContext("Endpoint", EntryAssembly.Value).ForContext("SourceContext", value);
+            return logger.ForContext("SourceContext", value);
         }
         public static ILogger For<TClass>(this ILogger logger)
         {
-            return logger.ForContext("Endpoint", EntryAssembly.Value).ForContext("SourceContext", typeof(TClass).FullName);
+            return logger.ForContext("SourceContext", typeof(TClass).FullName);
         }
     }
 }

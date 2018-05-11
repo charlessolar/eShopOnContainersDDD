@@ -27,6 +27,7 @@ using StructureMap;
 using App.Metrics.Health.Builder;
 using eShop.Presentation.Authentication;
 using ServiceStack.Api.OpenApi;
+using ServiceStack.Seq.RequestLogsFeature;
 
 namespace eShop
 {
@@ -92,6 +93,7 @@ namespace eShop
         {
             var config = new LoggerConfiguration()
                 .MinimumLevel.Debug()
+                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", "ServiceStack")
                 .WriteTo.Console(outputTemplate: "[{Level}] {Message}{NewLine}{Exception}",
                     restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning);
 
@@ -194,6 +196,14 @@ namespace eShop
             container.Register<IUserSessionSource>(x => new IdentitySessionSource(_bus));
             
             Plugins.Add(new OpenApiFeature());
+            if (!string.IsNullOrEmpty(AppSettings.GetString("SeqConnection")))
+            {
+                Plugins.Add(new SeqRequestLogsFeature
+                {
+                    AppendProperties = (request, dto, response, duration) => new Dictionary<string, object> { ["Endpoint"] = "ServiceStack", ["EventId"] = "Request" },
+                    SeqUrl = AppSettings.GetString("SeqConnection")
+                });
+            }
 
             Plugins.Add(new PostmanFeature
             {
