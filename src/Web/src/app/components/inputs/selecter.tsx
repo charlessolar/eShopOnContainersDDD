@@ -114,7 +114,7 @@ const selectModel = types
   props['selectStore'] = props['selectStore'] || selectModel.create({}, { store: props['projectionStoreStore'], projection: props.projection });
   return props;
 })
-class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'root' | 'container' | 'paper' | 'formControl'>, {}> {
+class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'paper' | 'formControl'>, {}> {
 
   private _value: string;
   private _clearSelection: () => void;
@@ -164,7 +164,7 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'roo
   private _renderDownshift = (classes, error, required, label, id, fieldProps, selectStore, value) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
     this._clearSelection = clearSelection;
     return (
-      <div className={classes.container}>
+      <div>
 
         <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
           <InputLabel htmlFor={id}>{label}</InputLabel>
@@ -211,24 +211,14 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'roo
     const { classes, error, required, label, id, fieldProps, selectStore, value } = this.props;
 
     return (
-      <div className={classes.root}>
         <Downshift onChange={this.selectionChanged} itemToString={item => item && item[1]}>
           {this._renderDownshift(classes, error, required, label, id, fieldProps, selectStore, value)}
         </Downshift>
-      </div>
     );
   }
 }
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    height: 250,
-  },
-  container: {
-    flexGrow: 1,
-    position: 'relative',
-  },
   paper: {
     position: 'absolute',
     zIndex: 1,

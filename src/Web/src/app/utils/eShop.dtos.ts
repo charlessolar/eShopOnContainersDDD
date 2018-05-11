@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-10 06:03:15
+Date: 2018-05-11 00:26:04
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -30,20 +30,8 @@ export module DTOs
         createResponse() : void;
     }
 
-    export class Query<T>
+    export interface IPost
     {
-    }
-
-    export class Basket
-    {
-        id: string;
-        customerId: string;
-        customer: string;
-        totalQuantity: number;
-        subTotal: number;
-        total: number;
-        created: string;
-        updated: string;
     }
 
     // @DataContract
@@ -79,6 +67,22 @@ export module DTOs
 
         // @DataMember(Order=5)
         meta: { [index:string]: string; };
+    }
+
+    export class Query<T>
+    {
+    }
+
+    export class Basket
+    {
+        id: string;
+        customerId: string;
+        customer: string;
+        totalQuantity: number;
+        subTotal: number;
+        total: number;
+        created: string;
+        updated: string;
     }
 
     export class CommandResponse
@@ -257,6 +261,7 @@ export module DTOs
 
     export class Status
     {
+        id: string;
         isSetup: boolean;
     }
 
@@ -276,6 +281,86 @@ export module DTOs
     {
     }
 
+    // @DataContract
+    export class AuthenticateResponse
+    {
+        // @DataMember(Order=1)
+        userId: string;
+
+        // @DataMember(Order=2)
+        sessionId: string;
+
+        // @DataMember(Order=3)
+        userName: string;
+
+        // @DataMember(Order=4)
+        displayName: string;
+
+        // @DataMember(Order=5)
+        referrerUrl: string;
+
+        // @DataMember(Order=6)
+        bearerToken: string;
+
+        // @DataMember(Order=7)
+        refreshToken: string;
+
+        // @DataMember(Order=8)
+        responseStatus: ResponseStatus;
+
+        // @DataMember(Order=9)
+        meta: { [index:string]: string; };
+    }
+
+    // @DataContract
+    export class AssignRolesResponse
+    {
+        // @DataMember(Order=1)
+        allRoles: string[];
+
+        // @DataMember(Order=2)
+        allPermissions: string[];
+
+        // @DataMember(Order=3)
+        responseStatus: ResponseStatus;
+    }
+
+    // @DataContract
+    export class UnAssignRolesResponse
+    {
+        // @DataMember(Order=1)
+        allRoles: string[];
+
+        // @DataMember(Order=2)
+        allPermissions: string[];
+
+        // @DataMember(Order=3)
+        responseStatus: ResponseStatus;
+    }
+
+    // @DataContract
+    export class ConvertSessionToTokenResponse
+    {
+        // @DataMember(Order=1)
+        meta: { [index:string]: string; };
+
+        // @DataMember(Order=2)
+        accessToken: string;
+
+        // @DataMember(Order=3)
+        responseStatus: ResponseStatus;
+    }
+
+    // @DataContract
+    export class GetAccessTokenResponse
+    {
+        // @DataMember(Order=1)
+        accessToken: string;
+
+        // @DataMember(Order=2)
+        responseStatus: ResponseStatus;
+    }
+
     export class QueryResponse<T>
     {
         roundTripMs: number;
@@ -287,6 +372,122 @@ export module DTOs
         roundTripMs: number;
         total: number;
         records: T[];
+    }
+
+    // @Route("/auth")
+    // @Route("/auth/{provider}")
+    // @Route("/authenticate")
+    // @Route("/authenticate/{provider}")
+    // @DataContract
+    export class Authenticate implements IReturn<AuthenticateResponse>, IPost
+    {
+        // @DataMember(Order=1)
+        provider: string;
+
+        // @DataMember(Order=2)
+        state: string;
+
+        // @DataMember(Order=3)
+        oauth_token: string;
+
+        // @DataMember(Order=4)
+        oauth_verifier: string;
+
+        // @DataMember(Order=5)
+        userName: string;
+
+        // @DataMember(Order=6)
+        password: string;
+
+        // @DataMember(Order=7)
+        rememberMe: boolean;
+
+        // @DataMember(Order=8)
+        continue: string;
+
+        // @DataMember(Order=9)
+        nonce: string;
+
+        // @DataMember(Order=10)
+        uri: string;
+
+        // @DataMember(Order=11)
+        response: string;
+
+        // @DataMember(Order=12)
+        qop: string;
+
+        // @DataMember(Order=13)
+        nc: string;
+
+        // @DataMember(Order=14)
+        cnonce: string;
+
+        // @DataMember(Order=15)
+        useTokenCookie: boolean;
+
+        // @DataMember(Order=16)
+        accessToken: string;
+
+        // @DataMember(Order=17)
+        accessTokenSecret: string;
+
+        // @DataMember(Order=18)
+        meta: { [index:string]: string; };
+        createResponse() { return new AuthenticateResponse(); }
+        getTypeName() { return "Authenticate"; }
+    }
+
+    // @Route("/assignroles")
+    // @DataContract
+    export class AssignRoles implements IReturn<AssignRolesResponse>, IPost
+    {
+        // @DataMember(Order=1)
+        userName: string;
+
+        // @DataMember(Order=2)
+        permissions: string[];
+
+        // @DataMember(Order=3)
+        roles: string[];
+        createResponse() { return new AssignRolesResponse(); }
+        getTypeName() { return "AssignRoles"; }
+    }
+
+    // @Route("/unassignroles")
+    // @DataContract
+    export class UnAssignRoles implements IReturn<UnAssignRolesResponse>, IPost
+    {
+        // @DataMember(Order=1)
+        userName: string;
+
+        // @DataMember(Order=2)
+        permissions: string[];
+
+        // @DataMember(Order=3)
+        roles: string[];
+        createResponse() { return new UnAssignRolesResponse(); }
+        getTypeName() { return "UnAssignRoles"; }
+    }
+
+    // @Route("/session-to-token")
+    // @DataContract
+    export class ConvertSessionToToken implements IReturn<ConvertSessionToTokenResponse>, IPost
+    {
+        // @DataMember(Order=1)
+        preserveSession: boolean;
+        createResponse() { return new ConvertSessionToTokenResponse(); }
+        getTypeName() { return "ConvertSessionToToken"; }
+    }
+
+    // @Route("/access-token")
+    // @DataContract
+    export class GetAccessToken implements IReturn<GetAccessTokenResponse>, IPost
+    {
+        // @DataMember(Order=1)
+        refreshToken: string;
+        createResponse() { return new GetAccessTokenResponse(); }
+        getTypeName() { return "GetAccessToken"; }
     }
 
     /**
@@ -443,6 +644,11 @@ export module DTOs
         getTypeName() { return "RemoveCategoryType"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}", "GET")
+    // @Api(Description="Catalog")
     export class GetProduct extends Query<Product> implements IReturn<QueryResponse<Product>>
     {
         productId: string;
@@ -450,12 +656,36 @@ export module DTOs
         getTypeName() { return "GetProduct"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products", "GET")
+    // @Api(Description="Catalog")
     export class ListProducts extends Paged<ProductIndex> implements IReturn<PagedResponse<ProductIndex>>
     {
         createResponse() { return new PagedResponse<ProductIndex>(); }
         getTypeName() { return "ListProducts"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog", "GET")
+    // @Api(Description="Catalog")
+    export class Catalog extends Paged<ProductIndex> implements IReturn<PagedResponse<ProductIndex>>
+    {
+        brandId: string;
+        typeId: string;
+        search: string;
+        createResponse() { return new PagedResponse<ProductIndex>(); }
+        getTypeName() { return "Catalog"; }
+    }
+
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products", "POST")
+    // @Api(Description="Catalog")
     export class AddProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
@@ -467,6 +697,11 @@ export module DTOs
         getTypeName() { return "AddProduct"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}", "DELETE")
+    // @Api(Description="Catalog")
     export class RemoveProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
@@ -474,6 +709,11 @@ export module DTOs
         getTypeName() { return "RemoveProduct"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}/picture", "POST")
+    // @Api(Description="Catalog")
     export class SetPictureProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
@@ -482,6 +722,11 @@ export module DTOs
         getTypeName() { return "SetPictureProduct"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}/description", "POST")
+    // @Api(Description="Catalog")
     export class UpdateDescriptionProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
@@ -490,6 +735,11 @@ export module DTOs
         getTypeName() { return "UpdateDescriptionProduct"; }
     }
 
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}/price", "POST")
+    // @Api(Description="Catalog")
     export class UpdatePriceProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
@@ -501,12 +751,33 @@ export module DTOs
     /**
     * Identity
     */
+    // @Route("/identity/user", "GET")
+    // @Api(Description="Identity")
+    export class GetIdentity extends DomainCommand implements IReturn<CommandResponse>
+    {
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "GetIdentity"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users", "GET")
+    // @Api(Description="Identity")
+    export class GetUsers
+    {
+    }
+
+    /**
+    * Identity
+    */
     // @Route("/identity/users", "POST")
     // @Api(Description="Identity")
     export class UserRegister extends DomainCommand implements IReturn<CommandResponse>
     {
-        userId: string;
         givenName: string;
+        userName: string;
+        password: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "UserRegister"; }
     }
@@ -514,11 +785,38 @@ export module DTOs
     /**
     * Identity
     */
-    // @Route("/identity/users/{UserId}/enable", "POST")
+    // @Route("/identity/users/{UserName}/name", "POST")
+    // @Api(Description="Identity")
+    export class ChangeName extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userName: string;
+        givenName: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "ChangeName"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users/{UserName}/password", "POST")
+    // @Api(Description="Identity")
+    export class ChangePassword extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userName: string;
+        password: string;
+        newPassword: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "ChangePassword"; }
+    }
+
+    /**
+    * Identity
+    */
+    // @Route("/identity/users/{UserName}/enable", "POST")
     // @Api(Description="Identity")
     export class UserEnable extends DomainCommand implements IReturn<CommandResponse>
     {
-        userId: string;
+        userName: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "UserEnable"; }
     }
@@ -526,11 +824,11 @@ export module DTOs
     /**
     * Identity
     */
-    // @Route("/identity/users/{UserId}/disable", "POST")
+    // @Route("/identity/users/{UserName}/disable", "POST")
     // @Api(Description="Identity")
     export class UserDisable extends DomainCommand implements IReturn<CommandResponse>
     {
-        userId: string;
+        userName: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "UserDisable"; }
     }
@@ -538,11 +836,11 @@ export module DTOs
     /**
     * Identity
     */
-    // @Route("/identity/users/{UserId}/assign", "POST")
+    // @Route("/identity/users/{UserName}/assign", "POST")
     // @Api(Description="Identity")
     export class AssignRole extends DomainCommand implements IReturn<CommandResponse>
     {
-        userId: string;
+        userName: string;
         roleId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "AssignRole"; }
@@ -551,11 +849,11 @@ export module DTOs
     /**
     * Identity
     */
-    // @Route("/identity/users/{UserId}/revoke", "POST")
+    // @Route("/identity/users/{UserName}/revoke", "POST")
     // @Api(Description="Identity")
     export class RevokeRole extends DomainCommand implements IReturn<CommandResponse>
     {
-        userId: string;
+        userName: string;
         roleId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "RevokeRole"; }

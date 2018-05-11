@@ -23,12 +23,12 @@ class TextControl extends React.Component<TextProps & WithStyles<'formControl'>,
 
   private handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (this.props.onChange) {
-      this.props.onChange(e.target.value.trim());
+      this.props.onChange(e.target.value);
     }
   }
   private handleKeydown(e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (this.props.onKeyDown) {
-      this.props.onKeyDown(e.which, (e.target as any).value.trim());
+      this.props.onKeyDown(e.which, (e.target as any).value);
     }
   }
 

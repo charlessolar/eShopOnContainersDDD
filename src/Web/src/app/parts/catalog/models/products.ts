@@ -5,7 +5,7 @@ import Debug from 'debug';
 
 import rules from '../validation';
 import { models } from '../../../utils';
-import { FieldDefinition } from '../../../components/models';
+import { FormatDefinition, FieldDefinition } from '../../../components/models';
 
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
@@ -24,6 +24,8 @@ export interface ProductType {
   catalogType: string;
   catalogBrandId: string;
   catalogBrand: string;
+
+  readonly formatting?: {[idx: string]: FormatDefinition };
 }
 export const ProductModel = types
   .model('Catalog_Product', {
@@ -35,7 +37,16 @@ export const ProductModel = types
     catalogType: types.string,
     catalogBrandId: types.string,
     catalogBrand: types.string,
-  });
+  })
+  .views(self => ({
+    get formatting() {
+      return ({
+        price: {
+          currency: true
+        }
+      });
+    }
+  }));
 
 export interface ProductListType {
   entries: Map<string, ProductType>;
