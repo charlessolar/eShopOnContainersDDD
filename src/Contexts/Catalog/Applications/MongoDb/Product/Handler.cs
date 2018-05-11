@@ -20,7 +20,7 @@ namespace eShop.Catalog.Product
             var brand = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<CategoryBrand.Models.CategoryBrand>(e.CategoryBrandId).ConfigureAwait(false);
             var type = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<CategoryType.Models.CategoryType>(e.CategoryTypeId).ConfigureAwait(false);
+                .Get<CategoryType.Models.CatalogType>(e.CategoryTypeId).ConfigureAwait(false);
 
             var model = new Models.Product
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShop.Catalog.Product.Models
+namespace eShop.Catalog.Import.Models
 {
     public class Product
     {
@@ -14,18 +14,11 @@ namespace eShop.Catalog.Product.Models
         public int Price { get; set; }
 
         public Guid CatalogTypeId { get; set; }
-        public string CatalogType { get; set; }
-
         public Guid CatalogBrandId { get; set; }
-        public string CatalogBrand { get; set; }
 
         public decimal AvailableStock { get; set; }
-        public decimal RestockThreshold { get; set; }
-        public decimal MaxStockThrshold { get; set; }
-
         public bool OnReorder { get; set; }
 
-        public byte[] PictureContents { get; set; }
-        public string PictureContentType { get; set; }
+        public string Picture { get; set; }
     }
 }

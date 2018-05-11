@@ -5,9 +5,8 @@ using Infrastructure.Commands;
 
 namespace eShop.Catalog.Product.Commands
 {
-    public class UpdatePrice : StampedCommand
+    public class UnMarkReordered : StampedCommand
     {
         public Guid ProductId { get; set; }
-        public int Price { get; set; }
     }
 }

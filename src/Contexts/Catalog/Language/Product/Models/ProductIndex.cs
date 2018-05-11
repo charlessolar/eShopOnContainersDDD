@@ -11,7 +11,7 @@ namespace eShop.Catalog.Product.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public decimal Price { get; set; }
+        public int Price { get; set; }
 
         public Guid CatalogTypeId { get; set; }
         public string CatalogType { get; set; }
@@ -23,7 +23,7 @@ namespace eShop.Catalog.Product.Models
         public decimal RestockThreshold { get; set; }
         public decimal MaxStockThreshold { get; set; }
 
-        public decimal OnReorder { get; set; }
+        public bool OnReorder { get; set; }
 
         public byte[] PictureContents { get; set; }
         public string PictureContentType { get; set; }

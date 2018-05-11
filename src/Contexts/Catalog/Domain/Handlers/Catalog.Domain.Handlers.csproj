@@ -10,9 +10,39 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Import\Pics\1.png" />
+    <None Remove="Import\Pics\10.png" />
+    <None Remove="Import\Pics\11.png" />
+    <None Remove="Import\Pics\12.png" />
+    <None Remove="Import\Pics\2.png" />
+    <None Remove="Import\Pics\3.png" />
+    <None Remove="Import\Pics\4.png" />
+    <None Remove="Import\Pics\5.png" />
+    <None Remove="Import\Pics\6.png" />
+    <None Remove="Import\Pics\7.png" />
+    <None Remove="Import\Pics\8.png" />
+    <None Remove="Import\Pics\9.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Import\Pics\1.png" />
+    <EmbeddedResource Include="Import\Pics\10.png" />
+    <EmbeddedResource Include="Import\Pics\11.png" />
+    <EmbeddedResource Include="Import\Pics\12.png" />
+    <EmbeddedResource Include="Import\Pics\2.png" />
+    <EmbeddedResource Include="Import\Pics\3.png" />
+    <EmbeddedResource Include="Import\Pics\4.png" />
+    <EmbeddedResource Include="Import\Pics\5.png" />
+    <EmbeddedResource Include="Import\Pics\6.png" />
+    <EmbeddedResource Include="Import\Pics\7.png" />
+    <EmbeddedResource Include="Import\Pics\8.png" />
+    <EmbeddedResource Include="Import\Pics\9.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />

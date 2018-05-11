@@ -9,12 +9,12 @@ namespace eShop.Catalog
     {
         public void Register(IAppHost appHost)
         {
-            appHost.RegisterService<CategoryBrand.Service>();
-            appHost.RegisterService<CategoryType.Service>();
+            appHost.RegisterService<CatalogBrand.Service>();
+            appHost.RegisterService<CatalogType.Service>();
             appHost.RegisterService<Product.Service>();
 
-            appHost.GetContainer().RegisterAutoWiredType(typeof(CategoryBrand.Service));
-            appHost.GetContainer().RegisterAutoWiredType(typeof(CategoryType.Service));
+            appHost.GetContainer().RegisterAutoWiredType(typeof(CatalogBrand.Service));
+            appHost.GetContainer().RegisterAutoWiredType(typeof(CatalogType.Service));
             appHost.GetContainer().RegisterAutoWiredType(typeof(Product.Service));
         }
     }
