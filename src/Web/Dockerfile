@@ -1,7 +1,7 @@
 FROM alpine as build
 
 RUN apk add --update --no-cache nodejs git
-RUN npm i -g yarn nps
+RUN npm i -g yarn webpack-cli
 
 WORKDIR /src
 
