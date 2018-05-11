@@ -49,7 +49,7 @@ namespace eShop.Identity.User.Services
             return userroles?.Users ?? new string[] { };
         }
 
-        class UserRoles
+        public class UserRoles
         {
             public Guid RoleId { get; set; }
             public string[] Users { get; set; }

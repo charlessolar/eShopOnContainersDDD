@@ -17,7 +17,10 @@ namespace eShop.Catalog.Product
         IHandleMessages<Events.DescriptionUpdated>,
         IHandleMessages<Events.PictureSet>,
         IHandleMessages<Events.PriceUpdated>,
-        IHandleMessages<Events.Removed>
+        IHandleMessages<Events.Removed>,
+        IHandleMessages<Events.ReorderMarked>,
+        IHandleMessages<Events.ReorderUnMarked>,
+        IHandleMessages<Events.StockUpdated>
     {
         public async Task Handle(Queries.List query, IMessageHandlerContext ctx)
         {
@@ -49,9 +52,11 @@ namespace eShop.Catalog.Product
         public async Task Handle(Events.Added e, IMessageHandlerContext ctx)
         {
             var brand = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<CatalogBrand.Models.CatalogBrand>(e.CatalogBrandId).ConfigureAwait(false);
+                .Get<CatalogBrand.Models.CatalogBrand>(e.CatalogBrandId)
+                .ConfigureAwait(false);
             var type = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<CatalogType.Models.CatalogType>(e.CatalogTypeId).ConfigureAwait(false);
+                .Get<CatalogType.Models.CatalogType>(e.CatalogTypeId)
+                .ConfigureAwait(false);
 
             var model = new Models.ProductIndex
             {
@@ -94,6 +99,31 @@ namespace eShop.Catalog.Product
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
             return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.ProductIndex>(e.ProductId);
+        }
+
+        public async Task Handle(Events.ReorderMarked e, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ProductIndex>(e.ProductId).ConfigureAwait(false);
+
+            product.OnReorder = true;
+
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.ReorderUnMarked e, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ProductIndex>(e.ProductId).ConfigureAwait(false);
+
+            product.OnReorder = false;
+
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.StockUpdated e, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ProductIndex>(e.ProductId).ConfigureAwait(false);
+
+            product.AvailableStock = e.Stock;
+
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
         }
     }
 }

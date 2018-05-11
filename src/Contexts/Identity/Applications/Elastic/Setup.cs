@@ -6,9 +6,9 @@ using Infrastructure.Setup;
 using Infrastructure.Setup.Attributes;
 using Nest;
 
-namespace eShop.Catalog
+namespace eShop.Identity
 {
-    [Category("Catalog")]
+    [Category("Identity")]
     public class Setup : ISetup
     {
         private readonly IElasticClient _client;
@@ -17,30 +17,10 @@ namespace eShop.Catalog
         {
             _client = client;
         }
-
         public async Task<bool> Initialize()
         {
-            await _client.CreateIndexAsync(typeof(CatalogBrand.Models.CatalogBrand).FullName.ToLower(), i => i
-                .Settings(s => s
-                    .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
-                    .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis
-                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
-                        .Analyzers(a => a
-                            .Custom("default",
-                                t => t.Tokenizer("keyword").Filters(new[]
-                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
-                        )
-                    )
-                )
-                .Mappings(mappings => mappings.Map<CatalogBrand.Models.CatalogBrand>(map =>
-                    map.Properties(props =>
-                        props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("Brand").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                    )))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(CatalogType.Models.CatalogType).FullName.ToLower(), i => i
+            await _client.CreateIndexAsync(typeof(Role.Models.RoleIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
@@ -54,42 +34,56 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<CatalogType.Models.CatalogType>(map =>
-                    map.Properties(props =>
-                        props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("Type").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                    )))).ConfigureAwait(false);
-
-            await _client.CreateIndexAsync(typeof(Product.Models.ProductIndex).FullName.ToLower(), i => i
-                .Settings(s => s
-                    .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
-                    .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis
-                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
-                        .Analyzers(a => a
-                            .Custom("default",
-                                t => t.Tokenizer("keyword").Filters(new[]
-                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
-                        )
-                    )
-                )
-                .Mappings(mappings => mappings.Map<Product.Models.ProductIndex>(map =>
+                .Mappings(mappings => mappings.Map<Role.Models.RoleIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Name").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("Description").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Number(s => s.Type(NumberType.Long).Name("Price").IgnoreMalformed())
-                            .Keyword(s => s.Name("CatalogTypeId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("CatalogType").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("CatalogBrandId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("CatalogBrand").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Number(s => s.Type(NumberType.Double).Name("AvailableStock").IgnoreMalformed())
-                            .Number(s => s.Type(NumberType.Double).Name("RestockThreshold").IgnoreMalformed())
-                            .Number(s => s.Type(NumberType.Double).Name("MaxStockThreshold").IgnoreMalformed())
-                            .Boolean(s => s.Name("OnReorder"))
-                            .Binary(s => s.Name("PictureContents"))
-                            .Keyword(s => s.Name("PictureContentType").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                            .Number(s => s.Name("Users").Type(NumberType.Long).IgnoreMalformed())
+                            .Boolean(s => s.Name("Disabled"))
+                    )))).ConfigureAwait(false);
+
+
+            await _client.CreateIndexAsync(typeof(User.Models.User).FullName.ToLower(), i => i
+                .Settings(s => s
+                    .NumberOfShards(3)
+                    .TotalShardsPerNode(3)
+                    .NumberOfReplicas(0)
+                    .Analysis(analysis => analysis
+                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
+                        .Analyzers(a => a
+                            .Custom("default",
+                                t => t.Tokenizer("keyword").Filters(new[]
+                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
+                        )
+                    )
+                )
+                .Mappings(mappings => mappings.Map<User.Models.User>(map =>
+                    map.Properties(props =>
+                        props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                            .Keyword(s => s.Name("GivenName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                            .Boolean(s => s.Name("Disabled"))
+                            .Keyword(s => s.Name("Roles").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                            .Number(s => s.Name("LastLogin").Type(NumberType.Long).IgnoreMalformed())
+                    )))).ConfigureAwait(false);
+
+            await _client.CreateIndexAsync(typeof(User.Services.UsersWithRoleHandler.UserRoles).FullName.ToLower(), i => i
+                .Settings(s => s
+                    .NumberOfShards(3)
+                    .TotalShardsPerNode(3)
+                    .NumberOfReplicas(0)
+                    .Analysis(analysis => analysis
+                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
+                        .Analyzers(a => a
+                            .Custom("default",
+                                t => t.Tokenizer("keyword").Filters(new[]
+                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
+                        )
+                    )
+                )
+                .Mappings(mappings => mappings.Map<User.Models.User>(map =>
+                    map.Properties(props =>
+                        props.Keyword(s => s.Name("RoleId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                            .Keyword(s => s.Name("Users").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                     )))).ConfigureAwait(false);
 
             this.Done = true;

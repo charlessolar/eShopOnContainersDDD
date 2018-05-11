@@ -48,8 +48,7 @@ namespace eShop
 
                 // Index the pending docs
                 //var response = await _client.BulkAsync(_pendingDocs.Consistency(Consistency.Quorum)).ConfigureAwait(false);
-                IBulkResponse response;
-                response = await _client.BulkAsync(pending).ConfigureAwait(false);
+                var response = await _client.BulkAsync(pending).ConfigureAwait(false);
                 if (response.Errors)
                 {
                     foreach (var item in response.Items.Select(x => x.Id).Except(response.ItemsWithErrors.Select(x => x.Id)))
@@ -102,7 +101,11 @@ namespace eShop
             _logger.DebugEvent("Get", "Object {Object} Document {Id}", typeof(T).FullName, id);
 
             var response = await _client.GetAsync<T>(new GetRequest<T>(typeof(T).FullName.ToLower(), typeof(T).FullName, id)).ConfigureAwait(false);
-            if (!response.Found) return null;
+            if (!response.Found)
+            {
+                _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!");
+                return null;
+            }
 
             return response.Source;
         }

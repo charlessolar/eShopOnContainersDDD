@@ -22,5 +22,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Language\Identity.Language.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Nest">
+      <HintPath>..\..\..\..\..\..\..\.nuget\packages\nest\6.1.0\lib\netstandard1.3\Nest.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
 

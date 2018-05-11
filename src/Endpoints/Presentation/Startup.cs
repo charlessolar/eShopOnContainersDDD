@@ -90,10 +90,15 @@ namespace eShop
 
         public override ServiceStackHost Init()
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Warning()
-               .WriteTo.Console(outputTemplate: "[{Level}] {Message}{NewLine}{Exception}")
-               .CreateLogger();
+            var config = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console(outputTemplate: "[{Level}] {Message}{NewLine}{Exception}",
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning);
+
+            if (!string.IsNullOrEmpty(AppSettings.Get<string>("SeqConnection")))
+                config.WriteTo.Seq(AppSettings.Get<string>("SeqConnection"));
+
+            Log.Logger = config.CreateLogger();
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 

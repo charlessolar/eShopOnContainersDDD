@@ -8,6 +8,7 @@ services:
       dockerfile: src/Endpoints/Domain/Dockerfile
     depends_on:
       - rabbitmq
+      - seq
       - eventstore
     restart: always
   mongo:
@@ -17,6 +18,7 @@ services:
       dockerfile: src/Endpoints/MongoDb/Dockerfile
     depends_on:
       - rabbitmq
+      - seq
       - eventstore
       - mongodb
     restart: always
@@ -27,6 +29,7 @@ services:
       dockerfile: src/Endpoints/Elastic/Dockerfile
     depends_on:
       - rabbitmq
+      - seq
       - eventstore
       - elasticdb
     restart: always
@@ -37,6 +40,7 @@ services:
       dockerfile: src/Endpoints/Presentation/Dockerfile
     depends_on:
       - rabbitmq
+      - seq
     ports:
       - "8080:80"
     restart: always
@@ -49,7 +53,7 @@ services:
       - presentation
     ports:
       - "80:80"
-  
+
   # windows image
   #rabbitmq:
   #  image: spring2/rabbitmq
@@ -58,6 +62,10 @@ services:
   #    - "5672:5672"
 
   # linux images
+  elastichq:
+    image: elastichq/elasticsearch-hq
+    ports:
+      - "5000:5000"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
@@ -77,6 +85,28 @@ services:
     restart: always
   elasticdb:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+    environment:
+      - cluster.name=eshop
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - http.host=0.0.0.0
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - transport.host=0.0.0.0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
     ports:
       - "9200:9200"
     restart: always
+  seq:
+    image: datalust/seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "15341:15341"
