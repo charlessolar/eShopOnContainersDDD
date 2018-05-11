@@ -3,7 +3,7 @@ FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
 
 COPY . .
-RUN dotnet restore
+RUN dotnet restore *.sln
 WORKDIR /src/src/Endpoints/Presentation
 RUN dotnet build --no-restore -c Release -o /app
 

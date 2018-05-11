@@ -57,6 +57,11 @@ namespace eShop
 
                     throw new StorageException(response.DebugInformation);
                 }
+
+                // refresh all indicies which were "inserted" into so we can GET by Id immediately
+                var indices = _pendingDocs.Values.Where(x => x.Operation == "index");
+                if (indices.Any())
+                    await _client.RefreshAsync(indices.Select(x => x.Index).ToArray()).ConfigureAwait(false);
             }
         }
 
