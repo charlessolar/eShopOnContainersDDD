@@ -13,9 +13,9 @@ namespace eShop.Catalog.Product.Services
         public Guid ProductId { get; set; }
 
         public string Name { get; set; }
-        public decimal Price { get; set; }
+        public int Price { get; set; }
 
-        public Guid CategoryBrandId { get; set; }
-        public Guid CategoryTypeId { get; set; }
+        public Guid CatalogBrandId { get; set; }
+        public Guid CatalogTypeId { get; set; }
     }
 }

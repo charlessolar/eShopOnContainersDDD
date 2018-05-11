@@ -51,8 +51,8 @@ namespace eShop.Catalog.Import
                 await _bus.CommandToDomain(new Product.Commands.Add
                 {
                     ProductId = product.Id,
-                    CategoryBrandId = product.CatalogBrandId,
-                    CategoryTypeId = product.CatalogTypeId,
+                    CatalogBrandId = product.CatalogBrandId,
+                    CatalogTypeId = product.CatalogTypeId,
                     Name = product.Name,
                     Price = product.Price
                 }).ConfigureAwait(false);

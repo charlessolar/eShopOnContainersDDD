@@ -17,8 +17,8 @@ namespace eShop.Catalog.Product
         public async Task Handle(Commands.Add command, IMessageHandlerContext ctx)
         {
             var product = await ctx.For<Product>().New(command.ProductId).ConfigureAwait(false);
-            var brand = await ctx.For<CategoryBrand.Brand>().Get(command.CategoryBrandId).ConfigureAwait(false);
-            var type = await ctx.For<CategoryType.Type>().Get(command.CategoryTypeId).ConfigureAwait(false);
+            var brand = await ctx.For<CatalogBrand.Brand>().Get(command.CatalogBrandId).ConfigureAwait(false);
+            var type = await ctx.For<CatalogType.Type>().Get(command.CatalogTypeId).ConfigureAwait(false);
 
             product.Add(command.Name, command.Price, brand.State, type.State);
         }

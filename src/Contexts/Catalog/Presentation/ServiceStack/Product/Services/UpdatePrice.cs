@@ -11,6 +11,6 @@ namespace eShop.Catalog.Product.Services
     public class UpdatePriceProduct : DomainCommand
     {
         public Guid ProductId { get; set; }
-        public decimal Price { get; set; }
+        public int Price { get; set; }
     }
 }

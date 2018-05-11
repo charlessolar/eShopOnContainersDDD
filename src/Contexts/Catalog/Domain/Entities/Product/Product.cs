@@ -8,15 +8,15 @@ namespace eShop.Catalog.Product
     {
         private Product() { }
 
-        public void Add(string name, decimal price, CategoryBrand.State brand, CategoryType.State type)
+        public void Add(string name, int price, CatalogBrand.State brand, CatalogType.State type)
         {
             Apply<Events.Added>(x =>
             {
                 x.ProductId = Id;
                 x.Name = name;
                 x.Price = price;
-                x.CategoryBrandId = brand.Id;
-                x.CategoryTypeId = type.Id;
+                x.CatalogBrandId = brand.Id;
+                x.CatalogTypeId = type.Id;
             });
         }
 
@@ -39,7 +39,7 @@ namespace eShop.Catalog.Product
             });
         }
 
-        public void UpdatePrice(decimal price)
+        public void UpdatePrice(int price)
         {
             Apply<Events.PriceUpdated>(x =>
             {

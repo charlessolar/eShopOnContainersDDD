@@ -20,7 +20,7 @@ namespace eShop.Catalog
 
         public async Task<bool> Initialize()
         {
-            await _client.CreateIndexAsync(typeof(CategoryBrand.Models.CatalogBrand).FullName.ToLower(), i => i
+            await _client.CreateIndexAsync(typeof(CatalogBrand.Models.CatalogBrand).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
@@ -34,12 +34,13 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<CategoryBrand.Models.CatalogBrand>(map =>
+                .Mappings(mappings => mappings.Map<CatalogBrand.Models.CatalogBrand>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Brand").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                     )))).ConfigureAwait(false);
-            await _client.CreateIndexAsync(typeof(CategoryType.Models.CatalogType).FullName.ToLower(), i => i
+
+            await _client.CreateIndexAsync(typeof(CatalogType.Models.CatalogType).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
@@ -53,7 +54,7 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<CategoryType.Models.CatalogType>(map =>
+                .Mappings(mappings => mappings.Map<CatalogType.Models.CatalogType>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Type").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))

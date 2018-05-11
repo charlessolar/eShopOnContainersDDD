@@ -47,8 +47,8 @@ namespace eShop.Catalog.Product
             return _bus.CommandToDomain(new Commands.Add
             {
                 ProductId = request.ProductId,
-                CategoryBrandId = request.CategoryBrandId,
-                CategoryTypeId = request.CategoryTypeId,
+                CatalogBrandId = request.CatalogBrandId,
+                CatalogTypeId = request.CatalogTypeId,
                 Name = request.Name,
                 Price = request.Price,
             });

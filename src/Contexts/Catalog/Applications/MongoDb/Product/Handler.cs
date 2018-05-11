@@ -18,9 +18,9 @@ namespace eShop.Catalog.Product
         public async Task Handle(Events.Added e, IMessageHandlerContext ctx)
         {
             var brand = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<CategoryBrand.Models.CategoryBrand>(e.CategoryBrandId).ConfigureAwait(false);
+                .Get<CatalogBrand.Models.CatalogBrand>(e.CatalogBrandId).ConfigureAwait(false);
             var type = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<CategoryType.Models.CatalogType>(e.CategoryTypeId).ConfigureAwait(false);
+                .Get<CatalogType.Models.CatalogType>(e.CatalogTypeId).ConfigureAwait(false);
 
             var model = new Models.Product
             {

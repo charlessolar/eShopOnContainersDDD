@@ -10,9 +10,9 @@ namespace eShop.Catalog.Product.Events
         Guid ProductId { get; set; }
 
         string Name { get; set; }
-        decimal Price { get; set; }
+        int Price { get; set; }
 
-        Guid CategoryBrandId { get; set; }
-        Guid CategoryTypeId { get; set; }
+        Guid CatalogBrandId { get; set; }
+        Guid CatalogTypeId { get; set; }
     }
 }
