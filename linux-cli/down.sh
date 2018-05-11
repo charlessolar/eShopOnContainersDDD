@@ -6,6 +6,6 @@ docker rm $(docker ps -a -q)
 docker rmi $(docker images -q -f dangling=true)
 
 docker rmi eshop/elastic
-docker rmi eshop/mongo
+docker rmi eshop/mongodb
 docker rmi eshop/presentation
 docker rmi eshop/domain

@@ -17,16 +17,12 @@
 
   <ItemGroup>
     <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />
+    <PackageReference Include="NEST" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Language\Identity.Language.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Nest">
-      <HintPath>..\..\..\..\..\..\..\.nuget\packages\nest\6.1.0\lib\netstandard1.3\Nest.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>
 
