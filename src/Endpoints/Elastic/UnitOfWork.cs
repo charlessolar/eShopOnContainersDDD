@@ -24,7 +24,7 @@ namespace eShop
         public UnitOfWork(IElasticClient client)
         {
             _client = client;
-            _logger = Log.Logger.With<UnitOfWork>();
+            _logger = Log.Logger.For<UnitOfWork>();
             _pendingDocs = new Dictionary<Id, IBulkOperation>();
         }
 
@@ -103,7 +103,7 @@ namespace eShop
             var response = await _client.GetAsync<T>(new GetRequest<T>(typeof(T).FullName.ToLower(), typeof(T).FullName, id)).ConfigureAwait(false);
             if (!response.Found)
             {
-                _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!");
+                _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!", typeof(T).FullName, id);
                 return null;
             }
 

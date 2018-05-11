@@ -23,7 +23,7 @@ namespace eShop.Configuration.Setup
     }
     public class Importer
     {
-        private static ILogger Logger = Log.Logger.With<Importer>();
+        private static ILogger Logger = Log.Logger.For<Importer>();
 
         private static IEnumerable<SeedInfo> _imports;
 

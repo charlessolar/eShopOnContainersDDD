@@ -3,12 +3,18 @@ using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Infrastructure.Extensions
 {
     public static class LoggingExtensions
     {
+        public static Lazy<string> EntryAssembly = new Lazy<string>(() =>
+        {
+            var entry = Assembly.GetEntryAssembly();
+            return entry.FullName;
+        });
 
         public static void LogEvent(this ILogger logger, LogEventLevel level, string eventId, string messageTemplate, params object[] propertyValues)
         {
@@ -62,15 +68,18 @@ namespace Infrastructure.Extensions
             logger.LogEvent(LogEventLevel.Fatal, eventId, ex, messageTemplate, propertyValues);
         }
 
-
-
         public static ILogger With(this ILogger logger, string propertyName, object value)
         {
             return logger.ForContext(propertyName, value, destructureObjects: true);
         }
-        public static ILogger With<TClass>(this ILogger logger)
+
+        public static ILogger For(this ILogger logger, string value)
         {
-            return logger.ForContext<TClass>();
+            return logger.ForContext("Endpoint", EntryAssembly.Value).ForContext("SourceContext", value);
+        }
+        public static ILogger For<TClass>(this ILogger logger)
+        {
+            return logger.ForContext("Endpoint", EntryAssembly.Value).ForContext("SourceContext", typeof(TClass).FullName);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace eShop
             _pendingSaves = new Dictionary<object, T>();
             _pendingUpdates = new Dictionary<object, T>();
             _pendingDeletes = new List<object>();
-            _logger = Log.Logger.With<CommitableCollection<T>>();
+            _logger = Log.Logger.For($"CommitCollection {typeof(T).FullName}");
         }
 
         public async Task<T> Get(object id)
@@ -53,7 +53,10 @@ namespace eShop
             
             var result = await _collection.FindAsync(filter).ConfigureAwait(false);
             var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
-            _retreived[id] = document;
+            if (document == null)
+                _logger.WarnEvent("GetFailure", "Document {Id} was not found", id);
+            else
+                _retreived[id] = document;
             return document;
         }
         
@@ -136,7 +139,7 @@ namespace eShop
         {
             _client = client;
             _collections = new List<ICommitableCollection>();
-            _logger = Log.Logger.With<UnitOfWork>();
+            _logger = Log.Logger.For<UnitOfWork>();
         }
 
         public Task Begin()

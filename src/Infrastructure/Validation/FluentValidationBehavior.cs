@@ -51,7 +51,7 @@ namespace Infrastructure.Validation
             }
             if (validationResults.Any(x => !x.IsValid))
             {
-                Log.Logger.With<FluentValidationBehaviour>().WarnEvent("Validation", "Message {MessageId} has failed validation\n{@Failures}\n{@Message}", context.MessageId, validationResults.SelectMany(x => x.Errors).Select(x => $"{x.PropertyName}: {x.ErrorMessage}"), context.Message.Instance);
+                Log.Logger.For<FluentValidationBehaviour>().WarnEvent("Validation", "Message {MessageId} has failed validation\n{@Failures}\n{@Message}", context.MessageId, validationResults.SelectMany(x => x.Errors).Select(x => $"{x.PropertyName}: {x.ErrorMessage}"), context.Message.Instance);
                 throw new ValidationException(validationResults.SelectMany(x => x.Errors));
             }
             await next().ConfigureAwait(false);

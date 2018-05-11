@@ -43,7 +43,7 @@ namespace Infrastructure.Setup
 
         private static async Task SetupApplication(SetupInfo info)
         {
-            var _logger = Log.Logger.With<SetupInfo>();
+            var _logger = Log.Logger.For<SetupInfo>();
 
             var watch = new Stopwatch();
 
