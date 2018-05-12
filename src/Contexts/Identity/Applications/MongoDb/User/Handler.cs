@@ -12,6 +12,7 @@ namespace eShop.Identity.User
     public class Handler :
         IHandleQueries<Queries.Identity>,
         IHandleMessages<Events.Registered>,
+        IHandleMessages<Events.NameChanged>,
         IHandleMessages<Events.Disabled>,
         IHandleMessages<Events.Enabled>,
         IHandleMessages<Entities.Role.Events.Assigned>,
@@ -39,6 +40,13 @@ namespace eShop.Identity.User
         {
             var user = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.User>(e.UserName).ConfigureAwait(false);
             user.Disabled = true;
+
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(user.Id, user).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.NameChanged e, IMessageHandlerContext ctx)
+        {
+            var user = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.User>(e.UserName).ConfigureAwait(false);
+            user.GivenName = e.GivenName;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(user.Id, user).ConfigureAwait(false);
         }

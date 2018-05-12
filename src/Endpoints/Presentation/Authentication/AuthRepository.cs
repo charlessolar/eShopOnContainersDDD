@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Aggregates.Extensions;
 using Infrastructure.Extensions;
+using Infrastructure.Queries;
 using NServiceBus;
 using Serilog;
+using ServiceStack;
 using ServiceStack.Auth;
 
 namespace eShop.Presentation.Authentication
@@ -124,11 +126,12 @@ namespace eShop.Presentation.Authentication
 
         public IUserAuth GetUserAuth(string userAuthId)
         {
-            var user = _bus.RequestQuery<Identity.User.Queries.Identity, Identity.User.Models.User>(new Identity.User.Queries.Identity
+            var reply = _bus.RequestQuery<Identity.User.Queries.Identity, Identity.User.Models.User>(new Identity.User.Queries.Identity
             {
                 UserName = userAuthId
-            }).Result as Identity.User.Models.User;
+            }).Result as Infrastructure.ServiceStack.QueryResponse<Identity.User.Models.User>;
 
+            var user = reply?.Payload as Identity.User.Models.User;
             if (user == null)
                 return null;
 

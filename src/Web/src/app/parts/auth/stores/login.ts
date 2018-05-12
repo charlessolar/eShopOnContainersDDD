@@ -27,12 +27,11 @@ export const LoginStore = types
   })
   .views(self => ({
     get validation() {
-      // const validation = {
-      //   username: rules.username,
-      //   password: rules.password
-      // };
-      // return validate(self, validation);
-      return undefined;
+      const validation = {
+        username: rules.username,
+        password: rules.password
+      };
+      return validate(self, validation);
     }
   }))
   .views(self => ({

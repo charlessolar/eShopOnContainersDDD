@@ -10,7 +10,6 @@ using Infrastructure.Queries;
 namespace eShop.Identity.User
 {
     public class Handler :
-        IHandleQueries<Queries.Identity>,
         IHandleMessages<Commands.Register>,
         IHandleMessages<Commands.ChangeName>,
         IHandleMessages<Commands.ChangePassword>,
@@ -18,11 +17,6 @@ namespace eShop.Identity.User
         IHandleMessages<Commands.Enable>,
         IHandleMessages<Commands.Disable>
     {
-        public async Task Handle(Queries.Identity query, IMessageHandlerContext ctx)
-        {
-            var user = await ctx.For<User>().Get(query.UserName).ConfigureAwait(false);
-            await ctx.Result(user).ConfigureAwait(false);
-        }
         public async Task Handle(Commands.Register command, IMessageHandlerContext ctx)
         {
             var user = await ctx.For<User>().New(command.UserName).ConfigureAwait(false);
