@@ -22,7 +22,11 @@ export const SetupModel = types
       try {
         self.loading = true;
         const client = getEnv(self).store as StoreType;
-        yield client.api.command(request);
+
+        const waiter = new Promise((resolve) => setTimeout(resolve, 10000));
+
+        // take at least 10 seconds for read models to populate
+        yield Promise.all([waiter, client.api.command(request)]);
 
         client.status.setup();
         setTimeout(() => client.history.push('/'), 1);

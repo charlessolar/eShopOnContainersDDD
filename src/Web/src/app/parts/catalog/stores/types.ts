@@ -46,7 +46,7 @@ export const TypeForm = types
   }))
   .actions(self => {
     const submit = flow(function*() {
-      const request = new DTOs.AddCategoryType();
+      const request = new DTOs.AddCatalogType();
 
       request.typeId = self.id;
       request.type = self.type;

@@ -36,7 +36,7 @@ const styles = (theme: Theme) => ({
     justifyContent: 'center'
   },
   card: {
-    maxWidth: 345,
+    width: 345,
   },
   media: {
     height: 0,
@@ -58,12 +58,18 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'sh
   public render() {
     const { store, classes } = this.props;
 
+    const AppView = glamorous('div')((_) => ({
+      flex: '1 1 auto',
+      width: '100vw',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'auto',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }));
     const MainView = glamorous('main')({
-      'display': 'flex',
-      'width': '100vw',
+      'width': '75vw',
       'flex': '1',
-      'justifyContent': 'center',
-      'alignItems': 'flex-start',
       'marginTop': 20,
       '@media(max-width: 600px)': {
         margin: 10
@@ -72,7 +78,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'sh
 
     const products = Array.from(store.products.values());
     return (
-      <div>
+      <AppView>
         <AppBar position='static' color='secondary' className={classes.shadow4}>
           <Toolbar>
             <Using model={store}>
@@ -95,36 +101,39 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'sh
           </Toolbar>
         </AppBar>
         <MainView>
-          <Grid container spacing={16} justify='center'>
-            {products.length === 0 ?
+          {products.length === 0 ?
+            <Grid container justify='center'>
               <Grid item xs={4}>
-                <Typography variant='display3' className={classes.noProduct}>No products!</Typography>
-              </Grid> : <></>
-            }
-            {products.map((product, key) => (
-              <Grid item xs key={key}>
-                <Using model={product}>
-                  <Card className={classes.card}>
-                    <CardMedia className={classes.media} title={product.name} image={require('../img/placeholder.png')}/>
-                    <CardContent>
-                      <Typography gutterBottom variant='headline' component='h2' className={classes.flex} noWrap>
-                        {product.name}
-                      </Typography>
-                      <Formatted field='price'/>
-                      <Typography component='p'>
-                        {product.description}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button color='primary' variant='raised' fullWidth className={classes.button}>Add to Cart</Button>
-                    </CardActions>
-                  </Card>
-                </Using>
+                <Typography variant='display3' className={classes.noProduct}>No products found</Typography>
               </Grid>
-            ))}
-          </Grid>
+            </Grid>
+             :
+            <Grid container spacing={16} justify='flex-start' alignItems='flex-start'>
+              {products.map((product, key) => (
+                <Grid item xs key={key}>
+                  <Using model={product}>
+                    <Card className={classes.card}>
+                      <CardMedia className={classes.media} title={product.name} image={product.productPicture || require('../img/placeholder.png')} />
+                      <CardContent>
+                        <Typography gutterBottom variant='headline' component='h2' className={classes.flex} noWrap>
+                          {product.name}
+                        </Typography>
+                        <Formatted field='price' />
+                        <Typography component='p'>
+                          {product.description}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button color='primary' variant='raised' fullWidth className={classes.button} disabled={!product.canOrder}>Add to Cart</Button>
+                      </CardActions>
+                    </Card>
+                  </Using>
+                </Grid>
+              ))}
+            </Grid>
+          }
         </MainView>
-      </div>
+      </AppView>
     );
   }
 }

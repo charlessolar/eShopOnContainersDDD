@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-11 00:26:04
+Date: 2018-05-11 17:39:24
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -87,8 +87,8 @@ export module DTOs
 
     export class CommandResponse
     {
-        roundTripMs: number;
         responseStatus: ResponseStatus;
+        roundTripMs: number;
     }
 
     export class DomainCommand
@@ -110,13 +110,13 @@ export module DTOs
         total: number;
     }
 
-    export class CategoryBrand
+    export class CatalogBrand
     {
         id: string;
         brand: string;
     }
 
-    export class CategoryType
+    export class CatalogType
     {
         id: string;
         type: string;
@@ -135,7 +135,7 @@ export module DTOs
         availableStock: number;
         restockThreshold: number;
         maxStockThrshold: number;
-        onReorder: number;
+        onReorder: boolean;
         pictureContents: Uint8Array;
         pictureContentType: string;
     }
@@ -153,7 +153,7 @@ export module DTOs
         availableStock: number;
         restockThreshold: number;
         maxStockThreshold: number;
-        onReorder: number;
+        onReorder: boolean;
         pictureContents: Uint8Array;
         pictureContentType: string;
     }
@@ -573,12 +573,12 @@ export module DTOs
     */
     // @Route("/catalog/brand", "GET")
     // @Api(Description="Catalog")
-    export class ListCategoryBrands extends Paged<CategoryBrand> implements IReturn<PagedResponse<CategoryBrand>>
+    export class ListCatalogBrands extends Paged<CatalogBrand> implements IReturn<PagedResponse<CatalogBrand>>
     {
         term: string;
         limit: number;
-        createResponse() { return new PagedResponse<CategoryBrand>(); }
-        getTypeName() { return "ListCategoryBrands"; }
+        createResponse() { return new PagedResponse<CatalogBrand>(); }
+        getTypeName() { return "ListCatalogBrands"; }
     }
 
     /**
@@ -586,12 +586,12 @@ export module DTOs
     */
     // @Route("/catalog/brand", "POST")
     // @Api(Description="Catalog")
-    export class AddCategoryBrand extends DomainCommand implements IReturn<CommandResponse>
+    export class AddCatalogBrand extends DomainCommand implements IReturn<CommandResponse>
     {
         brandId: string;
         brand: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "AddCategoryBrand"; }
+        getTypeName() { return "AddCatalogBrand"; }
     }
 
     /**
@@ -599,11 +599,11 @@ export module DTOs
     */
     // @Route("/catalog/brand/{BrandId}", "DELETE")
     // @Api(Description="Catalog")
-    export class RemoveCategoryBrand extends DomainCommand implements IReturn<CommandResponse>
+    export class RemoveCatalogBrand extends DomainCommand implements IReturn<CommandResponse>
     {
         brandId: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "RemoveCategoryBrand"; }
+        getTypeName() { return "RemoveCatalogBrand"; }
     }
 
     /**
@@ -611,12 +611,12 @@ export module DTOs
     */
     // @Route("/catalog/type", "GET")
     // @Api(Description="Catalog")
-    export class ListCategoryTypes extends Paged<CategoryType> implements IReturn<PagedResponse<CategoryType>>
+    export class ListCatalogTypes extends Paged<CatalogType> implements IReturn<PagedResponse<CatalogType>>
     {
         term: string;
         limit: number;
-        createResponse() { return new PagedResponse<CategoryType>(); }
-        getTypeName() { return "ListCategoryTypes"; }
+        createResponse() { return new PagedResponse<CatalogType>(); }
+        getTypeName() { return "ListCatalogTypes"; }
     }
 
     /**
@@ -624,12 +624,12 @@ export module DTOs
     */
     // @Route("/catalog/type", "POST")
     // @Api(Description="Catalog")
-    export class AddCategoryType extends DomainCommand implements IReturn<CommandResponse>
+    export class AddCatalogType extends DomainCommand implements IReturn<CommandResponse>
     {
         typeId: string;
         type: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "AddCategoryType"; }
+        getTypeName() { return "AddCatalogType"; }
     }
 
     /**
@@ -637,11 +637,11 @@ export module DTOs
     */
     // @Route("/catalog/type/{TypeId}", "POST")
     // @Api(Description="Catalog")
-    export class RemoveCategoryType extends DomainCommand implements IReturn<CommandResponse>
+    export class RemoveCatalogType extends DomainCommand implements IReturn<CommandResponse>
     {
         typeId: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "RemoveCategoryType"; }
+        getTypeName() { return "RemoveCatalogType"; }
     }
 
     /**
@@ -691,8 +691,8 @@ export module DTOs
         productId: string;
         name: string;
         price: number;
-        categoryBrandId: string;
-        categoryTypeId: string;
+        catalogBrandId: string;
+        catalogTypeId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "AddProduct"; }
     }

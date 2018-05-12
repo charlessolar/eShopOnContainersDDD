@@ -98,8 +98,8 @@ export const ProductForm = types
       request.productId = self.id;
       request.name = self.name;
       request.price = self.price;
-      request.categoryBrandId = self.catalogBrand.id;
-      request.categoryTypeId = self.catalogType.id;
+      request.catalogBrandId = self.catalogBrand.id;
+      request.catalogTypeId = self.catalogType.id;
 
       try {
         const client = getEnv(self).api as ApiClientType;
@@ -149,7 +149,13 @@ export const ProductsStoreModel = types.model(
         catalogType: product.catalogType.type,
         catalogTypeId: product.catalogType.id,
         catalogBrand: product.catalogBrand.brand,
-        catalogBrandId: product.catalogBrand.id
+        catalogBrandId: product.catalogBrand.id,
+        restockThreshold: 0,
+        availableStock: 0,
+        maxStockThreshold: 0,
+        onReorder: false,
+        pictureContents: '',
+        pictureContentType: '',
       });
       self.form = ProductForm.create({});
     };

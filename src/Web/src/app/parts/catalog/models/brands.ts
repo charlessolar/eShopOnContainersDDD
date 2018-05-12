@@ -35,7 +35,7 @@ export const BrandListModel = types
   })
   .actions(self => {
     const list = flow(function*(term?: string, limit?: number) {
-      const request = new DTOs.ListCategoryBrands();
+      const request = new DTOs.ListCatalogBrands();
 
       request.term = term;
       request.limit = limit || 10;
@@ -43,7 +43,7 @@ export const BrandListModel = types
       self.loading = true;
       try {
         const client = getEnv(self).api as ApiClientType;
-        const results: DTOs.PagedResponse<DTOs.CategoryBrand> = yield client.paged(request);
+        const results: DTOs.PagedResponse<DTOs.CatalogBrand> = yield client.paged(request);
 
         results.records.forEach(record => {
           self.entries.put(record);
@@ -58,7 +58,7 @@ export const BrandListModel = types
         self.entries.put(brand);
     };
     const remove = flow(function*(id: string) {
-      const request = new DTOs.RemoveCategoryBrand();
+      const request = new DTOs.RemoveCatalogBrand();
 
       request.brandId = id;
 

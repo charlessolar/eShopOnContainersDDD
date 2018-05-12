@@ -45,7 +45,7 @@ export const TypeListModel = types
   })
   .actions(self => {
     const list = flow(function*(term?: string, limit?: number) {
-      const request = new DTOs.ListCategoryTypes();
+      const request = new DTOs.ListCatalogTypes();
 
       request.term = term;
       request.limit = limit || 10;
@@ -53,7 +53,7 @@ export const TypeListModel = types
       self.loading = true;
       try {
         const client = getEnv(self).api as ApiClientType;
-        const results: DTOs.PagedResponse<DTOs.CategoryType> = yield client.paged(request);
+        const results: DTOs.PagedResponse<DTOs.CatalogType> = yield client.paged(request);
 
         results.records.forEach(record => {
           self.entries.put(record);
@@ -68,7 +68,7 @@ export const TypeListModel = types
         self.entries.put(type);
     };
     const remove = flow(function*(id: string) {
-      const request = new DTOs.RemoveCategoryType();
+      const request = new DTOs.RemoveCatalogType();
 
       request.typeId = id;
 

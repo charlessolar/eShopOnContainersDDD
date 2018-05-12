@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MongoDb": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ESHOP_RabbitConnection": "10.0.0.201",
+        "ESHOP_EventStoreConnection": "10.0.0.201",
+        "ESHOP_MongoDbConnection": "mongodb://10.0.0.201:27017"
+      }
+    }
+  }
+}

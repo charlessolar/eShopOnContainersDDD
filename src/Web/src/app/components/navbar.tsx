@@ -16,6 +16,8 @@ interface NavBarProps {
   authenticated: boolean;
   email: string;
   title: string;
+
+  store?: StoreType;
 }
 
 class Store {
@@ -60,13 +62,25 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
   }
 
   public render() {
-    const { title, authenticated, email, classes } = this.props;
+    const { title, store, authenticated, email, classes } = this.props;
     return (
       <header>
         <AppBar position='static'>
           <Toolbar>
             <Typography onClick={() => this._store.navChange('/')} variant='title' color='inherit' className={classes.title}>{title}</Typography>
-            {authenticated && (<Menu authenticated={authenticated} email={email} navChange={item => this._store.navChange(item)} />)}
+            {authenticated && (
+              <>
+                {store.auth.admin && (
+                  <>
+                    <Button color='secondary' onClick={() => this._store.navChange('/campaigns')}>My Campaigns</Button>
+                    <Button color='secondary' onClick={() => this._store.navChange('/administrate')}>Administrate</Button>
+                  </>
+                )}
+
+                <Button color='secondary' onClick={() => this._store.navChange('/orders')}>My Orders</Button>
+                <Menu authenticated={authenticated} email={email} navChange={item => this._store.navChange(item)} />
+              </>
+            )}
           </Toolbar>
         </AppBar>
 

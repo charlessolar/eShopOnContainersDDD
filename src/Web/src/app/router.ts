@@ -19,9 +19,10 @@ export function createRouter(store: StoreType, modules: Modules) {
     }
   }
 
-  function isSetup() {
+  function isSetup(routerContext: UniversalRouterContext) {
+    const { pathname } = routerContext;
     debug('isSetup', store.status.isSetup);
-    if (!store.status.isSetup) {
+    if (!store.status.isSetup && !pathname.startsWith('/seed')) {
       setTimeout(() => store.history.push('/seed'), 1);
       throw new Error('redirect');
     }
@@ -30,7 +31,7 @@ export function createRouter(store: StoreType, modules: Modules) {
   const routes: UniversalRouterRoute = {
     path: '',
     action: async (routerContext) => {
-      isSetup();
+      isSetup(routerContext);
     },
     children: [
       {

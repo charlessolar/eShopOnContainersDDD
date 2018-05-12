@@ -46,7 +46,7 @@ export const BrandForm = types
   }))
   .actions(self => {
     const submit = flow(function*() {
-      const request = new DTOs.AddCategoryBrand();
+      const request = new DTOs.AddCatalogBrand();
 
       request.brandId = self.id;
       request.brand = self.brand;

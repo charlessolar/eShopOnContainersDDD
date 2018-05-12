@@ -25,7 +25,18 @@ export interface ProductType {
   catalogBrandId: string;
   catalogBrand: string;
 
+  availableStock: number;
+  restockThreshold: number;
+  maxStockThreshold: number;
+
+  onReorder: boolean;
+
+  pictureContents: string;
+  pictureContentType: string;
+
   readonly formatting?: {[idx: string]: FormatDefinition };
+  readonly productPicture?: string;
+  readonly canOrder?: boolean;
 }
 export const ProductModel = types
   .model('Catalog_Product', {
@@ -37,14 +48,30 @@ export const ProductModel = types
     catalogType: types.string,
     catalogBrandId: types.string,
     catalogBrand: types.string,
+    availableStock: types.number,
+    restockThreshold: types.number,
+    maxStockThreshold: types.number,
+    onReorder: types.boolean,
+    pictureContents: types.maybe(types.string),
+    pictureContentType: types.maybe(types.string)
   })
   .views(self => ({
     get formatting() {
       return ({
         price: {
-          currency: true
+          currency: true,
+          normalize: 2
         }
       });
+    },
+    get productPicture() {
+      if (!self.pictureContents) {
+        return;
+      }
+      return 'data:' + self.pictureContentType + ';base64,' + self.pictureContents;
+    },
+    get canOrder() {
+      return self.availableStock > 0 || self.onReorder;
     }
   }));
 
@@ -68,7 +95,7 @@ export const ProductListModel = types
       self.loading = true;
       try {
         const client = getEnv(self).api as ApiClientType;
-        const results: DTOs.PagedResponse<DTOs.Product> = yield client.paged(request);
+        const results: DTOs.PagedResponse<DTOs.ProductIndex> = yield client.paged(request);
 
         results.records.forEach(record => {
           self.entries.put(record);
