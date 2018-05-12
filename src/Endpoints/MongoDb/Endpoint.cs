@@ -50,7 +50,7 @@ namespace eShop
             Console.Title = "MongoDb";
             var config = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", Console.Title)
+                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", "MongoDb")
                 .WriteTo.Console(outputTemplate: "[{Level}] {Message}{NewLine}{Exception}",
                     restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning);
 

@@ -49,7 +49,7 @@ namespace eShop
             Console.Title = "Domain";
             var config = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", Console.Title)
+                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", "Domain")
                 .WriteTo.Console(outputTemplate: "[{Level}] {Message}{NewLine}{Exception}",
                     restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning);
 

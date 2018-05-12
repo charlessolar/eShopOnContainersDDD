@@ -53,7 +53,7 @@ namespace eShop
             Console.Title = "Elastic";
             var config = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", Console.Title)
+                .Enrich.FromLogContext().Enrich.WithThreadId().Enrich.WithProcessName().Enrich.WithProperty("Endpoint", "Elastic")
                 .WriteTo.Console(outputTemplate: "[{Level}] {Message}{NewLine}{Exception}",
                     restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning);
 
