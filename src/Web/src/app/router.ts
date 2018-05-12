@@ -37,7 +37,7 @@ export function createRouter(store: StoreType, modules: Modules) {
       {
         path: '',
       },
-      // ...modules.auth.routes,
+      ...modules.auth.routes,
       ...modules.catalog.routes,
       ...modules.configuration.routes
     ]

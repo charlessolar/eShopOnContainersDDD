@@ -12,7 +12,6 @@ import { ApiClientType } from '../../../stores';
 import { BrandType, BrandModel, BrandListModel, BrandListType } from '../models/brands';
 import { TypeType, TypeModel, TypeListModel, TypeListType } from '../models/types';
 import { ProductModel, ProductType } from '../models/products';
-import { format } from 'path';
 
 const debug = new Debug('catalog');
 
@@ -96,7 +95,9 @@ export const CatalogStoreModel = types
         const result: DTOs.PagedResponse<DTOs.ProductIndex> = yield client.paged(request);
 
         self.products.clear();
-        result.records.forEach((record) => self.products.put(record));
+        result.records.forEach((record) => {
+          self.products.put(record);
+        });
        } catch (error) {
         debug('received http error: ', error);
         throw error;

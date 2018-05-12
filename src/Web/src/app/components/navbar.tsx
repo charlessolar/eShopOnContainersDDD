@@ -21,7 +21,7 @@ interface NavBarProps {
 }
 
 class Store {
-  constructor(private _store: StoreType) {}
+  constructor(private _store: StoreType) { }
 
   @observable
   public open: boolean;
@@ -68,7 +68,7 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
         <AppBar position='static'>
           <Toolbar>
             <Typography onClick={() => this._store.navChange('/')} variant='title' color='inherit' className={classes.title}>{title}</Typography>
-            {authenticated && (
+            {authenticated ? (
               <>
                 {store.auth.admin && (
                   <>
@@ -80,7 +80,10 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
                 <Button color='secondary' onClick={() => this._store.navChange('/orders')}>My Orders</Button>
                 <Menu authenticated={authenticated} email={email} navChange={item => this._store.navChange(item)} />
               </>
-            )}
+            )
+              :
+              <Button color='secondary' onClick={() => this._store.navChange('/login')}>Login</Button>
+            }
           </Toolbar>
         </AppBar>
 

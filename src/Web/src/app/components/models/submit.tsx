@@ -9,6 +9,7 @@ import { UsingContext, UsingType } from './using';
 interface SubmitProps {
   text?: string;
   buttonProps?: any;
+  className?: any;
 }
 
 export class Submit extends React.Component<SubmitProps, {}> {
@@ -28,13 +29,13 @@ export class Submit extends React.Component<SubmitProps, {}> {
 
 // need to wrap this in observer to make magic happen
 const SubmitConsumer = observer((props: SubmitProps & { using: UsingType<any> }) => {
-  const { using, text, buttonProps } = props;
+  const { using, text, buttonProps, className } = props;
 
   const handleSubmit = () => {
     using.submit();
   };
 
   return (
-    <Button disabled={!using.valid || using.loading} onClick={handleSubmit} {...buttonProps}>{text || 'Save'}</Button>
+    <Button disabled={!using.valid || using.loading} onClick={handleSubmit} className={className} {...buttonProps}>{text || 'Save'}</Button>
   );
 });

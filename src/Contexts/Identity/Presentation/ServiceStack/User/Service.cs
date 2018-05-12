@@ -40,6 +40,7 @@ namespace eShop.Identity.User
                 GivenName = request.GivenName
             });
         }
+
         public Task Any(Services.ChangeName request)
         {
             return _bus.CommandToDomain(new Commands.ChangeName

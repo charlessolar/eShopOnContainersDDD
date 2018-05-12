@@ -192,9 +192,12 @@ namespace eShop
                 new IAuthProvider[]
                 {
                     new JwtAuthProvider(AppSettings) { AuthKey = AesUtils.CreateKey(), RequireSecureConnection=false },
+                    new CredentialsAuthProvider()
                 }));
+            Plugins.Add(new RegistrationFeature());
             container.Register<IUserSessionSource>(x => new IdentitySessionSource(_bus));
-            
+            container.Register<IUserAuthRepository>(x => new AuthRepository(_bus));
+
             Plugins.Add(new OpenApiFeature());
             if (!string.IsNullOrEmpty(AppSettings.GetString("SeqConnection")))
             {

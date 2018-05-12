@@ -10,6 +10,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
+import Tooltip from 'material-ui/Tooltip';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 import { inject, models } from '../../../utils';
@@ -113,7 +114,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'sh
                 <Grid item xs key={key}>
                   <Using model={product}>
                     <Card className={classes.card}>
-                      <CardMedia className={classes.media} title={product.name} image={product.productPicture || require('../img/placeholder.png')} />
+                        <CardMedia className={classes.media} title={product.name} image={product.productPicture || require('../img/placeholder.png')} />
                       <CardContent>
                         <Typography gutterBottom variant='headline' component='h2' className={classes.flex} noWrap>
                           {product.name}

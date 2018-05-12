@@ -71,7 +71,7 @@ export const ProductModel = types
       return 'data:' + self.pictureContentType + ';base64,' + self.pictureContents;
     },
     get canOrder() {
-      return self.availableStock > 0 || self.onReorder;
+      return self.availableStock === 0 || self.onReorder;
     }
   }));
 
