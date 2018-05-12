@@ -63,12 +63,12 @@ namespace eShop.Catalog.Import
                     Description = product.Description
                 }).ConfigureAwait(false);
 
-
-                await _bus.CommandToDomain(new Product.Commands.UpdateStock
-                {
-                    ProductId = product.Id,
-                    Stock = product.AvailableStock
-                }).ConfigureAwait(false);
+                if(product.AvailableStock != 0)
+                    await _bus.CommandToDomain(new Product.Commands.UpdateStock
+                    {
+                        ProductId = product.Id,
+                        Stock = product.AvailableStock
+                    }).ConfigureAwait(false);
 
                 if(product.OnReorder)
                     await _bus.CommandToDomain(new Product.Commands.MarkReordered

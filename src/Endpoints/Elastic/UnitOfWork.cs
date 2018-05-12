@@ -20,6 +20,7 @@ namespace eShop
         private readonly ILogger _logger;
 
         private readonly Dictionary<Id, IBulkOperation> _pendingDocs;
+        private readonly Dictionary<Id, long> _versions;
 
         public UnitOfWork(IElasticClient client)
         {
@@ -85,8 +86,16 @@ namespace eShop
             if (Bag.Saved.Contains(id))
                 return Task.CompletedTask;
 
+            var descriptor = new BulkUpdateDescriptor<T, object>().Index(typeof(T).FullName.ToLower()).Id(id)
+                .Doc(document);
+            if (_versions.ContainsKey(id))
+                descriptor.Version(_versions[id]);
+            else
+                _logger.WarnEvent("NoVersion",
+                    "Update document {Document} id {Id} lacks version information - try to GET it first");
+
             _logger.DebugEvent("Update", "Object {Object} Document {Id}", typeof(T).FullName, id);
-            _pendingDocs[id] = new BulkUpdateDescriptor<T, object>().Index(typeof(T).FullName.ToLower()).Id(id).Doc(document);
+            _pendingDocs[id] = descriptor;
 
             return Task.CompletedTask;
         }
@@ -106,6 +115,8 @@ namespace eShop
                 _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!", typeof(T).FullName, id);
                 return null;
             }
+
+            _versions[id] = response.Version;
 
             return response.Source;
         }
