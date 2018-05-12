@@ -44,7 +44,7 @@ export interface AuthenticationType {
 
   readonly admin: boolean;
   updateToken(token: string): void;
-  reset(): void;
+  reset(): Promise<{}>;
 }
 const Authentication = types.model(
   'Authentication',
@@ -202,6 +202,7 @@ export interface StoreType {
   status: ConfigurationStatusType;
   theme: Theme;
   history: History;
+  client: JsonServiceClient;
 
   readonly authenticated: boolean;
   load: () => Promise<{}>;
@@ -224,6 +225,9 @@ export const Store = types.model(
   },
   get history() {
     return getEnv(self).history;
+  },
+  get client() {
+    return getEnv(self).client;
   }
 }))
 .actions(self => {

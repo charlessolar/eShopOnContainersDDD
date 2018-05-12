@@ -26,8 +26,8 @@ namespace eShop.Identity
             await _bus.CommandToDomain(new User.Commands.Register
             {
                 GivenName = "administrator",
-                UserName = "admin",
-                Password = "admin"
+                UserName = "user@example.com",
+                Password = "12345678"
             }).ConfigureAwait(false);
 
             await _bus.CommandToDomain(new Role.Commands.Define

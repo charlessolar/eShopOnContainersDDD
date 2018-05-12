@@ -17,6 +17,7 @@ namespace eShop.Identity.User
             {
                 x.UserName = Id;
                 x.GivenName = givenName;
+                x.Password = hashed;
             });
         }
 

@@ -51,7 +51,7 @@ class LoginView extends React.Component<LoginProps & WithStyles<'container' | 'b
         <Using model={store}>
           <Grid container spacing={24}>
             <Grid item xs={12}>
-              <Field field='email' />
+              <Field field='username' />
               <Field field='password' />
             </Grid>
             <Grid item xs={12}>

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-11 17:39:24
+Date: 2018-05-12 05:27:56
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -87,8 +87,8 @@ export module DTOs
 
     export class CommandResponse
     {
-        responseStatus: ResponseStatus;
         roundTripMs: number;
+        responseStatus: ResponseStatus;
     }
 
     export class DomainCommand
@@ -361,6 +361,34 @@ export module DTOs
         responseStatus: ResponseStatus;
     }
 
+    // @DataContract
+    export class RegisterResponse
+    {
+        // @DataMember(Order=1)
+        userId: string;
+
+        // @DataMember(Order=2)
+        sessionId: string;
+
+        // @DataMember(Order=3)
+        userName: string;
+
+        // @DataMember(Order=4)
+        referrerUrl: string;
+
+        // @DataMember(Order=5)
+        bearerToken: string;
+
+        // @DataMember(Order=6)
+        refreshToken: string;
+
+        // @DataMember(Order=7)
+        responseStatus: ResponseStatus;
+
+        // @DataMember(Order=8)
+        meta: { [index:string]: string; };
+    }
+
     export class QueryResponse<T>
     {
         roundTripMs: number;
@@ -488,6 +516,37 @@ export module DTOs
         refreshToken: string;
         createResponse() { return new GetAccessTokenResponse(); }
         getTypeName() { return "GetAccessToken"; }
+    }
+
+    // @Route("/register")
+    // @DataContract
+    export class Register implements IReturn<RegisterResponse>, IPost
+    {
+        // @DataMember(Order=1)
+        userName: string;
+
+        // @DataMember(Order=2)
+        firstName: string;
+
+        // @DataMember(Order=3)
+        lastName: string;
+
+        // @DataMember(Order=4)
+        displayName: string;
+
+        // @DataMember(Order=5)
+        email: string;
+
+        // @DataMember(Order=6)
+        password: string;
+
+        // @DataMember(Order=7)
+        autoLogin: boolean;
+
+        // @DataMember(Order=8)
+        continue: string;
+        createResponse() { return new RegisterResponse(); }
+        getTypeName() { return "Register"; }
     }
 
     /**
@@ -733,6 +792,43 @@ export module DTOs
         description: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "UpdateDescriptionProduct"; }
+    }
+
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}/mark", "POST")
+    // @Api(Description="Catalog")
+    export class MarkReordered extends DomainCommand implements IReturn<CommandResponse>
+    {
+        productId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "MarkReordered"; }
+    }
+
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}/unmark", "POST")
+    // @Api(Description="Catalog")
+    export class UnMarkReordered extends DomainCommand implements IReturn<CommandResponse>
+    {
+        productId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "UnMarkReordered"; }
+    }
+
+    /**
+    * Catalog
+    */
+    // @Route("/catalog/products/{ProductId}/stock", "POST")
+    // @Api(Description="Catalog")
+    export class UpdateStock extends DomainCommand implements IReturn<CommandResponse>
+    {
+        productId: string;
+        stock: number;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "UpdateStock"; }
     }
 
     /**

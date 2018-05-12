@@ -13,7 +13,7 @@ import { ApiClientType, StoreType } from '../../../stores';
 const debug = new Debug('login');
 
 export interface LoginType {
-  email: string;
+  username: string;
   password: string;
 
   readonly validation: any;
@@ -22,25 +22,26 @@ export interface LoginType {
 }
 export const LoginStore = types
   .model({
-    email: types.optional(types.string, ''),
+    username: types.optional(types.string, ''),
     password: types.optional(types.string, '')
   })
   .views(self => ({
     get validation() {
-      const validation = {
-        email: rules.email,
-        password: rules.password
-      };
-      return validate(self, validation);
+      // const validation = {
+      //   username: rules.username,
+      //   password: rules.password
+      // };
+      // return validate(self, validation);
+      return undefined;
     }
   }))
   .views(self => ({
     get form(): {[idx: string]: FieldDefinition} {
       return ({
-        email: {
+        username: {
           input: 'text',
-          label: 'Email',
-          autoComplete: 'email',
+          label: 'UserName',
+          autoComplete: 'username',
           required: true,
         },
         password: {
@@ -55,19 +56,18 @@ export const LoginStore = types
   }))
   .actions(self => {
     const submit = flow(function*() {
-      debug('attempting login: %s', self.email);
+      debug('attempting login: %s', self.username);
       const rootStore = getEnv(self).store as StoreType;
 
       try {
-        const client = getEnv(self).client as JsonServiceClient;
 
         const request = new DTOs.Authenticate();
         request.provider = 'credentials';
-        request.userName = self.email;
+        request.userName = self.username;
         request.password = self.password;
         request.rememberMe = true;
 
-        const response: DTOs.AuthenticateResponse = yield client.post(request);
+        const response: DTOs.AuthenticateResponse = yield rootStore.client.post(request);
 
         rootStore.auth.updateToken(response.bearerToken);
 
@@ -78,7 +78,7 @@ export const LoginStore = types
       } catch (error) {
         debug('login unsuccessful', error);
         rootStore.alertStack.add('error', 'Failed to login');
-        rootStore.auth.reset();
+        yield rootStore.auth.reset();
       }
     });
 
