@@ -38,7 +38,7 @@ namespace eShop.Identity
 
             await _bus.CommandToDomain(new User.Entities.Role.Commands.Assign
             {
-                UserName = "admin",
+                UserName = "user@example.com",
                 RoleId = roleId
             }).ConfigureAwait(false);
 
