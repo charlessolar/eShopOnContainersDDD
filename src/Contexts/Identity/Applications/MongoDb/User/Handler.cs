@@ -5,16 +5,25 @@ using System.Threading.Tasks;
 using Aggregates;
 using NServiceBus;
 using Infrastructure.Extensions;
+using Infrastructure.Queries;
 
 namespace eShop.Identity.User
 {
     public class Handler :
+        IHandleQueries<Queries.Identity>,
         IHandleMessages<Events.Registered>,
         IHandleMessages<Events.Disabled>,
         IHandleMessages<Events.Enabled>,
         IHandleMessages<Entities.Role.Events.Assigned>,
         IHandleMessages<Entities.Role.Events.Revoked>
     {
+        public async Task Handle(Queries.Identity query, IMessageHandlerContext ctx)
+        {
+            var model = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.User>(query.UserName)
+                .ConfigureAwait(false);
+
+            await ctx.Result(model).ConfigureAwait(false);
+        }
         public Task Handle(Events.Registered e, IMessageHandlerContext ctx)
         {
             var model = new Models.User
