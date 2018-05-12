@@ -90,7 +90,8 @@ namespace eShop
             _logger.DebugEvent("Commit", "Committing changes to collection {Type}", typeof(T).FullName);
             if (_pendingSaves.Any())
                 await _collection.InsertManyAsync(_pendingSaves.Values).ConfigureAwait(false);
-            if(_pendingUpdates.Any())
+            _logger.DebugEvent("Commit", "Finished saves");
+            if (_pendingUpdates.Any())
             {
                 await _pendingUpdates.SelectAsync(doc =>
                 {
@@ -105,6 +106,7 @@ namespace eShop
                     }
                     return _collection.ReplaceOneAsync(filter, doc.Value);
                 }).ConfigureAwait(false);
+                _logger.DebugEvent("Commit", "Finished updates");
             }
 
             if (_pendingDeletes.Any())
@@ -122,6 +124,7 @@ namespace eShop
                     }
                     return _collection.DeleteOneAsync(filter);
                 }).ConfigureAwait(false);
+                _logger.DebugEvent("Commit", "Finished deletes");
             }
         }
     }
@@ -181,7 +184,9 @@ namespace eShop
 
         public Task Add<T>(Guid id, T document) where T : class
         {
-            return Add(id, document);
+            var collection = GetOrAddCollection<T>();
+            collection.Add(id, document);
+            return Task.CompletedTask;
         }
 
         public Task Update<T>(string id, T document) where T : class
@@ -193,7 +198,9 @@ namespace eShop
 
         public Task Update<T>(Guid id, T document) where T : class
         {
-            return Update(id, document);
+            var collection = GetOrAddCollection<T>();
+            collection.Update(id, document);
+            return Task.CompletedTask;
         }
 
         public Task<T> Get<T>(string id) where T : class
@@ -204,7 +211,8 @@ namespace eShop
 
         public Task<T> Get<T>(Guid id) where T : class
         {
-            return Get<T>(id);
+            var collection = GetOrAddCollection<T>();
+            return collection.Get(id);
         }
 
         public Task Delete<T>(string id) where T : class
@@ -216,7 +224,9 @@ namespace eShop
 
         public Task Delete<T>(Guid id) where T : class
         {
-            return Delete<T>(id);
+            var collection = GetOrAddCollection<T>();
+            collection.Delete(id);
+            return Task.CompletedTask;
         }
 
         public Task<IQueryResult<T>> Query<T>(QueryDefinition definition) where T : class
