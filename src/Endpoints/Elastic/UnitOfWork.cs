@@ -27,6 +27,7 @@ namespace eShop
             _client = client;
             _logger = Log.Logger.For<UnitOfWork>();
             _pendingDocs = new Dictionary<Id, IBulkOperation>();
+            _versions = new Dictionary<Id, long>();
         }
 
         public Task Begin()
