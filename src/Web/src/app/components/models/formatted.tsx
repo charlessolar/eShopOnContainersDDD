@@ -40,7 +40,7 @@ const FormattedConsumer = observer((props: FormattedProps & { using: UsingType<a
     fieldValue = Number(fieldValue);
   }
 
-  if (!fieldValue || fieldValue === Number.NaN) {
+  if (fieldValue === null || fieldValue === undefined || fieldValue === Number.NaN) {
     return (<>{definition.defaultValue || ''}</>);
   }
 
@@ -51,9 +51,14 @@ const FormattedConsumer = observer((props: FormattedProps & { using: UsingType<a
   if (definition.negative) {
     fieldValue *= -1;
   }
+  if (definition.hideZero && fieldValue === 0) {
+    return (<></>);
+  }
 
   let format = '0';
-  if (!definition.precision || definition.precision > 0) {
+  if (definition.trim) {
+    format += '[.][000000]';
+  } else if (!definition.precision || definition.precision > 0) {
     // creates a series of 0s depending on precision wanted (default 2)
     format += '.' + Array((definition.precision || 2) + 1).join('0');
   }

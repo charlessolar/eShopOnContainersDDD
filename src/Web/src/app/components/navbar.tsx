@@ -1,7 +1,7 @@
 import * as React from 'react';
 import glamorous from 'glamorous';
 import { observable, action } from 'mobx';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import { withStyles, WithStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
@@ -14,7 +14,7 @@ import { StoreType } from '../stores';
 
 interface NavBarProps {
   authenticated: boolean;
-  email: string;
+  name: string;
   title: string;
 
   store?: StoreType;
@@ -62,7 +62,7 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
   }
 
   public render() {
-    const { title, store, authenticated, email, classes } = this.props;
+    const { title, store, authenticated, name, classes } = this.props;
     return (
       <header>
         <AppBar position='static'>
@@ -78,7 +78,7 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
                 )}
 
                 <Button color='secondary' onClick={() => this._store.navChange('/orders')}>My Orders</Button>
-                <Menu authenticated={authenticated} email={email} navChange={item => this._store.navChange(item)} />
+                <Menu authenticated={authenticated} name={name} navChange={item => this._store.navChange(item)} />
               </>
             )
               :

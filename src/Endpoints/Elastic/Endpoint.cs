@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
 using Infrastructure.Extensions;
+using Infrastructure.Logging;
 using Infrastructure.Setup;
 using Nest;
 using Nest.JsonNetSerializer;
@@ -119,6 +120,7 @@ namespace eShop
             config.UsePersistence<InMemoryPersistence>();
             config.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(_container));
 
+            config.Pipeline.Register<LogIncomingMessageRegistration>();
             config.Pipeline.Remove("LogErrorOnInvalidLicense");
 
             var client = GetEventStore();

@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Extensions;
+using Infrastructure.Logging;
 using Infrastructure.Setup;
 
 namespace eShop
@@ -110,6 +111,7 @@ namespace eShop
             config.UsePersistence<InMemoryPersistence>();
             config.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(_container));
 
+            config.Pipeline.Register<LogIncomingMessageRegistration>();
             config.Pipeline.Remove("LogErrorOnInvalidLicense");
 
             var client = GetEventStore();

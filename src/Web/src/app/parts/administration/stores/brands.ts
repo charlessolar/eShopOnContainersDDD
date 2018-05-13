@@ -9,9 +9,9 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { BrandType, BrandListModel, BrandListType } from '../models/brands';
+import { BrandType, BrandModel } from '../../../models/catalog/brands';
 
-const debug = new Debug('catalog brand store');
+const debug = new Debug('brands');
 
 export interface BrandFormType {
   id: string;
@@ -19,7 +19,7 @@ export interface BrandFormType {
   readonly form: { [idx: string]: FieldDefinition };
   submit: () => Promise<{}>;
 }
-export const BrandForm = types
+export const BrandFormModel = types
   .model({
     id: types.optional(types.identifier(types.string), uuid),
     brand: types.maybe(types.string)
@@ -55,9 +55,6 @@ export const BrandForm = types
         const client = getEnv(self).api as ApiClientType;
         const result: DTOs.CommandResponse = yield client.command(request);
 
-        // add new brand to list, reset form
-        const store = getParent(self) as BrandsStoreType;
-        setTimeout(() => store.add(getSnapshot(self)), 1);
        } catch (error) {
         debug('received http error: ', error);
         throw error;
@@ -65,35 +62,4 @@ export const BrandForm = types
     });
 
     return { submit };
-  });
-
-export interface BrandsStoreType {
-  list: BrandListType;
-  form: BrandFormType;
-  readonly loading: boolean;
-
-  get: () => Promise<{}>;
-  add: (brand: BrandType) => void;
-}
-export const BrandsStoreModel = types.model(
-  'Catalog_Brands',
-  {
-    list: types.optional(BrandListModel, {}),
-    form: types.optional(BrandForm, {})
-  })
-  .views(self => ({
-    get loading() {
-      return self.list.loading;
-    }
-  }))
-  .actions(self => {
-    const get = flow(function*() {
-      yield self.list.list();
-    });
-    const add = (brand: BrandType) => {
-      self.list.add(brand);
-      self.form = BrandForm.create({});
-    };
-
-    return { add, get };
   });

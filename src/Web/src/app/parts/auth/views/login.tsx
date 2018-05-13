@@ -65,7 +65,7 @@ class LoginView extends React.Component<LoginProps & WithStyles<'container' | 'b
                 Forgot Password
                 </Typography>
                 <Typography component='title'>
-                  UserName: user@example.com <br/>
+                  UserName: administrator <br/>
                   Password: 12345678
                 </Typography>
             </Grid>

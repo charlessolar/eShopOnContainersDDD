@@ -17,6 +17,15 @@ namespace eShop.Catalog.CatalogType
     {
         public async Task Handle(Queries.Types query, IMessageHandlerContext ctx)
         {
+            if (query.Id.HasValue)
+            {
+                var type = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.CatalogType>(query.Id.Value)
+                    .ConfigureAwait(false);
+
+                await ctx.Result(new[] {type}, 1, 0).ConfigureAwait(false);
+                return;
+            }
+
             var builder = new QueryBuilder();
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.CatalogType>(builder.Build())
                 .ConfigureAwait(false);

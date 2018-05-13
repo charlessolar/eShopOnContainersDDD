@@ -20,6 +20,9 @@ interface JWTPayload {
   exp: number;
   // audience
   aud?: string;
+
+  roles: string[];
+  name: string;
 }
 
 export interface ConfigurationStatusType {
@@ -37,10 +40,10 @@ export const ConfigurationStatusModel = types
   }));
 
 export interface AuthenticationType {
-  email: string;
+  name: string;
   token: string;
   expires: number;
-  roles: string[];
+  roles: Array<string>;
 
   readonly admin: boolean;
   updateToken(token: string): void;
@@ -49,7 +52,7 @@ export interface AuthenticationType {
 const Authentication = types.model(
   'Authentication',
   {
-    email: types.maybe(types.string),
+    name: types.maybe(types.string),
     expires: types.maybe(types.number),
     token: types.optional(types.string, ''),
     roles: types.optional(types.array(types.string), [])
@@ -73,6 +76,8 @@ const Authentication = types.model(
 
         self.token = token;
         self.expires = profile.exp;
+        profile.roles.forEach(r => self.roles.push(r));
+        self.name = profile.name;
 
         const client = getEnv(self).client as JsonServiceClient;
         client.setBearerToken(self.token);
@@ -88,10 +93,10 @@ const Authentication = types.model(
       try {
       yield client.post(request);
 
+      self.name = '';
       self.token = '';
-      self.email = '';
-
       self.expires = 0;
+      self.roles.clear();
 
       client.setBearerToken('');
       } catch (error) {

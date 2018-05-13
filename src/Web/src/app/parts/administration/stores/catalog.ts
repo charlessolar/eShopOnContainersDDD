@@ -1,4 +1,4 @@
-import { types, flow, getEnv, getParent, getSnapshot, applySnapshot } from 'mobx-state-tree';
+import { types, flow, getEnv, getParent, applySnapshot, getSnapshot } from 'mobx-state-tree';
 import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
@@ -9,11 +9,49 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { TypeType, TypeListModel, TypeModel, TypeListType } from '../models/types';
-import { BrandType, BrandListModel, BrandModel, BrandListType } from '../models/brands';
-import { ProductType, ProductListModel, ProductListType } from '../models/products';
+import { TypeListType, TypeListModel, TypeType, TypeModel } from '../models/types';
+import { BrandListType, BrandListModel, BrandType, BrandModel } from '../models/brands';
+import { ProductType, ProductModel } from '../models/products';
 
-const debug = new Debug('catalog product store');
+const debug = new Debug('catalog');
+
+export interface CatalogStoreType {
+  products: Map<string, ProductType>;
+  loading: boolean;
+
+  readonly validation: any;
+  readonly form: {[idx: string]: FieldDefinition};
+  get: () => Promise<{}>;
+}
+
+export const CatalogStoreModel = types
+.model('CatalogStore',
+{
+  products: types.optional(types.map(ProductModel), {}),
+  loading: types.optional(types.boolean, false)
+})
+.actions(self => {
+  const get = flow(function*() {
+    const request = new DTOs.Catalog();
+
+    self.loading = true;
+    try {
+      const client = getEnv(self).api as ApiClientType;
+      const result: DTOs.PagedResponse<DTOs.ProductIndex> = yield client.paged(request);
+
+      self.products.clear();
+      result.records.forEach((record) => {
+        self.products.put(record);
+      });
+     } catch (error) {
+      debug('received http error: ', error);
+      throw error;
+    }
+    self.loading = false;
+  });
+
+  return { get };
+});
 
 export interface ProductFormType {
   id: string;
@@ -67,12 +105,15 @@ export const ProductForm = types
           label: 'Catalog Type',
           required: true,
           projectionStore: TypeListModel,
-          projection: async (store: TypeListType, term: string) => {
-            await store.list(term);
+          projection: async (store: TypeListType, term: string, id?: string) => {
+            await store.list(term, id);
             return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.type }));
           },
           select: (store: TypeListType, id: string) => {
             return store.entries.get(id);
+          },
+          getIdentity: (model: TypeType) => {
+            return model.id;
           }
         },
         catalogBrand: {
@@ -80,12 +121,15 @@ export const ProductForm = types
           label: 'Catalog Brand',
           required: true,
           projectionStore: BrandListModel,
-          projection: async (store: BrandListType, term: string) => {
-            await store.list(term);
+          projection: async (store: BrandListType, term: string, id?: string) => {
+            await store.list(term, id);
             return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.brand }));
           },
           select: (store: BrandListType, id: string) => {
             return store.entries.get(id);
+          },
+          getIdentity: (model: BrandType) => {
+            return model.id;
           }
         }
       });
@@ -105,9 +149,6 @@ export const ProductForm = types
         const client = getEnv(self).api as ApiClientType;
         const result: DTOs.CommandResponse = yield client.command(request);
 
-        // add new brand to list, reset form
-        const store = getParent(self) as ProductsStoreType;
-        setTimeout(() => store.add(getSnapshot(self)), 1);
       } catch (error) {
         debug('received http error: ', error);
         throw error;
@@ -115,50 +156,4 @@ export const ProductForm = types
     });
 
     return { submit };
-  });
-
-export interface ProductsStoreType {
-  list: ProductListType;
-  form: ProductFormType;
-  readonly loading: boolean;
-
-  get: () => Promise<{}>;
-  add: (type: ProductType) => void;
-}
-export const ProductsStoreModel = types.model(
-  'Catalog_Products',
-  {
-    list: types.optional(ProductListModel, {}),
-    form: types.optional(ProductForm, {})
-  })
-  .views(self => ({
-    get loading() {
-      return self.list.loading;
-    }
-  }))
-  .actions(self => {
-    const get = flow(function*() {
-      yield self.list.list();
-    });
-    const add = (product: ProductFormType) => {
-      self.list.add({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        catalogType: product.catalogType.type,
-        catalogTypeId: product.catalogType.id,
-        catalogBrand: product.catalogBrand.brand,
-        catalogBrandId: product.catalogBrand.id,
-        restockThreshold: 0,
-        availableStock: 0,
-        maxStockThreshold: 0,
-        onReorder: false,
-        pictureContents: '',
-        pictureContentType: '',
-      });
-      self.form = ProductForm.create({});
-    };
-
-    return { add, get };
   });

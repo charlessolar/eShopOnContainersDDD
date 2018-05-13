@@ -76,7 +76,8 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         onChange: handleChange,
         projectionStore: definition.projectionStore,
         projection: definition.projection,
-        select: definition.select
+        select: definition.select,
+        getIdentity: definition.getIdentity,
       });
     case 'dropdown':
       return React.createElement(Dropdown, {

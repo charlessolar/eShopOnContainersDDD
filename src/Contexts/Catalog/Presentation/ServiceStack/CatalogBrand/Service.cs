@@ -21,7 +21,8 @@ namespace eShop.Catalog.CatalogBrand
             return _bus.RequestPaged<Queries.Brands, Models.CatalogBrand>(new Queries.Brands
             {
                 Term = request.Term,
-                Limit = request.Limit
+                Limit = request.Limit,
+                Id=request.Id
             });
         }
 

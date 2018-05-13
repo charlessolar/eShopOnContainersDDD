@@ -26,6 +26,7 @@ using App.Metrics.Health;
 using StructureMap;
 using App.Metrics.Health.Builder;
 using eShop.Presentation.Authentication;
+using Infrastructure.Logging;
 using ServiceStack.Api.OpenApi;
 using ServiceStack.Seq.RequestLogsFeature;
 
@@ -133,6 +134,7 @@ namespace eShop
             config.UsePersistence<InMemoryPersistence>();
             config.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(_container));
 
+            config.Pipeline.Register<LogIncomingMessageRegistration>();
             config.Pipeline.Remove("LogErrorOnInvalidLicense");
 
             await Aggregates.Configuration.Build(c => c

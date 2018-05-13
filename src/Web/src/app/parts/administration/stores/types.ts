@@ -1,4 +1,4 @@
-import { types, flow, getEnv, getParent, getSnapshot, applySnapshot } from 'mobx-state-tree';
+import { types, flow, getEnv, getParent, applySnapshot, getSnapshot } from 'mobx-state-tree';
 import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
@@ -9,9 +9,9 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { TypeType, TypeListModel, TypeListType } from '../models/types';
+import { TypeType, TypeModel } from '../../../models/catalog/types';
 
-const debug = new Debug('catalog type store');
+const debug = new Debug('types');
 
 export interface TypeFormType {
   id: string;
@@ -55,9 +55,6 @@ export const TypeForm = types
         const client = getEnv(self).api as ApiClientType;
         const result: DTOs.CommandResponse = yield client.command(request);
 
-        // add new type to list, reset form
-        const store = getParent(self) as TypesStoreType;
-        setTimeout(() => store.add(getSnapshot(self)), 1);
       } catch (error) {
         debug('received http error: ', error);
         throw error;
@@ -65,35 +62,4 @@ export const TypeForm = types
     });
 
     return { submit };
-  });
-
-export interface TypesStoreType {
-  list: TypeListType;
-  form: TypeFormType;
-  readonly loading: boolean;
-
-  get: () => Promise<{}>;
-  add: (type: TypeType) => void;
-}
-export const TypesStoreModel = types.model(
-  'Catalog_Types',
-  {
-    list: types.optional(TypeListModel, {}),
-    form: types.optional(TypeForm, {})
-  })
-  .views(self => ({
-    get loading() {
-      return self.list.loading;
-    }
-  }))
-  .actions(self => {
-    const get = flow(function*() {
-      yield self.list.list();
-    });
-    const add = (type: TypeType) => {
-      self.list.add(type);
-      self.form = TypeForm.create({});
-    };
-
-    return { add, get };
   });

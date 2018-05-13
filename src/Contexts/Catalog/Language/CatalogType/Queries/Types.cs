@@ -9,5 +9,7 @@ namespace eShop.Catalog.CatalogType.Queries
     {
         public string Term { get; set; }
         public int Limit { get; set; }
+
+        public Guid? Id { get; set; }
     }
 }

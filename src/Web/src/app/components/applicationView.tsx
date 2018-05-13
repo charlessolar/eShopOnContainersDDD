@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import glamorous from 'glamorous';
 
 import asyncView from './asyncView';
@@ -7,11 +7,13 @@ import asyncView from './asyncView';
 import NavBar from './navbar';
 import Footer from './footer';
 
+import { StoreType } from '../stores';
+
 interface AppViewProps {
-  authenticated: boolean;
-  email: string;
   title: string;
   version: string;
+
+  store?: StoreType;
 }
 
 const AppRoot = glamorous('div')({
@@ -36,15 +38,17 @@ const MainView = glamorous('main')({
   }
 });
 
+@inject('store')
+@observer
 export default class extends React.Component<AppViewProps, {}> {
 
   public render() {
-    const { authenticated, email, children, title, version } = this.props;
+    const { store, children, title, version } = this.props;
 
     return (
       <AppRoot>
         <AppView>
-          <NavBar title={title} authenticated={authenticated} email={email} />
+          <NavBar title={title} authenticated={store.authenticated} name={store.auth.name} />
           <MainView>
             {children}
           </MainView>

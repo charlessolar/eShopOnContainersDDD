@@ -3,46 +3,50 @@ import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
 
-import rules from '../validation';
 import { models } from '../../../utils';
 import { FormatDefinition, FieldDefinition } from '../../../components/models';
 
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { TypeModel, TypeType, TypeListModel, TypeListType } from './types';
-import { BrandModel, BrandType, BrandListModel, BrandListType } from './brands';
-
 import { ProductType as ProductTypeBase, ProductModel as ProductModelBase } from '../../../models/catalog/products';
 
 const debug = new Debug('catalog products');
 
 export interface ProductType extends ProductTypeBase {
-  readonly formatting?: {[idx: string]: FormatDefinition };
-  readonly productPicture?: string;
-  readonly canOrder?: boolean;
+  readonly formatting: {[idx: string]: FormatDefinition };
+  readonly productPicture: string;
+  readonly shouldReorder: boolean;
 }
-export const ProductModel =
-  ProductModelBase
-  .views(self => ({
-    get formatting() {
-      return ({
-        price: {
-          currency: true,
-          normalize: 2
-        }
-      });
-    },
-    get productPicture() {
-      if (!self.pictureContents) {
-        return;
+export const ProductModel = ProductModelBase
+.views(self => ({
+  get formatting() {
+    return ({
+      price: {
+        currency: true,
+        normalize: 2
+      },
+      availableStock: {
+        trim: true
+      },
+      restockThreshold: {
+        trim: true
+      },
+      maxStockThreshold: {
+        trim: true
       }
-      return 'data:' + self.pictureContentType + ';base64,' + self.pictureContents;
-    },
-    get canOrder() {
-      return self.availableStock > 0 || self.onReorder;
+    });
+  },
+  get productPicture() {
+    if (!self.pictureContents) {
+      return;
     }
-  }));
+    return 'data:' + self.pictureContentType + ';base64,' + self.pictureContents;
+  },
+  get shouldReorder() {
+    return self.restockThreshold > 0 && self.availableStock < self.restockThreshold;
+  }
+}));
 
 export interface ProductListType {
   entries: Map<string, ProductType>;

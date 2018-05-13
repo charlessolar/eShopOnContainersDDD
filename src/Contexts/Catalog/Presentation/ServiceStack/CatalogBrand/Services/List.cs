@@ -12,5 +12,7 @@ namespace eShop.Catalog.CatalogBrand.Services
     {
         public string Term { get; set; }
         public int Limit { get; set; }
+
+        public Guid? Id { get; set; }
     }
 }

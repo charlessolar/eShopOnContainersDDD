@@ -58,6 +58,9 @@ export const CatalogStoreModel = types
           },
           select: (store: TypeListType, id: string) => {
             return store.entries.get(id);
+          },
+          getIdentity: (model: TypeType) => {
+            return model.id;
           }
         },
         catalogBrand: {
@@ -70,6 +73,9 @@ export const CatalogStoreModel = types
           },
           select: (store: BrandListType, id: string) => {
             return store.entries.get(id);
+          },
+          getIdentity: (model: BrandType) => {
+            return model.id;
           }
         }
       });

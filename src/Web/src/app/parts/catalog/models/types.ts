@@ -10,31 +10,16 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
+import { TypeType, TypeModel } from '../../../models/catalog/types';
+
+export { TypeType, TypeModel };
+
 const debug = new Debug('catalog types');
-
-export interface TypeType {
-  id: string;
-  type: string;
-}
-export const TypeModel = types
-  .model('Catalog_Type', {
-    id: types.identifier(types.string),
-    type: types.string
-  })
-  .views(self => ({
-    get validation() {
-      const validation = {
-        type: rules.type
-      };
-
-      return validate(self, validation);
-    }
-  }));
 
 export interface TypeListType {
   entries: Map<string, TypeType>;
   loading: boolean;
-  list: (term?: string, limit?: number) => Promise<{}>;
+  list: (term?: string, id?: string) => Promise<{}>;
   add: (type: TypeType) => void;
   remove: (id: string) => Promise<{}>;
 }
@@ -44,11 +29,11 @@ export const TypeListModel = types
     loading: types.optional(types.boolean, true)
   })
   .actions(self => {
-    const list = flow(function*(term?: string, limit?: number) {
+    const list = flow(function*(term?: string, id?: string) {
       const request = new DTOs.ListCatalogTypes();
 
       request.term = term;
-      request.limit = limit || 10;
+      request.id = id;
 
       self.loading = true;
       try {

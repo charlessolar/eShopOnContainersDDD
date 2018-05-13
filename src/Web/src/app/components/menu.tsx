@@ -20,7 +20,7 @@ export interface Route {
 
 interface MenuProps {
   authenticated: boolean;
-  email: string;
+  name: string;
   navChange: (menu: Route) => void;
 }
 
@@ -74,14 +74,14 @@ export default class extends React.Component<MenuProps, MenuState> {
   }
 
   public render() {
-    const { authenticated, email, navChange } = this.props;
+    const { authenticated, name, navChange } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
       <div>
         <Button onClick={(e) => this.handleMenu(e)} color='inherit'>
-          {email} <ArrowDropDown />
+          {name} <ArrowDropDown />
         </Button>
         <Menu id='profile-appbar'
           anchorEl={anchorEl}

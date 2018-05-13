@@ -7,14 +7,14 @@ import { StoreType } from '../../stores';
 
 import { CatalogStoreModel, CatalogStoreType } from './stores/catalog';
 
-export class CatalogModule {
+export class AdministrationModule {
   public routes: UniversalRouterRoute[];
 
   constructor() {
 
     this.routes = [
       {
-        path: '/',
+        path: '/administrate',
         component: () => ({
           title: 'Catalog',
           component: (

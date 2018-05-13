@@ -54,7 +54,7 @@ export class Client {
       const Layout = hot(module)(() => (
         <MuiThemeProvider theme={this._store.theme}>
           <Provider store={this._store}>
-            <ApplicationView authenticated={this._store.authenticated} email={this._store.auth.email} title={config.title} version={config.build.version}>
+            <ApplicationView title={config.title} version={config.build.version}>
               {component}
               <AlertStack/>
             </ApplicationView>

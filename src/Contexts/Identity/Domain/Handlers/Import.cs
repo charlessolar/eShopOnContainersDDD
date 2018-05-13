@@ -33,7 +33,7 @@ namespace eShop.Identity
             await _bus.CommandToDomain(new Role.Commands.Define
             {
                 RoleId = roleId,
-                Name = "admininstrator"
+                Name = "administrator"
             }).ConfigureAwait(false);
 
             await _bus.CommandToDomain(new User.Entities.Role.Commands.Assign

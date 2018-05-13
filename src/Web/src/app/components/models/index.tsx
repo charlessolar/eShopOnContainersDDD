@@ -13,6 +13,8 @@ export interface FormatDefinition {
   percent?: boolean;
   negative?: boolean;
   commas?: boolean;
+  trim?: boolean;
+  hideZero?: boolean;
   defaultValue?: string;
 }
 export interface FieldDefinition {
@@ -29,4 +31,5 @@ export interface FieldDefinition {
   projectionStore?: any;
   projection?: (store: any, term: string) => Promise<{ id: string, label: string }[]>;
   select?: (store: any, id: string) => any;
+  getIdentity?: (model: any) => string;
 }

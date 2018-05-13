@@ -21,7 +21,8 @@ namespace eShop.Catalog.CatalogType
             return _bus.RequestPaged<Queries.Types, Models.CatalogType>(new Queries.Types
             {
                 Term = request.Term,
-                Limit = request.Limit
+                Limit = request.Limit,
+                Id=request.Id
             });
         }
 
