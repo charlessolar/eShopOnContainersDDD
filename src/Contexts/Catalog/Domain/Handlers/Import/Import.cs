@@ -69,8 +69,13 @@ namespace eShop.Catalog.Import
                         ProductId = product.Id,
                         Stock = product.AvailableStock
                     }).ConfigureAwait(false);
-                if(product.RestockThreshold > 0)
-                    await _bus.CommandToDomain(new Product.Commands.)
+                if (product.RestockThreshold > 0 || product.MaxStockThreshold > 0)
+                    await _bus.CommandToDomain(new Product.Commands.UpdateThresholds
+                    {
+                        ProductId = product.Id,
+                        RestockThreshold = product.RestockThreshold,
+                        MaxStockThreshold = product.MaxStockThreshold
+                    }).ConfigureAwait(false);
 
                 if(product.OnReorder)
                     await _bus.CommandToDomain(new Product.Commands.MarkReordered
