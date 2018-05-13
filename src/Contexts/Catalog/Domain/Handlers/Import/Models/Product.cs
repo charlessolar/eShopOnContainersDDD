@@ -19,6 +19,9 @@ namespace eShop.Catalog.Import.Models
         public decimal AvailableStock { get; set; }
         public bool OnReorder { get; set; }
 
+        public decimal RestockThreshold { get; set; }
+        public decimal MaxStockThreshold { get; set; }
+
         public string Picture { get; set; }
     }
 }

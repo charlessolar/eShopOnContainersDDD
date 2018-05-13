@@ -63,12 +63,14 @@ namespace eShop.Catalog.Import
                     Description = product.Description
                 }).ConfigureAwait(false);
 
-                if(product.AvailableStock != 0)
+                if(product.AvailableStock > 0)
                     await _bus.CommandToDomain(new Product.Commands.UpdateStock
                     {
                         ProductId = product.Id,
                         Stock = product.AvailableStock
                     }).ConfigureAwait(false);
+                if(product.RestockThreshold > 0)
+                    await _bus.CommandToDomain(new Product.Commands.)
 
                 if(product.OnReorder)
                     await _bus.CommandToDomain(new Product.Commands.MarkReordered
@@ -117,17 +119,17 @@ namespace eShop.Catalog.Import
         private static readonly Models.Product[] Products = new[]
         {
             new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[1].Id, Name=".NET Bot Black Hoodie", Description = ".NET Bot Black Hoodie, and more", Picture="1.png", Price=1950, AvailableStock=100, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[0].Id, CatalogBrandId = Brands[1].Id, Name=".NET Black & White Mug", Description = ".NET Black & White Mug", Picture="2.png", Price=850, AvailableStock=90, OnReorder=true },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[0].Id, CatalogBrandId = Brands[1].Id, Name=".NET Black & White Mug", Description = ".NET Black & White Mug", Picture="2.png", Price=850, AvailableStock=90,RestockThreshold=10, OnReorder=true },
             new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[4].Id, Name="Prism White T-Shirt", Description = "Prism White T-Shirt", Picture="3.png", Price=1200, AvailableStock=55, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[1].Id, Name=".NET Foundation T-shirt", Description = ".NET Foundation T-shirt", Picture="4.png", Price=1200, AvailableStock=120, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[2].Id, CatalogBrandId = Brands[4].Id, Name="Roslyn Red Sheet", Description = "Roslyn Red Sheet", Picture="5.png", Price=850, AvailableStock=55, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[1].Id, Name=".NET Blue Hoodie", Description = ".NET Blue Hoodie", Picture="6.png", Price=1200, AvailableStock=20, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[4].Id, Name="Roslyn Red T-Shirt", Description = "Roslyn Red T-Shirt", Picture="7.png", Price=1200, AvailableStock=10, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[1].Id, Name=".NET Foundation T-shirt", Description = ".NET Foundation T-shirt", Picture="4.png", Price=1200, AvailableStock=120, RestockThreshold=20, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[2].Id, CatalogBrandId = Brands[4].Id, Name="Roslyn Red Sheet", Description = "Roslyn Red Sheet", Picture="5.png", Price=850, AvailableStock=55,RestockThreshold=25, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[1].Id, Name=".NET Blue Hoodie", Description = ".NET Blue Hoodie", Picture="6.png", Price=1200, AvailableStock=20, RestockThreshold=10, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[4].Id, Name="Roslyn Red T-Shirt", Description = "Roslyn Red T-Shirt", Picture="7.png", Price=1200, AvailableStock=10,RestockThreshold=2, OnReorder=false },
             new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[4].Id, Name="Kudu Purple Hoodie", Description = "Kudu Purple Hoodie", Picture="8.png", Price=850, AvailableStock=35, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[0].Id, CatalogBrandId = Brands[4].Id, Name="Cup<T> White Mug", Description = "Cup<T> White Mug", Picture="9.png", Price=1200, AvailableStock=75, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[0].Id, CatalogBrandId = Brands[4].Id, Name="Cup<T> White Mug", Description = "Cup<T> White Mug", Picture="9.png", Price=1200, AvailableStock=75,RestockThreshold=10, OnReorder=false },
             new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[2].Id, CatalogBrandId = Brands[1].Id, Name=".NET Foundation Sheet", Description = ".NET Foundation Sheet", Picture="10.png", Price=1200, AvailableStock=11, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[2].Id, CatalogBrandId = Brands[1].Id, Name="Cup<T> Sheet", Description = "Cup<T> Sheet", Picture="11.png", Price=850, AvailableStock=3, OnReorder=false },
-            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[4].Id, Name="Prism White TShirt", Description = "Prism White TShirt", Picture="12.png", Price=1200, AvailableStock=0, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[2].Id, CatalogBrandId = Brands[1].Id, Name="Cup<T> Sheet", Description = "Cup<T> Sheet", Picture="11.png", Price=850, AvailableStock=3, RestockThreshold=5, OnReorder=false },
+            new Models.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[4].Id, Name="Prism White TShirt", Description = "Prism White TShirt", Picture="12.png", Price=1200, AvailableStock=0, RestockThreshold=10, OnReorder=false },
         };
     }
 }

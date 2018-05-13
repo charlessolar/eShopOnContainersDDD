@@ -21,7 +21,7 @@ namespace eShop.Catalog.Product.Models
 
         public decimal AvailableStock { get; set; }
         public decimal RestockThreshold { get; set; }
-        public decimal MaxStockThrshold { get; set; }
+        public decimal MaxStockThreshold { get; set; }
 
         public bool OnReorder { get; set; }
 

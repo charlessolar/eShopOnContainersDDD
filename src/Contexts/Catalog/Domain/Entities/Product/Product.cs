@@ -74,5 +74,15 @@ namespace eShop.Catalog.Product
         {
             Apply<Events.ReorderUnMarked>(x => { x.ProductId = Id; });
         }
+
+        public void UpdateThresholds(decimal restock, decimal maxStock)
+        {
+            Apply<Events.ThresholdsUpdated>(x =>
+            {
+                x.ProductId = Id;
+                x.RestockThreshold = restock;
+                x.MaxStockThreshold = maxStock;
+            });
+        }
     }
 }

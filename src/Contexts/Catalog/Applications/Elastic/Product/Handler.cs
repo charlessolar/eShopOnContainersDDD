@@ -20,7 +20,8 @@ namespace eShop.Catalog.Product
         IHandleMessages<Events.Removed>,
         IHandleMessages<Events.ReorderMarked>,
         IHandleMessages<Events.ReorderUnMarked>,
-        IHandleMessages<Events.StockUpdated>
+        IHandleMessages<Events.StockUpdated>,
+        IHandleMessages<Events.ThresholdsUpdated>
     {
         public async Task Handle(Queries.List query, IMessageHandlerContext ctx)
         {
@@ -122,6 +123,15 @@ namespace eShop.Catalog.Product
             var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ProductIndex>(e.ProductId).ConfigureAwait(false);
 
             product.AvailableStock = e.Stock;
+
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.ThresholdsUpdated e, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ProductIndex>(e.ProductId).ConfigureAwait(false);
+
+            product.MaxStockThreshold = e.MaxStockThreshold;
+            product.RestockThreshold = e.RestockThreshold;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, product).ConfigureAwait(false);
         }

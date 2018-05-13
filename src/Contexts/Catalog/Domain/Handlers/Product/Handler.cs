@@ -15,7 +15,8 @@ namespace eShop.Catalog.Product
         IHandleMessages<Commands.UpdatePrice>,
         IHandleMessages<Commands.UpdateStock>,
         IHandleMessages<Commands.MarkReordered>,
-        IHandleMessages<Commands.UnMarkReordered>
+        IHandleMessages<Commands.UnMarkReordered>,
+        IHandleMessages<Commands.UpdateThresholds>
     {
         public async Task Handle(Commands.Add command, IMessageHandlerContext ctx)
         {
@@ -61,5 +62,10 @@ namespace eShop.Catalog.Product
             product.UnMarkReordered();
         }
 
+        public async Task Handle(Commands.UpdateThresholds command, IMessageHandlerContext ctx)
+        {
+            var product = await ctx.For<Product>().Get(command.ProductId).ConfigureAwait(false);
+            product.UpdateThresholds(command.RestockThreshold, command.MaxStockThreshold);
+        }
     }
 }
