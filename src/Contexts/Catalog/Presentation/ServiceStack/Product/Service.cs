@@ -67,7 +67,7 @@ namespace eShop.Catalog.Product
             await _bus.CommandToDomain(new Commands.SetPicture
             {
                 ProductId = request.ProductId,
-                Content = request.Content,
+                Content = Convert.FromBase64String(request.Content),
                 ContentType = request.ContentType
             }).ConfigureAwait(false);
         }

@@ -5,6 +5,7 @@ import Debug from 'debug';
 
 import rules from '../validation';
 import { FieldDefinition } from '../../../components/models';
+import { when } from '../../../utils';
 
 import { DTOs } from '../../../utils/eShop.dtos';
 import { Data, DataModel, urlToBase64 } from '../../../utils/image';
@@ -12,6 +13,8 @@ import { ApiClientType } from '../../../stores';
 
 import { TypeListType, TypeListModel, TypeType, TypeModel } from '../models/types';
 import { BrandListType, BrandListModel, BrandType, BrandModel } from '../models/brands';
+
+import BrandFormView from '../components/brandForm';
 
 const debug = new Debug('product');
 
@@ -64,7 +67,8 @@ export const ProductFormModel = types
         price: {
           input: 'number',
           label: 'Price',
-          required: true
+          required: true,
+          normalize: 2
         },
         catalogType: {
           input: 'selecter',
@@ -96,7 +100,8 @@ export const ProductFormModel = types
           },
           getIdentity: (model: BrandType) => {
             return model.id;
-          }
+          },
+          addComponent: BrandFormView
         },
         picture: {
           input: 'image',
@@ -108,7 +113,7 @@ export const ProductFormModel = types
     }
   }))
   .actions(self => {
-    const submit = flow(function*() {
+    const addProduct = () => {
       const request = new DTOs.AddProduct();
 
       request.productId = self.id;
@@ -117,14 +122,39 @@ export const ProductFormModel = types
       request.catalogBrandId = self.catalogBrand.id;
       request.catalogTypeId = self.catalogType.id;
 
-      try {
-        const client = getEnv(self).api as ApiClientType;
-        const result: DTOs.CommandResponse = yield client.command(request);
+      return request;
+    };
+    const setPicture = () => {
+      const request = new DTOs.SetPictureProduct();
 
-      } catch (error) {
-        debug('received http error: ', error);
-        throw error;
+      request.productId = self.id;
+      request.content = self.picture.data as any;
+      request.contentType = self.picture.contentType;
+
+      return request;
+    };
+    const setDescription = () => {
+      const request = new DTOs.UpdateDescriptionProduct();
+
+      request.productId = self.id;
+      request.description = self.description;
+
+      return request;
+    };
+
+    const submit = flow(function*() {
+      const requests = [ addProduct, ...when(self.picture, setPicture), ...when(self.description, setDescription) ];
+
+      const client = getEnv(self).api as ApiClientType;
+      for (let i = 0; i < requests.length; i++) {
+        try {
+          const result: DTOs.CommandResponse = yield client.command(requests[i]());
+        } catch (error) {
+          debug('received http error: ', error);
+          throw error;
+        }
       }
+
     });
 
     return { submit };

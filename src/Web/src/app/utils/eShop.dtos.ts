@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-13 21:03:00
+Date: 2018-05-14 03:19:26
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -778,7 +778,8 @@ export module DTOs
     export class SetPictureProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
-        pictureUrl: string;
+        content: Uint8Array;
+        contentType: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "SetPictureProduct"; }
     }

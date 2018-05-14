@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { types, IModelType, flow, IStateTreeNode } from 'mobx-state-tree';
 
 export { Using } from './using';
@@ -26,10 +27,13 @@ export interface FieldDefinition {
   allowEmpty?: boolean;
   options?: { value: string, label: string }[];
 
+  normalize?: number;
+
   imageRatio?: number;
 
   projectionStore?: any;
   projection?: (store: any, term: string) => Promise<{ id: string, label: string }[]>;
   select?: (store: any, id: string) => any;
   getIdentity?: (model: any) => string;
+  addComponent?: React.ComponentType<{ onChange: (newVal: any) => void }>;
 }

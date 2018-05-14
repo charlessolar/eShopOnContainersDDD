@@ -12,7 +12,7 @@ namespace eShop.Catalog.Product.Services
     {
         public Guid ProductId { get; set; }
 
-        public byte[] Content { get; set; }
+        public string Content { get; set; }
         public string ContentType { get; set; }
     }
 }

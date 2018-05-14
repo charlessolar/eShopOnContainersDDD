@@ -62,6 +62,7 @@ interface SelectProps {
   projection: (store: any, term: string, id?: string) => Promise<{ id: string, label: string }[]>;
   select: (store: any, id: string) => any;
   getIdentity: (model: any) => string;
+  addComponent?: React.ComponentType<{ onChange: (newVal: any) => void }>;
 
   // injected
   projectionStoreStore?: any;
@@ -186,8 +187,11 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
     selectStore.clear();
     this._value = selection[0];
   }
+  public addAndSelect = (data: any) => {
+    this.selectionChanged([data.id, data.brand]);
+  }
 
-  private _renderDownshift = (classes, error, required, label, id, fieldProps, selectStore, value) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
+  private _renderDownshift = (classes, error, required, label, id, fieldProps, selectStore, value, addComponent) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
     this._clearSelection = clearSelection;
     return (
       <div className={classes.container}>
@@ -212,6 +216,7 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
                 >
                   <ArrowDown />
                 </IconButton>
+                {addComponent && React.createElement(addComponent, { onChange: this.addAndSelect })}
               </InputAdornment>
           } />
           {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
@@ -234,12 +239,12 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
   }
 
   public render() {
-    const { classes, error, required, label, id, fieldProps, selectStore, value } = this.props;
+    const { classes, error, required, label, id, fieldProps, selectStore, value, addComponent, onChange } = this.props;
 
     return (
       <div className={classes.root}>
         <Downshift selectedItem={ selectStore.selected && [selectStore.selected.id, selectStore.selected.label]} onChange={this.selectionChanged} itemToString={item => item && item[1]}>
-          {this._renderDownshift(classes, error, required, label, id, fieldProps, selectStore, value)}
+          {this._renderDownshift(classes, error, required, label, id, fieldProps, selectStore, value, addComponent)}
         </Downshift>
       </div>
     );

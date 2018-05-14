@@ -78,6 +78,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         projection: definition.projection,
         select: definition.select,
         getIdentity: definition.getIdentity,
+        addComponent: definition.addComponent
       });
     case 'dropdown':
       return React.createElement(Dropdown, {
@@ -110,6 +111,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         label: definition.label,
         autoComplete: definition.autoComplete,
         onChange: handleChange,
+        normalize: definition.normalize,
         fieldProps
       });
     case 'checkbox':
