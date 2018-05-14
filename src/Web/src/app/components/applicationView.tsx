@@ -25,7 +25,7 @@ const AppView = glamorous('div')((_) => ({
   flex: '1 1 auto',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'auto'
+  overflow: 'auto',
 }));
 
 const MainView = glamorous('main')({

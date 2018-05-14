@@ -32,6 +32,12 @@ export default {
     },
     catalogBrand: {
       presence: true
-    }
-  }
+    },
+    picture: {
+      presence: true,
+      image: {
+        ratio: 1
+      }
+    },
+  },
 };

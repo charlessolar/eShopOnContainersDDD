@@ -45,7 +45,6 @@ class Store {
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
   },
   title: {
     flex: 1,
@@ -64,7 +63,7 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
   public render() {
     const { title, store, authenticated, name, classes } = this.props;
     return (
-      <header>
+      <header className={classes.root}>
         <AppBar position='static'>
           <Toolbar>
             <Typography onClick={() => this._store.navChange('/')} variant='title' color='inherit' className={classes.title}>{title}</Typography>

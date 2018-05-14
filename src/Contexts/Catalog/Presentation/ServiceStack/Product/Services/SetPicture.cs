@@ -11,6 +11,8 @@ namespace eShop.Catalog.Product.Services
     public class SetPictureProduct : DomainCommand
     {
         public Guid ProductId { get; set; }
-        public string PictureUrl { get; set; }
+
+        public byte[] Content { get; set; }
+        public string ContentType { get; set; }
     }
 }

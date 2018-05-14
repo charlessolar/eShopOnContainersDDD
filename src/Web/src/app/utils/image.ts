@@ -1,3 +1,4 @@
+import { types } from 'mobx-state-tree';
 import html2canvas from 'html2canvas';
 import * as ReactCrop from 'react-image-crop';
 
@@ -129,3 +130,13 @@ export interface Data {
   height: number;
   width: number;
 }
+
+export const DataModel = types
+  .model({
+    url: types.string,
+    data: types.string,
+    filename: types.maybe(types.string),
+    contentType: types.maybe(types.string),
+    height: types.number,
+    width: types.number
+  });

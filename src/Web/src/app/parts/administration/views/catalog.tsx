@@ -15,13 +15,18 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 import { Using, Formatted } from '../../../components/models';
 import { CatalogStoreType, CatalogStoreModel } from '../stores/catalog';
 
+import ProductForm from '../components/productForm';
+
 interface CatalogProps {
   store?: CatalogStoreType;
 }
 
 const styles = theme => ({
   root: {
+    marginTop: theme.spacing.unit * 3,
     width: '100%',
+  },
+  container: {
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
@@ -40,16 +45,18 @@ const styles = theme => ({
 });
 
 @observer
-class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'table' | 'avatar' | 'row'>, {}> {
+class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'container' | 'table' | 'avatar' | 'row'>, {}> {
 
   public render() {
     const { store, classes } = this.props;
 
     const products = Array.from(store.products.values());
     return (
+      <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item xs={8}>
-          <Paper className={classes.root}>
+          <ProductForm list={store}/>
+          <Paper className={classes.container}>
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
@@ -88,8 +95,9 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'ta
           </Paper>
         </Grid>
       </Grid>
+      </div>
     );
   }
 }
 
-export default withStyles(styles as any)(CatalogView);
+export default hot(module)(withStyles(styles as any)(CatalogView));

@@ -64,12 +64,11 @@ namespace eShop.Catalog.Product
 
         public async Task Any(Services.SetPictureProduct request)
         {
-            var image = await GetImageFromUrl(request.PictureUrl).ConfigureAwait(false);
             await _bus.CommandToDomain(new Commands.SetPicture
             {
                 ProductId = request.ProductId,
-                Content = image.Data,
-                ContentType = image.Type
+                Content = request.Content,
+                ContentType = request.ContentType
             }).ConfigureAwait(false);
         }
 

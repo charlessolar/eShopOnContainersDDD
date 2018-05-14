@@ -10,17 +10,18 @@ interface SubmitProps {
   text?: string;
   buttonProps?: any;
   className?: any;
+  onSuccess?: () => void;
+  onError?: () => void;
 }
 
 export class Submit extends React.Component<SubmitProps, {}> {
 
   public render() {
-    const { text, buttonProps } = this.props;
 
     return (
       <UsingContext.Consumer>
         {value => (
-          <SubmitConsumer using={value} text={text} buttonProps={buttonProps} />
+          <SubmitConsumer using={value} {...this.props}/>
         )}
       </UsingContext.Consumer>
     );
@@ -29,10 +30,19 @@ export class Submit extends React.Component<SubmitProps, {}> {
 
 // need to wrap this in observer to make magic happen
 const SubmitConsumer = observer((props: SubmitProps & { using: UsingType<any> }) => {
-  const { using, text, buttonProps, className } = props;
+  const { using, text, buttonProps, className,  onSuccess, onError } = props;
 
   const handleSubmit = () => {
-    using.submit();
+    try {
+      using.submit();
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch {
+      if (onError) {
+        onError();
+      }
+    }
   };
 
   return (

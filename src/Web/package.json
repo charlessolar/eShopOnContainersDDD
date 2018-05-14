@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "start": "webpack-dev-server --colors --env.server --hot --mode development --progress",
-    "build": "webpack -p --colors --env.production",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --colors --env.server --hot --mode development --progress",
+    "build": "cross-env NODE_ENV=production webpack -p --colors --env.production",
     "prettier": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },
   "devDependencies": {
@@ -30,6 +30,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "compression-webpack-plugin": "^1.1.11",
     "copy-webpack-plugin": "^4.2.3",
+    "cross-env": "^5.1.5",
     "css-loader": "^0.28.7",
     "expose-loader": "0.7.5",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",

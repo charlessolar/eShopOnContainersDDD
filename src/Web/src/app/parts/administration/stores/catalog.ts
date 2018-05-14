@@ -12,6 +12,7 @@ import { ApiClientType } from '../../../stores';
 import { TypeListType, TypeListModel, TypeType, TypeModel } from '../models/types';
 import { BrandListType, BrandListModel, BrandType, BrandModel } from '../models/brands';
 import { ProductType, ProductModel } from '../models/products';
+import { ProductType as ProductTypeBase } from '../../../models/catalog/products';
 
 const debug = new Debug('catalog');
 
@@ -19,15 +20,15 @@ export interface CatalogStoreType {
   products: Map<string, ProductType>;
   loading: boolean;
 
-  readonly validation: any;
-  readonly form: {[idx: string]: FieldDefinition};
   get: () => Promise<{}>;
+  add: (product: ProductTypeBase) => void;
 }
 
 export const CatalogStoreModel = types
 .model('CatalogStore',
 {
   products: types.optional(types.map(ProductModel), {}),
+
   loading: types.optional(types.boolean, false)
 })
 .actions(self => {
@@ -49,111 +50,9 @@ export const CatalogStoreModel = types
     }
     self.loading = false;
   });
+  const add = (product: ProductTypeBase) => {
+    self.products.put(product);
+  };
 
-  return { get };
+  return { get, add };
 });
-
-export interface ProductFormType {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  catalogType: TypeType;
-  catalogBrand: BrandType;
-
-  readonly form: { [idx: string]: FieldDefinition };
-  submit: () => Promise<{}>;
-}
-export const ProductForm = types
-  .model({
-    id: types.optional(types.identifier(types.string), uuid),
-    name: types.maybe(types.string),
-    description: types.maybe(types.string),
-    price: types.maybe(types.number),
-    catalogType: types.maybe(TypeModel),
-    catalogBrand: types.maybe(BrandModel)
-  })
-  .views(self => ({
-    get validation() {
-      const validation = {
-        name: rules.product.name,
-        price: rules.product.price,
-        catalogType: rules.product.catalogType,
-        catalogBrand: rules.product.catalogBrand
-      };
-
-      return validate(self, validation);
-    },
-    get form(): { [idx: string]: FieldDefinition } {
-      return ({
-        name: {
-          input: 'text',
-          label: 'Name',
-          required: true,
-        },
-        description: {
-          input: 'textarea',
-          label: 'Description',
-        },
-        price: {
-          input: 'number',
-          label: 'Price',
-          required: true
-        },
-        catalogType: {
-          input: 'selecter',
-          label: 'Catalog Type',
-          required: true,
-          projectionStore: TypeListModel,
-          projection: async (store: TypeListType, term: string, id?: string) => {
-            await store.list(term, id);
-            return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.type }));
-          },
-          select: (store: TypeListType, id: string) => {
-            return store.entries.get(id);
-          },
-          getIdentity: (model: TypeType) => {
-            return model.id;
-          }
-        },
-        catalogBrand: {
-          input: 'selecter',
-          label: 'Catalog Brand',
-          required: true,
-          projectionStore: BrandListModel,
-          projection: async (store: BrandListType, term: string, id?: string) => {
-            await store.list(term, id);
-            return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.brand }));
-          },
-          select: (store: BrandListType, id: string) => {
-            return store.entries.get(id);
-          },
-          getIdentity: (model: BrandType) => {
-            return model.id;
-          }
-        }
-      });
-    }
-  }))
-  .actions(self => {
-    const submit = flow(function*() {
-      const request = new DTOs.AddProduct();
-
-      request.productId = self.id;
-      request.name = self.name;
-      request.price = self.price;
-      request.catalogBrandId = self.catalogBrand.id;
-      request.catalogTypeId = self.catalogType.id;
-
-      try {
-        const client = getEnv(self).api as ApiClientType;
-        const result: DTOs.CommandResponse = yield client.command(request);
-
-      } catch (error) {
-        debug('received http error: ', error);
-        throw error;
-      }
-    });
-
-    return { submit };
-  });

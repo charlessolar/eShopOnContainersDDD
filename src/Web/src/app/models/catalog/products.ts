@@ -19,8 +19,8 @@ export interface ProductType {
 
   onReorder: boolean;
 
-  pictureContents: string;
-  pictureContentType: string;
+  pictureContents?: string;
+  pictureContentType?: string;
 }
 export const ProductModel = types
   .model('Catalog_Product', {

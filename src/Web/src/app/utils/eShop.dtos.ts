@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-12 05:27:56
+Date: 2018-05-13 21:03:00
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -134,7 +134,7 @@ export module DTOs
         catalogBrand: string;
         availableStock: number;
         restockThreshold: number;
-        maxStockThrshold: number;
+        maxStockThreshold: number;
         onReorder: boolean;
         pictureContents: Uint8Array;
         pictureContentType: string;
@@ -636,6 +636,7 @@ export module DTOs
     {
         term: string;
         limit: number;
+        id: string;
         createResponse() { return new PagedResponse<CatalogBrand>(); }
         getTypeName() { return "ListCatalogBrands"; }
     }
@@ -674,6 +675,7 @@ export module DTOs
     {
         term: string;
         limit: number;
+        id: string;
         createResponse() { return new PagedResponse<CatalogType>(); }
         getTypeName() { return "ListCatalogTypes"; }
     }
