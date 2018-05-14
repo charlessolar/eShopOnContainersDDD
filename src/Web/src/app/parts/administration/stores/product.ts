@@ -53,6 +53,7 @@ export const ProductFormModel = types
 
       return validate(self, validation);
     },
+
     get form(): { [idx: string]: FieldDefinition } {
       return ({
         name: {
@@ -74,33 +75,13 @@ export const ProductFormModel = types
           input: 'selecter',
           label: 'Catalog Type',
           required: true,
-          projectionStore: TypeListModel,
-          projection: async (store: TypeListType, term: string, id?: string) => {
-            await store.list(term, id);
-            return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.type }));
-          },
-          select: (store: TypeListType, id: string) => {
-            return store.entries.get(id);
-          },
-          getIdentity: (model: TypeType) => {
-            return model.id;
-          }
+          selectStore: TypeListModel,
         },
         catalogBrand: {
           input: 'selecter',
           label: 'Catalog Brand',
           required: true,
-          projectionStore: BrandListModel,
-          projection: async (store: BrandListType, term: string, id?: string) => {
-            await store.list(term, id);
-            return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.brand }));
-          },
-          select: (store: BrandListType, id: string) => {
-            return store.entries.get(id);
-          },
-          getIdentity: (model: BrandType) => {
-            return model.id;
-          },
+          selectStore: BrandListModel,
           addComponent: BrandFormView
         },
         picture: {

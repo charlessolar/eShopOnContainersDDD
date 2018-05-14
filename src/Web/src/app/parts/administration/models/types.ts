@@ -22,12 +22,19 @@ export interface TypeListType {
   list: (term?: string, id?: string) => Promise<{}>;
   add: (type: TypeType) => void;
   remove: (id: string) => Promise<{}>;
+  clear(): void;
+  readonly projection: { id: string, label: string}[];
 }
 export const TypeListModel = types
   .model('Catalog_Type_List', {
     entries: types.optional(types.map(TypeModel), {}),
     loading: types.optional(types.boolean, true)
   })
+  .views(self => ({
+    get projection() {
+      return Array.from(self.entries.values()).map(x => ({ id: x.id, label: x.type }));
+    }
+  }))
   .actions(self => {
     const list = flow(function*(term?: string, id?: string) {
       const request = new DTOs.ListCatalogTypes();
@@ -66,6 +73,9 @@ export const TypeListModel = types
         debug('received http error: ', error);
       }
     });
+    const clear = () => {
+      self.entries.clear();
+    };
 
-    return { list, add, remove };
+    return { list, add, remove, clear };
   });

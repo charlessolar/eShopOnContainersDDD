@@ -21,12 +21,19 @@ export interface BrandListType {
   list: (term?: string, id?: string) => Promise<{}>;
   add: (brand: BrandType) => void;
   remove: (id: string) => Promise<{}>;
+  clear(): void;
+  readonly projection: { id: string, label: string}[];
 }
 export const BrandListModel = types
   .model('Catalog_Brand_List', {
     entries: types.optional(types.map(BrandModel), {}),
     loading: types.optional(types.boolean, true)
   })
+  .views(self => ({
+    get projection() {
+      return Array.from(self.entries.values()).map(x => ({ id: x.id, label: x.brand }));
+    }
+  }))
   .actions(self => {
     const list = flow(function*(term?: string, id?: string) {
       const request = new DTOs.ListCatalogBrands();
@@ -65,6 +72,9 @@ export const BrandListModel = types
         debug('received http error: ', error);
       }
     });
+    const clear = () => {
+      self.entries.clear();
+    };
 
-    return { list, add, remove };
+    return { list, add, remove, clear };
   });

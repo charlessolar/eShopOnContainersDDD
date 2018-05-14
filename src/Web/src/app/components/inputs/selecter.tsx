@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { types, flow, getEnv, IModelType, getSnapshot } from 'mobx-state-tree';
+import { types, flow, getEnv, IModelType, getSnapshot, getIdentifier, IStateTreeNode } from 'mobx-state-tree';
 import * as keycode from 'keycode';
 import Downshift from 'downshift';
 import Debug from 'debug';
@@ -23,29 +23,32 @@ const debug = new Debug('selecter');
 
 const renderSuggestion = ({ suggestion, index, itemProps, highlightedIndex, selectedItem }) => {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = selectedItem && selectedItem === suggestion[1];
+  const isSelected = selectedItem && selectedItem === suggestion.label;
 
   return (
     <MenuItem
       {...itemProps}
-      key={suggestion[1]}
+      key={suggestion.id}
       selected={isHighlighted}
       component='div'
       style={{
         fontWeight: isSelected ? 'bold' : 'normal',
       }}
     >
-      {suggestion[1]}
+      {suggestion.label}
     </MenuItem>
   );
 };
 
-interface DownshiftProps {
+interface SelectStore {
 
-}
-interface DownshiftState {
-  inputValue: string;
-  selectedItem: string[];
+  entries: Map<string, any>;
+  loading: boolean;
+
+  list: (term: string, id?: string) => Promise<{}>;
+  clear: () => void;
+  add: (model: any) => void;
+  readonly projection: { id: string, label: string }[];
 }
 
 interface SelectProps {
@@ -58,81 +61,107 @@ interface SelectProps {
   onChange?: (newVal: any) => void;
   fieldProps?: any;
 
-  projectionStore: IModelType<{}, {}>;
-  projection: (store: any, term: string, id?: string) => Promise<{ id: string, label: string }[]>;
-  select: (store: any, id: string) => any;
-  getIdentity: (model: any) => string;
+  selectStore?: IModelType<any, SelectStore>;
+
   addComponent?: React.ComponentType<{ onChange: (newVal: any) => void }>;
 
   // injected
-  projectionStoreStore?: any;
-  selectStore?: SelectType;
+  store?: SelectType;
 }
 
 interface SelectType {
-  selected?: { id: string, label: string };
-
-  loading: boolean;
+  selected?: string;
+  readonly selection: { id: string, label: string };
   term: string;
-  records: Map<string, string>;
+
+  readonly loading: boolean;
+  readonly records: {id: string, label: string}[];
+
   list: (id?: string) => Promise<{}>;
   updateTerm: (newVal: string) => Promise<{}>;
-  clear: () => void;
-  itemToSelect: (id: string) => Promise<{}>;
-  change: (item: { id: string, label: string }) => void;
+  reset: () => Promise<{}>;
+  selectItem: (id: string) => Promise<{}>;
+  findById: (id: string) => {id: string, label: string};
+  modelById: (id: string) => any;
+  addModel: (model: any) => void;
 }
 const selectModel = types
   .model(
     {
-      selected: types.maybe(types.model({
-        id: types.string,
-        label: types.string,
-      })),
-      loading: types.optional(types.boolean, false),
+      selected: types.maybe(types.string),
       term: types.optional(types.string, ''),
-      records: types.optional(types.map(types.string), {})
     })
+    .views(self => ({
+      get loading() {
+        const select = getEnv(self).store as SelectStore;
+        return select.loading;
+      },
+      get records() {
+        const select = getEnv(self).store as SelectStore;
+        return select.projection;
+      }
+    }))
   .actions(self => {
     const list: (id?: string) => Promise<{}> = flow(function*(id?: string) {
-      const projectionStore = getEnv(self).store;
-      const projection = getEnv(self).projection as (store: any, term: string, id?: string) => Promise<{ id: string, label: string }[]>;
+      const select = getEnv(self).store as SelectStore;
 
-      self.loading = true;
       try {
-        const records = yield projection(projectionStore, self.term);
-        records.forEach((record) => {
-          self.records.set(record.id, record.label);
-        });
+        yield select.list(self.term, id);
       } catch (e) {
         debug('error fetching: ', e);
       }
-      self.loading = false;
     });
     const updateTerm = flow(function*(newVal: string) {
       self.term = newVal;
       yield list();
     });
-    const clear = () => {
-      self.records.clear();
+    const reset = flow(function*() {
+      const select = getEnv(self).store as SelectStore;
+      select.clear();
+      self.selected = '';
       self.term = '';
-    };
-    const itemToSelect = flow(function*(id: string) {
-      if (self.records.has(id)) {
-        self.selected = { id, label: self.records.get(id) };
-      }
-
-      yield list(id);
-      self.selected = { id, label: self.records.get(id) };
+      yield list();
     });
-    const change = (item: {id: string, label: string}) => {
-      self.selected = item;
+    const selectItem = flow(function*(id: string | IStateTreeNode) {
+      // when a value is already set, we need to 'select' it to display in the control
+      // the existing value could be a string Id or a model.  Assume an 'id' value exists
+      if (typeof id !== 'string') {
+        id = getIdentifier(id);
+      }
+      if (!findById(id)) {
+        yield list(id);
+      }
+      self.selected = id;
+    });
+    const findById = (id: string) => {
+      return self.records.find(x => x.id === id);
     };
-    return { change, itemToSelect, list, updateTerm, clear };
-  });
+    const modelById = (id: string) => {
+      const select = getEnv(self).store as SelectStore;
+      return select.entries.get(id);
+    };
+    const addModel = (model: any) => {
+      const select = getEnv(self).store as SelectStore;
+      select.add(model);
+    };
+    return { findById, modelById, selectItem, list, updateTerm, reset, addModel };
+  })
+  .views(self => ({
+    get selection() {
+      if (!self.selected) {
+        return undefined;
+      }
+      const model = self.findById(self.selected);
+      return model == null ? undefined : model;
+    }
+  }));
 
+  // Double observer to observe the props received and the props used by the component (weird I know)
+@observer
 @inject((stores, props: SelectProps) => {
-  props['projectionStoreStore'] = props['projectionStoreStore'] || props.projectionStore.create({}, { api: stores['store'].api });
-  props['selectStore'] = props['selectStore'] || selectModel.create({}, { store: props['projectionStoreStore'], projection: props.projection });
+  const modelStore = props.selectStore.create({}, { api: stores['store'].api });
+
+  props['store'] = selectModel.create({}, { store: modelStore });
   return props;
 })
 @observer
@@ -142,68 +171,79 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
   private _clearSelection: () => void;
 
   public componentDidMount() {
-    const { value, selectStore, getIdentity } = this.props;
+    const { value, store } = this.props;
     if (value) {
-      selectStore.itemToSelect(getIdentity(value));
-    } else {
-      selectStore.list();
+      store.selectItem(value);
     }
   }
   public componentDidUpdate() {
-    const { value, getIdentity } = this.props;
+    const { value, store } = this.props;
     if (!value && this._value) {
       this._value = undefined;
       this._clearSelection();
     }
-    const { selectStore } = this.props;
-    selectStore.list();
+    if (value) {
+      const snapshot = getSnapshot(value);
+      store.addModel(snapshot);
+      store.selectItem(value);
+    }
   }
 
-  public onFocus = () => {
-    const { selectStore } = this.props;
-    selectStore.list();
-  }
-  public onChange = (newVal: string) => {
-    const { selectStore, onChange } = this.props;
+  // Called when input element changes
+  private onInput = (e: any) => {
+    const { store, onChange } = this.props;
 
-    const label = this._value && selectStore.records.get(this._value);
-    if (label !== newVal) {
+    const newVal = e.target.value;
+    const selectedValue = this._value && store.findById(this._value);
+    if (selectedValue && selectedValue.label !== newVal) {
       onChange(undefined);
     }
 
-    selectStore.updateTerm(newVal);
+    store.updateTerm(newVal);
   }
-  public selectionChanged = (selection: string[]) => {
-    const { selectStore, onChange, select, projectionStoreStore } = this.props;
+  // Called when downshift selects something
+  private selectionChanged = (selection?: {id: string, label: string}) => {
+    const { store, onChange } = this.props;
 
     if (!selection) {
       this._value = undefined;
       onChange(undefined);
+      store.reset();
+      this._clearSelection();
       return;
     }
 
-    selectStore.change({ id: selection[0], label: selection[1] });
-    onChange(select ? getSnapshot(select(projectionStoreStore, selection[0])) : selection[0]);
-    selectStore.clear();
-    this._value = selection[0];
+    onChange(getSnapshot(store.modelById(selection.id)));
+    store.selectItem(selection.id);
+    this._value = selection.id;
   }
-  public addAndSelect = (data: any) => {
-    this.selectionChanged([data.id, data.brand]);
+  private modelAdded = (model: any) => {
+    const { store, onChange } = this.props;
+    onChange(model);
+    store.addModel(model);
+    const selected = store.records[0];
+    this._value = selected.id;
+  }
+  private openMenu = async (open: () => void) => {
+    const { store } = this.props;
+    await store.list();
+    open();
   }
 
-  private _renderDownshift = (classes, error, required, label, id, fieldProps, selectStore, value, addComponent) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
+  private _renderDownshift = (classes, error, required, label, id, fieldProps, store, value, addComponent) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
     this._clearSelection = clearSelection;
+
     return (
       <div className={classes.container}>
 
         <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
           <InputLabel htmlFor={id}>{label}</InputLabel>
-          <Input id={id} onChange={this.onChange} onFocus={this.onFocus} type='text' fullWidth {...fieldProps} {...getInputProps()} endAdornment={
+          <Input id={id} onInput={this.onInput} type='text' fullWidth {...fieldProps} {...getInputProps()} value={inputValue || ''} endAdornment={
             value ?
               <InputAdornment position='end'>
                 <IconButton
                   aria-label='Clear'
-                  onClick={clearSelection}
+                  onClick={() => this.selectionChanged()}
                 >
                   <Close />
                 </IconButton>
@@ -212,18 +252,18 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
               <InputAdornment position='end'>
                 <IconButton
                   aria-label='Open'
-                  onClick={openMenu}
+                  onClick={() => this.openMenu(openMenu)}
                 >
                   <ArrowDown />
                 </IconButton>
-                {addComponent && React.createElement(addComponent, { onChange: this.addAndSelect })}
+                {addComponent && React.createElement(addComponent, { onChange: this.modelAdded })}
               </InputAdornment>
           } />
           {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
         </FormControl>
         {isOpen ? (
           <Paper className={classes.paper} elevation={3} square>
-            {Array.from(selectStore.records.entries()).map((suggestion, index) =>
+            {Array.from(store.records.values()).map((suggestion, index) =>
               renderSuggestion({
                 suggestion,
                 index,
@@ -239,12 +279,12 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
   }
 
   public render() {
-    const { classes, error, required, label, id, fieldProps, selectStore, value, addComponent, onChange } = this.props;
+    const { classes, error, required, label, id, fieldProps, store, value, addComponent, onChange } = this.props;
 
     return (
       <div className={classes.root}>
-        <Downshift selectedItem={ selectStore.selected && [selectStore.selected.id, selectStore.selected.label]} onChange={this.selectionChanged} itemToString={item => item && item[1]}>
-          {this._renderDownshift(classes, error, required, label, id, fieldProps, selectStore, value, addComponent)}
+        <Downshift selectedItem={store.selection} onChange={this.selectionChanged} itemToString={item => item && item.label}>
+          {this._renderDownshift(classes, error, required, label, id, fieldProps, store, value, addComponent)}
         </Downshift>
       </div>
     );
@@ -265,6 +305,11 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     left: 0,
     right: 0,
-  }
+  },
+  formControl: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 400,
+  },
 });
 export default withStyles(styles as any)<SelectProps>(IntegrationDownshift);

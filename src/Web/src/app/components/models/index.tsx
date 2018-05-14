@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types, IModelType, flow, IStateTreeNode } from 'mobx-state-tree';
+import { types, IModelType, flow } from 'mobx-state-tree';
 
 export { Using } from './using';
 export { Formatted } from './formatted';
@@ -31,9 +31,14 @@ export interface FieldDefinition {
 
   imageRatio?: number;
 
-  projectionStore?: any;
-  projection?: (store: any, term: string) => Promise<{ id: string, label: string }[]>;
-  select?: (store: any, id: string) => any;
-  getIdentity?: (model: any) => string;
+  selectStore?: IModelType<any, {
+    entries: Map<string, any>,
+    loading: boolean,
+
+    list: (term: string, id?: string) => Promise<{}>;
+    clear: () => void;
+    add: (model: any) => void;
+    readonly projection: { id: string, label: string }[];
+  }>;
   addComponent?: React.ComponentType<{ onChange: (newVal: any) => void }>;
 }

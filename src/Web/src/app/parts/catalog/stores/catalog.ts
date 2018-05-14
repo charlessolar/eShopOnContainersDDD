@@ -51,32 +51,12 @@ export const CatalogStoreModel = types
         catalogType: {
           input: 'selecter',
           label: 'Catalog Type',
-          projectionStore: TypeListModel,
-          projection: async (store: TypeListType, term: string) => {
-            await store.list(term);
-            return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.type }));
-          },
-          select: (store: TypeListType, id: string) => {
-            return store.entries.get(id);
-          },
-          getIdentity: (model: TypeType) => {
-            return model.id;
-          }
+          selectStore: TypeListModel,
         },
         catalogBrand: {
           input: 'selecter',
           label: 'Catalog Brand',
-          projectionStore: BrandListModel,
-          projection: async (store: BrandListType, term: string) => {
-            await store.list(term);
-            return Array.from(store.entries.values()).map(type => ({ id: type.id, label: type.brand }));
-          },
-          select: (store: BrandListType, id: string) => {
-            return store.entries.get(id);
-          },
-          getIdentity: (model: BrandType) => {
-            return model.id;
-          }
+          selectStore: BrandListModel,
         }
       });
     }

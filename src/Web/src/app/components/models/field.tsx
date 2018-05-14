@@ -74,10 +74,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         error: using.validation,
         label: definition.label,
         onChange: handleChange,
-        projectionStore: definition.projectionStore,
-        projection: definition.projection,
-        select: definition.select,
-        getIdentity: definition.getIdentity,
+        selectStore: definition.selectStore,
         addComponent: definition.addComponent
       });
     case 'dropdown':

@@ -30,12 +30,13 @@ const styles = theme => ({
 
 class TextControl extends React.Component<TextProps & WithStyles<'formControl'>, {}> {
 
-  private handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+  private handleInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (this.props.onChange) {
       this.props.onChange(e.target.value);
     }
+    e.stopPropagation();
   }
-  private handleKeydown(e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
+  private handleKeydown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (this.props.onKeyDown) {
       this.props.onKeyDown(e.which, (e.target as any).value);
     }
@@ -47,7 +48,7 @@ class TextControl extends React.Component<TextProps & WithStyles<'formControl'>,
     return (
       <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Input id={id} onChange={e => this.handleChange(e)} type={type || 'text'} autoComplete={autoComplete} value={value || ''} onKeyDown={(e) => this.handleKeydown(e)} {...fieldProps} />
+        <Input id={id} onInput={this.handleInput} type={type || 'text'} autoComplete={autoComplete} value={value || ''} onKeyDown={this.handleKeydown} {...fieldProps} />
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
       </FormControl>
     );
