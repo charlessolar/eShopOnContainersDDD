@@ -6,22 +6,28 @@ import glamorous from 'glamorous';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import { ListItem, ListItemText } from 'material-ui/List';
 import Button from 'material-ui/Button';
+import Tooltip from 'material-ui/Tooltip';
+import IconButton from 'material-ui/IconButton';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import Avatar from 'material-ui/Avatar';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { Using, Formatted } from '../../../components/models';
 import { CatalogStoreType, CatalogStoreModel } from '../stores/catalog';
 
-import ProductForm from '../components/productForm';
+import AvailableStockForm from '../components/availableStockForm';
+
+import ProductFormAdd from '../views/productAdd';
+import ProductFormEdit from '../views/productEdit';
 
 interface CatalogProps {
   store?: CatalogStoreType;
 }
 
-const styles = theme => ({
+const styles = (theme: Theme) => ({
   root: {
     marginTop: theme.spacing.unit * 3,
     width: '100%',
@@ -42,10 +48,14 @@ const styles = theme => ({
       backgroundColor: theme.palette.background.default,
     },
   },
+  button: {
+    margin: theme.spacing.unit,
+    color: theme.palette.primary.light
+  }
 });
 
 @observer
-class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'container' | 'table' | 'avatar' | 'row'>, {}> {
+class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'container' | 'table' | 'avatar' | 'row' | 'button'>, {}> {
 
   public render() {
     const { store, classes } = this.props;
@@ -55,7 +65,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'co
       <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item xs={8}>
-          <ProductForm list={store}/>
+          <ProductFormAdd list={store}/>
           <Paper className={classes.container}>
             <Table className={classes.table}>
               <TableHead>
@@ -77,12 +87,16 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'co
                         <ListItem>
                           <Avatar src={p.productPicture} className={classes.avatar} />
                           <ListItemText primary={p.name} secondary={p.description} />
+                          <ProductFormEdit product={p} />
                         </ListItem>
                       </TableCell>
                       <TableCell>{p.catalogType}</TableCell>
                       <TableCell>{p.catalogBrand}</TableCell>
                       <TableCell numeric><Formatted field='price' /></TableCell>
-                      <TableCell numeric><Formatted field='availableStock' /></TableCell>
+                      <TableCell numeric>
+                        <Formatted field='availableStock' />
+                        <AvailableStockForm product={p}/>
+                      </TableCell>
                       <TableCell>
                         <Typography variant='body2'>Restock: <Formatted field='restockThreshold' /></Typography>
                         <Typography variant='body2'>Max Stock: <Formatted field='maxStockThreshold' /></Typography>

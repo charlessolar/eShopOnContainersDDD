@@ -8,14 +8,17 @@ import Dialog from 'material-ui/Dialog';
 import Typography from 'material-ui/Typography';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
+import Tooltip from 'material-ui/Tooltip';
 import Slide from 'material-ui/transitions/Slide';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { inject } from '../../../utils';
 import { Using, Field, Submit } from '../../../components/models';
 
+import { ProductType } from '../models/products';
 import { ProductFormType, ProductFormModel } from '../stores/product';
 import { CatalogStoreType } from '../stores/catalog';
 
@@ -44,43 +47,39 @@ const styles = theme => ({
   },
 });
 
-function Transition(props) {
-  return <Slide direction='up' {...props} />;
-}
-
 interface FormProps {
   handleClose: () => void;
+  handleSuccess: (product: Partial<ProductType>) => void;
 
-  list: CatalogStoreType;
+  product?: ProductType;
   store?: ProductFormType;
 }
 
-@inject(ProductFormModel)
+@inject(ProductFormModel, 'store', 'product', (s: ProductType) => {
+  return {
+    id: s.id,
+    name: s.name,
+    description: s.description,
+    price: s.price,
+    catalogBrand: { id: s.catalogBrandId, brand: s.catalogBrand },
+    catalogType: { id: s.catalogTypeId, type: s.catalogType },
+    picture: {
+      data: s.pictureContents,
+      contentType: s.pictureContentType
+    }
+  };
+})
 class FormView extends React.Component<FormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button'>, {}> {
 
   private handleSuccess = () => {
-    const { list, store, handleClose } = this.props;
+    const { store, handleClose, handleSuccess } = this.props;
 
-    // list.add(store);
-    list.add({
-      id: store.id,
-      name: store.name,
-      description: store.description,
-      price: store.price,
-      catalogBrand: store.catalogBrand.brand,
-      catalogBrandId: store.catalogBrand.id,
-      catalogType: store.catalogType.type,
-      catalogTypeId: store.catalogType.id,
-      availableStock: 0,
-      restockThreshold: 0,
-      maxStockThreshold: 0,
-      onReorder: false,
-    });
+    handleSuccess(store.partial);
 
     handleClose();
   }
   public render() {
-    const { classes, store, handleClose } = this.props;
+    const { classes, store, product, handleClose } = this.props;
 
     return (
       <Using model={store}>
@@ -90,7 +89,7 @@ class FormView extends React.Component<FormProps & WithStyles<'root' | 'containe
             <CloseIcon />
           </IconButton>
           <Typography variant='title' color='inherit' className={classes.flex}>
-            Add Product
+            {product ? 'Edit' : 'Add'} Product
           </Typography>
           <Submit buttonProps={{ color: 'inherit' }} onSuccess={this.handleSuccess} />
         </Toolbar>
@@ -132,40 +131,4 @@ class FormView extends React.Component<FormProps & WithStyles<'root' | 'containe
   }
 }
 
-class ProductFormView extends React.Component<ProductFormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button'>, { open: boolean }> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false
-    };
-  }
-
-  private handleClickOpen = () => {
-    this.setState({ open: true });
-  }
-
-  private handleClose = () => {
-    this.setState({ open: false });
-  }
-
-  public render() {
-    const { classes, store } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <Button variant='raised' color='primary' size='large' onClick={this.handleClickOpen}>Create Product</Button>
-
-        <Dialog
-          fullScreen
-          open={this.state.open}
-          onClose={this.handleClose}
-          TransitionComponent={Transition}
-        >
-          <FormView {...this.props} handleClose={this.handleClose}/>
-        </Dialog>
-      </div>
-    );
-  }
-}
-
-export default withStyles(styles as any)<ProductFormProps>(ProductFormView);
+export default withStyles(styles as any)<FormProps>(FormView);

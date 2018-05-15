@@ -13,6 +13,12 @@ export default {
       message: 'must be at least 3 characters'
     }
   },
+  stock: {
+    presence: true,
+    numericality: {
+      greaterThanOrEqual: 0
+    }
+  },
   product: {
     name: {
       presence: true,

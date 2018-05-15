@@ -14,11 +14,17 @@ import { ProductType as ProductTypeBase, ProductModel as ProductModelBase } from
 const debug = new Debug('catalog products');
 
 export interface ProductType extends ProductTypeBase {
+  updateStock: (stock: number) => void;
   readonly formatting: {[idx: string]: FormatDefinition };
   readonly productPicture: string;
   readonly shouldReorder: boolean;
 }
 export const ProductModel = ProductModelBase
+.actions(self => ({
+  updateStock(stock: number) {
+    self.availableStock = stock;
+  }
+}))
 .views(self => ({
   get formatting() {
     return ({

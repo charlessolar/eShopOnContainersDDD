@@ -1,4 +1,4 @@
-import { types, flow, getEnv, getParent, applySnapshot, getSnapshot } from 'mobx-state-tree';
+import { types, flow, getEnv, getParent, applySnapshot, getSnapshot, onPatch, addDisposer, recordPatches } from 'mobx-state-tree';
 import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
@@ -29,19 +29,32 @@ export interface ProductFormType {
 
   picture: Data;
 
+  readonly editing: boolean;
   readonly form: { [idx: string]: FieldDefinition };
+  readonly partial: {};
   submit: () => Promise<{}>;
 }
 export const ProductFormModel = types
   .model({
-    id: types.optional(types.identifier(types.string), uuid),
+    id: types.optional(types.string, ''),
     name: types.maybe(types.string),
     description: types.maybe(types.string),
     price: types.maybe(types.number),
     catalogType: types.maybe(TypeModel),
     catalogBrand: types.maybe(BrandModel),
-    picture: types.maybe(DataModel)
+    picture: types.maybe(DataModel),
+
+    dirty: types.optional(types.array(types.string), [])
   })
+  .views(self => ({
+    get editing() {
+      return self.id !== '';
+    },
+    get partial() {
+      // return a small object of only changed fields
+      return self.dirty.reduce<{}>((prev, cur) => { prev[cur] = self[cur]; return prev; }, {});
+    }
+  }))
   .views(self => ({
     get validation() {
       const validation = {
@@ -61,6 +74,7 @@ export const ProductFormModel = types
           input: 'text',
           label: 'Name',
           required: true,
+          disabled: self.editing
         },
         description: {
           input: 'textarea',
@@ -77,14 +91,16 @@ export const ProductFormModel = types
           label: 'Catalog Type',
           required: true,
           selectStore: TypeListModel,
-          addComponent: TypeFormView
+          addComponent: TypeFormView,
+          disabled: self.editing
         },
         catalogBrand: {
           input: 'selecter',
           label: 'Catalog Brand',
           required: true,
           selectStore: BrandListModel,
-          addComponent: BrandFormView
+          addComponent: BrandFormView,
+          disabled: self.editing
         },
         picture: {
           input: 'image',
@@ -96,9 +112,21 @@ export const ProductFormModel = types
     }
   }))
   .actions(self => {
+    const afterCreate = () => {
+      const disposer = onPatch(self, patch => {
+        // todo: might be more interesting to use recordPatches
+        const prop = patch.path.match(/\/([a-zA-Z]+)\/?/);
+        if (prop[1] !== 'dirty' && self.dirty.indexOf(prop[1]) === -1) {
+          self.dirty.push(prop[1]);
+        }
+      });
+      addDisposer(self, disposer);
+    };
+
     const addProduct = () => {
       const request = new DTOs.AddProduct();
 
+      self.id = uuid();
       request.productId = self.id;
       request.name = self.name;
       request.price = self.price;
@@ -124,9 +152,22 @@ export const ProductFormModel = types
 
       return request;
     };
+    const setPrice = () => {
+      const request = new DTOs.UpdatePriceProduct();
+
+      request.productId = self.id;
+      request.price = self.price;
+
+      return request;
+    };
 
     const submit = flow(function*() {
-      const requests = [ addProduct, ...when(self.picture, setPicture), ...when(self.description, setDescription) ];
+      const requests = [
+        ...when(self.id === '', addProduct),
+        ...when(self.id !== '' && self.dirty.indexOf('price') !== -1, setPrice),
+        ...when(self.dirty.indexOf('picture') !== -1, setPicture),
+        ...when(self.dirty.indexOf('description') !== -1, setDescription)
+      ];
 
       const client = getEnv(self).api as ApiClientType;
       for (let i = 0; i < requests.length; i++) {
@@ -140,5 +181,5 @@ export const ProductFormModel = types
 
     });
 
-    return { submit };
+    return { afterCreate, submit };
   });
