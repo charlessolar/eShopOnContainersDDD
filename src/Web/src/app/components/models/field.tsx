@@ -31,6 +31,10 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
   const { using, field, fieldProps } = props;
   const definition = using.form[field];
 
+  if (!definition) {
+    throw new Error('No definition for field ' + field + ' was found!');
+  }
+
   const handleChange = (val: string | number | Data | { from: string, to: string} | any) => {
     using.changeValue(field, val);
   };

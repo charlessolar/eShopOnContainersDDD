@@ -15,6 +15,7 @@ import { TypeListType, TypeListModel, TypeType, TypeModel } from '../models/type
 import { BrandListType, BrandListModel, BrandType, BrandModel } from '../models/brands';
 
 import BrandFormView from '../components/brandForm';
+import TypeFormView from '../components/typeForm';
 
 const debug = new Debug('product');
 
@@ -76,6 +77,7 @@ export const ProductFormModel = types
           label: 'Catalog Type',
           required: true,
           selectStore: TypeListModel,
+          addComponent: TypeFormView
         },
         catalogBrand: {
           input: 'selecter',

@@ -19,7 +19,7 @@ export interface TypeFormType {
   readonly form: { [idx: string]: FieldDefinition };
   submit: () => Promise<{}>;
 }
-export const TypeForm = types
+export const TypeFormModel = types
   .model({
     id: types.optional(types.identifier(types.string), uuid),
     type: types.maybe(types.string)
