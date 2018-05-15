@@ -71,17 +71,17 @@ class NavBar extends React.Component<NavBarProps & WithStyles<'root' | 'title'>,
               <>
                 {store.auth.admin && (
                   <>
-                    <Button color='secondary' onClick={() => this._store.navChange('/campaigns')}>My Campaigns</Button>
-                    <Button color='secondary' onClick={() => this._store.navChange('/administrate')}>Administrate</Button>
+                    <Button color='inherit' onClick={() => this._store.navChange('/campaigns')}>My Campaigns</Button>
+                    <Button color='inherit' onClick={() => this._store.navChange('/administrate')}>Administrate</Button>
                   </>
                 )}
 
-                <Button color='secondary' onClick={() => this._store.navChange('/orders')}>My Orders</Button>
+                <Button color='inherit' onClick={() => this._store.navChange('/orders')}>My Orders</Button>
                 <Menu authenticated={authenticated} name={name} navChange={item => this._store.navChange(item)} />
               </>
             )
               :
-              <Button color='secondary' onClick={() => this._store.navChange('/login')}>Login</Button>
+              <Button color='inherit' onClick={() => this._store.navChange('/login')}>Login</Button>
             }
           </Toolbar>
         </AppBar>

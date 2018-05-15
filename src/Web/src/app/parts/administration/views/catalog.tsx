@@ -87,7 +87,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'co
                         <ListItem>
                           <Avatar src={p.productPicture} className={classes.avatar} />
                           <ListItemText primary={p.name} secondary={p.description} />
-                          <ProductFormEdit product={p} />
+                          <ProductFormEdit product={p} list={store} />
                         </ListItem>
                       </TableCell>
                       <TableCell>{p.catalogType}</TableCell>

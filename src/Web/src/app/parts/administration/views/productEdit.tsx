@@ -17,6 +17,7 @@ import FormView from '../components/productForm';
 
 interface ProductFormProps {
   product: ProductType;
+  list: CatalogStoreType;
 
   store?: ProductFormType;
 }
@@ -27,11 +28,13 @@ function Transition(props) {
 
 const styles = theme => ({
   root: {
-    marginTop: 20,
+  },
+  button: {
+    color: theme.palette.primary.light
   }
 });
 
-class ProductFormEditView extends React.Component<ProductFormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button'>, { open: boolean }> {
+class ProductFormEditView extends React.Component<ProductFormProps & WithStyles<'root' | 'button'>, { open: boolean }> {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,7 +65,7 @@ class ProductFormEditView extends React.Component<ProductFormProps & WithStyles<
   }
 
   public render() {
-    const { classes, store, product } = this.props;
+    const { classes, store, product, list } = this.props;
 
     return (
       <div className={classes.root}>
@@ -76,7 +79,7 @@ class ProductFormEditView extends React.Component<ProductFormProps & WithStyles<
           onClose={this.handleClose}
           TransitionComponent={Transition}
         >
-          <FormView {...this.props} product={product} handleSuccess={this.handleSuccess} handleClose={this.handleClose}/>
+          <FormView {...this.props} product={product} list={list} handleSuccess={this.handleSuccess} handleClose={this.handleClose}/>
         </Dialog>
       </div>
     );

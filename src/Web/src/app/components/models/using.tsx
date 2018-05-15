@@ -57,6 +57,19 @@ export class UsingType<T extends Payload & IStateTreeNode> {
   }
 
   @action
+  public async action(method: string) {
+    this.loading = true;
+    try {
+      await this.payload[method]();
+    } catch (e) {
+      throw e;
+    }
+    runInAction(() => {
+      this.loading = false;
+    });
+  }
+
+  @action
   public async submit() {
     this.loading = true;
     let success = false;
@@ -65,6 +78,7 @@ export class UsingType<T extends Payload & IStateTreeNode> {
       success = true;
     } catch (e) {
       // console.log('submit error:', e);
+      throw e;
     }
     runInAction(() => {
       this.loading = false;

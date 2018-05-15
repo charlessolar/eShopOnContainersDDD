@@ -33,6 +33,7 @@ export interface ProductFormType {
   readonly form: { [idx: string]: FieldDefinition };
   readonly partial: {};
   submit: () => Promise<{}>;
+  destroy: () => Promise<{}>;
 }
 export const ProductFormModel = types
   .model({
@@ -180,6 +181,19 @@ export const ProductFormModel = types
       }
 
     });
+    const destroy = flow(function*() {
+      const client = getEnv(self).api as ApiClientType;
+      const request = new DTOs.RemoveProduct();
 
-    return { afterCreate, submit };
+      request.productId = self.id;
+
+      try {
+        const result: DTOs.CommandResponse = yield client.command(request);
+      } catch (error) {
+        debug('received http error: ', error);
+        throw error;
+      }
+    });
+
+    return { afterCreate, submit, destroy };
   });

@@ -28,10 +28,11 @@ const styles = (theme: Theme) => ({
     flex: 1
   },
   navbar: {
-    marginLeft: 50
+    marginLeft: 50,
   },
-  shadow4: {
-    'box-shadow': '0 4px 2px -2px gray'
+  appbar: {
+    boxShadow: '0 4px 2px -2px gray',
+    backgroundColor: theme.palette.grey[100]
   },
   noProduct: {
     height: '80vh',
@@ -52,7 +53,7 @@ const styles = (theme: Theme) => ({
 });
 
 @observer
-class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'shadow4' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card'>, {}> {
+class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'appbar' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card'>, {}> {
 
   private pullProducts = () => {
     const { store } = this.props;
@@ -83,7 +84,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'sh
     const products = Array.from(store.products.values());
     return (
       <AppView>
-        <AppBar position='static' color='secondary' className={classes.shadow4}>
+        <AppBar position='static' className={classes.appbar}>
           <Toolbar>
             <Using model={store}>
               <Grid container className={classes.navbar}>

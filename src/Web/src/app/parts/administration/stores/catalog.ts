@@ -22,6 +22,7 @@ export interface CatalogStoreType {
 
   get: () => Promise<{}>;
   add: (product: ProductTypeBase) => void;
+  remove: (id: string) => void;
 }
 
 export const CatalogStoreModel = types
@@ -53,6 +54,9 @@ export const CatalogStoreModel = types
   const add = (product: ProductTypeBase) => {
     self.products.put(product);
   };
+  const remove = (id: string) => {
+    self.products.delete(id);
+  };
 
-  return { get, add };
+  return { get, add, remove };
 });

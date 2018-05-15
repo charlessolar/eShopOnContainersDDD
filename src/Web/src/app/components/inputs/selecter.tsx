@@ -237,7 +237,7 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
     return (
       <div className={classes.container}>
 
-        <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+        <FormControl required={required} className={classes.formControl} fullWidth disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
           <InputLabel htmlFor={id}>{label}</InputLabel>
           <Input id={id} onInput={this.onInput} type='text' fullWidth {...fieldProps} {...getInputProps()} value={inputValue || ''} endAdornment={
             value ?
@@ -312,7 +312,7 @@ const styles = theme => ({
   formControl: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 400,
+    maxWidth: 400
   },
 });
 export default withStyles(styles as any)<SelectProps>(IntegrationDownshift);

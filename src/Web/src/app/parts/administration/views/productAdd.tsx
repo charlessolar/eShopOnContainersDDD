@@ -49,7 +49,7 @@ class ProductFormAddView extends React.Component<ProductFormProps & WithStyles<'
   }
 
   public render() {
-    const { classes, store } = this.props;
+    const { classes, store, list } = this.props;
 
     return (
       <div className={classes.root}>
@@ -61,7 +61,7 @@ class ProductFormAddView extends React.Component<ProductFormProps & WithStyles<'
           onClose={this.handleClose}
           TransitionComponent={Transition}
         >
-          <FormView {...this.props} handleSuccess={this.handleSuccess} handleClose={this.handleClose}/>
+          <FormView {...this.props} list={list} handleSuccess={this.handleSuccess} handleClose={this.handleClose}/>
         </Dialog>
       </div>
     );

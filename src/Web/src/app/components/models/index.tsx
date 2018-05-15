@@ -5,6 +5,7 @@ export { Using } from './using';
 export { Formatted } from './formatted';
 export { Field } from './field';
 export { Submit } from './submit';
+export { Action } from './action';
 
 export interface FormatDefinition {
   normalize?: number;

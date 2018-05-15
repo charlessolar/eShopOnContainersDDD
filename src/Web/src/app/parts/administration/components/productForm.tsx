@@ -16,19 +16,13 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { inject } from '../../../utils';
-import { Using, Field, Submit } from '../../../components/models';
+import { Using, Field, Submit, Action } from '../../../components/models';
 
 import { ProductType } from '../models/products';
 import { ProductFormType, ProductFormModel } from '../stores/product';
 import { CatalogStoreType } from '../stores/catalog';
 
-interface ProductFormProps {
-  list: CatalogStoreType;
-
-  store?: ProductFormType;
-}
-
-const styles = theme => ({
+const styles = (theme: Theme) => ({
   root: {
     marginTop: 20,
   },
@@ -45,12 +39,17 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  dangerButton: {
+    backgroundColor: theme.palette.error[500],
+    color: theme.palette.primary.contrastText
+  }
 });
 
 interface FormProps {
   handleClose: () => void;
   handleSuccess: (product: Partial<ProductType>) => void;
 
+  list: CatalogStoreType;
   product?: ProductType;
   store?: ProductFormType;
 }
@@ -69,15 +68,20 @@ interface FormProps {
     }
   };
 })
-class FormView extends React.Component<FormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button'>, {}> {
+class FormView extends React.Component<FormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button' | 'dangerButton'>, {}> {
 
   private handleSuccess = () => {
     const { store, handleClose, handleSuccess } = this.props;
 
     handleSuccess(store.partial);
-
     handleClose();
   }
+  private handleDestroy = () => {
+    const { list, product, handleClose } = this.props;
+    list.remove(product.id);
+    handleClose();
+  }
+
   public render() {
     const { classes, store, product, handleClose } = this.props;
 
@@ -91,6 +95,7 @@ class FormView extends React.Component<FormProps & WithStyles<'root' | 'containe
           <Typography variant='title' color='inherit' className={classes.flex}>
             {product ? 'Edit' : 'Add'} Product
           </Typography>
+          { product && <Action action='destroy' text='Destroy' buttonProps={{ className: classes.dangerButton }} onSuccess={this.handleDestroy}/>}
           <Submit buttonProps={{ color: 'inherit' }} onSuccess={this.handleSuccess} />
         </Toolbar>
       </AppBar>
