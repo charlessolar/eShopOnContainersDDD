@@ -15,6 +15,7 @@ interface DateRangeProps {
   required?: boolean;
   label: string;
   error?: any;
+  disabled?: boolean;
   value?: { from: string, to: string };
 
   onChange?: (newVal: { from: string, to: string }) => void;
@@ -89,11 +90,11 @@ class DateRangeControl extends React.Component<DateRangeProps & WithStyles<'cont
 
   public render() {
     const { from, to } = this.state;
-    const { id, label, required, error, value, classes } = this.props;
+    const { id, label, required, error, value, disabled, classes } = this.props;
 
     const modifiers = { start: from, end: to };
     return (
-      <FormControl required={required} className={classes.container} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.container} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <Grid container spacing={8}>
           <Grid item xs={4}>
             <DayPickerInput

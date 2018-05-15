@@ -58,6 +58,7 @@ interface SelectProps {
   error?: any;
   type?: string;
   value?: any;
+  disabled?: boolean;
   onChange?: (newVal: any) => void;
   fieldProps?: any;
 
@@ -230,13 +231,13 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
     open();
   }
 
-  private _renderDownshift = (classes, error, required, label, id, fieldProps, store, value, addComponent) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
+  private _renderDownshift = (classes, error, required, label, id, fieldProps, store, value, disabled, addComponent) => ({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection, openMenu }) => {
     this._clearSelection = clearSelection;
 
     return (
       <div className={classes.container}>
 
-        <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+        <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
           <InputLabel htmlFor={id}>{label}</InputLabel>
           <Input id={id} onInput={this.onInput} type='text' fullWidth {...fieldProps} {...getInputProps()} value={inputValue || ''} endAdornment={
             value ?
@@ -244,6 +245,7 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
                 <IconButton
                   aria-label='Clear'
                   onClick={() => this.selectionChanged()}
+                  disabled={disabled}
                 >
                   <Close />
                 </IconButton>
@@ -253,10 +255,11 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
                 <IconButton
                   aria-label='Open'
                   onClick={() => this.openMenu(openMenu)}
+                  disabled={disabled}
                 >
                   <ArrowDown />
                 </IconButton>
-                {addComponent && React.createElement(addComponent, { onChange: this.modelAdded })}
+                {addComponent && !disabled && React.createElement(addComponent, { onChange: this.modelAdded })}
               </InputAdornment>
           } />
           {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
@@ -279,12 +282,12 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
   }
 
   public render() {
-    const { classes, error, required, label, id, fieldProps, store, value, addComponent, onChange } = this.props;
+    const { classes, error, required, label, id, fieldProps, store, value, addComponent, disabled, onChange } = this.props;
 
     return (
       <div className={classes.root}>
         <Downshift selectedItem={store.selection} onChange={this.selectionChanged} itemToString={item => item && item.label}>
-          {this._renderDownshift(classes, error, required, label, id, fieldProps, store, value, addComponent)}
+          {this._renderDownshift(classes, error, required, label, id, fieldProps, store, value, disabled, addComponent)}
         </Downshift>
       </div>
     );

@@ -21,6 +21,7 @@ interface CheckboxProps {
   error?: any;
   value?: any;
   fieldProps?: any;
+  disabled?: boolean;
   options: { value: string, label: string }[];
 
   onChange?: (value: string, checked: boolean) => void;
@@ -44,10 +45,10 @@ class CheckboxControl extends React.Component<CheckboxProps & WithStyles<'formCo
   }
 
   public render() {
-    const { id, label, required, error, value, options, classes, fieldProps } = this.props;
+    const { id, label, required, error, value, options, disabled, classes, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <FormLabel htmlFor={id}>{label}</FormLabel>
         <FormGroup>
           <Grid container spacing={24}>

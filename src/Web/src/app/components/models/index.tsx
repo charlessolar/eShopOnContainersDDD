@@ -25,6 +25,7 @@ export interface FieldDefinition {
   type?: string;
   autoComplete?: string;
   allowEmpty?: boolean;
+  disabled?: boolean;
   options?: { value: string, label: string }[];
 
   normalize?: number;

@@ -54,6 +54,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         autoComplete: definition.autoComplete,
         onChange: handleChange,
         fieldProps
@@ -66,6 +67,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         autoComplete: definition.autoComplete,
         onChange: handleChange,
         fieldProps
@@ -77,6 +79,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         onChange: handleChange,
         selectStore: definition.selectStore,
         addComponent: definition.addComponent
@@ -88,6 +91,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         options: definition.options,
         onChange: handleChange,
         allowEmpty: definition.allowEmpty
@@ -99,6 +103,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         autoComplete: definition.autoComplete,
         onChange: handleChange,
         fieldProps
@@ -110,6 +115,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         autoComplete: definition.autoComplete,
         onChange: handleChange,
         normalize: definition.normalize,
@@ -122,6 +128,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         options: definition.options,
         onChange: handleCheckboxChange,
       });
@@ -132,6 +139,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         onChange: handleChange,
         imageRatio: definition.imageRatio,
         fieldProps
@@ -143,6 +151,7 @@ const FieldConsumer = observer((props: FieldProps & { using: UsingType<any> }) =
         required: definition.required,
         error: using.validation,
         label: definition.label,
+        disabled: definition.disabled,
         onChange: handleChange,
       });
     default:

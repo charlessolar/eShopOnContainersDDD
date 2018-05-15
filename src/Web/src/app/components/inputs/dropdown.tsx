@@ -16,6 +16,7 @@ interface DropdownProps {
   value?: any;
   fieldProps?: any;
   allowEmpty?: boolean;
+  disabled?: boolean;
   options: { value: string, label: string }[];
 
   onChange?: (newVal: string) => void;
@@ -38,10 +39,10 @@ class DropdownControl extends React.Component<DropdownProps & WithStyles<'formCo
   }
 
   public render() {
-    const { id, label, required, error, value, options, classes, allowEmpty, fieldProps } = this.props;
+    const { id, label, required, error, value, options, disabled, classes, allowEmpty, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <Select id={id} value={value} onChange={(e) => this.handleChange(e)} {...fieldProps}>
           {allowEmpty === true || allowEmpty === undefined ? <MenuItem value=''><em>None</em></MenuItem> : <></>}

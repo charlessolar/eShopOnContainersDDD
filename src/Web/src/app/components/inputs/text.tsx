@@ -15,6 +15,7 @@ interface TextProps {
   value?: any;
   autoComplete?: string;
   fieldProps?: any;
+  disabled?: boolean;
 
   onChange?: (newVal: string) => void;
   onKeyDown?: (key: number, value: string) => void;
@@ -43,10 +44,10 @@ class TextControl extends React.Component<TextProps & WithStyles<'formControl'>,
   }
 
   public render() {
-    const { id, label, required, error, type, value, autoComplete, classes, fieldProps } = this.props;
+    const { id, label, required, error, type, value, autoComplete, classes, disabled, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <Input id={id} onInput={this.handleInput} type={type || 'text'} autoComplete={autoComplete} value={value || ''} onKeyDown={this.handleKeydown} {...fieldProps} />
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}

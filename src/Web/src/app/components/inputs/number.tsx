@@ -20,6 +20,7 @@ interface NumberProps {
   format?: string;
   fieldProps?: any;
   normalize?: number;
+  disabled?: boolean;
 
   onChange?: (newVal: number) => void;
   onKeyDown?: (key: number, value: string) => void;
@@ -94,10 +95,10 @@ class NumberControl extends React.Component<NumberProps & WithStyles<'formContro
   }
 
   public render() {
-    const { id, label, required, error, type, value, normalize, autoComplete, classes, fieldProps } = this.props;
+    const { id, label, required, error, type, value, normalize, autoComplete, disabled, classes, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <Input id={id} onBlur={this.onBlur} onChange={this.handleChange} type={type || 'text'} autoComplete={autoComplete} value={this.state.value} onKeyDown={this.handleKeydown} {...fieldProps} />
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}

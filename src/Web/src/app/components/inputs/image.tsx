@@ -21,6 +21,7 @@ interface ImageProps {
   value?: Data;
   fieldProps?: any;
   imageRatio?: number;
+  disabled?: boolean;
 
   onChange?: (newVal: Data) => void;
 }
@@ -113,10 +114,10 @@ class ImageControl extends React.Component<ImageProps & WithStyles<'formControl'
   }
 
   public render() {
-    const { id, label, required, error, value, classes, fieldProps } = this.props;
+    const { id, label, required, error, value, disabled, classes, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <Grid container spacing={24}>
           <Grid item xs={4}>
             <Typography variant='title' color={error && error[id] ? 'error' : 'primary'}>{label}</Typography>
