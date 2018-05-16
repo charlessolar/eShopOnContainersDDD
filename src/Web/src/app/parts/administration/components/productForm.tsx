@@ -133,11 +133,9 @@ class FormView extends React.Component<FormProps & WithStyles<'root' | 'containe
                     <Grid item xs={12}>
                       <Divider className={classes.divider}/>
                       { product &&
-                        <>
                           <Confirm title='Confirm Destroy' description='Destroying a product is non-reversable!'>
                             <Action action='destroy' onSuccess={this.handleDestroy} text='Destroy' buttonProps={{ className: classes.dangerButton }}/>
                           </Confirm>
-                        </>
                       }
                     </Grid>
                   </Grid>

@@ -123,7 +123,7 @@ export function canvasToBase64(canvas: HTMLCanvasElement): Promise<Data> {
 }
 
 export interface Data {
-  url?: string;
+  url: string;
   data: string;
   filename?: string;
   contentType: string;
@@ -133,10 +133,16 @@ export interface Data {
 
 export const DataModel = types
   .model({
-    url: types.maybe(types.string),
     data: types.string,
     filename: types.maybe(types.string),
     contentType: types.string,
     height: types.maybe(types.number),
     width: types.maybe(types.number)
-  });
+  }).views(self => ({
+    get url() {
+      if (!self.data) {
+        return;
+      }
+      return 'data:' + self.contentType + ';base64,' + self.data;
+    },
+  }));

@@ -79,6 +79,7 @@ class ImageControl extends React.Component<ImageProps & WithStyles<'formControl'
 
   private clearImage() {
     this.setState({ file: undefined, value: undefined });
+    this.props.onChange(undefined);
   }
 
   private renderImage = () => {
