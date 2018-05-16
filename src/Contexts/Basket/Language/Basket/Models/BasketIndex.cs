@@ -11,6 +11,7 @@ namespace eShop.Basket.Basket.Models
         public string CustomerId { get; set; }
         public string Customer { get; set; }
 
+        public int TotalItems { get; set; }
         public long TotalQuantity { get; set; }
 
         public long SubTotal { get; set; }

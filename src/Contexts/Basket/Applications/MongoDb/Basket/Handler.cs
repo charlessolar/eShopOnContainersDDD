@@ -66,6 +66,7 @@ namespace eShop.Basket.Basket
                 .ConfigureAwait(false);
             var product = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Catalog.Product.Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
+            basket.TotalItems++;
             basket.TotalQuantity++;
             basket.SubTotal += product.Price;
 
@@ -79,6 +80,7 @@ namespace eShop.Basket.Basket
             var item = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Entities.Item.Models.BasketItem>(Entities.Item.Handler.ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
 
+            basket.TotalItems--;
             basket.TotalQuantity -= item.Quantity;
             basket.SubTotal -= item.SubTotal;
             basket.TotalFees -= item.AdditionalFees;
