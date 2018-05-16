@@ -8,7 +8,7 @@ namespace eShop.Identity.User.Services
 {
     [Api("Identity")]
     [Route("/identity/user", "GET")]
-    public class GetIdentity : DomainCommand
+    public class GetIdentity : Query<Models.User>
     {
     }
 }

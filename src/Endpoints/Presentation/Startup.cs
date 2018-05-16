@@ -193,7 +193,9 @@ namespace eShop
             Plugins.Add(new AuthFeature(() => new AuthUserSession(),
                 new IAuthProvider[]
                 {
-                    new JwtAuthProvider(AppSettings) { AuthKey = AesUtils.CreateKey(), RequireSecureConnection=false },
+                    new JwtAuthProvider(AppSettings) {
+                        AuthKeyBase64 = AppSettings.GetString("AuthKeyBase64"),
+                        RequireSecureConnection=false },
                     new CredentialsAuthProvider()
                 }));
             Plugins.Add(new RegistrationFeature());

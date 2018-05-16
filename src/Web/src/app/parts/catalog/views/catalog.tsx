@@ -5,13 +5,16 @@ import glamorous from 'glamorous';
 
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
+import Badge from 'material-ui/Badge';
 import Typography from 'material-ui/Typography';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
 import Grid from 'material-ui/Grid';
 import Tooltip from 'material-ui/Tooltip';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import BasketIcon from '@material-ui/icons/ShoppingBasket';
 
 import { inject, models } from '../../../utils';
 import { Using, Field, Formatted } from '../../../components/models';
@@ -49,11 +52,24 @@ const styles = (theme: Theme) => ({
   },
   button: {
     margin: theme.spacing.unit,
+  },
+  selectors: {
+    display: 'flex',
+    flex: 1
+  },
+  controls: {
+    display: 'flex',
+    maxWidth: '60vw'
+  },
+  dropdowns: {
+    marginRight: 20
+  },
+  badge: {
   }
 });
 
 @observer
-class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'appbar' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card'>, {}> {
+class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'appbar' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card' | 'selectors' | 'controls' | 'dropdowns' | 'badge'>, {}> {
 
   private pullProducts = () => {
     const { store } = this.props;
@@ -87,21 +103,22 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
         <AppBar position='static' className={classes.appbar}>
           <Toolbar>
             <Using model={store}>
-              <Grid container className={classes.navbar}>
-                <Grid item md={4} xs={12}>
-                  <Grid container spacing={24}>
-                    <Grid item xs={5}>
-                      <Field field='catalogBrand' />
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Field field='catalogType' />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <Button className={classes.button} variant='raised' size='small' color='primary' onClick={this.pullProducts}><KeyboardArrowRight /></Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
+              <div className={classes.selectors}>
+                <div className={classes.controls}>
+                  <div className={classes.dropdowns}>
+                    <Field field='catalogBrand' />
+                  </div>
+                  <div className={classes.dropdowns}>
+                    <Field field='catalogType' />
+                  </div>
+                  <Button className={classes.button} variant='raised' size='small' color='primary' onClick={this.pullProducts}><KeyboardArrowRight /></Button>
+                </div>
+              </div>
+              <IconButton className={classes.badge}>
+                <Badge color='primary' badgeContent={store.basketItems}>
+                  <BasketIcon/>
+                </Badge>
+              </IconButton>
             </Using>
           </Toolbar>
         </AppBar>
@@ -112,13 +129,13 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
                 <Typography variant='display3' className={classes.noProduct}>No products found</Typography>
               </Grid>
             </Grid>
-             :
+            :
             <Grid container spacing={16} justify='flex-start' alignItems='flex-start'>
               {products.map((product, key) => (
                 <Grid item xs key={key}>
                   <Using model={product}>
                     <Card className={classes.card}>
-                        <CardMedia className={classes.media} title={product.name} image={product.productPicture || require('../img/placeholder.png')} />
+                      <CardMedia className={classes.media} title={product.name} image={product.productPicture || require('../img/placeholder.png')} />
                       <CardContent>
                         <Typography gutterBottom variant='headline' component='h2' className={classes.flex} noWrap>
                           {product.name}
@@ -129,7 +146,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        <Button color='primary' variant='raised' fullWidth className={classes.button} disabled={!product.canOrder}>Add to Cart</Button>
+                        <Button color='primary' variant='raised' fullWidth className={classes.button} disabled={!product.canOrder} onClick={() => store.addToBasket(product)}>Add to Cart</Button>
                       </CardActions>
                     </Card>
                   </Using>

@@ -8,10 +8,10 @@ export interface ItemType {
   basketId: string;
   productId: string;
 
-  productPictureContents: string;
-  productPictureContentType: string;
+  productPictureContents?: string;
+  productPictureContentType?: string;
   productName: string;
-  productDescription: string;
+  productDescription?: string;
 
   productPrice: number;
   quantity: number;
@@ -28,10 +28,10 @@ export const ItemModel = types
     basketId: types.string,
     productId: types.string,
 
-    productPictureContents: types.string,
-    productPictureContentType: types.string,
+    productPictureContents: types.maybe(types.string),
+    productPictureContentType: types.maybe(types.string),
     productName: types.string,
-    productDescription: types.string,
+    productDescription: types.maybe(types.string),
 
     productPrice: types.number,
     quantity: types.number,
@@ -47,10 +47,10 @@ export interface ItemIndexType {
   basketId: string;
   productId: string;
 
-  productPictureContents: string;
-  productPictureContentType: string;
+  productPictureContents?: string;
+  productPictureContentType?: string;
   productName: string;
-  productDescription: string;
+  productDescription?: string;
 
   productPrice: number;
   quantity: number;
@@ -66,10 +66,10 @@ export const ItemIndexModel = types
     basketId: types.string,
     productId: types.string,
 
-    productPictureContents: types.string,
-    productPictureContentType: types.string,
+    productPictureContents: types.maybe(types.string),
+    productPictureContentType: types.maybe(types.string),
     productName: types.string,
-    productDescription: types.string,
+    productDescription: types.maybe(types.string),
 
     productPrice: types.number,
     quantity: types.number,

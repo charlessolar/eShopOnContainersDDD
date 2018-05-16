@@ -66,6 +66,21 @@ const Authentication = types.model(
     }
   }))
   .actions(self => {
+    const checkAuth = flow(function*() {
+      // restored a token, check with service if its valid
+      const client = getRoot(self).api as ApiClientType;
+
+      try {
+        const request = new DTOs.GetIdentity();
+        const response: DTOs.QueryResponse<DTOs.User> = yield client.query(request);
+
+      } catch (error) {
+        debug('check auth failure');
+        yield reset();
+        setTimeout(() => (getRoot(self).history as History).push('/'), 1);
+      }
+
+    });
     const updateToken = (token: string) => {
 
       try {
@@ -91,17 +106,17 @@ const Authentication = types.model(
       const request = new DTOs.Authenticate();
       request.provider = 'logout';
       try {
-      yield client.post(request);
+        yield client.post(request);
 
+      } catch (error) {
+        debug('failed to logout', error);
+      }
       self.name = '';
       self.token = '';
       self.expires = 0;
       self.roles.clear();
 
       client.setBearerToken('');
-      } catch (error) {
-        debug('failed to logout', error);
-      }
     });
     const afterCreate = () => {
       const authStorage = localStorage.getItem('auth.eShop');
@@ -111,6 +126,12 @@ const Authentication = types.model(
         localStorage.setItem('auth.eShop', JSON.stringify(state));
       });
       addDisposer(self, disposer);
+
+      if (self.authenticated) {
+        const client = getEnv(self).client as JsonServiceClient;
+        client.setBearerToken(self.token);
+        checkAuth();
+      }
     };
     return { updateToken, reset, afterCreate };
   });
@@ -221,33 +242,33 @@ export const Store = types.model(
     status: types.optional(ConfigurationStatusModel, { isSetup: false })
   }
 )
-.views(self => ({
-  get authenticated() {
-    return self.auth.authenticated;
-  },
-  get theme() {
-    return getEnv(self).theme;
-  },
-  get history() {
-    return getEnv(self).history;
-  },
-  get client() {
-    return getEnv(self).client;
-  }
-}))
-.actions(self => {
-  const load = flow(function*() {
-    const request = new DTOs.GetStatus();
-
-    debug('attempting to pull configuration status');
-    try {
-      const result: DTOs.QueryResponse<DTOs.Status> = yield self.api.query(request);
-
-      self.status.isSetup = result.payload.isSetup;
-    } catch (error) {
-      debug('received http error: ', error);
+  .views(self => ({
+    get authenticated() {
+      return self.auth.authenticated;
+    },
+    get theme() {
+      return getEnv(self).theme;
+    },
+    get history() {
+      return getEnv(self).history;
+    },
+    get client() {
+      return getEnv(self).client;
     }
-  });
+  }))
+  .actions(self => {
+    const load = flow(function*() {
+      const request = new DTOs.GetStatus();
 
-  return { load };
-});
+      debug('attempting to pull configuration status');
+      try {
+        const result: DTOs.QueryResponse<DTOs.ConfigurationStatus> = yield self.api.query(request);
+
+        self.status.isSetup = result.payload.isSetup;
+      } catch (error) {
+        debug('received http error: ', error);
+      }
+    });
+
+    return { load };
+  });

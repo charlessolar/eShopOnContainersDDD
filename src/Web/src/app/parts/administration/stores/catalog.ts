@@ -39,7 +39,7 @@ export const CatalogStoreModel = types
     self.loading = true;
     try {
       const client = getEnv(self).api as ApiClientType;
-      const result: DTOs.PagedResponse<DTOs.ProductIndex> = yield client.paged(request);
+      const result: DTOs.PagedResponse<DTOs.CatalogProductIndex> = yield client.paged(request);
 
       self.products.clear();
       result.records.forEach((record) => {

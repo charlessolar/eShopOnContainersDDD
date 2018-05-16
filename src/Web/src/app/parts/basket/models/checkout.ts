@@ -16,4 +16,3 @@ export { BasketType, BasketModel };
 export { ItemType, ItemModel };
 
 const debug = new Debug('checkout');
-

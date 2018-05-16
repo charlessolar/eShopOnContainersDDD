@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-16 05:48:11
+Date: 2018-05-16 19:43:48
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -78,10 +78,29 @@ export module DTOs
         id: string;
         customerId: string;
         customer: string;
+        totalItems: number;
         totalQuantity: number;
         subTotal: number;
         totalFees: number;
         totalTaxes: number;
+        total: number;
+        created: number;
+        updated: number;
+    }
+
+    export class Paged<T>
+    {
+    }
+
+    export class BasketIndex
+    {
+        id: string;
+        customerId: string;
+        customer: string;
+        totalItems: number;
+        totalQuantity: number;
+        subTotal: number;
+        extraTotal: number;
         total: number;
         created: number;
         updated: number;
@@ -97,11 +116,7 @@ export module DTOs
     {
     }
 
-    export class Paged<T>
-    {
-    }
-
-    export class Item
+    export class BasketItemIndex
     {
         id: string;
         basketId: string;
@@ -112,8 +127,8 @@ export module DTOs
         productDescription: string;
         productPrice: number;
         quantity: number;
-        additionalTaxes: number;
-        additionalFees: number;
+        subTotal: number;
+        additional: number;
         total: number;
     }
 
@@ -129,7 +144,7 @@ export module DTOs
         type: string;
     }
 
-    export class Product
+    export class CatalogProduct
     {
         id: string;
         name: string;
@@ -147,7 +162,7 @@ export module DTOs
         pictureContentType: string;
     }
 
-    export class ProductIndex
+    export class CatalogProductIndex
     {
         id: string;
         name: string;
@@ -218,7 +233,7 @@ export module DTOs
         cardType: string;
     }
 
-    export class Order
+    export class OrderingOrder
     {
         id: string;
         status: string;
@@ -237,7 +252,7 @@ export module DTOs
         total: number;
     }
 
-    export class OrderIndex
+    export class OrderingOrderIndex
     {
         id: string;
         status: string;
@@ -256,7 +271,7 @@ export module DTOs
         total: number;
     }
 
-    export class Item
+    export class OrderingOrderItem
     {
         id: string;
         orderId: string;
@@ -266,7 +281,7 @@ export module DTOs
         quantity: number;
     }
 
-    export class Status
+    export class ConfigurationStatus
     {
         id: string;
         isSetup: boolean;
@@ -571,6 +586,17 @@ export module DTOs
     /**
     * Basket
     */
+    // @Route("/basket/list", "GET")
+    // @Api(Description="Basket")
+    export class ListBaskets extends Paged<BasketIndex> implements IReturn<PagedResponse<BasketIndex>>
+    {
+        createResponse() { return new PagedResponse<BasketIndex>(); }
+        getTypeName() { return "ListBaskets"; }
+    }
+
+    /**
+    * Basket
+    */
     // @Route("/basket", "POST")
     // @Api(Description="Basket")
     export class InitiateBasket extends DomainCommand implements IReturn<CommandResponse>
@@ -609,10 +635,10 @@ export module DTOs
     */
     // @Route("/basket/item", "GET")
     // @Api(Description="Basket")
-    export class GetBasketItems extends Paged<Item> implements IReturn<PagedResponse<Item>>
+    export class GetBasketItems extends Paged<BasketItemIndex> implements IReturn<PagedResponse<BasketItemIndex>>
     {
         basketId: string;
-        createResponse() { return new PagedResponse<Item>(); }
+        createResponse() { return new PagedResponse<BasketItemIndex>(); }
         getTypeName() { return "GetBasketItems"; }
     }
 
@@ -739,10 +765,10 @@ export module DTOs
     */
     // @Route("/catalog/products/{ProductId}", "GET")
     // @Api(Description="Catalog")
-    export class GetProduct extends Query<Product> implements IReturn<QueryResponse<Product>>
+    export class GetProduct extends Query<CatalogProduct> implements IReturn<QueryResponse<CatalogProduct>>
     {
         productId: string;
-        createResponse() { return new QueryResponse<Product>(); }
+        createResponse() { return new QueryResponse<CatalogProduct>(); }
         getTypeName() { return "GetProduct"; }
     }
 
@@ -751,9 +777,9 @@ export module DTOs
     */
     // @Route("/catalog/products", "GET")
     // @Api(Description="Catalog")
-    export class ListProducts extends Paged<ProductIndex> implements IReturn<PagedResponse<ProductIndex>>
+    export class ListProducts extends Paged<CatalogProductIndex> implements IReturn<PagedResponse<CatalogProductIndex>>
     {
-        createResponse() { return new PagedResponse<ProductIndex>(); }
+        createResponse() { return new PagedResponse<CatalogProductIndex>(); }
         getTypeName() { return "ListProducts"; }
     }
 
@@ -762,12 +788,12 @@ export module DTOs
     */
     // @Route("/catalog", "GET")
     // @Api(Description="Catalog")
-    export class Catalog extends Paged<ProductIndex> implements IReturn<PagedResponse<ProductIndex>>
+    export class Catalog extends Paged<CatalogProductIndex> implements IReturn<PagedResponse<CatalogProductIndex>>
     {
         brandId: string;
         typeId: string;
         search: string;
-        createResponse() { return new PagedResponse<ProductIndex>(); }
+        createResponse() { return new PagedResponse<CatalogProductIndex>(); }
         getTypeName() { return "Catalog"; }
     }
 
@@ -1337,10 +1363,10 @@ export module DTOs
     */
     // @Route("/order/{OrderId}", "GET")
     // @Api(Description="Ordering")
-    export class GetOrder extends Query<Order> implements IReturn<QueryResponse<Order>>
+    export class GetOrder extends Query<OrderingOrder> implements IReturn<QueryResponse<OrderingOrder>>
     {
         orderId: string;
-        createResponse() { return new QueryResponse<Order>(); }
+        createResponse() { return new QueryResponse<OrderingOrder>(); }
         getTypeName() { return "GetOrder"; }
     }
 
@@ -1349,9 +1375,9 @@ export module DTOs
     */
     // @Route("/order", "GET")
     // @Api(Description="Ordering")
-    export class ListOrders extends Paged<OrderIndex> implements IReturn<PagedResponse<OrderIndex>>
+    export class ListOrders extends Paged<OrderingOrderIndex> implements IReturn<PagedResponse<OrderingOrderIndex>>
     {
-        createResponse() { return new PagedResponse<OrderIndex>(); }
+        createResponse() { return new PagedResponse<OrderingOrderIndex>(); }
         getTypeName() { return "ListOrders"; }
     }
 
@@ -1448,10 +1474,10 @@ export module DTOs
     */
     // @Route("/order/{OrderId}/item", "GET")
     // @Api(Description="Ordering")
-    export class ListOrderItems extends Paged<Item> implements IReturn<PagedResponse<Item>>
+    export class ListOrderItems extends Paged<OrderingOrderItem> implements IReturn<PagedResponse<OrderingOrderItem>>
     {
         orderId: string;
-        createResponse() { return new PagedResponse<Item>(); }
+        createResponse() { return new PagedResponse<OrderingOrderItem>(); }
         getTypeName() { return "ListOrderItems"; }
     }
 
@@ -1502,9 +1528,9 @@ export module DTOs
     */
     // @Route("/configuration/status", "GET")
     // @Api(Description="Configuration")
-    export class GetStatus extends Query<Status> implements IReturn<QueryResponse<Status>>
+    export class GetStatus extends Query<ConfigurationStatus> implements IReturn<QueryResponse<ConfigurationStatus>>
     {
-        createResponse() { return new QueryResponse<Status>(); }
+        createResponse() { return new QueryResponse<ConfigurationStatus>(); }
         getTypeName() { return "GetStatus"; }
     }
 
