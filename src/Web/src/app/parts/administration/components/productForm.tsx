@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Dialog from 'material-ui/Dialog';
+import Divider from 'material-ui/Divider';
 import Typography from 'material-ui/Typography';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -17,6 +18,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import { inject } from '../../../utils';
 import { Using, Field, Submit, Action } from '../../../components/models';
+import Confirm from '../../../components/dialogs/confirm';
 
 import { ProductType } from '../models/products';
 import { ProductFormType, ProductFormModel } from '../stores/product';
@@ -32,6 +34,12 @@ const styles = (theme: Theme) => ({
   },
   appBar: {
     position: 'relative',
+  },
+  divider: {
+    backgroundColor: theme.palette.error[500],
+    marginBottom: 50,
+    marginTop: 50,
+    marginRight: 50
   },
   flex: {
     flex: 1,
@@ -62,14 +70,13 @@ interface FormProps {
     price: s.price,
     catalogBrand: { id: s.catalogBrandId, brand: s.catalogBrand },
     catalogType: { id: s.catalogTypeId, type: s.catalogType },
-    picture: {
+    picture: s.pictureContents ? {
       data: s.pictureContents,
       contentType: s.pictureContentType
-    }
+    } : undefined
   };
 })
-class FormView extends React.Component<FormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button' | 'dangerButton'>, {}> {
-
+class FormView extends React.Component<FormProps & WithStyles<'root' | 'container' | 'appBar' | 'flex' | 'button' | 'divider' | 'dangerButton'>, {}> {
   private handleSuccess = () => {
     const { store, handleClose, handleSuccess } = this.props;
 
@@ -95,7 +102,6 @@ class FormView extends React.Component<FormProps & WithStyles<'root' | 'containe
           <Typography variant='title' color='inherit' className={classes.flex}>
             {product ? 'Edit' : 'Add'} Product
           </Typography>
-          { product && <Action action='destroy' text='Destroy' buttonProps={{ className: classes.dangerButton }} onSuccess={this.handleDestroy}/>}
           <Submit buttonProps={{ color: 'inherit' }} onSuccess={this.handleSuccess} />
         </Toolbar>
       </AppBar>
@@ -123,6 +129,16 @@ class FormView extends React.Component<FormProps & WithStyles<'root' | 'containe
                     </Grid>
                     <Grid item xs={12}>
                       <Field field='catalogBrand' />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Divider className={classes.divider}/>
+                      { product &&
+                        <>
+                          <Confirm title='Confirm Destroy' description='Destroying a product is non-reversable!'>
+                            <Action action='destroy' onSuccess={this.handleDestroy} text='Destroy' buttonProps={{ className: classes.dangerButton }}/>
+                          </Confirm>
+                        </>
+                      }
                     </Grid>
                   </Grid>
                 </Grid>

@@ -14,6 +14,8 @@ interface ActionProps {
   className?: any;
   onSuccess?: () => void;
   onError?: () => void;
+
+  dialogOpen?: (onConfirm: () => void) => void;
 }
 
 export class Action extends React.Component<ActionProps, {}> {
@@ -32,7 +34,7 @@ export class Action extends React.Component<ActionProps, {}> {
 
 // need to wrap this in observer to make magic happen
 const ActionConsumer = observer((props: ActionProps & { using: UsingType<any> }) => {
-  const { using, text, action, buttonProps, className,  onSuccess, onError } = props;
+  const { using, text, action, buttonProps, className,  onSuccess, onError, dialogOpen } = props;
 
   const handleAction = () => {
     try {
@@ -48,6 +50,6 @@ const ActionConsumer = observer((props: ActionProps & { using: UsingType<any> })
   };
 
   return (
-    <Button disabled={using.loading} onClick={handleAction} className={className} {...buttonProps}>{text}</Button>
+    <Button disabled={using.loading} onClick={() => dialogOpen ? dialogOpen(handleAction) : handleAction()} className={className} {...buttonProps}>{text}</Button>
   );
 });

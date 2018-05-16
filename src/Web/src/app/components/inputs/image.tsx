@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import * as ReactCrop from 'react-image-crop';
 import Dropzone, { ImageFile } from 'react-dropzone';
 
@@ -39,6 +40,7 @@ const styles = theme => ({
   },
 });
 
+@observer
 class ImageControl extends React.Component<ImageProps & WithStyles<'formControl'>, ImageState> {
   constructor(props) {
     super(props);
