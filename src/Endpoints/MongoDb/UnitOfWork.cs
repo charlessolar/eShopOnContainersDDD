@@ -16,7 +16,7 @@ namespace eShop
         Task Commit();
     }
 
-    class CommitableCollection<T> : ICommitableCollection
+    class CommitableCollection<T> : ICommitableCollection where T : class
     {
         private readonly IMongoCollection<T> _collection;
         private readonly ILogger _logger;
@@ -27,7 +27,7 @@ namespace eShop
 
         public CommitableCollection(IMongoDatabase database)
         {
-            _collection = database.GetCollection<T>($"eshop;{typeof(T).FullName.ToLower()}", new MongoCollectionSettings {AssignIdOnInsert = false});
+            _collection = database.GetCollection<T>($"eshop;{typeof(T).FullName.ToLower()}", new MongoCollectionSettings { AssignIdOnInsert = false });
             _retreived = new Dictionary<object, T>();
             _pendingSaves = new Dictionary<object, T>();
             _pendingUpdates = new Dictionary<object, T>();
@@ -37,6 +37,8 @@ namespace eShop
 
         public async Task<T> Get(object id)
         {
+            if (id == null)
+                return null;
             _logger.DebugEvent("Get", "Retreiving document {Id}", id);
             if (_retreived.ContainsKey(id))
                 return _retreived[id];
@@ -50,7 +52,7 @@ namespace eShop
             {
                 filter = Builders<T>.Filter.Eq((FieldDefinition<T, Guid>)"_id", (Guid)id);
             }
-            
+
             var result = await _collection.FindAsync(filter).ConfigureAwait(false);
             var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
             if (document == null)
@@ -59,7 +61,7 @@ namespace eShop
                 _retreived[id] = document;
             return document;
         }
-        
+
         public void Add(object id, T document)
         {
             _logger.DebugEvent("Add", "Queuing add document {Id}", id);
@@ -151,7 +153,7 @@ namespace eShop
                 Bag.Saved = new HashSet<string>();
             return Task.CompletedTask;
         }
-            
+
 
         public async Task End(Exception ex = null)
         {
@@ -164,7 +166,7 @@ namespace eShop
             }
         }
 
-        private CommitableCollection<T> GetOrAddCollection<T>()
+        private CommitableCollection<T> GetOrAddCollection<T>() where T : class
         {
             var collection = _collections.SingleOrDefault(x => x is CommitableCollection<T>);
             if (collection == null)
