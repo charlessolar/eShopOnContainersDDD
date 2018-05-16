@@ -18,7 +18,7 @@ namespace eShop.Basket.Basket.Entities.Item
 
         public Task<object> Any(Services.GetBasketItems request)
         {
-            return _bus.RequestPaged<Queries.Items, Models.Items>(new Queries.Items
+            return _bus.RequestPaged<Queries.Items, Models.Item>(new Queries.Items
             {
                 BasketId = request.BasketId
             });
@@ -29,9 +29,7 @@ namespace eShop.Basket.Basket.Entities.Item
             return _bus.CommandToDomain(new Commands.AddItem
             {
                 BasketId = request.BasketId,
-                ItemId = request.ItemId,
                 ProductId = request.ProductId,
-                Quantity = request.Quantity
             });
         }
         public Task Any(Services.RemoveBasketItem request)
@@ -39,7 +37,7 @@ namespace eShop.Basket.Basket.Entities.Item
             return _bus.CommandToDomain(new Commands.RemoveItem
             {
                 BasketId = request.BasketId,
-                ItemId = request.ItemId,
+                ProductId = request.ProductId,
             });
         }
         public Task Any(Services.UpdateBasketItemQuantity request)
@@ -47,7 +45,7 @@ namespace eShop.Basket.Basket.Entities.Item
             return _bus.CommandToDomain(new Commands.UpdateQuantity
             {
                 BasketId = request.BasketId,
-                ItemId = request.ItemId,
+                ProductId = request.ProductId,
                 Quantity = request.Quantity
             });
         }

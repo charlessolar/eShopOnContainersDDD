@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Infrastructure.Commands;
 
-namespace eShop.Basket.Basket.Entities.Item.Events
+namespace eShop.Basket.Basket.Events
 {
-    public interface ItemRemoved : IStampedEvent
+    public interface Initiated : IStampedEvent
     {
         Guid BasketId { get; set; }
-        Guid ProductId { get; set; }
+        string UserName { get; set; }
     }
 }

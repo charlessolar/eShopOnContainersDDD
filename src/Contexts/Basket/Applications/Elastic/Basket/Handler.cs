@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
-using Infrastructure;
 using NServiceBus;
 
 namespace eShop.Basket.Basket
 {
-    public class Handler : 
+    public class Handler :
         IHandleMessages<Events.Initiated>,
         IHandleMessages<Events.BasketClaimed>,
         IHandleMessages<Events.Destroyed>,
@@ -17,12 +16,13 @@ namespace eShop.Basket.Basket
         IHandleMessages<Entities.Item.Events.QuantityUpdated>,
         IHandleMessages<Catalog.Product.Events.PriceUpdated>
     {
+
         public async Task Handle(Events.Initiated e, IMessageHandlerContext ctx)
         {
             var user = await ctx.App<Infrastructure.IUnitOfWork>().Get<Identity.User.Models.User>(e.UserName)
                 .ConfigureAwait(false);
 
-            var basket = new Models.Basket
+            var basket = new Models.BasketIndex
             {
                 Id = e.BasketId,
                 CustomerId = user?.Id,
@@ -36,7 +36,7 @@ namespace eShop.Basket.Basket
         {
             var user = await ctx.App<Infrastructure.IUnitOfWork>().Get<Identity.User.Models.User>(e.UserName)
                 .ConfigureAwait(false);
-            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Basket>(e.BasketId)
+            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketIndex>(e.BasketId)
                 .ConfigureAwait(false);
 
             basket.Customer = user.GivenName;
@@ -48,8 +48,9 @@ namespace eShop.Basket.Basket
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.Basket>(e.BasketId);
+            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.BasketIndex>(e.BasketId);
         }
+
         public async Task Handle(Entities.Item.Events.ItemAdded e, IMessageHandlerContext ctx)
         {
             var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketIndex>(e.BasketId)
@@ -118,4 +119,5 @@ namespace eShop.Basket.Basket
             }
         }
     }
+
 }

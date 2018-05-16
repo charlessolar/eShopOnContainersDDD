@@ -8,8 +8,8 @@ namespace eShop.Basket.Basket.Entities.Item.Events
     public interface QuantityUpdated : IStampedEvent
     {
         Guid BasketId { get; set; }
-        Guid ItemId { get; set; }
+        Guid ProductId { get; set; }
 
-        decimal Quantity { get; set; }
+        long Quantity { get; set; }
     }
 }

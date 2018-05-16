@@ -8,6 +8,6 @@ namespace eShop.Catalog.Product.Events
     public interface PriceUpdated : IStampedEvent
     {
         Guid ProductId { get; set; }
-        int Price { get; set; }
+        long Price { get; set; }
     }
 }

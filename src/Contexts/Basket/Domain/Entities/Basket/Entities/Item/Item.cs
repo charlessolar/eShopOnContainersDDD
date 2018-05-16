@@ -8,23 +8,21 @@ namespace eShop.Basket.Basket.Entities.Item
     {
         private Item() { }
 
-        public void Add(Catalog.Product.State product, decimal quantity)
+        public void Add()
         {
             Apply<Events.ItemAdded>(x =>
             {
                 x.BasketId = Parent.Id;
-                x.ItemId = Id;
-                x.ProductId = product.Id;
-                x.Quantity = quantity;
+                x.ProductId = Id;
             });
         }
 
-        public void UpdateQuantity(decimal quantity)
+        public void UpdateQuantity(long quantity)
         {
             Apply<Events.QuantityUpdated>(x =>
             {
                 x.BasketId = Parent.Id;
-                x.ItemId = Id;
+                x.ProductId = Id;
                 x.Quantity = quantity;
             });
         }
@@ -34,7 +32,7 @@ namespace eShop.Basket.Basket.Entities.Item
             Apply<Events.ItemRemoved>(x =>
             {
                 x.BasketId = Parent.Id;
-                x.ItemId = Id;
+                x.ProductId = Id;
             });
         }
     }

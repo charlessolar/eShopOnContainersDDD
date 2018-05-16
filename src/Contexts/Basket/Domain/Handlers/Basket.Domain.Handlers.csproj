@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Catalog\Domain\Entities\Catalog.Domain.Entities.csproj" />
+    <ProjectReference Include="..\..\..\Identity\Domain\Entities\Identity.Domain.Entities.csproj" />
     <ProjectReference Include="..\..\Language\Basket.Language.csproj" />
     <ProjectReference Include="..\Entities\Basket.Domain.Entities.csproj" />
   </ItemGroup>

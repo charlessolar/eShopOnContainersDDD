@@ -39,7 +39,7 @@ namespace eShop.Catalog.Product
             });
         }
 
-        public void UpdatePrice(int price)
+        public void UpdatePrice(long price)
         {
             Apply<Events.PriceUpdated>(x =>
             {

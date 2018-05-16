@@ -8,6 +8,6 @@ namespace eShop.Catalog.Product.Commands
     public class UpdatePrice : StampedCommand
     {
         public Guid ProductId { get; set; }
-        public int Price { get; set; }
+        public long Price { get; set; }
     }
 }

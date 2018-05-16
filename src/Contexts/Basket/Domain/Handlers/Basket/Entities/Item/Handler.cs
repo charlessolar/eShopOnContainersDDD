@@ -15,23 +15,23 @@ namespace eShop.Basket.Basket.Entities.Item
         public async Task Handle(Commands.AddItem command, IMessageHandlerContext ctx)
         {
             var basket = await ctx.For<Basket>().Get(command.BasketId).ConfigureAwait(false);
-            var item = await basket.For<Item>().New(command.ItemId).ConfigureAwait(false);
+            var item = await basket.For<Item>().New(command.ProductId).ConfigureAwait(false);
 
             var product = await ctx.For<Catalog.Product.Product>().Get(command.ProductId).ConfigureAwait(false);
 
-            item.Add(product.State, command.Quantity);
+            item.Add();
         }
         public async Task Handle(Commands.RemoveItem command, IMessageHandlerContext ctx)
         {
             var basket = await ctx.For<Basket>().Get(command.BasketId).ConfigureAwait(false);
-            var item = await basket.For<Item>().Get(command.ItemId).ConfigureAwait(false);
+            var item = await basket.For<Item>().Get(command.ProductId).ConfigureAwait(false);
 
             item.Remove();
         }
         public async Task Handle(Commands.UpdateQuantity command, IMessageHandlerContext ctx)
         {
             var basket = await ctx.For<Basket>().Get(command.BasketId).ConfigureAwait(false);
-            var item = await basket.For<Item>().Get(command.ItemId).ConfigureAwait(false);
+            var item = await basket.For<Item>().Get(command.ProductId).ConfigureAwait(false);
 
             item.UpdateQuantity(command.Quantity);
         }

@@ -171,6 +171,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration.Domain.Handle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration.Applications.MongoDb", "src\Contexts\Configuration\Applications\MongoDb\Configuration.Applications.MongoDb.csproj", "{3C1B9076-B2B9-46C8-973D-0CA3A3B5B807}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Applications.Elastic", "src\Contexts\Basket\Applications\Elastic\Basket.Applications.Elastic.csproj", "{39451D67-1653-4842-9B25-C2737D7A660F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -377,6 +379,10 @@ Global
 		{3C1B9076-B2B9-46C8-973D-0CA3A3B5B807}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C1B9076-B2B9-46C8-973D-0CA3A3B5B807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C1B9076-B2B9-46C8-973D-0CA3A3B5B807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39451D67-1653-4842-9B25-C2737D7A660F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39451D67-1653-4842-9B25-C2737D7A660F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39451D67-1653-4842-9B25-C2737D7A660F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39451D67-1653-4842-9B25-C2737D7A660F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -462,6 +468,7 @@ Global
 		{EF651CC1-48E8-499A-B82E-CD55C1E12D7E} = {6A958E6B-6017-4716-BFAC-557035213FE4}
 		{7B5865EC-B525-45C6-A59F-42252D1EEA30} = {6A958E6B-6017-4716-BFAC-557035213FE4}
 		{3C1B9076-B2B9-46C8-973D-0CA3A3B5B807} = {4B8385F7-265A-4CBD-9663-4FEBC57B83AF}
+		{39451D67-1653-4842-9B25-C2737D7A660F} = {B5581F10-6B8C-4FF0-8190-F15EC2401631}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E0FE21F-D8B6-4D1E-85B5-9B2A2EFBEDAE}

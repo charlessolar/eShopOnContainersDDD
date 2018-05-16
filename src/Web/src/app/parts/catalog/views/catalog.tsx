@@ -125,7 +125,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
                         </Typography>
                         <Formatted field='price' />
                         <Typography component='p'>
-                          {product.description}
+                          {product.description || ' '}
                         </Typography>
                       </CardContent>
                       <CardActions>

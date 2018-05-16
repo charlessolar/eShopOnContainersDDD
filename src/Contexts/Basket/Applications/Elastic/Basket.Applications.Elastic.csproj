@@ -6,7 +6,7 @@
     <RootNamespace>eShop.Basket</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Basket</Title>
-    <AssemblyName>eShop.Basket.Domain.Entities</AssemblyName>
+    <AssemblyName>eShop.Basket.Application.Elastic</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,8 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.4.260" />
+    <PackageReference Include="NEST" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Catalog\Language\Catalog.Language.csproj" />
     <ProjectReference Include="..\..\..\Identity\Language\Identity.Language.csproj" />
     <ProjectReference Include="..\..\Language\Basket.Language.csproj" />
   </ItemGroup>
 </Project>
+

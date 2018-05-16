@@ -46,7 +46,7 @@ namespace eShop.Identity.User
             return _bus.CommandToDomain(new Commands.ChangeName
             {
                 UserName = request.UserName,
-                GivenName=request.GivenName
+                GivenName = request.GivenName
             });
         }
         public Task Any(Services.ChangePassword request)

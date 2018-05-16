@@ -8,8 +8,8 @@ namespace eShop.Basket.Basket.Entities.Item.Commands
     public class UpdateQuantity : StampedCommand
     {
         public Guid BasketId { get; set; }
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
     
-        public decimal Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

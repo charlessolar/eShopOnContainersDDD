@@ -7,12 +7,12 @@ using ServiceStack;
 namespace eShop.Basket.Basket.Entities.Item.Services
 {
     [Api("Basket")]
-    [Route("/basket/item/{ItemId}/quantity", "POST")]
+    [Route("/basket/item/{ProductId}/quantity", "POST")]
     public class UpdateBasketItemQuantity : DomainCommand
     {
         public Guid BasketId { get; set; }
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
 
-        public decimal Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

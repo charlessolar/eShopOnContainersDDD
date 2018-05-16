@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Basket.Basket.Models
 {
-    public class Basket
+    public class BasketIndex
     {
         public Guid Id { get; set; }
 
@@ -14,9 +14,8 @@ namespace eShop.Basket.Basket.Models
         public long TotalQuantity { get; set; }
 
         public long SubTotal { get; set; }
-        public long TotalFees { get; set; }
-        public long TotalTaxes { get; set; }
-        public long Total { get; set; }
+        public long ExtraTotal { get; set; }
+        public long Total => SubTotal + ExtraTotal;
 
         public long Created { get; set; }
         public long Updated { get; set; }
