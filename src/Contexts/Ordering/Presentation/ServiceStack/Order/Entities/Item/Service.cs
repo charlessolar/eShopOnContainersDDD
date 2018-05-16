@@ -20,7 +20,7 @@ namespace eShop.Ordering.Order.Entities.Item
 
         public Task<object> Any(Services.ListOrderItems request)
         {
-            return _bus.RequestPaged<Queries.Items, Models.Item>(new Queries.Items
+            return _bus.RequestPaged<Queries.Items, Models.OrderingOrderItem>(new Queries.Items
             {
                 OrderId = request.OrderId
             });

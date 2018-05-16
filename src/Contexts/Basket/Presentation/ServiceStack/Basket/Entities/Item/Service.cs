@@ -18,7 +18,7 @@ namespace eShop.Basket.Basket.Entities.Item
 
         public Task<object> Any(Services.GetBasketItems request)
         {
-            return _bus.RequestPaged<Queries.Items, Models.Item>(new Queries.Items
+            return _bus.RequestPaged<Queries.Items, Models.BasketItemIndex>(new Queries.Items
             {
                 BasketId = request.BasketId
             });

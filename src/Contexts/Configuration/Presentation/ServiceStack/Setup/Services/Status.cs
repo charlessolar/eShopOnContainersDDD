@@ -8,7 +8,7 @@ namespace eShop.Configuration.Setup.Services
 {
     [Api("Configuration")]
     [Route("/configuration/status", "GET")]
-    public class GetStatus : Query<Models.Status>
+    public class GetStatus : Query<Models.ConfigurationStatus>
     {
     }
 }

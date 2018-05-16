@@ -11,7 +11,7 @@ import { ApiClientType } from '../../../stores';
 
 import { ProductType, ProductModel } from '../../../models/catalog/products';
 
-const debug = new Debug('types');
+const debug = new Debug('product stock');
 
 export interface StockFormType {
   id: string;

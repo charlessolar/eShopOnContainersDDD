@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Basket.Basket.Entities.Item.Models
 {
-    public class ItemIndex
+    public class BasketItemIndex
     {
         public string Id { get; set; }
 

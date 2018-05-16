@@ -20,7 +20,7 @@ namespace eShop.Ordering.Order
 
         public Task<object> Any(Services.GetOrder request)
         {
-            return _bus.RequestQuery<Queries.Order, Models.Order>(new Queries.Order
+            return _bus.RequestQuery<Queries.Order, Models.OrderingOrder>(new Queries.Order
             {
                 OrderId=request.OrderId
             });
@@ -28,7 +28,7 @@ namespace eShop.Ordering.Order
 
         public Task<object> Any(Services.ListOrders request)
         {
-            return _bus.RequestPaged<Queries.Orders, Models.OrderIndex>(new Queries.Orders { });
+            return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders { });
         }
 
         public Task Any(Services.CancelOrder request)

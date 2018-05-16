@@ -8,7 +8,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
 {
     [Api("Basket")]
     [Route("/basket/item", "GET")]
-    public class GetBasketItems : Paged<Models.Item>
+    public class GetBasketItems : Paged<Models.BasketItemIndex>
     {
         public Guid BasketId { get; set; }
     }

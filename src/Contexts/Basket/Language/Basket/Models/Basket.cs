@@ -16,7 +16,7 @@ namespace eShop.Basket.Basket.Models
         public long SubTotal { get; set; }
         public long TotalFees { get; set; }
         public long TotalTaxes { get; set; }
-        public long Total { get; set; }
+        public long Total => SubTotal + TotalFees + TotalTaxes;
 
         public long Created { get; set; }
         public long Updated { get; set; }

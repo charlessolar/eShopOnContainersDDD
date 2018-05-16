@@ -9,7 +9,7 @@ namespace eShop.Catalog.Product.Services
 
     [Api("Catalog")]
     [Route("/catalog/products", "GET")]
-    public class ListProducts : Paged<Models.ProductIndex>
+    public class ListProducts : Paged<Models.CatalogProductIndex>
     {
     }
 }

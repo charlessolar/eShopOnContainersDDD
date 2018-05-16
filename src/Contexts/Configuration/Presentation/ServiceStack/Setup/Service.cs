@@ -19,7 +19,7 @@ namespace eShop.Configuration.Setup
         }
         public Task<object> Any(Services.GetStatus request)
         {
-            return _bus.RequestQuery<Queries.Status, Models.Status>(new Queries.Status
+            return _bus.RequestQuery<Queries.Status, Models.ConfigurationStatus>(new Queries.Status
             {
             });
         }

@@ -19,9 +19,9 @@ namespace eShop.Basket.Basket.Entities.Item
 
         public async Task Handle(Events.ItemAdded e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.ProductIndex>(e.ProductId)
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId)
                 .ConfigureAwait(false);
-            var model = new Models.ItemIndex
+            var model = new Models.BasketItemIndex
             {
                 Id = ItemIdGenerator(e.BasketId, e.ProductId),
                 BasketId = e.BasketId,
@@ -37,11 +37,11 @@ namespace eShop.Basket.Basket.Entities.Item
         }
         public Task Handle(Events.ItemRemoved e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.ItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId));
+            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.BasketItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId));
         }
         public async Task Handle(Events.QuantityUpdated e, IMessageHandlerContext ctx)
         {
-            var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
+            var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
 
             item.Quantity = e.Quantity;
 
@@ -49,7 +49,7 @@ namespace eShop.Basket.Basket.Entities.Item
         }
         public async Task Handle(Catalog.Product.Events.DescriptionUpdated e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.ProductIndex>(e.ProductId)
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId)
                 .ConfigureAwait(false);
 
             var basketIds = await ctx.Service<Services.ItemsUsingProduct, Guid[]>(x => { x.ProductId = e.ProductId; })
@@ -58,7 +58,7 @@ namespace eShop.Basket.Basket.Entities.Item
             // Update the description for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
                 item.ProductDescription = e.Description;
 
                 await ctx.App<Infrastructure.IUnitOfWork>().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
@@ -73,7 +73,7 @@ namespace eShop.Basket.Basket.Entities.Item
             // Update the description for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
                 item.ProductPictureContents = e.Content;
                 item.ProductPictureContentType = e.ContentType;
 
@@ -89,7 +89,7 @@ namespace eShop.Basket.Basket.Entities.Item
             // Update the description for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.ItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
                 item.ProductPrice = e.Price;
 
                 await ctx.App<Infrastructure.IUnitOfWork>().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);

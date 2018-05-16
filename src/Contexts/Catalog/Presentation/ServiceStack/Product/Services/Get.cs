@@ -8,7 +8,7 @@ namespace eShop.Catalog.Product.Services
 {
     [Api("Catalog")]
     [Route("/catalog/products/{ProductId}", "GET")]
-    public class GetProduct : Query<Models.Product>
+    public class GetProduct : Query<Models.CatalogProduct>
     {
         public Guid ProductId { get; set; }
     }

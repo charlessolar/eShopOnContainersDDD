@@ -11,7 +11,7 @@ import { ApiClientType } from '../../../stores';
 
 import { TypeType, TypeModel } from '../../../models/catalog/types';
 
-const debug = new Debug('types');
+const debug = new Debug('catalog types');
 
 export interface TypeFormType {
   id: string;

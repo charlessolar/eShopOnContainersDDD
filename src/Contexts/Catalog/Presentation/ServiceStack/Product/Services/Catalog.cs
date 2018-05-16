@@ -8,7 +8,7 @@ namespace eShop.Catalog.Product.Services
 {
     [Api("Catalog")]
     [Route("/catalog", "GET")]
-    public class Catalog : Paged<Models.ProductIndex>
+    public class Catalog : Paged<Models.CatalogProductIndex>
     {
         public Guid? BrandId { get; set; }
         public Guid? TypeId { get; set; }

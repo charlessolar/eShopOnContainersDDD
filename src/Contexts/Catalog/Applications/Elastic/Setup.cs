@@ -60,7 +60,7 @@ namespace eShop.Catalog
                             .Keyword(s => s.Name("Type").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                     )))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Product.Models.ProductIndex).FullName.ToLower(), i => i
+            await _client.CreateIndexAsync(typeof(Product.Models.CatalogProductIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
@@ -74,7 +74,7 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<Product.Models.ProductIndex>(map =>
+                .Mappings(mappings => mappings.Map<Product.Models.CatalogProductIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Name").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))

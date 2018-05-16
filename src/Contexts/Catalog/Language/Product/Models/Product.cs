@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Catalog.Product.Models
 {
-    public class Product
+    public class CatalogProduct
     {
         public Guid Id { get; set; }
 

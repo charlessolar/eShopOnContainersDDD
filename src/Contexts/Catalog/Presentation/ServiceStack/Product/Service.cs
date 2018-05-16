@@ -20,21 +20,21 @@ namespace eShop.Catalog.Product
 
         public Task<object> Any(Services.GetProduct request)
         {
-            return _bus.RequestQuery<Queries.Product, Models.Product>(new Queries.Product
+            return _bus.RequestQuery<Queries.Product, Models.CatalogProduct>(new Queries.Product
             {
                 ProductId = request.ProductId
             });
         }
         public Task<object> Any(Services.ListProducts request)
         {
-            return _bus.RequestPaged<Queries.List, Models.ProductIndex>(new Queries.List
+            return _bus.RequestPaged<Queries.List, Models.CatalogProductIndex>(new Queries.List
             {
             });
         }
 
         public Task<object> Any(Services.Catalog request)
         {
-            return _bus.RequestPaged<Queries.Catalog, Models.ProductIndex>(new Queries.Catalog
+            return _bus.RequestPaged<Queries.Catalog, Models.CatalogProductIndex>(new Queries.Catalog
             {
                 BrandId = request.BrandId,
                 TypeId = request.TypeId,

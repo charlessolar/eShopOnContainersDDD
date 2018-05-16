@@ -9,9 +9,9 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { BrandType, BrandModel } from '../../../models/catalog/brands';
+import { BrandType, BrandModel } from '../models/brands';
 
-const debug = new Debug('brands');
+const debug = new Debug('catalog brands');
 
 export interface BrandFormType {
   id: string;

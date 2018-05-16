@@ -22,7 +22,7 @@ namespace eShop.Catalog.Product
             var type = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<CatalogType.Models.CatalogType>(e.CatalogTypeId).ConfigureAwait(false);
 
-            var model = new Models.Product
+            var model = new Models.CatalogProduct
             {
                 Id = e.ProductId,
                 Name = e.Name,
@@ -37,7 +37,7 @@ namespace eShop.Catalog.Product
         }
         public async Task Handle(Events.DescriptionUpdated e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Product>(e.ProductId).ConfigureAwait(false);
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
 
             product.Description = e.Description;
 
@@ -45,7 +45,7 @@ namespace eShop.Catalog.Product
         }
         public async Task Handle(Events.PictureSet e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Product>(e.ProductId).ConfigureAwait(false);
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
 
             product.PictureContents = e.Content;
             product.PictureContentType = e.ContentType;
@@ -54,7 +54,7 @@ namespace eShop.Catalog.Product
         }
         public async Task Handle(Events.PriceUpdated e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Product>(e.ProductId).ConfigureAwait(false);
+            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
 
             product.Price = e.Price;
 
@@ -62,7 +62,7 @@ namespace eShop.Catalog.Product
         }
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.Product>(e.ProductId);
+            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.CatalogProduct>(e.ProductId);
         }
     }
 }

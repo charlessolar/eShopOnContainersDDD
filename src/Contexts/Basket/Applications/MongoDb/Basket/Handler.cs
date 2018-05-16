@@ -52,10 +52,10 @@ namespace eShop.Basket.Basket
         }
         public async Task Handle(Entities.Item.Events.ItemAdded e, IMessageHandlerContext ctx)
         {
-            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketIndex>(e.BasketId)
+            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Basket>(e.BasketId)
                 .ConfigureAwait(false);
             var product = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<Catalog.Product.Models.ProductIndex>(e.ProductId).ConfigureAwait(false);
+                .Get<Catalog.Product.Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
             basket.TotalQuantity++;
             basket.SubTotal += product.Price;
 
@@ -64,24 +64,25 @@ namespace eShop.Basket.Basket
 
         public async Task Handle(Entities.Item.Events.ItemRemoved e, IMessageHandlerContext ctx)
         {
-            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketIndex>(e.BasketId)
+            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Basket>(e.BasketId)
                 .ConfigureAwait(false);
             var item = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<Entities.Item.Models.ItemIndex>(Entities.Item.Handler.ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
+                .Get<Entities.Item.Models.BasketItem>(Entities.Item.Handler.ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
 
             basket.TotalQuantity -= item.Quantity;
             basket.SubTotal -= item.SubTotal;
-            basket.ExtraTotal -= item.Additional;
+            basket.TotalFees -= item.AdditionalFees;
+            basket.TotalTaxes -= item.AdditionalTaxes;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.BasketId, basket).ConfigureAwait(false);
         }
 
         public async Task Handle(Entities.Item.Events.QuantityUpdated e, IMessageHandlerContext ctx)
         {
-            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketIndex>(e.BasketId)
+            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Basket>(e.BasketId)
                 .ConfigureAwait(false);
             var item = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<Entities.Item.Models.ItemIndex>(Entities.Item.Handler.ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
+                .Get<Entities.Item.Models.BasketItem>(Entities.Item.Handler.ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
 
             // Todo: verify item is the item state before IT processes QuantityUpdated
             basket.TotalQuantity -= item.Quantity;
@@ -104,8 +105,8 @@ namespace eShop.Basket.Basket
             // Update the subtotal and quantity for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.ItemIndex>(Entities.Item.Handler.ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
-                var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketIndex>(id)
+                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.BasketItem>(Entities.Item.Handler.ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Basket>(id)
                     .ConfigureAwait(false);
 
                 basket.SubTotal -= item.SubTotal;

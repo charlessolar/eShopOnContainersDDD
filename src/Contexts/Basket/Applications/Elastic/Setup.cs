@@ -47,7 +47,7 @@ namespace eShop.Basket
                             .Number(s => s.Name("Updated").Type(NumberType.Long))
                     )))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Models.ItemIndex).FullName.ToLower(), i => i
+            await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Models.BasketItemIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
@@ -61,7 +61,7 @@ namespace eShop.Basket
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<Basket.Entities.Item.Models.ItemIndex>(map =>
+                .Mappings(mappings => mappings.Map<Basket.Entities.Item.Models.BasketItemIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("BasketId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))

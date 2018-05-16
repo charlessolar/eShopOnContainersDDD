@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-14 03:19:26
+Date: 2018-05-16 05:48:11
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -80,9 +80,11 @@ export module DTOs
         customer: string;
         totalQuantity: number;
         subTotal: number;
+        totalFees: number;
+        totalTaxes: number;
         total: number;
-        created: string;
-        updated: string;
+        created: number;
+        updated: number;
     }
 
     export class CommandResponse
@@ -99,14 +101,19 @@ export module DTOs
     {
     }
 
-    export class Items
+    export class Item
     {
+        id: string;
         basketId: string;
-        itemId: string;
         productId: string;
+        productPictureContents: Uint8Array;
+        productPictureContentType: string;
         productName: string;
+        productDescription: string;
         productPrice: number;
         quantity: number;
+        additionalTaxes: number;
+        additionalFees: number;
         total: number;
     }
 
@@ -564,6 +571,30 @@ export module DTOs
     /**
     * Basket
     */
+    // @Route("/basket", "POST")
+    // @Api(Description="Basket")
+    export class InitiateBasket extends DomainCommand implements IReturn<CommandResponse>
+    {
+        basketId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "InitiateBasket"; }
+    }
+
+    /**
+    * Basket
+    */
+    // @Route("/basket/claim", "POST")
+    // @Api(Description="Basket")
+    export class ClaimBasket extends DomainCommand implements IReturn<CommandResponse>
+    {
+        basketId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "ClaimBasket"; }
+    }
+
+    /**
+    * Basket
+    */
     // @Route("/basket", "DELETE")
     // @Api(Description="Basket")
     export class BasketDestroy extends DomainCommand implements IReturn<CommandResponse>
@@ -578,10 +609,10 @@ export module DTOs
     */
     // @Route("/basket/item", "GET")
     // @Api(Description="Basket")
-    export class GetBasketItems extends Paged<Items> implements IReturn<PagedResponse<Items>>
+    export class GetBasketItems extends Paged<Item> implements IReturn<PagedResponse<Item>>
     {
         basketId: string;
-        createResponse() { return new PagedResponse<Items>(); }
+        createResponse() { return new PagedResponse<Item>(); }
         getTypeName() { return "GetBasketItems"; }
     }
 
@@ -593,9 +624,7 @@ export module DTOs
     export class AddBasketItem extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
-        itemId: string;
         productId: string;
-        quantity: number;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "AddBasketItem"; }
     }
@@ -603,12 +632,12 @@ export module DTOs
     /**
     * Basket
     */
-    // @Route("/basket/item/{ItemId}", "DELETE")
+    // @Route("/basket/item/{ProductId}", "DELETE")
     // @Api(Description="Basket")
     export class RemoveBasketItem extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
-        itemId: string;
+        productId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "RemoveBasketItem"; }
     }
@@ -616,12 +645,12 @@ export module DTOs
     /**
     * Basket
     */
-    // @Route("/basket/item/{ItemId}/quantity", "POST")
+    // @Route("/basket/item/{ProductId}/quantity", "POST")
     // @Api(Description="Basket")
     export class UpdateBasketItemQuantity extends DomainCommand implements IReturn<CommandResponse>
     {
         basketId: string;
-        itemId: string;
+        productId: string;
         quantity: number;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "UpdateBasketItemQuantity"; }
@@ -778,7 +807,7 @@ export module DTOs
     export class SetPictureProduct extends DomainCommand implements IReturn<CommandResponse>
     {
         productId: string;
-        content: Uint8Array;
+        content: string;
         contentType: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "SetPictureProduct"; }

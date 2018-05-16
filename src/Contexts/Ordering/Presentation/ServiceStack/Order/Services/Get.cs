@@ -8,7 +8,7 @@ namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
     [Route("/order/{OrderId}", "GET")]
-    public class GetOrder : Query<Models.Order>
+    public class GetOrder : Query<Models.OrderingOrder>
     {
         public Guid OrderId { get; set; }
     }

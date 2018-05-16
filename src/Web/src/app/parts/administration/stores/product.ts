@@ -17,7 +17,7 @@ import { BrandListType, BrandListModel, BrandType, BrandModel } from '../models/
 import BrandFormView from '../components/brandForm';
 import TypeFormView from '../components/typeForm';
 
-const debug = new Debug('product');
+const debug = new Debug('catalog products');
 
 export interface ProductFormType {
   id: string;

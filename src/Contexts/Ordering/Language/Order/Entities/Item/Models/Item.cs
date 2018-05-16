@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Ordering.Order.Entities.Item.Models
 {
-    public class Item
+    public class OrderingOrderItem
     {
         public Guid Id { get; set; }
         public Guid OrderId { get; set;}

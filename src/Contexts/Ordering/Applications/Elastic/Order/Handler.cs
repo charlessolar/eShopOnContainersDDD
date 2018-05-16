@@ -24,7 +24,7 @@ namespace eShop.Ordering.Order
             var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Models.Buyer>(e.BuyerId)
                 .ConfigureAwait(false);
 
-            var model = new Models.OrderIndex
+            var model = new Models.OrderingOrderIndex
             {
                 Id = e.OrderId,
                 BuyerId = buyer.Id,
@@ -38,7 +38,7 @@ namespace eShop.Ordering.Order
 
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Cancelled.DisplayName;
             order.StatusDescription = Status.Cancelled.Description;
@@ -47,7 +47,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.Confirm e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Confirmed.DisplayName;
             order.StatusDescription = Status.Confirmed.Description;
@@ -56,7 +56,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.Paid e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Paid.DisplayName;
             order.StatusDescription = Status.Paid.Description;
@@ -65,7 +65,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.Shipped e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Shipped.DisplayName;
             order.StatusDescription = Status.Shipped.Description;
@@ -74,7 +74,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.AddressSet e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
             var address = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Buyer.Entities.Address.Models.Address>(e.AddressId).ConfigureAwait(false);
 
@@ -89,7 +89,7 @@ namespace eShop.Ordering.Order
 
         public async Task Handle(Events.PaymentMethodSet e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
             var method = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
