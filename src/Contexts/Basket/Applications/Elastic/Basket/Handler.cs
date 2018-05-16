@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Queries;
 using NServiceBus;
 
 namespace eShop.Basket.Basket
 {
     public class Handler :
+        IHandleQueries<Queries.Baskets>,
         IHandleMessages<Events.Initiated>,
         IHandleMessages<Events.BasketClaimed>,
         IHandleMessages<Events.Destroyed>,
@@ -16,6 +20,15 @@ namespace eShop.Basket.Basket
         IHandleMessages<Entities.Item.Events.QuantityUpdated>,
         IHandleMessages<Catalog.Product.Events.PriceUpdated>
     {
+        public async Task Handle(Queries.Baskets query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.Basket>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
 
         public async Task Handle(Events.Initiated e, IMessageHandlerContext ctx)
         {

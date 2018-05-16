@@ -17,11 +17,18 @@ namespace eShop.Basket.Basket
         }
 
         public Task<object> Any(Services.GetBasket request)
-        {
-            
+        {   
             return _bus.RequestQuery<Queries.Basket, Models.Basket>(new Queries.Basket
             {
                 BasketId = request.BasketId
+            });
+        }
+
+        public Task<object> Any(Services.ListBaskets request)
+        {
+            return _bus.RequestPaged<Queries.Baskets, Models.BasketIndex>(new Queries.Baskets
+            {
+
             });
         }
 
