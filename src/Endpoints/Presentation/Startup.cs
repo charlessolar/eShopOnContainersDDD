@@ -194,7 +194,7 @@ namespace eShop
                 new IAuthProvider[]
                 {
                     new JwtAuthProvider(AppSettings) {
-                        AuthKeyBase64 = AppSettings.GetString("AuthKeyBase64"),
+                        AuthKeyBase64 = AppSettings.GetString("jwt.AuthKeyBase64"),
                         RequireSecureConnection=false },
                     new CredentialsAuthProvider()
                 }));
