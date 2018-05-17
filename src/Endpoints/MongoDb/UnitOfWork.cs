@@ -20,7 +20,6 @@ namespace eShop
     {
         private readonly IMongoCollection<T> _collection;
         private readonly ILogger _logger;
-        private readonly Dictionary<object, T> _retreived;
         private readonly Dictionary<object, T> _pendingSaves;
         private readonly Dictionary<object, T> _pendingUpdates;
         private readonly List<object> _pendingDeletes;
@@ -28,7 +27,6 @@ namespace eShop
         public CommitableCollection(IMongoDatabase database)
         {
             _collection = database.GetCollection<T>($"eshop;{typeof(T).FullName.ToLower()}", new MongoCollectionSettings { AssignIdOnInsert = false });
-            _retreived = new Dictionary<object, T>();
             _pendingSaves = new Dictionary<object, T>();
             _pendingUpdates = new Dictionary<object, T>();
             _pendingDeletes = new List<object>();
@@ -40,8 +38,6 @@ namespace eShop
             if (id == null)
                 return null;
             _logger.DebugEvent("Get", "Retreiving document {Id}", id);
-            if (_retreived.ContainsKey(id))
-                return _retreived[id];
 
             FilterDefinition<T> filter;
             if (id is string)
@@ -57,8 +53,6 @@ namespace eShop
             var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
             if (document == null)
                 _logger.WarnEvent("GetFailure", "Document {Id} was not found", id);
-            else
-                _retreived[id] = document;
             return document;
         }
 

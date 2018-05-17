@@ -16,24 +16,77 @@ import { ItemIndexType as ItemIndexTypeBase, ItemIndexModel as ItemIndexModelBas
 const debug = new Debug('basket item');
 
 export interface ItemIndexType extends ItemIndexTypeBase {
-  updateQuantity: (quantity: number) => void;
+  loading: boolean;
+
+  increaseQuantity: () => Promise<{}>;
+  decreaseQuantity: () => Promise<{}>;
   readonly productPicture?: string;
   readonly formatting?: { [idx: string]: FormatDefinition };
 }
 export const ItemIndexModel = ItemIndexModelBase
-  .actions(self => ({
-    updateQuantity(quantity: number) {
+  .props({
+    loading: types.optional(types.boolean, false)
+  })
+  .actions(self => {
+    const increaseQuantity = flow(function*() {
+      debug('increasing quantity');
+
+      const client = getEnv(self).api as ApiClientType;
       const basket = getParent(self, 2) as BasketType;
-      basket.subTotal -= self.subTotal;
-      basket.totalQuantity -= self.quantity;
 
-      self.quantity = quantity;
-      self.subTotal = self.productPrice * self.quantity;
+      try {
+        const request = new DTOs.UpdateBasketItemQuantity();
 
-      basket.subTotal += self.subTotal;
-      basket.totalQuantity += self.quantity;
-    }
-  }))
+        request.basketId = self.basketId;
+        request.productId = self.productId;
+        request.quantity = self.quantity + 1;
+
+        yield client.command(request);
+
+        basket.subTotal -= self.subTotal;
+        basket.totalQuantity -= self.quantity;
+
+        self.quantity++;
+        self.subTotal = self.productPrice * self.quantity;
+
+        basket.subTotal += self.subTotal;
+        basket.totalQuantity += self.quantity;
+      } catch (error) {
+        debug('received http error: ', error);
+        throw error;
+      }
+    });
+    const decreaseQuantity = flow(function*() {
+      debug('decreasing quantity');
+
+      const client = getEnv(self).api as ApiClientType;
+      const basket = getParent(self, 2) as BasketType;
+
+      try {
+        const request = new DTOs.UpdateBasketItemQuantity();
+
+        request.basketId = self.basketId;
+        request.productId = self.productId;
+        request.quantity = self.quantity - 1;
+
+        yield client.command(request);
+
+        basket.subTotal -= self.subTotal;
+        basket.totalQuantity -= self.quantity;
+
+        self.quantity--;
+        self.subTotal = self.productPrice * self.quantity;
+
+        basket.subTotal += self.subTotal;
+        basket.totalQuantity += self.quantity;
+      } catch (error) {
+        debug('received http error: ', error);
+        throw error;
+      }
+    });
+
+    return { increaseQuantity, decreaseQuantity };
+  })
   .views(self => ({
     get productPicture() {
       if (!self.productPictureContents) {

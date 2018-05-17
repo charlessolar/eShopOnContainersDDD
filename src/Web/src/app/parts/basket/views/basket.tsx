@@ -15,12 +15,12 @@ import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
-import DeleteIcon from '@material-ui/icons/delete';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 import { Using, Formatted, Field } from '../../../components/models';
 import { BasketStoreType, BasketStoreModel } from '../stores/basket';
-
-import QuantityForm from '../components/quantityForm';
 
 interface BasketProps {
   store?: BasketStoreType;
@@ -60,6 +60,12 @@ const styles = (theme: Theme) => ({
     margin: theme.spacing.unit,
     color: theme.palette.primary.light
   },
+  quantityButton: {
+    width: 24,
+    height: 24,
+    color: theme.palette.primary.light,
+    margin: theme.spacing.unit,
+  },
   total: {
     color: theme.palette.error[900]
   }
@@ -84,12 +90,20 @@ const MainView = glamorous('main')({
 });
 
 @observer
-class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appbar' | 'flex' | 'container' | 'table' | 'avatar' | 'row' | 'button' | 'total'>, {}> {
+class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appbar' | 'flex' | 'container' | 'table' | 'avatar' | 'row' | 'button' | 'total' | 'quantityButton'>, {}> {
 
   public render() {
     const { store, classes } = this.props;
 
-    const items = Array.from(store.items.values());
+    const items = Array.from(store.items.values()).sort((a, b) => {
+      if (a.productId < b.productId) {
+        return -1;
+      }
+      if (a.productId > b.productId) {
+        return 1;
+      }
+      return 0;
+    });
     return (
       <Using model={store.basket}>
         <AppView>
@@ -130,7 +144,7 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
                                 <ListItem>
                                   <ListItemIcon>
                                     <Tooltip title='Delete Item'>
-                                      <IconButton className={classes.button} color='primary' area-label='Delete Item' onClick={() => store.removeItem(i)}>
+                                      <IconButton className={classes.button} color='primary' area-label='Delete Item' disabled={i.loading} onClick={() => store.removeItem(i)}>
                                         <DeleteIcon />
                                       </IconButton>
                                     </Tooltip>
@@ -145,8 +159,17 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
                                 </Typography>
                               </TableCell>
                               <TableCell numeric>
+                                <Tooltip title='Decrease Quantity'>
+                                  <IconButton className={classes.quantityButton} color='primary' area-label='Decrease Quantity' disabled={i.loading || i.quantity === 1 } onClick={() => i.decreaseQuantity()}>
+                                    <RemoveIcon />
+                                  </IconButton>
+                                </Tooltip>
                                 <Formatted field='quantity' />
-                                <QuantityForm item={i}/>
+                                <Tooltip title='Increase Quantity'>
+                                  <IconButton className={classes.quantityButton} color='primary' area-label='Increase Quantity' disabled={i.loading} onClick={() => i.increaseQuantity()}>
+                                    <AddIcon />
+                                  </IconButton>
+                                </Tooltip>
                               </TableCell>
                               <TableCell numeric>
                                 <Typography variant='title' color='primary'>
