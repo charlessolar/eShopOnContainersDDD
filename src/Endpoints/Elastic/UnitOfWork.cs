@@ -109,6 +109,8 @@ namespace eShop
         public async Task<T> Get<T>(string id) where T : class
         {
             _logger.DebugEvent("Get", "Object {Object} Document {Id}", typeof(T).FullName, id);
+            if (string.IsNullOrEmpty(id))
+                return null;
 
             var response = await _client.GetAsync<T>(new GetRequest<T>(typeof(T).FullName.ToLower(), typeof(T).FullName, id)).ConfigureAwait(false);
             if (!response.Found)
@@ -124,6 +126,9 @@ namespace eShop
 
         public Task<T> Get<T>(Guid id) where T : class
         {
+            if (id == Guid.Empty)
+                return null;
+
             return Get<T>(id.ToString());
         }
 
