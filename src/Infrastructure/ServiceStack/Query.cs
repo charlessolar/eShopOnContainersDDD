@@ -12,6 +12,7 @@ namespace Infrastructure.ServiceStack
     {
         public long RoundTripMs { get; set; }
         public T Payload { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
     }
 
     public class Paged<T> : IReturn<PagedResponse<T>>
@@ -23,5 +24,6 @@ namespace Infrastructure.ServiceStack
         public long RoundTripMs { get; set; }
         public long Total { get; set; }
         public T[] Records { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
     }
 }

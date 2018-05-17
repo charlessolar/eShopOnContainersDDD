@@ -8,7 +8,7 @@ BaseUrl: http://10.0.0.201:8080
 //GlobalNamespace: DTOs
 //MakePropertiesOptional: True
 //AddServiceStackTypes: True
-AddResponseStatus: True
+//AddResponseStatus: False
 //AddImplicitVersion:
 //AddDescriptionAsComments: True
 //IncludeTypes:

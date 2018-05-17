@@ -66,6 +66,10 @@ export const BasketModel = types
 
         applySnapshot(self.basket, response.payload);
       } catch (error) {
+        // 'forget' basket
+        self.basketId = undefined;
+        self.basket = undefined;
+        self.totalItems = 0;
         debug('received http error: ', error);
         throw error;
       }

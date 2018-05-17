@@ -156,7 +156,7 @@ const ApiClient = types.model(
         const response = yield client.get(request);
         self.loading = false;
 
-        if (response.responseStatus.errorCode) {
+        if (response.responseStatus && response.responseStatus.errorCode) {
           const status = response.responseStatus;
           throw new Error('error: ' + status.errorCode + ' - ' + status.message);
         }
@@ -164,6 +164,7 @@ const ApiClient = types.model(
       } catch (error) {
         debug('failed to execute query: ', error);
         self.loading = false;
+        throw error;
       }
     });
     const paged = flow(function*<T>(request: DTOs.IReturn<DTOs.PagedResponse<T>>) {
@@ -172,7 +173,7 @@ const ApiClient = types.model(
         const response = yield client.get(request);
         self.loading = false;
 
-        if (response.responseStatus.errorCode) {
+        if (response.responseStatus && response.responseStatus.errorCode) {
           const status = response.responseStatus;
           throw new Error('error: ' + status.errorCode + ' - ' + status.message);
         }
@@ -180,6 +181,7 @@ const ApiClient = types.model(
       } catch (error) {
         debug('failed to execute paged query: ', error);
         self.loading = false;
+        throw error;
       }
     });
     const command = flow(function*<T>(request: DTOs.IReturn<DTOs.CommandResponse>) {
@@ -188,7 +190,7 @@ const ApiClient = types.model(
         const response = yield client.post(request);
         self.loading = false;
 
-        if (response.responseStatus.errorCode) {
+        if (response.responseStatus && response.responseStatus.errorCode) {
           const status = response.responseStatus;
           throw new Error('error: ' + status.errorCode + ' - ' + status.message);
         }
@@ -196,6 +198,7 @@ const ApiClient = types.model(
       } catch (error) {
         debug('failed to execute command: ', error);
         self.loading = false;
+        throw error;
       }
     });
 

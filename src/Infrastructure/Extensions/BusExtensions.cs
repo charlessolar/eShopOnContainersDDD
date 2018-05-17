@@ -139,6 +139,9 @@ namespace Infrastructure.Extensions
             if (!response.IsCompleted)
                 throw new CommandTimeoutException("Request timed out");
 
+            if (response.Result.Payload == null)
+                throw new QueryRejectedException("No results for query");
+
             return response.Result.RequestQuery<TResponse>();
         }
     }
