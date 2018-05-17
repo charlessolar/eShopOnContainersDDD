@@ -155,6 +155,11 @@ const ApiClient = types.model(
       try {
         const response = yield client.get(request);
         self.loading = false;
+
+        if (response.responseStatus.errorCode) {
+          const status = response.responseStatus;
+          throw new Error('error: ' + status.errorCode + ' - ' + status.message);
+        }
         return response;
       } catch (error) {
         debug('failed to execute query: ', error);
@@ -166,6 +171,11 @@ const ApiClient = types.model(
       try {
         const response = yield client.get(request);
         self.loading = false;
+
+        if (response.responseStatus.errorCode) {
+          const status = response.responseStatus;
+          throw new Error('error: ' + status.errorCode + ' - ' + status.message);
+        }
         return response;
       } catch (error) {
         debug('failed to execute paged query: ', error);
@@ -177,6 +187,11 @@ const ApiClient = types.model(
       try {
         const response = yield client.post(request);
         self.loading = false;
+
+        if (response.responseStatus.errorCode) {
+          const status = response.responseStatus;
+          throw new Error('error: ' + status.errorCode + ' - ' + status.message);
+        }
         return response;
       } catch (error) {
         debug('failed to execute command: ', error);

@@ -21,6 +21,9 @@ namespace eShop.Identity.User
         public Task<object> Any(Services.GetIdentity request)
         {
             var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new InvalidOperationException("Not logged in");
+            
             return _bus.RequestQuery<Queries.Identity, Models.User>(new Queries.Identity
             {
                 UserName = session.UserName

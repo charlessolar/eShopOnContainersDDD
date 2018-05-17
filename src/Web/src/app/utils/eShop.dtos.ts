@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-16 19:43:48
+Date: 2018-05-16 23:59:01
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -8,7 +8,7 @@ BaseUrl: http://10.0.0.201:8080
 //GlobalNamespace: DTOs
 //MakePropertiesOptional: True
 //AddServiceStackTypes: True
-//AddResponseStatus: False
+AddResponseStatus: True
 //AddImplicitVersion:
 //AddDescriptionAsComments: True
 //IncludeTypes:
@@ -178,6 +178,15 @@ export module DTOs
         onReorder: boolean;
         pictureContents: Uint8Array;
         pictureContentType: string;
+    }
+
+    export class User
+    {
+        id: string;
+        givenName: string;
+        disabled: boolean;
+        roles: string[];
+        lastLogin: number;
     }
 
     export class StampedCommand
@@ -415,6 +424,7 @@ export module DTOs
     {
         roundTripMs: number;
         payload: T;
+        responseStatus: ResponseStatus;
     }
 
     export class PagedResponse<T>
@@ -422,6 +432,7 @@ export module DTOs
         roundTripMs: number;
         total: number;
         records: T[];
+        responseStatus: ResponseStatus;
     }
 
     // @Route("/auth")
@@ -907,9 +918,9 @@ export module DTOs
     */
     // @Route("/identity/user", "GET")
     // @Api(Description="Identity")
-    export class GetIdentity extends DomainCommand implements IReturn<CommandResponse>
+    export class GetIdentity extends Query<User> implements IReturn<QueryResponse<User>>
     {
-        createResponse() { return new CommandResponse(); }
+        createResponse() { return new QueryResponse<User>(); }
         getTypeName() { return "GetIdentity"; }
     }
 
@@ -918,8 +929,10 @@ export module DTOs
     */
     // @Route("/identity/users", "GET")
     // @Api(Description="Identity")
-    export class GetUsers
+    export class GetUsers extends Paged<User> implements IReturn<PagedResponse<User>>
     {
+        createResponse() { return new PagedResponse<User>(); }
+        getTypeName() { return "GetUsers"; }
     }
 
     /**
