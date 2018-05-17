@@ -91,7 +91,7 @@ namespace eShop.Catalog.Import
                     await _bus.CommandToDomain(new Product.Commands.SetPicture
                     {
                         ProductId = product.Id,
-                        Content = memory.ToArray(),
+                        Content = Convert.ToBase64String(memory.ToArray()),
                         ContentType = "image/png"
                     }).ConfigureAwait(false);
                 }

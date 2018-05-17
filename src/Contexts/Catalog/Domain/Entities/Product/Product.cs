@@ -20,7 +20,7 @@ namespace eShop.Catalog.Product
             });
         }
 
-        public void SetPicture(byte[] content, string contentType)
+        public void SetPicture(string content, string contentType)
         {
             Apply<Events.PictureSet>(x =>
             {

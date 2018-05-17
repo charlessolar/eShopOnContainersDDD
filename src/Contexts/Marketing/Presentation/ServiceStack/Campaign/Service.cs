@@ -68,7 +68,7 @@ namespace eShop.Marketing.Campaign
             await _bus.CommandToDomain(new Commands.SetPicture
             {
                 CampaignId = request.CampaignId,
-                Content = image.Data,
+                Content = Convert.ToBase64String(image.Data),
                 ContentType = image.Type
             }).ConfigureAwait(false);
         }

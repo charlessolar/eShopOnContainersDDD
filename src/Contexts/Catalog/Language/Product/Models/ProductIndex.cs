@@ -25,7 +25,7 @@ namespace eShop.Catalog.Product.Models
 
         public bool OnReorder { get; set; }
 
-        public byte[] PictureContents { get; set; }
+        public string PictureContents { get; set; }
         public string PictureContentType { get; set; }
     }
 }

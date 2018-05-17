@@ -162,10 +162,10 @@ namespace eShop
 
         public override void Configure(Funq.Container container)
         {
-            JsConfig.IncludeNullValues = true;
             JsConfig.AlwaysUseUtc = true;
             JsConfig.AssumeUtc = true;
             JsConfig.TreatEnumAsInteger = true;
+            JsConfig.IncludeNullValues = false;
             JsConfig.DateHandler = DateHandler.ISO8601;
 
             if (!AppSettings.Exists("ServiceStackLicense"))

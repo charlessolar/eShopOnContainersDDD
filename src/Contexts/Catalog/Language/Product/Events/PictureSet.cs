@@ -9,7 +9,7 @@ namespace eShop.Catalog.Product.Events
     {
         Guid ProductId { get; set; }
 
-        byte[] Content { get; set; }
+        string Content { get; set; }
         string ContentType { get; set; }
     }
 }

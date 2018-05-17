@@ -141,7 +141,7 @@ namespace Infrastructure.Extensions
 
             if (response.Result.Payload == null)
                 throw new QueryRejectedException("No results for query");
-
+            
             return response.Result.RequestQuery<TResponse>();
         }
     }
