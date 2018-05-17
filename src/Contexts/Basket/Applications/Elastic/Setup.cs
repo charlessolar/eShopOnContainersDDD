@@ -8,7 +8,7 @@ using Nest;
 
 namespace eShop.Basket
 {
-    [Category("Catalog")]
+    [Category("Basket")]
     public class Setup : ISetup
     {
         private readonly IElasticClient _client;

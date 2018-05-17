@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Contexts\Basket\Applications\Elastic\Basket.Applications.Elastic.csproj" />
     <ProjectReference Include="..\..\Contexts\Catalog\Applications\Elastic\Catalog.Applications.Elastic.csproj" />
     <ProjectReference Include="..\..\Contexts\Identity\Applications\Elastic\Identity.Applications.Elastic.csproj" />
     <ProjectReference Include="..\..\Contexts\Location\Applications\Elastic\Location.Applications.Elastic.csproj" />
