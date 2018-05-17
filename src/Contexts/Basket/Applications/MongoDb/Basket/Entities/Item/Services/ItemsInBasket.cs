@@ -41,7 +41,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
 
         public async Task Handle(Item.Events.ItemRemoved e, IMessageHandlerContext ctx)
         {
-            var basketitems = await ctx.App<Infrastructure.IUnitOfWork>().Get<ItemsBasket>(e.ProductId)
+            var basketitems = await ctx.App<Infrastructure.IUnitOfWork>().Get<ItemsBasket>(e.BasketId)
                 .ConfigureAwait(false);
 
             basketitems.Items = basketitems.Items.TryRemove(e.ProductId);

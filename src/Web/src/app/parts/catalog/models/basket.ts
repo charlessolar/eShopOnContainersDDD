@@ -13,7 +13,7 @@ import { ApiClientType } from '../../../stores';
 import { ProductType } from '../../../models/catalog/products';
 import { BasketType as BasketTypeBase, BasketModel as BasketModelBase } from '../../../models/basket/baskets';
 
-const debug = new Debug('basket');
+const debug = new Debug('catalog basket');
 
 export interface BasketType {
   basketId: string;
@@ -50,6 +50,8 @@ export const BasketModel = types
       }
     });
     const get = flow(function*() {
+      debug('getting basket items');
+
       const client = getEnv(self).api as ApiClientType;
 
       if (!self.basketId) {
@@ -64,7 +66,11 @@ export const BasketModel = types
 
         const response: DTOs.QueryResponse<DTOs.Basket> = yield client.query(request);
 
-        applySnapshot(self.basket, response.payload);
+        if (!self.basket) {
+          self.basket = BasketModelBase.create(response.payload);
+        } else {
+          applySnapshot(self.basket, response.payload);
+        }
       } catch (error) {
         // 'forget' basket
         self.basketId = undefined;

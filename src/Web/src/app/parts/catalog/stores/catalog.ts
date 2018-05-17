@@ -1,4 +1,5 @@
 import { types, flow, getEnv, getParent, applySnapshot, getSnapshot } from 'mobx-state-tree';
+import { History } from 'history';
 import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
@@ -31,6 +32,7 @@ export interface CatalogStoreType {
   readonly form: {[idx: string]: FieldDefinition};
   get: () => Promise<{}>;
   addToBasket: (product: ProductType) => Promise<{}>;
+  openBasket: () => void;
 }
 export const CatalogStoreModel = types
   .model('CatalogStore',
@@ -73,6 +75,7 @@ export const CatalogStoreModel = types
   }))
   .actions(self => {
     const get = flow(function*() {
+
       const request = new DTOs.Catalog();
 
       if (self.catalogBrand) {
@@ -103,6 +106,10 @@ export const CatalogStoreModel = types
     const addToBasket = flow(function*(product: ProductType) {
       yield self.basket.addToCart(product);
     });
+    const openBasket = () => {
+      const history = getEnv(self).history as History;
+      history.push('/basket');
+    };
 
-    return { get, addToBasket };
+    return { get, addToBasket, openBasket };
   });

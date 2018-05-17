@@ -19,7 +19,7 @@ export class CatalogModule {
           title: 'Catalog',
           component: (
             <AsyncView
-              actionStore={(store: StoreType) => CatalogStoreModel.create({}, { api: store.api })}
+              actionStore={(store: StoreType) => CatalogStoreModel.create({}, { api: store.api, history: store.history })}
               action={(store: CatalogStoreType) => store.get()}
               loading={(store: CatalogStoreType) => store.loading}
               getComponent={() => import('./views/catalog')}

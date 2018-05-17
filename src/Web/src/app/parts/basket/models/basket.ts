@@ -11,7 +11,6 @@ import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
 import { BasketType as BasketTypeBase, BasketModel as BasketModelBase } from '../../../models/basket/baskets';
-import { ItemIndexType as ItemIndexTypeBase, ItemIndexModel as ItemIndexModelBase } from '../../../models/basket/items';
 
 const debug = new Debug('basket');
 
@@ -39,40 +38,6 @@ export const BasketModel = BasketModelBase
           normalize: 2
         },
         totalTaxes: {
-          currency: true,
-          normalize: 2
-        },
-        total: {
-          currency: true,
-          normalize: 2
-        }
-      });
-    },
-  }));
-
-export interface ItemIndexType extends ItemIndexTypeBase {
-  readonly productPicture?: string;
-  readonly formatting?: { [idx: string]: FormatDefinition };
-}
-export const ItemIndexModel = ItemIndexModelBase
-  .views(self => ({
-    get productPicture() {
-      if (!self.productPictureContents) {
-        return;
-      }
-      return 'data:' + self.productPictureContentType + ';base64,' + self.productPictureContents;
-    },
-    get formatting() {
-      return ({
-        productPrice: {
-          currency: true,
-          normalize: 2
-        },
-        subTotal: {
-          currency: true,
-          normalize: 2
-        },
-        additional: {
           currency: true,
           normalize: 2
         },

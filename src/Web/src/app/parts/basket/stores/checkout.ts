@@ -9,7 +9,8 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { ItemIndexType, ItemIndexModel, BasketType, BasketModel } from '../models/basket';
+import { BasketType, BasketModel } from '../models/basket';
+import { ItemIndexType, ItemIndexModel } from '../models/items';
 
 const debug = new Debug('checkout');
 

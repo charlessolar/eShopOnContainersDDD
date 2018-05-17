@@ -68,6 +68,24 @@ const styles = (theme: Theme) => ({
   }
 });
 
+const AppView = glamorous('div')((_) => ({
+  flex: '1 1 auto',
+  width: '100vw',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+}));
+const MainView = glamorous('main')({
+  'width': '75vw',
+  'flex': '1',
+  'marginTop': 20,
+  '@media(max-width: 600px)': {
+    margin: 10
+  }
+});
+
 @observer
 class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'appbar' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card' | 'selectors' | 'controls' | 'dropdowns' | 'badge'>, {}> {
 
@@ -75,27 +93,14 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
     const { store } = this.props;
     store.get();
   }
+  private openBasket = () => {
+    const { store } = this.props;
+
+    store.openBasket();
+  }
 
   public render() {
     const { store, classes } = this.props;
-
-    const AppView = glamorous('div')((_) => ({
-      flex: '1 1 auto',
-      width: '100vw',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'auto',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }));
-    const MainView = glamorous('main')({
-      'width': '75vw',
-      'flex': '1',
-      'marginTop': 20,
-      '@media(max-width: 600px)': {
-        margin: 10
-      }
-    });
 
     const products = Array.from(store.products.values());
     return (
@@ -114,7 +119,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
                   <Button className={classes.button} variant='raised' size='small' color='primary' onClick={this.pullProducts}><KeyboardArrowRight /></Button>
                 </div>
               </div>
-              <IconButton className={classes.badge}>
+              <IconButton className={classes.badge} onClick={this.openBasket}>
                 <Badge color='primary' badgeContent={store.basketItems}>
                   <BasketIcon/>
                 </Badge>
@@ -125,7 +130,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
         <MainView>
           {products.length === 0 ?
             <Grid container justify='center'>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <Typography variant='display3' className={classes.noProduct}>No products found</Typography>
               </Grid>
             </Grid>

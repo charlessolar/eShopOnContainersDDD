@@ -19,8 +19,8 @@ export interface BasketType {
 export const BasketModel = types
   .model('Basket_Basket', {
     id: types.identifier(types.string),
-    customerId: types.string,
-    customer: types.string,
+    customerId: types.optional(types.string, ''),
+    customer:  types.optional(types.string, ''),
     totalItems: types.number,
     totalQuantity: types.number,
     subTotal: types.number,
@@ -46,8 +46,8 @@ export interface BasketIndexType {
 export const BasketIndexModel = types
   .model('Basket_BasketIndex', {
     id: types.identifier(types.string),
-    customerId: types.string,
-    customer: types.string,
+    customerId:  types.optional(types.string, ''),
+    customer: types.optional(types.string, ''),
     totalItems: types.number,
     totalQuantity: types.number,
     subTotal: types.number,

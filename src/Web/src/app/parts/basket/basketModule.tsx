@@ -20,9 +20,8 @@ export class BasketModule {
           title: 'Basket',
           component: (
             <AsyncView
-              actionStore={(store: StoreType) => BasketStoreModel.create({}, { api: store.api })}
+              actionStore={(store: StoreType) => BasketStoreModel.create({}, { api: store.api, history: store.history })}
               action={(store: BasketStoreType) => store.get()}
-              loading={(store: BasketStoreType) => store.loading}
               getComponent={() => import('./views/basket')}
             />
           )
@@ -34,7 +33,7 @@ export class BasketModule {
           title: 'Checkout',
           component: (
             <AsyncView
-              actionStore={(store: StoreType) => CheckoutStoreModel.create({}, { api: store.api })}
+              actionStore={(store: StoreType) => CheckoutStoreModel.create({}, { api: store.api, history: store.history })}
               action={(store: CheckoutStoreType) => store.get()}
               loading={(store: CheckoutStoreType) => store.loading}
               getComponent={() => import('./views/checkout')}

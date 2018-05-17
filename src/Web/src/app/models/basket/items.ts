@@ -24,7 +24,7 @@ export interface ItemType {
 
 export const ItemModel = types
   .model('Basket_Basket_Item', {
-    id: types.string,
+    id: types.identifier(types.string),
     basketId: types.string,
     productId: types.string,
 
@@ -62,7 +62,7 @@ export interface ItemIndexType {
 
 export const ItemIndexModel = types
   .model('Basket_Basket_ItemIndex', {
-    id: types.string,
+    id: types.identifier(types.string),
     basketId: types.string,
     productId: types.string,
 

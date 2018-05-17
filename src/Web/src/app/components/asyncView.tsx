@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observable, action, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
-import { IModelType } from 'mobx-state-tree';
+import { IModelType, destroy } from 'mobx-state-tree';
 
 import Fade from 'material-ui/transitions/Fade';
 import { CircularProgress } from 'material-ui/Progress';
@@ -106,6 +106,15 @@ export default class AsyncView extends React.Component<AsyncViewProps, AsyncView
     const { store, existingStore } = this.props;
 
     this._asyncStore.loadComponent(store || existingStore, this.props.action, this.props.component, this.props.getComponent);
+  }
+  public componentWillUnmount() {
+    const { store } = this.props;
+
+    if (store) {
+      // don't destroy the store as any active promise will throw exceptions
+      // https://github.com/mobxjs/mobx-state-tree/issues/792
+      // destroy(store);
+    }
   }
 
   public render() {
