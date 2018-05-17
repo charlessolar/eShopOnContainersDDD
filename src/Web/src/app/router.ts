@@ -23,20 +23,21 @@ export function createRouter(store: StoreType, modules: Modules) {
     const { pathname } = routerContext;
     debug('isSetup', store.status.isSetup);
     if (!store.status.isSetup && !pathname.startsWith('/seed')) {
-      setTimeout(() => store.history.push('/seed'), 1);
+      setTimeout(() => store.history.push('/seed'), 100);
       throw new Error('redirect');
     }
   }
 
   const routes: UniversalRouterRoute = {
     path: '',
-    action: async (routerContext) => {
-      isSetup(routerContext);
+    action: (routerContext) => {
+      const { pathname } = routerContext;
+      debug('isSetup', store.status.isSetup);
+      if (!store.status.isSetup && !pathname.startsWith('/seed')) {
+        return { redirect: '/seed' };
+      }
     },
     children: [
-      {
-        path: '',
-      },
       ...modules.auth.routes,
       ...modules.catalog.routes,
       ...modules.configuration.routes,
@@ -50,7 +51,10 @@ export function createRouter(store: StoreType, modules: Modules) {
       const { route } = routerContext;
 
       if (typeof route.action === 'function') {
-        route.action(routerContext, params);
+        const result = route.action(routerContext, params);
+        if (result) {
+          return result;
+        }
       }
 
       if (route.path !== '' && !route.path.startsWith('/login')) {

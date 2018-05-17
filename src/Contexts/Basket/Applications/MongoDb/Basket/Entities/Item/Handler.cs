@@ -48,7 +48,7 @@ namespace eShop.Basket.Basket.Entities.Item
 
             item.Quantity = e.Quantity;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.ProductId, item).ConfigureAwait(false);
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(ItemIdGenerator(e.BasketId, e.ProductId), item).ConfigureAwait(false);
         }
 
         public async Task Handle(Catalog.Product.Events.DescriptionUpdated e, IMessageHandlerContext ctx)

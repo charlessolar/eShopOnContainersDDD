@@ -39,6 +39,10 @@ export class Client {
       route = await createRouter(this._store, this._modules).resolve({
         pathname: location.pathname
       });
+      if (route.redirect) {
+        this._store.history.push(route.redirect);
+        return;
+      }
       component = route.component;
     } catch (error) {
       debug('routing exception', error);
