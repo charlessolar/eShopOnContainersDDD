@@ -25,7 +25,7 @@ namespace eShop.Ordering.Order
         {
             var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Models.Basket>(e.OrderId)
                 .ConfigureAwait(false);
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Models.Buyer>(e.UserName)
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Models.OrderingBuyer>(e.UserName)
                 .ConfigureAwait(false);
 
             var address = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.Address.Models.Address>(e.AddressId).ConfigureAwait(false);

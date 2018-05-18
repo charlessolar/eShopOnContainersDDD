@@ -8,7 +8,7 @@ namespace eShop.Ordering.Buyer.Services
 {
     [Api("Ordering")]
     [Route("/buyer", "GET")]
-    public class Buyer : Query<Models.Buyer>
+    public class Buyer : Query<Models.OrderingBuyer>
     {
         public string UserName { get; set; }
     }

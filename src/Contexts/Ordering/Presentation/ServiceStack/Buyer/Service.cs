@@ -20,7 +20,7 @@ namespace eShop.Ordering.Buyer
 
         public Task<object> Any(Services.Buyers request)
         {
-            return _bus.RequestPaged<Queries.Buyers, Models.BuyerIndex>(new Queries.Buyers
+            return _bus.RequestPaged<Queries.Buyers, Models.OrderingBuyerIndex>(new Queries.Buyers
             {
             });
         }
@@ -31,7 +31,7 @@ namespace eShop.Ordering.Buyer
             if (!session.IsAuthenticated)
                 throw new HttpError("not logged in");
 
-            return _bus.RequestQuery<Queries.Buyer, Models.Buyer>(new Queries.Buyer
+            return _bus.RequestQuery<Queries.Buyer, Models.OrderingBuyer>(new Queries.Buyer
             {
                 UserName = session.UserName,
             });

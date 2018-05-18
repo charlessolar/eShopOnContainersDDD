@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Ordering.Buyer.Models
 {
-    public class Buyer
+    public class OrderingBuyer
     {
         public string UserName { get; set; }
         public string GivenName { get; set; }
