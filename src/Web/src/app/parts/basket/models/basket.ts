@@ -29,13 +29,11 @@ export const BasketModel = BasketModelBase
       self.totalItems--;
       self.totalQuantity -= item.quantity;
       self.subTotal -= item.subTotal;
-      self.total -= item.total;
     },
     additionItem(item: ItemIndexType) {
       self.totalItems++;
       self.totalQuantity += item.quantity;
       self.subTotal += item.subTotal;
-      self.total += item.total;
     }
   }))
   .views(self => ({

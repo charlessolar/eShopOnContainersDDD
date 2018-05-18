@@ -17,9 +17,6 @@ export interface ItemType {
   quantity: number;
 
   subTotal: number;
-  additionalTaxes: number;
-  additionalFees: number;
-  total: number;
 }
 
 export const ItemModel = types
@@ -37,9 +34,6 @@ export const ItemModel = types
     quantity: types.number,
 
     subTotal: types.number,
-    additionalTaxes: types.number,
-    additionalFees: types.number,
-    total: types.number
   });
 
 export interface ItemIndexType {
@@ -56,8 +50,6 @@ export interface ItemIndexType {
   quantity: number;
 
   subTotal: number;
-  additional: number;
-  total: number;
 }
 
 export const ItemIndexModel = types
@@ -74,7 +66,5 @@ export const ItemIndexModel = types
     productPrice: types.number,
     quantity: types.number,
 
-    subTotal: types.number,
-    additional: types.number,
-    total: types.number
+    subTotal: types.number
   });

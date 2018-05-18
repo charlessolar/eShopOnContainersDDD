@@ -10,9 +10,6 @@ export interface BasketType {
   totalItems: number;
   totalQuantity: number;
   subTotal: number;
-  totalFees: number;
-  totalTaxes: number;
-  total: number;
   created: number;
   updated: number;
 }
@@ -24,9 +21,6 @@ export const BasketModel = types
     totalItems: types.number,
     totalQuantity: types.number,
     subTotal: types.number,
-    totalFees: types.number,
-    totalTaxes: types.number,
-    total: types.number,
     created: types.number,
     updated: types.number
   });
@@ -38,8 +32,6 @@ export interface BasketIndexType {
   totalItems: number;
   totalQuantity: number;
   subTotal: number;
-  extraTotal: number;
-  total: number;
   created: number;
   updated: number;
 }
@@ -51,8 +43,6 @@ export const BasketIndexModel = types
     totalItems: types.number,
     totalQuantity: types.number,
     subTotal: types.number,
-    extraTotal: types.number,
-    total: types.number,
     created: types.number,
     updated: types.number
   });

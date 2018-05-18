@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-16 23:59:01
+Date: 2018-05-18 04:57:40
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -81,9 +81,6 @@ export module DTOs
         totalItems: number;
         totalQuantity: number;
         subTotal: number;
-        totalFees: number;
-        totalTaxes: number;
-        total: number;
         created: number;
         updated: number;
     }
@@ -100,8 +97,6 @@ export module DTOs
         totalItems: number;
         totalQuantity: number;
         subTotal: number;
-        extraTotal: number;
-        total: number;
         created: number;
         updated: number;
     }
@@ -121,15 +116,13 @@ export module DTOs
         id: string;
         basketId: string;
         productId: string;
-        productPictureContents: Uint8Array;
+        productPictureContents: string;
         productPictureContentType: string;
         productName: string;
         productDescription: string;
         productPrice: number;
         quantity: number;
         subTotal: number;
-        additional: number;
-        total: number;
     }
 
     export class CatalogBrand
@@ -158,7 +151,7 @@ export module DTOs
         restockThreshold: number;
         maxStockThreshold: number;
         onReorder: boolean;
-        pictureContents: Uint8Array;
+        pictureContents: string;
         pictureContentType: string;
     }
 
@@ -176,7 +169,7 @@ export module DTOs
         restockThreshold: number;
         maxStockThreshold: number;
         onReorder: boolean;
-        pictureContents: Uint8Array;
+        pictureContents: string;
         pictureContentType: string;
     }
 
@@ -209,20 +202,38 @@ export module DTOs
         description: string;
         start: string;
         end: string;
-        pictureContents: Uint8Array;
+        pictureContents: string;
         pictureContentType: string;
     }
 
-    export class Buyer
+    export class OrderingBuyerIndex
     {
         id: string;
         givenName: string;
+        goodStanding: boolean;
+        totalSpent: number;
+        preferredCity: string;
+        preferredState: string;
+        preferredCountry: string;
+        preferredZipCode: string;
+        preferredPaymentCardholder: string;
+        preferredPaymentMethod: string;
+        preferredPaymentExpiration: string;
+    }
+
+    export class OrderingBuyer
+    {
+        id: string;
+        givenName: string;
+        goodStanding: boolean;
+        preferredAddressId: string;
+        preferredPaymentMethodId: string;
     }
 
     export class Address
     {
         id: string;
-        buyerId: string;
+        userName: string;
         street: string;
         city: string;
         state: string;
@@ -233,7 +244,7 @@ export module DTOs
     export class PaymentMethod
     {
         id: string;
-        buyerId: string;
+        userName: string;
         alias: string;
         cardNumber: string;
         securityNumber: string;
@@ -247,7 +258,7 @@ export module DTOs
         id: string;
         status: string;
         statusDescription: string;
-        buyerId: string;
+        userName: string;
         buyerName: string;
         addressId: string;
         address: string;
@@ -256,9 +267,13 @@ export module DTOs
         country: string;
         paymentMethodId: string;
         paymentMethod: string;
-        quantity: number;
+        totalItems: number;
+        totalQuantity: number;
         subTotal: number;
+        additionalFees: number;
+        additionalTaxes: number;
         total: number;
+        paid: boolean;
     }
 
     export class OrderingOrderIndex
@@ -266,7 +281,7 @@ export module DTOs
         id: string;
         status: string;
         statusDescription: string;
-        buyerId: string;
+        userName: string;
         buyerName: string;
         addressId: string;
         address: string;
@@ -275,9 +290,12 @@ export module DTOs
         country: string;
         paymentMethodId: string;
         paymentMethod: string;
-        quantity: number;
+        totalItems: number;
+        totalQuantity: number;
         subTotal: number;
+        additional: number;
         total: number;
+        paid: boolean;
     }
 
     export class OrderingOrderItem
@@ -285,9 +303,17 @@ export module DTOs
         id: string;
         orderId: string;
         productId: string;
+        productPictureContents: string;
+        productPictureContentType: string;
         productName: string;
+        productDescription: string;
         productPrice: number;
+        price: number;
         quantity: number;
+        subTotal: number;
+        additionalFees: number;
+        additionalTaxes: number;
+        total: number;
     }
 
     export class ConfigurationStatus
@@ -1263,12 +1289,24 @@ export module DTOs
     /**
     * Ordering
     */
+    // @Route("/buyers", "GET")
+    // @Api(Description="Ordering")
+    export class Buyers extends Paged<OrderingBuyerIndex> implements IReturn<PagedResponse<OrderingBuyerIndex>>
+    {
+        createResponse() { return new PagedResponse<OrderingBuyerIndex>(); }
+        getTypeName() { return "Buyers"; }
+    }
+
+    /**
+    * Ordering
+    */
     // @Route("/buyer", "GET")
     // @Api(Description="Ordering")
-    export class Buyers extends Paged<Buyer> implements IReturn<PagedResponse<Buyer>>
+    export class Buyer extends Query<OrderingBuyer> implements IReturn<QueryResponse<OrderingBuyer>>
     {
-        createResponse() { return new PagedResponse<Buyer>(); }
-        getTypeName() { return "Buyers"; }
+        userName: string;
+        createResponse() { return new QueryResponse<OrderingBuyer>(); }
+        getTypeName() { return "Buyer"; }
     }
 
     /**
@@ -1276,22 +1314,69 @@ export module DTOs
     */
     // @Route("/buyer", "POST")
     // @Api(Description="Ordering")
-    export class CreateBuyer extends DomainCommand implements IReturn<CommandResponse>
+    export class InitiateBuyer extends DomainCommand implements IReturn<CommandResponse>
     {
-        buyerId: string;
-        givenName: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "CreateBuyer"; }
+        getTypeName() { return "InitiateBuyer"; }
     }
 
     /**
     * Ordering
     */
-    // @Route("/buyer/{BuyerId}/address", "GET")
+    // @Route("/buyer/{UserName}/good", "POST")
+    // @Api(Description="Ordering")
+    export class MarkGoodStanding extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userName: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "MarkGoodStanding"; }
+    }
+
+    /**
+    * Ordering
+    */
+    // @Route("/buyer/{UserName}/suspend", "POST")
+    // @Api(Description="Ordering")
+    export class MarkSuspended extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userName: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "MarkSuspended"; }
+    }
+
+    /**
+    * Ordering
+    */
+    // @Route("/buyer/{UserName}/preferred_address", "POST")
+    // @Api(Description="Ordering")
+    export class SetPreferredAddress extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userName: string;
+        addressId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "SetPreferredAddress"; }
+    }
+
+    /**
+    * Ordering
+    */
+    // @Route("/buyer/{UserName}/preferred_payment", "POST")
+    // @Api(Description="Ordering")
+    export class SetPreferredPaymentMethod extends DomainCommand implements IReturn<CommandResponse>
+    {
+        userName: string;
+        paymentMethodId: string;
+        createResponse() { return new CommandResponse(); }
+        getTypeName() { return "SetPreferredPaymentMethod"; }
+    }
+
+    /**
+    * Ordering
+    */
+    // @Route("/buyer/address", "GET")
     // @Api(Description="Ordering")
     export class ListAddresses extends Paged<Address> implements IReturn<PagedResponse<Address>>
     {
-        buyerId: string;
         createResponse() { return new PagedResponse<Address>(); }
         getTypeName() { return "ListAddresses"; }
     }
@@ -1299,11 +1384,10 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/buyer/{BuyerId}/address", "POST")
+    // @Route("/buyer/address", "POST")
     // @Api(Description="Ordering")
     export class AddBuyerAddress extends DomainCommand implements IReturn<CommandResponse>
     {
-        buyerId: string;
         addressId: string;
         street: string;
         city: string;
@@ -1317,11 +1401,10 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/buyer/{BuyerId}/address/{AddressId}", "DELETE")
+    // @Route("/buyer/address/{AddressId}", "DELETE")
     // @Api(Description="Ordering")
     export class RemoveBuyerAddress extends DomainCommand implements IReturn<CommandResponse>
     {
-        buyerId: string;
         addressId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "RemoveBuyerAddress"; }
@@ -1330,11 +1413,10 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/buyer/{BuyerId}/payment_method", "GET")
+    // @Route("/buyer/payment_method", "GET")
     // @Api(Description="Ordering")
     export class ListPaymentMethods extends Paged<PaymentMethod> implements IReturn<PagedResponse<PaymentMethod>>
     {
-        buyerId: string;
         createResponse() { return new PagedResponse<PaymentMethod>(); }
         getTypeName() { return "ListPaymentMethods"; }
     }
@@ -1342,11 +1424,10 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/buyer/{BuyerId}/payment_method", "POST")
+    // @Route("/buyer/payment_method", "POST")
     // @Api(Description="Ordering")
     export class AddBuyerPaymentMethod extends DomainCommand implements IReturn<CommandResponse>
     {
-        buyerId: string;
         paymentMethodId: string;
         alias: string;
         cardNumber: string;
@@ -1361,11 +1442,10 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/buyer/{BuyerId}/payment_method/{PaymentMethodId}", "DELETE")
+    // @Route("/buyer/payment_method/{PaymentMethodId}", "DELETE")
     // @Api(Description="Ordering")
     export class RemoveBuyerPaymentMethod extends DomainCommand implements IReturn<CommandResponse>
     {
-        buyerId: string;
         paymentMethodId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "RemoveBuyerPaymentMethod"; }
@@ -1386,12 +1466,23 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/order", "GET")
+    // @Route("/orders", "GET")
     // @Api(Description="Ordering")
     export class ListOrders extends Paged<OrderingOrderIndex> implements IReturn<PagedResponse<OrderingOrderIndex>>
     {
         createResponse() { return new PagedResponse<OrderingOrderIndex>(); }
         getTypeName() { return "ListOrders"; }
+    }
+
+    /**
+    * Ordering
+    */
+    // @Route("/order", "GET")
+    // @Api(Description="Ordering")
+    export class UserOrders extends Paged<OrderingOrderIndex> implements IReturn<PagedResponse<OrderingOrderIndex>>
+    {
+        createResponse() { return new PagedResponse<OrderingOrderIndex>(); }
+        getTypeName() { return "UserOrders"; }
     }
 
     /**
@@ -1426,8 +1517,9 @@ export module DTOs
     export class DraftOrder extends DomainCommand implements IReturn<CommandResponse>
     {
         orderId: string;
-        buyerId: string;
         basketId: string;
+        addressId: string;
+        paymentMethodId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "DraftOrder"; }
     }
@@ -1461,12 +1553,12 @@ export module DTOs
     */
     // @Route("/order/{OrderId}/address", "POST")
     // @Api(Description="Ordering")
-    export class SetAddressOrder extends DomainCommand implements IReturn<CommandResponse>
+    export class ChangeAddressOrder extends DomainCommand implements IReturn<CommandResponse>
     {
         orderId: string;
         addressId: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "SetAddressOrder"; }
+        getTypeName() { return "ChangeAddressOrder"; }
     }
 
     /**
@@ -1474,12 +1566,12 @@ export module DTOs
     */
     // @Route("/order/{OrderId}/payment_method", "POST")
     // @Api(Description="Ordering")
-    export class SetPaymentMethodOrder extends DomainCommand implements IReturn<CommandResponse>
+    export class ChangePaymentMethodOrder extends DomainCommand implements IReturn<CommandResponse>
     {
         orderId: string;
         paymentMethodId: string;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "SetPaymentMethodOrder"; }
+        getTypeName() { return "ChangePaymentMethodOrder"; }
     }
 
     /**
@@ -1501,9 +1593,8 @@ export module DTOs
     // @Api(Description="Ordering")
     export class AddOrderItem extends DomainCommand implements IReturn<CommandResponse>
     {
-        itemId: string;
-        orderId: string;
         productId: string;
+        orderId: string;
         quantity: number;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "AddOrderItem"; }
@@ -1512,25 +1603,25 @@ export module DTOs
     /**
     * Ordering
     */
-    // @Route("/order/{OrderId}/item/{ItemId}/quantity", "POST")
+    // @Route("/order/{OrderId}/item/{ProductId}/price", "POST")
     // @Api(Description="Ordering")
-    export class ChangeQuantityOrderItem extends DomainCommand implements IReturn<CommandResponse>
+    export class OverridePriceOrderItem extends DomainCommand implements IReturn<CommandResponse>
     {
-        itemId: string;
+        productId: string;
         orderId: string;
-        quantity: number;
+        price: number;
         createResponse() { return new CommandResponse(); }
-        getTypeName() { return "ChangeQuantityOrderItem"; }
+        getTypeName() { return "OverridePriceOrderItem"; }
     }
 
     /**
     * Ordering
     */
-    // @Route("/order/{OrderId}/item/{ItemId}", "DELETE")
+    // @Route("/order/{OrderId}/item/{ProductId}", "DELETE")
     // @Api(Description="Ordering")
     export class RemoveOrderItem extends DomainCommand implements IReturn<CommandResponse>
     {
-        itemId: string;
+        productId: string;
         orderId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "RemoveOrderItem"; }

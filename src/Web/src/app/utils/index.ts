@@ -12,7 +12,7 @@ const ensureArray = (config: any | any[]) => config && (Array.isArray(config) ? 
 export const when = (condition: any, config: any | any[], negativeConfig?: any | any[]) =>
   condition ? ensureArray(config) : ensureArray(negativeConfig);
 
-export const sort = (array: any[], prop: string) => {
+export function sort<T>(array: T[], prop: string): T[] {
   return array.sort((a, b) => {
     if (a[prop] < b[prop]) {
       return 1;
@@ -22,4 +22,4 @@ export const sort = (array: any[], prop: string) => {
     }
     return 0;
   });
-};
+}

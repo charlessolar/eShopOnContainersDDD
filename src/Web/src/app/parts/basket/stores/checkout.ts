@@ -13,12 +13,16 @@ import { ApiClientType, AlertStackType, AuthenticationType } from '../../../stor
 import { BasketType, BasketModel } from '../models/basket';
 import { ItemIndexType, ItemIndexModel } from '../models/items';
 
+import { BuyerType, BuyerModel } from '../../../models/ordering/buyer';
+
 const debug = new Debug('checkout');
 
 export interface CheckoutStoreType {
   loading: boolean;
   basket: BasketType;
   items: Map<string, ItemIndexType>;
+
+  buyer: BuyerType;
 
   load: () => Promise<{}>;
   validateBasket: () => void;
@@ -33,6 +37,7 @@ export const CheckoutStoreModel = types
       basket: types.maybe(BasketModel),
       items: types.optional(types.map(ItemIndexModel), {}),
 
+      buyer: types.maybe(BuyerModel)
     })
   .actions(self => {
     const load = flow(function*() {
@@ -68,6 +73,18 @@ export const CheckoutStoreModel = types
         itemsResponse.records.forEach(item => {
           self.items.put(item);
         });
+
+        try {
+          const buyerRequest = new DTOs.Buyer();
+          const buyer: DTOs.QueryResponse<DTOs.OrderingBuyer> = yield client.query(buyerRequest);
+
+          self.buyer = BuyerModel.create(buyer.payload);
+        } catch {
+          const initBuyer = new DTOs.InitiateBuyer();
+          yield client.command(initBuyer);
+
+          self.buyer = BuyerModel.create({ id: auth.username, givenName: auth.name, goodStanding: true });
+        }
 
       } catch (error) {
         debug('received http error: ', error);
