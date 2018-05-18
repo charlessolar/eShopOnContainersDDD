@@ -32,10 +32,11 @@ export const ItemIndexModel = ItemIndexModelBase
       debug('increasing quantity');
 
       const client = getEnv(self).api as ApiClientType;
-      const basket = getParent(self, 2) as BasketType;
+      const basket = getParent(self, 2).basket as BasketType;
 
       try {
         const request = new DTOs.UpdateBasketItemQuantity();
+        self.loading = true;
 
         request.basketId = self.basketId;
         request.productId = self.productId;
@@ -43,26 +44,26 @@ export const ItemIndexModel = ItemIndexModelBase
 
         yield client.command(request);
 
-        basket.subTotal -= self.subTotal;
-        basket.totalQuantity -= self.quantity;
+        basket.subtractItem(self);
 
         self.quantity++;
         self.subTotal = self.productPrice * self.quantity;
 
-        basket.subTotal += self.subTotal;
-        basket.totalQuantity += self.quantity;
+        basket.additionItem(self);
       } catch (error) {
         debug('received http error: ', error);
         throw error;
       }
+      self.loading = false;
     });
     const decreaseQuantity = flow(function*() {
       debug('decreasing quantity');
 
       const client = getEnv(self).api as ApiClientType;
-      const basket = getParent(self, 2) as BasketType;
+      const basket = getParent(self, 2).basket as BasketType;
 
       try {
+        self.loading = true;
         const request = new DTOs.UpdateBasketItemQuantity();
 
         request.basketId = self.basketId;
@@ -71,18 +72,17 @@ export const ItemIndexModel = ItemIndexModelBase
 
         yield client.command(request);
 
-        basket.subTotal -= self.subTotal;
-        basket.totalQuantity -= self.quantity;
+        basket.subtractItem(self);
 
         self.quantity--;
         self.subTotal = self.productPrice * self.quantity;
 
-        basket.subTotal += self.subTotal;
-        basket.totalQuantity += self.quantity;
+        basket.additionItem(self);
       } catch (error) {
         debug('received http error: ', error);
         throw error;
       }
+      self.loading = false;
     });
 
     return { increaseQuantity, decreaseQuantity };

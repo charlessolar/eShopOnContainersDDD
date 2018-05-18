@@ -70,6 +70,7 @@ export const BasketModel = types
           self.basket = BasketModelBase.create(response.payload);
         } else {
           applySnapshot(self.basket, response.payload);
+          self.totalItems = self.basket.totalItems;
         }
       } catch (error) {
         // 'forget' basket

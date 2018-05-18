@@ -5,10 +5,10 @@ import { hot } from 'react-hot-loader';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 
 import { Using, Formatted } from '../../../components/models';
-import { BasketStoreType, BasketStoreModel } from '../stores/basket';
+import { CheckoutStoreType, CheckoutStoreModel } from '../stores/checkout';
 
 interface CheckoutProps {
-  store?: BasketStoreType;
+  store?: CheckoutStoreType;
 }
 
 const styles = (theme: Theme) => ({
@@ -17,12 +17,17 @@ const styles = (theme: Theme) => ({
 
 @observer
 class CheckoutView extends React.Component<CheckoutProps & WithStyles<never>, {}> {
+  public componentDidMount() {
+    const { store } = this.props;
+
+    store.validateBasket();
+  }
 
   public render() {
     const { store, classes } = this.props;
 
     return (
-      <></>
+      <div></div>
     );
   }
 }

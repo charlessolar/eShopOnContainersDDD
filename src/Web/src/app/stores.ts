@@ -21,6 +21,7 @@ interface JWTPayload {
   // audience
   aud?: string;
 
+  preferred_username: string;
   roles: string[];
   name: string;
 }
@@ -40,9 +41,10 @@ export const ConfigurationStatusModel = types
   }));
 
 export interface AuthenticationType {
+  username: string;
   name: string;
-  token: string;
   expires: number;
+  token: string;
   roles: Array<string>;
 
   readonly admin: boolean;
@@ -52,6 +54,7 @@ export interface AuthenticationType {
 const Authentication = types.model(
   'Authentication',
   {
+    username: types.maybe(types.string),
     name: types.maybe(types.string),
     expires: types.maybe(types.number),
     token: types.optional(types.string, ''),
@@ -74,6 +77,7 @@ const Authentication = types.model(
         const request = new DTOs.GetIdentity();
         const response: DTOs.QueryResponse<DTOs.User> = yield client.query(request);
 
+        debug('confirmed auth', response.payload);
       } catch (error) {
         debug('check auth failure');
         yield reset();
@@ -93,6 +97,7 @@ const Authentication = types.model(
         self.expires = profile.exp;
         profile.roles.forEach(r => self.roles.push(r));
         self.name = profile.name;
+        self.username = profile.preferred_username;
 
         const client = getEnv(self).client as JsonServiceClient;
         client.setBearerToken(self.token);

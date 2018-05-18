@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { types, getRoot } from 'mobx-state-tree';
+import Debug from 'debug';
 
 import AsyncView from '../../components/asyncView';
 import { models } from '../../utils';
@@ -8,10 +9,12 @@ import { StoreType } from '../../stores';
 import { BasketStoreModel, BasketStoreType } from './stores/basket';
 import { CheckoutStoreModel, CheckoutStoreType } from './stores/checkout';
 
+const debug = new Debug('basket module');
+
 export class BasketModule {
   public routes: UniversalRouterRoute[];
 
-  constructor() {
+  constructor(store: StoreType) {
 
     this.routes = [
       {
@@ -29,12 +32,18 @@ export class BasketModule {
       },
       {
         path: '/checkout',
+        action: () => {
+          debug('isAuth', store.authenticated);
+          if (!store.authenticated) {
+            return { redirect: '/login?nextPath=/checkout' };
+          }
+        },
         component: () => ({
           title: 'Checkout',
           component: (
             <AsyncView
-              actionStore={(store: StoreType) => CheckoutStoreModel.create({}, { api: store.api, history: store.history })}
-              action={(store: CheckoutStoreType) => store.get()}
+              actionStore={(store: StoreType) => CheckoutStoreModel.create({}, { api: store.api, history: store.history, alertStack: store.alertStack, auth: store.auth })}
+              action={(store: CheckoutStoreType) => store.load()}
               loading={(store: CheckoutStoreType) => store.loading}
               getComponent={() => import('./views/checkout')}
             />

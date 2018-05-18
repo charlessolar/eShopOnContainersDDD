@@ -19,6 +19,8 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RemoveIcon from '@material-ui/icons/Remove';
 
+import { sort } from '../../../utils';
+
 import { Using, Formatted, Field } from '../../../components/models';
 import { BasketStoreType, BasketStoreModel } from '../stores/basket';
 
@@ -92,18 +94,16 @@ const MainView = glamorous('main')({
 @observer
 class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appbar' | 'flex' | 'container' | 'table' | 'avatar' | 'row' | 'button' | 'total' | 'quantityButton'>, {}> {
 
+  private checkout = () => {
+    const { store } = this.props;
+
+    store.checkout();
+  }
+
   public render() {
     const { store, classes } = this.props;
 
-    const items = Array.from(store.items.values()).sort((a, b) => {
-      if (a.productId < b.productId) {
-        return -1;
-      }
-      if (a.productId > b.productId) {
-        return 1;
-      }
-      return 0;
-    });
+    const items = sort(Array.from(store.items.values()), 'productId');
     return (
       <Using model={store.basket}>
         <AppView>
@@ -112,7 +112,7 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
               <div className={classes.flex}>
                 <Typography variant='headline'>Shopping Basket</Typography>
               </div>
-              <Button variant='raised' color='primary'>Checkout</Button>
+              <Button variant='raised' color='primary' disabled={!store.basket || items.length === 0} onClick={this.checkout}>Checkout</Button>
             </Toolbar>
           </AppBar>
           <MainView>
@@ -159,17 +159,13 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
                                 </Typography>
                               </TableCell>
                               <TableCell numeric>
-                                <Tooltip title='Decrease Quantity'>
-                                  <IconButton className={classes.quantityButton} color='primary' area-label='Decrease Quantity' disabled={i.loading || i.quantity === 1 } onClick={() => i.decreaseQuantity()}>
-                                    <RemoveIcon />
-                                  </IconButton>
-                                </Tooltip>
+                                <IconButton className={classes.quantityButton} color='primary' area-label='Decrease Quantity' disabled={i.loading || i.quantity === 1} onClick={() => i.decreaseQuantity()}>
+                                  <RemoveIcon />
+                                </IconButton>
                                 <Formatted field='quantity' />
-                                <Tooltip title='Increase Quantity'>
-                                  <IconButton className={classes.quantityButton} color='primary' area-label='Increase Quantity' disabled={i.loading} onClick={() => i.increaseQuantity()}>
-                                    <AddIcon />
-                                  </IconButton>
-                                </Tooltip>
+                                <IconButton className={classes.quantityButton} color='primary' area-label='Increase Quantity' disabled={i.loading} onClick={() => i.increaseQuantity()}>
+                                  <AddIcon />
+                                </IconButton>
                               </TableCell>
                               <TableCell numeric>
                                 <Typography variant='title' color='primary'>

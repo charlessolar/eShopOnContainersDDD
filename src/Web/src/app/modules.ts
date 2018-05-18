@@ -21,6 +21,6 @@ export function createModules(store: StoreType) {
     configuration: new ConfigurationModule(store),
     auth: new AuthModule(store),
     administrate: new AdministrationModule(),
-    basket: new BasketModule()
+    basket: new BasketModule(store)
   };
 }

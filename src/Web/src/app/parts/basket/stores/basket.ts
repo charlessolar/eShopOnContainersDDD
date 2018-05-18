@@ -1,4 +1,5 @@
 import { types, getRoot, getEnv, flow, applyAction, applySnapshot, onSnapshot, addDisposer } from 'mobx-state-tree';
+import { History } from 'history';
 import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
@@ -19,10 +20,9 @@ export interface BasketStoreType {
   basket: BasketType;
   items: Map<string, ItemIndexType>;
 
-  readonly validation: any;
-  readonly form: {[idx: string]: FieldDefinition};
   get: () => Promise<{}>;
   removeItem: (item: ItemIndexType) => void;
+  checkout: () => void;
 }
 
 export const BasketStoreModel = types
@@ -36,15 +36,6 @@ export const BasketStoreModel = types
       items: types.optional(types.map(ItemIndexModel), {}),
 
     })
-    .views(self => ({
-      get validation() {
-        return;
-      },
-      get form(): { [idx: string]: FieldDefinition } {
-        return ({
-        });
-      }
-    }))
   .actions(self => {
     const get = flow(function*() {
       debug('getting basket items');
@@ -88,13 +79,18 @@ export const BasketStoreModel = types
         request.productId = item.productId;
         yield client.command(request);
 
-        self.basket.subTotal -= item.subTotal;
+        self.basket.subtractItem(item);
         self.items.delete(item.id);
       } catch (error) {
         debug('received http error: ', error);
         throw error;
       }
     });
+    const checkout = () => {
+      const history = getEnv(self).history as History;
+      history.push('/checkout');
+    };
+
     // refresh bucket every 10 seconds
     const timerId = setInterval(() => applyAction(self, { name: 'get' }), 10000);
 
@@ -102,15 +98,10 @@ export const BasketStoreModel = types
       const basketStorage = localStorage.getItem('basket.eShop');
       applySnapshot(self, basketStorage ? JSON.parse(basketStorage) : {});
 
-      const disposer = onSnapshot(self, state => {
-        localStorage.setItem('basket.eShop', JSON.stringify(state));
-      });
-      addDisposer(self, disposer);
-
       addDisposer(self, () => {
         clearInterval(timerId);
       });
     };
 
-    return { get, removeItem, afterCreate };
+    return { get, removeItem, checkout, afterCreate };
   });

@@ -10,16 +10,34 @@ import { FormatDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
+import { ItemIndexType } from '../../../models/basket/items';
 import { BasketType as BasketTypeBase, BasketModel as BasketModelBase } from '../../../models/basket/baskets';
 
 const debug = new Debug('basket');
 
 export interface BasketType extends BasketTypeBase {
+  subtractItem: (item: ItemIndexType) => void;
+  additionItem: (item: ItemIndexType) => void;
+
   readonly createdDate?: DateTime;
   readonly updatedDate?: DateTime;
   readonly formatting?: { [idx: string]: FormatDefinition };
 }
 export const BasketModel = BasketModelBase
+  .actions(self => ({
+    subtractItem(item: ItemIndexType) {
+      self.totalItems--;
+      self.totalQuantity -= item.quantity;
+      self.subTotal -= item.subTotal;
+      self.total -= item.total;
+    },
+    additionItem(item: ItemIndexType) {
+      self.totalItems++;
+      self.totalQuantity += item.quantity;
+      self.subTotal += item.subTotal;
+      self.total += item.total;
+    }
+  }))
   .views(self => ({
     get createdDate() {
       return DateTime.fromMillis(self.created);
