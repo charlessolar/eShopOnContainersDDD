@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Infrastructure;
 using Infrastructure.Extensions;
+using Infrastructure.Queries;
 using NServiceBus;
 
 namespace eShop.Ordering.Order
 {
     public class Handler :
+        IHandleQueries<Queries.Order>,
         IHandleMessages<Events.Drafted>,
         IHandleMessages<Events.Canceled>,
         IHandleMessages<Events.Confirm>,
@@ -21,6 +24,12 @@ namespace eShop.Ordering.Order
         IHandleMessages<Entities.Item.Events.PriceOverridden>,
         IHandleMessages<Entities.Item.Events.Removed>
     {
+        public async Task Handle(Queries.Order query, IMessageHandlerContext ctx)
+        {
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(query.OrderId).ConfigureAwait(false);
+
+            await ctx.Result(order).ConfigureAwait(false);
+        }
         public async Task Handle(Events.Drafted e, IMessageHandlerContext ctx)
         {
             var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Models.Basket>(e.OrderId)

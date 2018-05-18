@@ -5,16 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
 using NServiceBus;
+using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Queries;
 
 namespace eShop.Ordering.Buyer
 {
     public class Handler : 
+        IHandleQueries<Queries.Buyer>,
         IHandleMessages<Events.Initiated>,
         IHandleMessages<Events.InGoodStanding>,
         IHandleMessages<Events.PreferredAddressSet>,
         IHandleMessages<Events.PreferredPaymentSet>,
         IHandleMessages<Events.Suspended>
     {
+        public async Task Handle(Queries.Buyer query, IMessageHandlerContext ctx)
+        {
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyer>(query.UserName).ConfigureAwait(false);
+
+            await ctx.Result(buyer).ConfigureAwait(false);
+        }
         public Task Handle(Events.Initiated e, IMessageHandlerContext ctx)
         {
             var model = new Models.OrderingBuyer

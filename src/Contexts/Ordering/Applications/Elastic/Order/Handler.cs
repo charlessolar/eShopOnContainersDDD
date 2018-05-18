@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
-using Infrastructure.Extensions;
 using NServiceBus;
+using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Queries;
 
 namespace eShop.Ordering.Order
 {
     public class Handler :
+        IHandleQueries<Queries.Orders>,
+        IHandleQueries<Queries.UserOrders>,
         IHandleMessages<Events.Drafted>,
         IHandleMessages<Events.Canceled>,
         IHandleMessages<Events.Confirm>,
@@ -21,6 +25,27 @@ namespace eShop.Ordering.Order
         IHandleMessages<Entities.Item.Events.PriceOverridden>,
         IHandleMessages<Entities.Item.Events.Removed>
     {
+        public async Task Handle(Queries.Orders query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderIndex>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
+        public async Task Handle(Queries.UserOrders query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+            builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
+
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderIndex>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
+    
+
         public async Task Handle(Events.Drafted e, IMessageHandlerContext ctx)
         {
             var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Models.BasketIndex>(e.OrderId)

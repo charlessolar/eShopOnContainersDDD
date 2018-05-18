@@ -4,17 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Queries;
 using NServiceBus;
 
 namespace eShop.Ordering.Order.Entities.Item
 {
     public class Handler :
+        IHandleQueries<Queries.Items>,
         IHandleMessages<Order.Events.Drafted>,
         IHandleMessages<Events.Added>,
         IHandleMessages<Events.PriceOverridden>,
         IHandleMessages<Events.Removed>
     {
         public static Func<Guid, Guid, string> ItemIdGenerator = (orderId, productId) => $"{orderId}.{productId}";
+
+        public async Task Handle(Queries.Items query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+            builder.Add("OrderId", query.OrderId.ToString(), Operation.EQUAL);
+
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderItem>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
 
         public async Task Handle(Order.Events.Drafted e, IMessageHandlerContext ctx)
         {

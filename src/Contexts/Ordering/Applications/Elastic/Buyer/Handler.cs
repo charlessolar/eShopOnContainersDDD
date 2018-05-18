@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Infrastructure;
+using Infrastructure.Extensions;
+using Infrastructure.Queries;
 using NServiceBus;
 
 namespace eShop.Ordering.Buyer
 {
     public class Handler : 
+        IHandleQueries<Queries.Buyers>,
         IHandleMessages<Events.Initiated>,
         IHandleMessages<Events.InGoodStanding>,
         IHandleMessages<Events.PreferredAddressSet>,
@@ -17,6 +21,15 @@ namespace eShop.Ordering.Buyer
         IHandleMessages<Order.Events.Paid>,
         IHandleMessages<Order.Events.Canceled>
     {
+        public async Task Handle(Queries.Buyers query, IMessageHandlerContext ctx)
+        {
+            var builder = new QueryBuilder();
+
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingBuyerIndex>(builder.Build())
+                .ConfigureAwait(false);
+
+            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
+        }
         public Task Handle(Events.Initiated e, IMessageHandlerContext ctx)
         {
             var model = new Models.OrderingBuyerIndex
