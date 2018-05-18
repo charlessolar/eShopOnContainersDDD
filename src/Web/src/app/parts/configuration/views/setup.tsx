@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import Fade from 'material-ui/transitions/Fade';
-import { CircularProgress } from 'material-ui/Progress';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { inject_factory } from '../../../utils';
 

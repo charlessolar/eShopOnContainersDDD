@@ -7,7 +7,7 @@ import { hot } from 'react-hot-loader';
 import { parse } from 'qs';
 import Debug from 'debug';
 
-import { MuiThemeProvider } from 'material-ui/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
 import { createRouter } from './router';
 import { StoreType } from './stores';

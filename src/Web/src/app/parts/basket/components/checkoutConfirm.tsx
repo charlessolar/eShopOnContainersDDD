@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import { inject } from '../../../utils';
 import { Using, Formatted, Field } from '../../../components/models';

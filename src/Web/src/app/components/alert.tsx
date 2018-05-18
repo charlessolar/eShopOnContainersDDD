@@ -2,12 +2,11 @@ import * as React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import red from 'material-ui/colors/red';
-import blue from 'material-ui/colors/blue';
-import amber from 'material-ui/colors/amber';
-
-import { SnackbarContent } from 'material-ui/Snackbar';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import red from '@material-ui/core/colors/red';
+import blue from '@material-ui/core/colors/blue';
+import amber from '@material-ui/core/colors/amber';
 
 interface AlertProps {
   type: 'info' | 'warn' | 'error';

@@ -3,12 +3,15 @@ import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
 import glamorous from 'glamorous';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
-import Paper from 'material-ui/Paper';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 import { inject, models } from '../../../utils';
 import { Using, Field, Submit } from '../../../components/models';

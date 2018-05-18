@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import * as numeral from 'numeral';
 import { DateTime } from 'luxon';
 
-import { Typography } from 'material-ui';
+import { Typography } from '@material-ui/core';
 
 import { toFixed, Round } from '../../utils/math';
 import { UsingContext, UsingType } from './using';

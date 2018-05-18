@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { applyPatch, IStateTreeNode } from 'mobx-state-tree';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import Tooltip from 'material-ui/Tooltip';
-import Dialog from 'material-ui/Dialog';
-import Slide from 'material-ui/transitions/Slide';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { ProductType } from '../models/products';

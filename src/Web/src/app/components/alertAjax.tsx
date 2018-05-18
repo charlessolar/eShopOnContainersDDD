@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 import Debug from 'debug';
 

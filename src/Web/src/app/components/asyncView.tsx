@@ -3,8 +3,8 @@ import { observable, action, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import { IModelType, destroy } from 'mobx-state-tree';
 
-import Fade from 'material-ui/transitions/Fade';
-import { CircularProgress } from 'material-ui/Progress';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { inject_props } from '../utils';
 import { StoreType } from '../stores';

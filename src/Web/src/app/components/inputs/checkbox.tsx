@@ -2,17 +2,16 @@ import * as React from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 
-import { withStyles, WithStyles, StyledComponentProps } from 'material-ui/styles';
-import Input, { InputLabel } from 'material-ui/Input';
-import Grid from 'material-ui/Grid';
-import {
-  FormLabel,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  FormHelperText,
-} from 'material-ui/Form';
-import Checkbox from 'material-ui/Checkbox';
+import { withStyles, WithStyles, StyledComponentProps } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import Grid from '@material-ui/core/Grid';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
 
 interface CheckboxProps {
   id: string;

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 import { UsingContext, UsingType } from './using';
 

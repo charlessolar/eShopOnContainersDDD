@@ -1,15 +1,14 @@
 import * as React from 'react';
 
-import { Theme, withStyles, WithStyles } from 'material-ui';
-import IconButton from 'material-ui/IconButton';
-import Button from 'material-ui/Button';
-import Tooltip from 'material-ui/Tooltip';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
+import { Theme, withStyles, WithStyles } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import { inject } from '../../../utils';

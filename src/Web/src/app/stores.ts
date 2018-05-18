@@ -3,7 +3,7 @@ import { JsonServiceClient } from '@servicestack/client';
 import { History } from 'history';
 import Debug from 'debug';
 
-import { Theme } from 'material-ui/styles';
+import { Theme } from '@material-ui/core/styles';
 import { DTOs } from './utils/eShop.dtos';
 import theme from './theme';
 

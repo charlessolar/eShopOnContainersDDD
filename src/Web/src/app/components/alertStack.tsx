@@ -3,9 +3,9 @@ import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import Debug from 'debug';
 
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import Snackbar from 'material-ui/Snackbar';
-import IconButton from 'material-ui/IconButton';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import Alert from './alert';

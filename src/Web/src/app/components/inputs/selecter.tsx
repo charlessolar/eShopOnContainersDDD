@@ -6,14 +6,17 @@ import * as keycode from 'keycode';
 import Downshift from 'downshift';
 import Debug from 'debug';
 
-import { withStyles, WithStyles } from 'material-ui/styles';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import { MenuItem } from 'material-ui/Menu';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import Chip from 'material-ui/Chip';
-import IconButton from 'material-ui/IconButton';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 
