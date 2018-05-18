@@ -21,7 +21,7 @@ namespace eShop.Ordering.Buyer
         {
             var model = new Models.OrderingBuyerIndex
             {
-                UserName = e.UserName,
+                Id = e.UserName,
                 GivenName = e.GivenName,
                 GoodStanding = true
             };

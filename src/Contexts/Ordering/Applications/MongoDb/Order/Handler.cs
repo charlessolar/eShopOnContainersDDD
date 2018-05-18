@@ -43,7 +43,7 @@ namespace eShop.Ordering.Order
             var model = new Models.OrderingOrder
             {
                 Id = e.OrderId,
-                UserName = buyer.UserName,
+                UserName = buyer.Id,
                 BuyerName = buyer.GivenName,
                 Status = Status.Submitted.DisplayName,
                 StatusDescription = Status.Submitted.Description,

@@ -19,7 +19,7 @@ namespace eShop.Ordering.Buyer
         {
             var model = new Models.OrderingBuyer
             {
-                UserName = e.UserName,
+                Id = e.UserName,
                 GivenName = e.GivenName,
                 GoodStanding = true
             };
