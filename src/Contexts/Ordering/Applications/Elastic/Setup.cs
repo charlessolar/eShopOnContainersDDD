@@ -37,7 +37,6 @@ namespace eShop.Ordering
                 .Mappings(mappings => mappings.Map<Buyer.Models.OrderingBuyerIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("UserName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("GivenName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Boolean(s => s.Name("GoodStanding"))
                             .Number(s => s.Name("TotalSpent").Type(NumberType.Long))
