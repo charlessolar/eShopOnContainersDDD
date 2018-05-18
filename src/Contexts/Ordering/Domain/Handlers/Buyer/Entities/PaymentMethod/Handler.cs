@@ -13,7 +13,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
     {
         public async Task Handle(Commands.Add command, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.For<Buyer>().Get(command.BuyerId).ConfigureAwait(false);
+            var buyer = await ctx.For<Buyer>().Get(command.UserName).ConfigureAwait(false);
             var method = await ctx.For<PaymentMethod>().New(command.PaymentMethodId).ConfigureAwait(false);
 
             method.Add(command.Alias, command.CardNumber, command.SecurityNumber, command.CardholderName,
@@ -22,7 +22,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
 
         public async Task Handle(Commands.Remove command, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.For<Buyer>().Get(command.BuyerId).ConfigureAwait(false);
+            var buyer = await ctx.For<Buyer>().Get(command.UserName).ConfigureAwait(false);
             var method = await ctx.For<PaymentMethod>().Get(command.PaymentMethodId).ConfigureAwait(false);
 
             method.Remove();

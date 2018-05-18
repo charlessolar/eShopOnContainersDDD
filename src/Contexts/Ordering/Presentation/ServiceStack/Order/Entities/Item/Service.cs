@@ -31,19 +31,18 @@ namespace eShop.Ordering.Order.Entities.Item
             return _bus.CommandToDomain(new Commands.Add
             {
                 OrderId = request.OrderId,
-                ItemId = request.ItemId,
                 ProductId = request.ProductId,
                 Quantity = request.Quantity
             });
         }
 
-        public Task Any(Services.ChangeQuantityOrderItem request)
+        public Task Any(Services.OverridePriceOrderItem request)
         {
-            return _bus.CommandToDomain(new Commands.ChangeQuantity
+            return _bus.CommandToDomain(new Commands.OverridePrice
             {
                 OrderId = request.OrderId,
-                ItemId = request.ItemId,
-                Quantity = request.Quantity
+                ProductId = request.ProductId,
+                Price = request.Price
             });
         }
 
@@ -52,7 +51,7 @@ namespace eShop.Ordering.Order.Entities.Item
             return _bus.CommandToDomain(new Commands.Remove
             {
                 OrderId = request.OrderId,
-                ItemId = request.ItemId
+                ProductId = request.ProductId,
             });
         }
     }

@@ -9,17 +9,48 @@ using NServiceBus;
 namespace eShop.Ordering.Buyer
 {
     public class Handler : 
-        IHandleMessages<Events.Created>
+        IHandleMessages<Events.Initiated>,
+        IHandleMessages<Events.InGoodStanding>,
+        IHandleMessages<Events.PreferredAddressSet>,
+        IHandleMessages<Events.PreferredPaymentSet>,
+        IHandleMessages<Events.Suspended>
     {
-        public Task Handle(Events.Created e, IMessageHandlerContext ctx)
+        public Task Handle(Events.Initiated e, IMessageHandlerContext ctx)
         {
             var model = new Models.Buyer
             {
-                Id = e.BuyerId,
-                GivenName = e.GivenName
+                UserName = e.UserName,
+                GivenName = e.GivenName,
+                GoodStanding = true
             };
 
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.BuyerId, model);
+            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.UserName, model);
         }
+
+        public async Task Handle(Events.InGoodStanding e, IMessageHandlerContext ctx)
+        {
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Buyer>(e.UserName).ConfigureAwait(false);
+            buyer.GoodStanding = true;
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.PreferredAddressSet e, IMessageHandlerContext ctx)
+        {
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Buyer>(e.UserName).ConfigureAwait(false);
+            buyer.PreferredAddressId = e.AddressId;
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.PreferredPaymentSet e, IMessageHandlerContext ctx)
+        {
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Buyer>(e.UserName).ConfigureAwait(false);
+            buyer.PreferredPaymentMethodId = e.PaymentMethodId;
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+        }
+        public async Task Handle(Events.Suspended e, IMessageHandlerContext ctx)
+        {
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Buyer>(e.UserName).ConfigureAwait(false);
+            buyer.GoodStanding = false;
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+        }
+
     }
 }

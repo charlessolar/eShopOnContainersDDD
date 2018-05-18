@@ -20,17 +20,66 @@ namespace eShop.Ordering.Buyer
 
         public Task<object> Any(Services.Buyers request)
         {
-            return _bus.RequestPaged<Queries.Buyers, Models.Buyer>(new Queries.Buyers
+            return _bus.RequestPaged<Queries.Buyers, Models.BuyerIndex>(new Queries.Buyers
             {
             });
         }
-
-        public Task Any(Services.CreateBuyer request)
+        public Task<object> Any(Services.Buyer request)
         {
-            return _bus.CommandToDomain(new Commands.Create
+            var session = GetSession();
+
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
+            return _bus.RequestQuery<Queries.Buyer, Models.Buyer>(new Queries.Buyer
             {
-                BuyerId = request.BuyerId,
-                GivenName = request.GivenName
+                UserName = session.UserName,
+            });
+        }
+
+        public Task Any(Services.InitiateBuyer request)
+        {
+            var session = GetSession();
+
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
+            return _bus.CommandToDomain(new Commands.Initiate
+            {
+                UserName = session.UserName,
+                GivenName = session.DisplayName
+            });
+        }
+
+        public Task Any(Services.MarkGoodStanding request)
+        {
+            return _bus.CommandToDomain(new Commands.MarkGoodStanding
+            {
+                UserName = request.UserName
+            });
+        }
+        public Task Any(Services.MarkSuspended request)
+        {
+            return _bus.CommandToDomain(new Commands.MarkSuspended
+            {
+                UserName = request.UserName
+            });
+        }
+        public Task Any(Services.SetPreferredAddress request)
+        {
+            return _bus.CommandToDomain(new Commands.SetPreferredAddress
+            {
+                UserName = request.UserName,
+                AddressId = request.AddressId
+                
+            });
+        }
+        public Task Any(Services.SetPreferredPaymentMethod request)
+        {
+            return _bus.CommandToDomain(new Commands.SetPreferredPaymentMethod
+            {
+                UserName = request.UserName,
+                PaymentMethodId = request.PaymentMethodId
             });
         }
     }

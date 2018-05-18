@@ -7,7 +7,7 @@ namespace eShop.Ordering.Buyer.Entities.Address.Models
     public class Address
     {
         public Guid Id { get; set; }
-        public Guid BuyerId { get; set; }
+        public string UserName { get; set; }
 
         public String Street { get; set; }
         public String City { get; set; }

@@ -7,7 +7,7 @@ namespace eShop.Ordering.Order.Entities.Item.Commands
 {
     public class Remove : StampedCommand
     {
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
         public Guid OrderId { get; set; }
     }
 }

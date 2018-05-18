@@ -8,16 +8,17 @@ namespace eShop.Ordering.Order
     {
         private Order() { }
 
-        public void Draft(Buyer.State buyer, Basket.Basket.State basket)
+        public void Draft(Buyer.State buyer, Basket.Basket.State basket, Buyer.Entities.Address.State address, Buyer.Entities.PaymentMethod.State method)
         {
             Apply<Events.Drafted>(x =>
             {
                 x.OrderId = Id;
-                x.BuyerId = buyer.Id;
-                x.CartId = basket.Id;
+                x.UserName = buyer.Id;
+                x.BasketId = basket.Id;
+                x.AddressId = address.Id;
+                x.PaymentMethodId = method.Id;
             });
 
-            // foreach item in card - add item?
         }
 
         public void Cancel()
@@ -51,18 +52,18 @@ namespace eShop.Ordering.Order
                 x.OrderId = Id;
             });
         }
-        public void SetAddress(Buyer.Entities.Address.State address)
+        public void ChangeAddress(Buyer.Entities.Address.State address)
         {
-            Apply<Events.AddressSet>(x =>
+            Apply<Events.AddressChanged>(x =>
             {
                 x.OrderId = Id;
                 x.AddressId = address.Id;
             });
         }
 
-        public void SetPaymentMethod(Buyer.Entities.PaymentMethod.State paymentMethod)
+        public void ChangePaymentMethod(Buyer.Entities.PaymentMethod.State paymentMethod)
         {
-            Apply<Events.PaymentMethodSet>(x =>
+            Apply<Events.PaymentMethodChanged>(x =>
             {
                 x.OrderId = Id;
                 x.PaymentMethodId = paymentMethod.Id;

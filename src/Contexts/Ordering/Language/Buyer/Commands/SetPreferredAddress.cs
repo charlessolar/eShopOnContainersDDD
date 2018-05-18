@@ -5,11 +5,9 @@ using Infrastructure.Commands;
 
 namespace eShop.Ordering.Buyer.Commands
 {
-    public class Create : StampedCommand
+    public class SetPreferredAddress : StampedCommand
     {
-        public Guid BuyerId { get; set; }
-
-        public string GivenName { get; set; }
-
+        public string UserName { get; set; }
+        public Guid AddressId { get; set; }
     }
 }

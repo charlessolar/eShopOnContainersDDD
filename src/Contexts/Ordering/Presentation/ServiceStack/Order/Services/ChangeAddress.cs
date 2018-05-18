@@ -8,10 +8,10 @@ using ServiceStack;
 namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
-    [Route("/order/{OrderId}/payment_method", "POST")]
-    public class SetPaymentMethodOrder : DomainCommand
+    [Route("/order/{OrderId}/address", "POST")]
+    public class ChangeAddressOrder : DomainCommand
     {
         public Guid OrderId { get; set; }
-        public Guid PaymentMethodId { get; set; }
+        public Guid AddressId { get; set; }
     }
 }

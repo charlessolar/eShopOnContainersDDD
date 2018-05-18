@@ -22,7 +22,7 @@ namespace eShop.Identity.User
         {
             var session = GetSession();
             if (!session.IsAuthenticated)
-                throw new InvalidOperationException("Not logged in");
+                throw new HttpError("not logged in");
             
             return _bus.RequestQuery<Queries.Identity, Models.User>(new Queries.Identity
             {

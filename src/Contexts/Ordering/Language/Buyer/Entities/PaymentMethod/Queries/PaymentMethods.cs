@@ -7,6 +7,6 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Queries
 {
     public class PaymentMethods : Paged
     {
-        public Guid BuyerId { get; set; }
+        public string UserName { get; set; }
     }
 }

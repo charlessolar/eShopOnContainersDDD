@@ -20,17 +20,25 @@ namespace eShop.Ordering.Buyer.Entities.Address
 
         public Task<object> Any(Services.ListAddresses request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.RequestPaged<Queries.Addresses, Models.Address>(new Queries.Addresses
             {
-                BuyerId = request.BuyerId
+                UserName = session.UserName
             });
         }
 
         public Task Any(Services.AddBuyerAddress request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.Add
             {
-                BuyerId = request.BuyerId,
+                UserName = session.UserName,
                 AddressId = request.AddressId,
                 Street = request.Street,
                 City = request.City,
@@ -42,9 +50,13 @@ namespace eShop.Ordering.Buyer.Entities.Address
 
         public Task Any(Services.RemoveBuyerAddress request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.Remove
             {
-                BuyerId = request.BuyerId,
+                UserName = session.UserName,
                 AddressId = request.AddressId
             });
         }

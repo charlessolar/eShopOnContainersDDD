@@ -8,10 +8,10 @@ using ServiceStack;
 namespace eShop.Ordering.Order.Entities.Item.Services
 {
     [Api("Ordering")]
-    [Route("/order/{OrderId}/item/{ItemId}", "DELETE")]
+    [Route("/order/{OrderId}/item/{ProductId}", "DELETE")]
     public class RemoveOrderItem : DomainCommand
     {
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
         public Guid OrderId { get; set; }
     }
 }

@@ -9,7 +9,10 @@ namespace eShop.Ordering.Order.Events
     {
         Guid OrderId { get; set; }
 
-        Guid BuyerId { get; set; }
-        Guid CartId { get; set; }
+        string UserName { get; set; }
+        Guid BasketId { get; set; }
+
+        Guid AddressId { get; set; }
+        Guid PaymentMethodId { get; set; }
     }
 }

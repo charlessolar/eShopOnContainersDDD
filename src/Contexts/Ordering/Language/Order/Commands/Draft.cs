@@ -9,7 +9,10 @@ namespace eShop.Ordering.Order.Commands
     {
         public Guid OrderId { get; set; }
 
-        public Guid BuyerId { get; set; }
-        public Guid CartId { get; set; }
+        public string UserName { get; set; }
+        public Guid BasketId { get; set; }
+
+        public Guid AddressId { get; set; }
+        public Guid PaymentMethodId { get; set; }
     }
 }

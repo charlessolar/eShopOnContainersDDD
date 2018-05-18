@@ -21,8 +21,5 @@ namespace eShop.Basket.Basket.Entities.Item.Models
         public long Quantity { get; set; }
 
         public long SubTotal => ProductPrice * Quantity;
-        public long Additional { get; set; }
-
-        public long Total => SubTotal + Additional;
     }
 }

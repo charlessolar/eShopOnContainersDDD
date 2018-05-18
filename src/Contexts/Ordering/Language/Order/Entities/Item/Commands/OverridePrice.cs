@@ -5,11 +5,11 @@ using Infrastructure.Commands;
 
 namespace eShop.Ordering.Order.Entities.Item.Commands
 {
-    public class ChangeQuantity : StampedCommand
+    public class OverridePrice : StampedCommand
     {
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
         public Guid OrderId { get; set; }
 
-        public decimal Quantity { get; set; }
+        public long Price { get; set; }
     }
 }

@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Basket\Language\Basket.Language.csproj" />
+    <ProjectReference Include="..\..\..\Catalog\Language\Catalog.Language.csproj" />
     <ProjectReference Include="..\..\Language\Ordering.Language.csproj" />
   </ItemGroup>
 </Project>

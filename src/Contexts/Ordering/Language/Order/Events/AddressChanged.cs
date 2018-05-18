@@ -5,10 +5,10 @@ using Infrastructure.Commands;
 
 namespace eShop.Ordering.Order.Events
 {
-    public interface PaymentMethodSet : IStampedEvent
+    public interface AddressChanged : IStampedEvent
     {
         Guid OrderId { get; set; }
 
-        Guid PaymentMethodId { get; set; }
+        Guid AddressId { get; set; }
     }
 }

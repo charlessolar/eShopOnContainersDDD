@@ -8,12 +8,12 @@ using ServiceStack;
 namespace eShop.Ordering.Order.Entities.Item.Services
 {
     [Api("Ordering")]
-    [Route("/order/{OrderId}/item/{ItemId}/quantity", "POST")]
-    public class ChangeQuantityOrderItem : DomainCommand
+    [Route("/order/{OrderId}/item/{ProductId}/price", "POST")]
+    public class OverridePriceOrderItem : DomainCommand
     {
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
         public Guid OrderId { get; set; }
 
-        public decimal Quantity { get; set; }
+        public long Price { get; set; }
     }
 }

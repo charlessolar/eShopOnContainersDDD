@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Infrastructure.Commands;
 using Infrastructure.ServiceStack;
 using ServiceStack;
 
 namespace eShop.Ordering.Buyer.Services
 {
     [Api("Ordering")]
-    [Route("/buyer", "POST")]
-    public class CreateBuyer : DomainCommand
+    [Route("/buyer/{UserName}/preferred_address", "POST")]
+    public class SetPreferredAddress : DomainCommand
     {
-        public Guid BuyerId { get; set; }
-
-        public string GivenName { get; set; }
+        public string UserName { get; set; }
+        public Guid AddressId { get; set; }
     }
 }

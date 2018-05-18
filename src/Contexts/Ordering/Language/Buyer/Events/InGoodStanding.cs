@@ -5,9 +5,8 @@ using Infrastructure.Commands;
 
 namespace eShop.Ordering.Buyer.Events
 {
-    public interface Created : IStampedEvent
+    public interface InGoodStanding : IStampedEvent
     {
-        Guid BuyerId { get; set; }
-        string GivenName { get; set; }
+        string UserName { get; set; }
     }
 }

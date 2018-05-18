@@ -7,7 +7,7 @@ using ServiceStack;
 namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
-    [Route("/order", "GET")]
+    [Route("/orders", "GET")]
     public class ListOrders : Paged<Models.OrderingOrderIndex>
     {
     }

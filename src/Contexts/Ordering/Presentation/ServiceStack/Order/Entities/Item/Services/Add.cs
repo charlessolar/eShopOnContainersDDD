@@ -11,11 +11,9 @@ namespace eShop.Ordering.Order.Entities.Item.Services
     [Route("/order/{OrderId}/item", "POST")]
     public class AddOrderItem : DomainCommand
     {
-        public Guid ItemId { get; set; }
+        public Guid ProductId { get; set; }
         public Guid OrderId { get; set; }
 
-        public Guid ProductId { get; set; }
-
-        public decimal Quantity { get; set; }
+        public long Quantity { get; set; }
     }
 }

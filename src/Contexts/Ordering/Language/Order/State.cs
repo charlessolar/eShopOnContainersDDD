@@ -6,11 +6,11 @@ namespace eShop.Ordering.Order
 {
     public class State : Aggregates.State<State>
     {
-        public Guid BuyerId { get; private set; }
+        public string UserName { get; private set; }
 
         private void Handle(Events.Drafted e)
         {
-            BuyerId = e.BuyerId;
+            UserName = e.UserName;
         }
     }
 }

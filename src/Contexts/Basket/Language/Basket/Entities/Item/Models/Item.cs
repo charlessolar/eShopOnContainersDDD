@@ -21,9 +21,5 @@ namespace eShop.Basket.Basket.Entities.Item.Models
         public long Quantity { get; set; }
 
         public long SubTotal => ProductPrice * Quantity;
-        public long AdditionalTaxes { get; set; }
-        public long AdditionalFees { get; set; }
-
-        public long Total => SubTotal + AdditionalTaxes + AdditionalFees;
     }
 }

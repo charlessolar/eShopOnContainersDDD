@@ -7,7 +7,7 @@ namespace eShop.Ordering.Buyer.Entities.Address.Commands
 {
     public class Remove : StampedCommand
     {
-        public Guid BuyerId { get; set; }
+        public string UserName { get; set; }
         public Guid AddressId { get; set; }
     }
 }

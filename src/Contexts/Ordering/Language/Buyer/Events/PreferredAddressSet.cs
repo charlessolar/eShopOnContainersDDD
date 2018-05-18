@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Infrastructure.Commands;
 
-namespace eShop.Ordering.Order.Events
+namespace eShop.Ordering.Buyer.Events
 {
-    public interface AddressSet : IStampedEvent
+    public interface PreferredAddressSet : IStampedEvent
     {
-        Guid OrderId { get; set; }
-
+        string UserName { get; set; }
         Guid AddressId { get; set; }
     }
 }

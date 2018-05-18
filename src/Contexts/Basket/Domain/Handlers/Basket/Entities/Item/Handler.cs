@@ -15,7 +15,12 @@ namespace eShop.Basket.Basket.Entities.Item
         public async Task Handle(Commands.AddItem command, IMessageHandlerContext ctx)
         {
             var basket = await ctx.For<Basket>().Get(command.BasketId).ConfigureAwait(false);
-            var item = await basket.For<Item>().New(command.ProductId).ConfigureAwait(false);
+            // allow user to add product, remove product, re-add product
+            var item = await basket.For<Item>().TryGet(command.ProductId).ConfigureAwait(false);
+            if (item == null)
+            {
+                item = await basket.For<Item>().New(command.ProductId).ConfigureAwait(false);
+            }
 
             var product = await ctx.For<Catalog.Product.Product>().Get(command.ProductId).ConfigureAwait(false);
 

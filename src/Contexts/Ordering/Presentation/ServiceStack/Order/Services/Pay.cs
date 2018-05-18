@@ -9,7 +9,7 @@ namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
     [Route("/order/{OrderId}/pay", "POST")]
-    public class PayOrder :DomainCommand
+    public class PayOrder : DomainCommand
     {
         public Guid OrderId { get; set; }
     }

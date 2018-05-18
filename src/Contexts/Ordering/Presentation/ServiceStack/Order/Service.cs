@@ -22,13 +22,25 @@ namespace eShop.Ordering.Order
         {
             return _bus.RequestQuery<Queries.Order, Models.OrderingOrder>(new Queries.Order
             {
-                OrderId=request.OrderId
+                OrderId = request.OrderId
             });
         }
 
         public Task<object> Any(Services.ListOrders request)
         {
             return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders { });
+        }
+
+        public Task<object> Any(Services.UserOrders request)
+        {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
+            return _bus.RequestPaged<Queries.UserOrders, Models.OrderingOrderIndex>(new Queries.UserOrders
+            {
+                UserName = session.UserName
+            });
         }
 
         public Task Any(Services.CancelOrder request)
@@ -47,11 +59,17 @@ namespace eShop.Ordering.Order
         }
         public Task Any(Services.DraftOrder request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.Draft
             {
                 OrderId = request.OrderId,
-                BuyerId = request.BuyerId,
-                CartId=request.BasketId
+                UserName = session.UserName,
+                BasketId = request.BasketId,
+                AddressId = request.AddressId,
+                PaymentMethodId = request.PaymentMethodId
             });
         }
         public Task Any(Services.PayOrder request)
@@ -69,18 +87,18 @@ namespace eShop.Ordering.Order
             });
         }
 
-        public Task Any(Services.SetAddressOrder request)
+        public Task Any(Services.ChangeAddressOrder request)
         {
-            return _bus.CommandToDomain(new Commands.SetAddress
+            return _bus.CommandToDomain(new Commands.ChangeAddress
             {
                 OrderId = request.OrderId,
                 AddressId = request.AddressId
             });
         }
 
-        public Task Any(Services.SetPaymentMethodOrder request)
+        public Task Any(Services.ChangePaymentMethodOrder request)
         {
-            return _bus.CommandToDomain(new Commands.SetPaymentMethod
+            return _bus.CommandToDomain(new Commands.ChangePaymentMethod
             {
                 OrderId = request.OrderId,
                 PaymentMethodId = request.PaymentMethodId

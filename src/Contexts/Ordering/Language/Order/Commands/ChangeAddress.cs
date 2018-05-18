@@ -5,10 +5,10 @@ using Infrastructure.Commands;
 
 namespace eShop.Ordering.Order.Commands
 {
-    public class SetPaymentMethod : StampedCommand
+    public class ChangeAddress : StampedCommand
     {
         public Guid OrderId { get; set; }
 
-        public Guid PaymentMethodId { get; set; }
+        public Guid AddressId { get; set; }
     }
 }

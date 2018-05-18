@@ -20,16 +20,24 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
 
         public Task<object> Any(Services.ListPaymentMethods request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.RequestPaged<Queries.PaymentMethods, Models.PaymentMethod>(new Queries.PaymentMethods
             {
-                BuyerId = request.BuyerId
+                UserName = session.UserName
             });
         }
         public Task Any(Services.AddBuyerPaymentMethod request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.Add
             {
-                BuyerId = request.BuyerId,
+                UserName = session.UserName,
                 PaymentMethodId = request.PaymentMethodId,
                 Alias = request.Alias,
                 CardholderName = request.CardholderName,
@@ -42,9 +50,13 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
 
         public Task Any(Services.RemoveBuyerPaymentMethod request)
         {
+            var session = GetSession();
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.Remove
             {
-                BuyerId = request.BuyerId,
+                UserName = session.UserName,
                 PaymentMethodId = request.PaymentMethodId
             });
         }

@@ -7,7 +7,7 @@ namespace eShop.Ordering.Order.Entities.Item.Events
 {
     public interface Removed : IStampedEvent
     {
-        Guid ItemId { get; set; }
+        Guid ProductId { get; set; }
         Guid OrderId { get; set; }
     }
 }

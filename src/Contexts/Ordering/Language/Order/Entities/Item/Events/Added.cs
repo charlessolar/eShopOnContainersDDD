@@ -7,11 +7,9 @@ namespace eShop.Ordering.Order.Entities.Item.Events
 {
     public interface Added : IStampedEvent
     {
-        Guid ItemId { get; set; }
+        Guid ProductId { get; set; }
         Guid OrderId { get; set; }
 
-        Guid ProductId { get; set; }
-
-        decimal Quantity { get; set; }
+        long Quantity { get; set; }
     }
 }

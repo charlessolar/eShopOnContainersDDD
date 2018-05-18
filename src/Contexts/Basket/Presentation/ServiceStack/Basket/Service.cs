@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Extensions;
 using NServiceBus;
+using ServiceStack;
 
 namespace eShop.Basket.Basket
 {
@@ -45,6 +46,10 @@ namespace eShop.Basket.Basket
         public Task Any(Services.ClaimBasket request)
         {
             var session = GetSession();
+
+            if (!session.IsAuthenticated)
+                throw new HttpError("claiming basket requires authentication");
+
             return _bus.CommandToDomain(new Commands.ClaimBasket
             {
                 BasketId = request.BasketId,

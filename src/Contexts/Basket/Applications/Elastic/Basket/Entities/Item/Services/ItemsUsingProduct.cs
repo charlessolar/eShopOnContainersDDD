@@ -9,11 +9,6 @@ using NServiceBus;
 
 namespace eShop.Basket.Basket.Entities.Item.Services
 {
-    public class ItemsUsingProduct : IService<Guid[]>
-    {
-        public Guid ProductId { get; set; }
-    }
-
     public class ItemsUsingProductHandler :
         IHandleMessages<Item.Events.ItemAdded>,
         IHandleMessages<Item.Events.ItemRemoved>,

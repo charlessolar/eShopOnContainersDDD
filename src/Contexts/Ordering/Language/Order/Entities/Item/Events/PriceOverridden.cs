@@ -5,11 +5,11 @@ using Infrastructure.Commands;
 
 namespace eShop.Ordering.Order.Entities.Item.Events
 {
-    public interface QuantityChanged : IStampedEvent
+    public interface PriceOverridden : IStampedEvent
     {
-        Guid ItemId { get; set; }
+        Guid ProductId { get; set; }
         Guid OrderId { get; set; }
 
-        decimal Quantity { get; set; }
+        long Price { get; set; }
     }
 }

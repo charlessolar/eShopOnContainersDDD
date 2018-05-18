@@ -13,7 +13,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
         {
             Apply<Events.Added>(x =>
             {
-                x.BuyerId = Parent.Id;
+                x.UserName = Parent.Id;
                 x.PaymentMethodId = Id;
             });
         }
@@ -22,7 +22,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
         {
             Apply<Events.Removed>(x =>
             {
-                x.BuyerId = Parent.Id;
+                x.UserName = Parent.Id;
                 x.PaymentMethodId = Id;
             });
         }

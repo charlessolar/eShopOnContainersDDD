@@ -7,7 +7,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Commands
 {
     public class Add : StampedCommand
     {
-        public Guid BuyerId { get; set; }
+        public string UserName { get; set; }
         public Guid PaymentMethodId { get; set; }
 
         public string Alias { get; set; }

@@ -7,7 +7,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Models
     public class PaymentMethod
     {
         public Guid Id { get; set; }
-        public Guid BuyerId { get; set; }
+        public string UserName { get; set; }
 
         public string Alias { get; set; }
         public string CardNumber { get; set; }

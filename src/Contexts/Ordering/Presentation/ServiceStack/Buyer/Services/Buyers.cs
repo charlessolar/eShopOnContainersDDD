@@ -7,8 +7,8 @@ using ServiceStack;
 namespace eShop.Ordering.Buyer.Services
 {
     [Api("Ordering")]
-    [Route("/buyer", "GET")]
-    public class Buyers : Paged<Models.Buyer>
+    [Route("/buyers", "GET")]
+    public class Buyers : Paged<Models.BuyerIndex>
     {
     }
 }

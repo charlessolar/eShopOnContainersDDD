@@ -7,9 +7,8 @@ using ServiceStack;
 namespace eShop.Ordering.Buyer.Entities.Address.Services
 {
     [Api("Ordering")]
-    [Route("/buyer/{BuyerId}/address", "GET")]
+    [Route("/buyer/address", "GET")]
     public class ListAddresses : Paged<Models.Address>
     {
-        public Guid BuyerId { get; set; }
     }
 }

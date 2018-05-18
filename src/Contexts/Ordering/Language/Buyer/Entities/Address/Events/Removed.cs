@@ -7,7 +7,7 @@ namespace eShop.Ordering.Buyer.Entities.Address.Events
 {
     public interface Removed :IStampedEvent
     {
-        Guid BuyerId { get; set; }
+        string UserName { get; set; }
         Guid AddressId { get; set; }
     }
 }

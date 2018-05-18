@@ -83,8 +83,6 @@ namespace eShop.Basket.Basket
             basket.TotalItems--;
             basket.TotalQuantity -= item.Quantity;
             basket.SubTotal -= item.SubTotal;
-            basket.TotalFees -= item.AdditionalFees;
-            basket.TotalTaxes -= item.AdditionalTaxes;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.BasketId, basket).ConfigureAwait(false);
         }

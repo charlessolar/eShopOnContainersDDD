@@ -12,7 +12,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
         {
             Apply<Events.Added>(x =>
             {
-                x.BuyerId = Parent.Id;
+                x.UserName = Parent.Id;
                 x.AddressId = Id;
                 x.Street = street;
                 x.City = city;
@@ -26,7 +26,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
         {
             Apply<Events.Removed>(x =>
             {
-                x.BuyerId = Parent.Id;
+                x.UserName = Parent.Id;
                 x.AddressId = Id;
             });
         }

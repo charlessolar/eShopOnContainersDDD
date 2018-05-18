@@ -16,7 +16,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
             var model = new Models.Address
             {
                 Id = e.AddressId,
-                BuyerId = e.BuyerId,
+                UserName = e.UserName,
                 City = e.City,
                 State = e.State,
                 Country = e.Country,

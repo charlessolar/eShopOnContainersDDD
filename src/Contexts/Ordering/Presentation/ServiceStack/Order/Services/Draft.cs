@@ -12,8 +12,10 @@ namespace eShop.Ordering.Order.Services
     public class DraftOrder : DomainCommand
     {
         public Guid OrderId { get; set; }
-
-        public Guid BuyerId { get; set; }
+        
         public Guid BasketId { get; set; }
+
+        public Guid AddressId { get; set; }
+        public Guid PaymentMethodId { get; set; }
     }
 }

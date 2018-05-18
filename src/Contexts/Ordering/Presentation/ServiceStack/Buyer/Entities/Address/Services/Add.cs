@@ -8,10 +8,9 @@ using ServiceStack;
 namespace eShop.Ordering.Buyer.Entities.Address.Services
 {
     [Api("Ordering")]
-    [Route("/buyer/{BuyerId}/address", "POST")]
+    [Route("/buyer/address", "POST")]
     public class AddBuyerAddress : DomainCommand
     {
-        public Guid BuyerId { get; set; }
         public Guid AddressId { get; set; }
 
         public string Street { get; set; }

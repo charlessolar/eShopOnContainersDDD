@@ -13,17 +13,19 @@ namespace eShop.Ordering.Order
         IHandleMessages<Commands.Confirm>,
         IHandleMessages<Commands.Pay>,
         IHandleMessages<Commands.Ship>,
-        IHandleMessages<Commands.SetAddress>,
-        IHandleMessages<Commands.SetPaymentMethod>
+        IHandleMessages<Commands.ChangeAddress>,
+        IHandleMessages<Commands.ChangePaymentMethod>
     {
         public async Task Handle(Commands.Draft command, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.For<Buyer.Buyer>().Get(command.BuyerId).ConfigureAwait(false);
-            var basket = await ctx.For<Basket.Basket.Basket>().Get(command.CartId).ConfigureAwait(false);
+            var buyer = await ctx.For<Buyer.Buyer>().Get(command.UserName).ConfigureAwait(false);
+            var basket = await ctx.For<Basket.Basket.Basket>().Get(command.BasketId).ConfigureAwait(false);
 
             var order = await ctx.For<Order>().New(command.OrderId).ConfigureAwait(false);
+            var address = await buyer.For<Buyer.Entities.Address.Address>().Get(command.AddressId).ConfigureAwait(false);
+            var method = await buyer.For<Buyer.Entities.PaymentMethod.PaymentMethod>().Get(command.PaymentMethodId).ConfigureAwait(false);
 
-            order.Draft(buyer.State, basket.State);
+            order.Draft(buyer.State, basket.State, address.State, method.State);
         }
 
         public async Task Handle(Commands.Cancel command, IMessageHandlerContext ctx)
@@ -46,21 +48,21 @@ namespace eShop.Ordering.Order
             var order = await ctx.For<Order>().Get(command.OrderId).ConfigureAwait(false);
             order.Confirm();
         }
-        public async Task Handle(Commands.SetAddress command, IMessageHandlerContext ctx)
+        public async Task Handle(Commands.ChangeAddress command, IMessageHandlerContext ctx)
         {
             var order = await ctx.For<Order>().Get(command.OrderId).ConfigureAwait(false);
-            var buyer = await ctx.For<Buyer.Buyer>().Get(order.State.BuyerId).ConfigureAwait(false);
+            var buyer = await ctx.For<Buyer.Buyer>().Get(order.State.UserName).ConfigureAwait(false);
             var address = await ctx.For<Buyer.Entities.Address.Address>().Get(command.AddressId).ConfigureAwait(false);
 
-            order.SetAddress(address.State);
+            order.ChangeAddress(address.State);
         }
-        public async Task Handle(Commands.SetPaymentMethod command, IMessageHandlerContext ctx)
+        public async Task Handle(Commands.ChangePaymentMethod command, IMessageHandlerContext ctx)
         {
             var order = await ctx.For<Order>().Get(command.OrderId).ConfigureAwait(false);
-            var buyer = await ctx.For<Buyer.Buyer>().Get(order.State.BuyerId).ConfigureAwait(false);
+            var buyer = await ctx.For<Buyer.Buyer>().Get(order.State.UserName).ConfigureAwait(false);
             var method = await ctx.For<Buyer.Entities.PaymentMethod.PaymentMethod>().Get(command.PaymentMethodId).ConfigureAwait(false);
 
-            order.SetPaymentMethod(method.State);
+            order.ChangePaymentMethod(method.State);
         }
 
     }

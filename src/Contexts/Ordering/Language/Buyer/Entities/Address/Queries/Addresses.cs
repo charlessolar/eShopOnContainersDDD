@@ -7,6 +7,6 @@ namespace eShop.Ordering.Buyer.Entities.Address.Queries
 {
     public class Addresses : Paged
     {
-        public Guid BuyerId { get; set; }
+        public string UserName { get; set; }
     }
 }

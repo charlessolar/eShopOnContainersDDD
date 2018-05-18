@@ -16,7 +16,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
             var model = new Models.PaymentMethod
             {
                 Id = e.PaymentMethodId,
-                BuyerId = e.BuyerId,
+                UserName = e.UserName,
                 Alias =e.Alias,
                 CardholderName=e.CardholderName,
                 CardNumber=e.CardNumber,

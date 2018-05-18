@@ -8,24 +8,23 @@ namespace eShop.Ordering.Order.Entities.Item
     {
         private Item() { }
 
-        public void Add(Catalog.Product.State product, decimal quantity)
+        public void Add(long quantity)
         {
             Apply<Events.Added>(x =>
             {
                 x.OrderId = Parent.Id;
-                x.ItemId = Id;
-                x.ProductId = product.Id;
+                x.ProductId = Id;
                 x.Quantity = quantity;
             });
         }
 
-        public void ChangeQuantity(decimal quantity)
+        public void OverridePrice(long price)
         {
-            Apply<Events.QuantityChanged>(x =>
+            Apply<Events.PriceOverridden>(x =>
             {
                 x.OrderId = Parent.Id;
-                x.ItemId = Id;
-                x.Quantity = quantity;
+                x.ProductId = Id;
+                x.Price = price;
             });
         }
         public void Remove()
@@ -33,7 +32,7 @@ namespace eShop.Ordering.Order.Entities.Item
             Apply<Events.Removed>(x =>
             {
                 x.OrderId = Parent.Id;
-                x.ItemId = Id;
+                x.ProductId = Id;
             });
         }
     }
