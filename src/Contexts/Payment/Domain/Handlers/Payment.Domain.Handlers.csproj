@@ -17,4 +17,9 @@
   <ItemGroup>
     <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.5.261" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Ordering\Domain\Entities\Ordering.Domain.Entities.csproj" />
+    <ProjectReference Include="..\..\Language\Payment.Language.csproj" />
+    <ProjectReference Include="..\Entities\Payment.Domain.Entities.csproj" />
+  </ItemGroup>
 </Project>

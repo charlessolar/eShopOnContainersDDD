@@ -5,7 +5,7 @@ using Infrastructure.Queries;
 
 namespace eShop.Ordering.Order.Queries
 {
-    public class UserOrders : Paged
+    public class BuyerOrders : Paged
     {
         public string UserName { get; set; }
     }

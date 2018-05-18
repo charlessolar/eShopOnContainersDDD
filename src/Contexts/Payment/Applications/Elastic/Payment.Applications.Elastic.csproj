@@ -6,7 +6,7 @@
     <RootNamespace>eShop.Payment</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Payment</Title>
-    <AssemblyName>eShop.Payment.Domain.Entities</AssemblyName>
+    <AssemblyName>eShop.Payment.Application.Elastic</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.5.261" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.5.261" />
+    <PackageReference Include="NEST" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,3 +25,4 @@
     <ProjectReference Include="..\..\Language\Payment.Language.csproj" />
   </ItemGroup>
 </Project>
+

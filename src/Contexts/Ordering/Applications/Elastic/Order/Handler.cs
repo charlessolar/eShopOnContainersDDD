@@ -13,7 +13,7 @@ namespace eShop.Ordering.Order
 {
     public class Handler :
         IHandleQueries<Queries.Orders>,
-        IHandleQueries<Queries.UserOrders>,
+        IHandleQueries<Queries.BuyerOrders>,
         IHandleMessages<Events.Drafted>,
         IHandleMessages<Events.Canceled>,
         IHandleMessages<Events.Confirm>,
@@ -34,7 +34,7 @@ namespace eShop.Ordering.Order
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
         }
-        public async Task Handle(Queries.UserOrders query, IMessageHandlerContext ctx)
+        public async Task Handle(Queries.BuyerOrders query, IMessageHandlerContext ctx)
         {
             var builder = new QueryBuilder();
             builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);

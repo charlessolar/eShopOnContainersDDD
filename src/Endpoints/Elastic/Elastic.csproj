@@ -35,6 +35,7 @@
     <ProjectReference Include="..\..\Contexts\Location\Applications\Elastic\Location.Applications.Elastic.csproj" />
     <ProjectReference Include="..\..\Contexts\Marketing\Applications\Elastic\Marketing.Applications.Elastic.csproj" />
     <ProjectReference Include="..\..\Contexts\Ordering\Applications\Elastic\Ordering.Applications.Elastic.csproj" />
+    <ProjectReference Include="..\..\Contexts\Payment\Applications\Elastic\Payment.Applications.Elastic.csproj" />
   </ItemGroup>
 
 </Project>

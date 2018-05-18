@@ -31,13 +31,13 @@ namespace eShop.Ordering.Order
             return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders { });
         }
 
-        public Task<object> Any(Services.UserOrders request)
+        public Task<object> Any(Services.BuyerOrders request)
         {
             var session = GetSession();
             if (!session.IsAuthenticated)
                 throw new HttpError("not logged in");
 
-            return _bus.RequestPaged<Queries.UserOrders, Models.OrderingOrderIndex>(new Queries.UserOrders
+            return _bus.RequestPaged<Queries.BuyerOrders, Models.OrderingOrderIndex>(new Queries.BuyerOrders
             {
                 UserName = session.UserName
             });

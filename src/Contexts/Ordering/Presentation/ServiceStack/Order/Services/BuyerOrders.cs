@@ -8,7 +8,7 @@ namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
     [Route("/order", "GET")]
-    public class UserOrders : Paged<Models.OrderingOrderIndex>
+    public class BuyerOrders : Paged<Models.OrderingOrderIndex>
     {
     }
 }

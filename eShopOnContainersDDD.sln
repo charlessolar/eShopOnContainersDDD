@@ -173,6 +173,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration.Applications.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Applications.Elastic", "src\Contexts\Basket\Applications\Elastic\Basket.Applications.Elastic.csproj", "{39451D67-1653-4842-9B25-C2737D7A660F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Applications.Elastic", "src\Contexts\Payment\Applications\Elastic\Payment.Applications.Elastic.csproj", "{6EC798D4-8557-46ED-8A3D-396FB3C3D8C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -383,6 +385,10 @@ Global
 		{39451D67-1653-4842-9B25-C2737D7A660F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39451D67-1653-4842-9B25-C2737D7A660F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39451D67-1653-4842-9B25-C2737D7A660F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC798D4-8557-46ED-8A3D-396FB3C3D8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC798D4-8557-46ED-8A3D-396FB3C3D8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC798D4-8557-46ED-8A3D-396FB3C3D8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC798D4-8557-46ED-8A3D-396FB3C3D8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -469,6 +475,7 @@ Global
 		{7B5865EC-B525-45C6-A59F-42252D1EEA30} = {6A958E6B-6017-4716-BFAC-557035213FE4}
 		{3C1B9076-B2B9-46C8-973D-0CA3A3B5B807} = {4B8385F7-265A-4CBD-9663-4FEBC57B83AF}
 		{39451D67-1653-4842-9B25-C2737D7A660F} = {B5581F10-6B8C-4FF0-8190-F15EC2401631}
+		{6EC798D4-8557-46ED-8A3D-396FB3C3D8C6} = {2A8C2A7F-90CC-4640-A99B-C6D240DCDD21}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E0FE21F-D8B6-4D1E-85B5-9B2A2EFBEDAE}
