@@ -67,18 +67,28 @@ namespace eShop.Ordering.Buyer
         }
         public Task Any(Services.SetPreferredAddress request)
         {
+            var session = GetSession();
+
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.SetPreferredAddress
             {
-                UserName = request.UserName,
+                UserName = session.UserName,
                 AddressId = request.AddressId
                 
             });
         }
         public Task Any(Services.SetPreferredPaymentMethod request)
         {
+            var session = GetSession();
+
+            if (!session.IsAuthenticated)
+                throw new HttpError("not logged in");
+
             return _bus.CommandToDomain(new Commands.SetPreferredPaymentMethod
             {
-                UserName = request.UserName,
+                UserName = session.UserName,
                 PaymentMethodId = request.PaymentMethodId
             });
         }

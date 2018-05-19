@@ -10,7 +10,6 @@ namespace eShop.Ordering.Buyer.Services
     [Route("/buyer/{UserName}/preferred_address", "POST")]
     public class SetPreferredAddress : DomainCommand
     {
-        public string UserName { get; set; }
         public Guid AddressId { get; set; }
     }
 }

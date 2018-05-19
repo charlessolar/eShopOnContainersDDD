@@ -14,7 +14,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
         public async Task Handle(Commands.Add command, IMessageHandlerContext ctx)
         {
             var buyer = await ctx.For<Buyer>().Get(command.UserName).ConfigureAwait(false);
-            var method = await ctx.For<PaymentMethod>().New(command.PaymentMethodId).ConfigureAwait(false);
+            var method = await buyer.For<PaymentMethod>().New(command.PaymentMethodId).ConfigureAwait(false);
 
             method.Add(command.Alias, command.CardNumber, command.SecurityNumber, command.CardholderName,
                 command.Expiration, command.CardType);
