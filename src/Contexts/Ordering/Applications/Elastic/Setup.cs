@@ -67,6 +67,7 @@ namespace eShop.Ordering
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("UserName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                            .Keyword(s => s.Name("Alias").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Street").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("City").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("State").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))

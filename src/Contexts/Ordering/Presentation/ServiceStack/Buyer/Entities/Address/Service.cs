@@ -40,6 +40,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
             {
                 UserName = session.UserName,
                 AddressId = request.AddressId,
+                Alias = request.Alias,
                 Street = request.Street,
                 City = request.City,
                 State = request.State,

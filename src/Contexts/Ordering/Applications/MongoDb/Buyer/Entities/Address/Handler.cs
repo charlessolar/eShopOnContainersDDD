@@ -17,6 +17,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
             {
                 Id = e.AddressId,
                 UserName = e.UserName,
+                Alias = e.Alias,
                 City = e.City,
                 State = e.State,
                 Country = e.Country,

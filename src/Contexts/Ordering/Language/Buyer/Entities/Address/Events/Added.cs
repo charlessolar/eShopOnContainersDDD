@@ -10,6 +10,7 @@ namespace eShop.Ordering.Buyer.Entities.Address.Events
         string UserName { get; set; }
         Guid AddressId { get; set; }
 
+        string Alias { get; set; }
         string Street { get; set; }
         string City { get; set; }
         string State { get; set; }

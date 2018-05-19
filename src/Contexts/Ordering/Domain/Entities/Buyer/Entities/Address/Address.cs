@@ -8,12 +8,13 @@ namespace eShop.Ordering.Buyer.Entities.Address
     {
         private Address() { }
 
-        public void Add(string street, string city, string state, string country, string zipCode)
+        public void Add(string alias, string street, string city, string state, string country, string zipCode)
         {
             Apply<Events.Added>(x =>
             {
                 x.UserName = Parent.Id;
                 x.AddressId = Id;
+                x.Alias = alias;
                 x.Street = street;
                 x.City = city;
                 x.State = state;

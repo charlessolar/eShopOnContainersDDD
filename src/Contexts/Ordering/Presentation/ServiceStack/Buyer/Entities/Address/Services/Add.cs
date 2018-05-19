@@ -13,6 +13,7 @@ namespace eShop.Ordering.Buyer.Entities.Address.Services
     {
         public Guid AddressId { get; set; }
 
+        public string Alias { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
