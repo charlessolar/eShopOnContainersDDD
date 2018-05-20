@@ -15,6 +15,12 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
             {
                 x.UserName = Parent.Id;
                 x.PaymentMethodId = Id;
+                x.Alias = alias;
+                x.CardNumber = cardNumber;
+                x.SecurityNumber = securityNumber;
+                x.CardholderName = cardholderName;
+                x.Expiration = expiration;
+                x.CardType = type;
             });
         }
 
