@@ -7,6 +7,7 @@ export interface AddressType {
   id: string;
   userName: string;
 
+  alias: string;
   street: string;
   city: string;
   state: string;
@@ -18,6 +19,7 @@ export const AddressModel = types
     id: types.identifier(types.string),
     userName: types.string,
 
+    alias: types.string,
     street: types.string,
     city: types.string,
     state: types.string,

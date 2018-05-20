@@ -10,6 +10,8 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType, AlertStackType, AuthenticationType } from '../../../stores';
 
+import { AddressType, AddressModel } from '../models/address';
+import { PaymentMethodType, PaymentMethodModel } from '../models/paymentMethod';
 import { BasketType, BasketModel } from '../models/basket';
 import { ItemIndexType, ItemIndexModel } from '../models/items';
 
@@ -24,8 +26,17 @@ export interface CheckoutStoreType {
 
   buyer: BuyerType;
 
+  selectedBillingAddress: AddressType;
+  selectedShippingAddress: AddressType;
+
+  selectedPaymentMethod: PaymentMethodType;
+
+  selectBilling: (address: AddressType) => void;
+  selectShipping: (address: AddressType) => void;
+  selectPayment: (payment: PaymentMethodType) => void;
   load: () => Promise<{}>;
   validateBasket: () => void;
+  submit: () => Promise<{}>;
 }
 
 export const CheckoutStoreModel = types
@@ -37,7 +48,11 @@ export const CheckoutStoreModel = types
       basket: types.maybe(BasketModel),
       items: types.optional(types.map(ItemIndexModel), {}),
 
-      buyer: types.maybe(BuyerModel)
+      buyer: types.maybe(BuyerModel),
+
+      selectedBillingAddress: types.maybe(AddressModel),
+      selectedShippingAddress: types.maybe(AddressModel),
+      selectedPaymentMethod: types.maybe(PaymentMethodModel)
     })
   .actions(self => {
     const load = flow(function*() {
@@ -85,7 +100,6 @@ export const CheckoutStoreModel = types
 
           self.buyer = BuyerModel.create({ id: auth.username, givenName: auth.name, goodStanding: true });
         }
-
       } catch (error) {
         debug('received http error: ', error);
         throw error;
@@ -110,5 +124,15 @@ export const CheckoutStoreModel = types
 
     };
 
-    return { load, validateBasket, afterCreate };
+    const selectBilling = (address: AddressType) => {
+      self.selectedBillingAddress = address;
+    };
+    const selectShipping = (address: AddressType) => {
+      self.selectedShippingAddress = address;
+    };
+    const selectPayment = (payment: PaymentMethodType) => {
+      self.selectedPaymentMethod = payment;
+    };
+
+    return { load, validateBasket, afterCreate, selectBilling, selectShipping, selectPayment };
   });

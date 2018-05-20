@@ -104,32 +104,32 @@ class CheckoutView extends React.Component<CheckoutProps & WithStyles<'avatar' |
             <Grid item xs={12} md={4}>
               <Paper elevation={4}>
                 <Using model={store.basket}>
-                <List>
-                  {items.map(item => (
-                    <Using model={item} key={item.id}>
-                      <ListItem>
-                        <Avatar src={item.productPicture} className={classes.avatar} />
-                        <ListItemText primary={item.productName} secondary={item.productDescription} />
-                        <ListItemSecondaryAction>
-                          <Avatar className={classes.avatarQuantity}>{item.quantity}</Avatar>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    </Using>
-                  ))}
-                  <Divider/>
-                  <ListItem>
-                    <Typography variant='title' color='primary' align='right' className={classes.totals}>SubTotal: <Formatted field='subTotal'/></Typography>
-                  </ListItem>
-                  <ListItem>
-                    <Typography variant='subheading' color='primary' align='right' className={classes.totals}>Fees:</Typography>
-                  </ListItem>
-                  <ListItem>
-                    <Typography variant='subheading' color='primary' align='right' className={classes.totals}>Taxes:</Typography>
-                  </ListItem>
-                  <ListItem>
-                    <Typography variant='title' color='primary' align='right' className={classes.totals}>Total:</Typography>
-                  </ListItem>
-                </List>
+                  <List>
+                    {items.map(item => (
+                      <Using model={item} key={item.id}>
+                        <ListItem>
+                          <Avatar src={item.productPicture} className={classes.avatar} />
+                          <ListItemText primary={item.productName} secondary={item.productDescription} />
+                          <ListItemSecondaryAction>
+                            <Avatar className={classes.avatarQuantity}>{item.quantity}</Avatar>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </Using>
+                    ))}
+                    <Divider/>
+                    <ListItem>
+                      <Typography variant='title' color='primary' align='right' className={classes.totals}>SubTotal: <Formatted field='subTotal'/></Typography>
+                    </ListItem>
+                    <ListItem>
+                      <Typography variant='subheading' color='primary' align='right' className={classes.totals}>Fees:</Typography>
+                    </ListItem>
+                    <ListItem>
+                      <Typography variant='subheading' color='primary' align='right' className={classes.totals}>Taxes:</Typography>
+                    </ListItem>
+                    <ListItem>
+                      <Typography variant='title' color='primary' align='right' className={classes.totals}>Total:</Typography>
+                    </ListItem>
+                  </List>
                 </Using>
               </Paper>
             </Grid>

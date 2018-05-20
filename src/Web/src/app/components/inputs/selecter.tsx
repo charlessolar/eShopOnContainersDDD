@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { types, flow, getEnv, IModelType, getSnapshot, getIdentifier, IStateTreeNode } from 'mobx-state-tree';
+import { types, flow, getEnv, IModelType, getSnapshot, getIdentifier, IStateTreeNode, isStateTreeNode } from 'mobx-state-tree';
 import * as keycode from 'keycode';
 import Downshift from 'downshift';
 import Debug from 'debug';
@@ -177,19 +177,27 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
   public componentDidMount() {
     const { value, store } = this.props;
     if (value) {
+      if (typeof value !== 'string') {
+        const snapshot = getSnapshot(value);
+        store.addModel(snapshot);
+      }
       store.selectItem(value);
     }
   }
-  public componentDidUpdate() {
-    const { value, store } = this.props;
+  public async componentDidUpdate() {
+    const { value, store, onChange } = this.props;
+
     if (!value && this._value) {
       this._value = undefined;
       this._clearSelection();
     }
     if (value) {
-      const snapshot = getSnapshot(value);
-      store.addModel(snapshot);
-      store.selectItem(value);
+      if (typeof value !== 'string') {
+        const snapshot = getSnapshot(value);
+        store.addModel(snapshot);
+      }
+      await store.selectItem(value);
+      onChange(getSnapshot(store.modelById(store.selection.id)));
     }
   }
 

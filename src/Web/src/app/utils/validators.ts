@@ -43,4 +43,38 @@ export default function install() {
       return 'invalid array elements';
     }
   };
+  validate.validators.credit_card = (value: string, options) => {
+    if (!value) {
+      return;
+    }
+
+    if (/[^0-9-\s]+/.test(value)) {
+      return 'invalid number';
+    }
+
+    // The Luhn Algorithm. It's so pretty.
+    let nCheck = 0;
+    let nDigit = 0;
+    let bEven = false;
+    value = value.replace(/\D/g, '');
+
+    for (let n = value.length - 1; n >= 0; n--) {
+      const cDigit = value.charAt(n);
+      nDigit = parseInt(cDigit, 10);
+
+      if (bEven) {
+        nDigit *= 2;
+        if (nDigit > 9) {
+          nDigit -= 9;
+        }
+      }
+
+      nCheck += nDigit;
+      bEven = !bEven;
+    }
+
+    if ((nCheck % 10) !== 0) {
+      return 'invalid card number';
+    }
+  };
 }

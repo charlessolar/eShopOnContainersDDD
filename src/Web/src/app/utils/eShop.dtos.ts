@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-18 04:57:40
+Date: 2018-05-20 00:55:40
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -234,6 +234,7 @@ export module DTOs
     {
         id: string;
         userName: string;
+        alias: string;
         street: string;
         city: string;
         state: string;
@@ -1351,7 +1352,6 @@ export module DTOs
     // @Api(Description="Ordering")
     export class SetPreferredAddress extends DomainCommand implements IReturn<CommandResponse>
     {
-        userName: string;
         addressId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "SetPreferredAddress"; }
@@ -1364,7 +1364,6 @@ export module DTOs
     // @Api(Description="Ordering")
     export class SetPreferredPaymentMethod extends DomainCommand implements IReturn<CommandResponse>
     {
-        userName: string;
         paymentMethodId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "SetPreferredPaymentMethod"; }
@@ -1377,6 +1376,8 @@ export module DTOs
     // @Api(Description="Ordering")
     export class ListAddresses extends Paged<Address> implements IReturn<PagedResponse<Address>>
     {
+        term: string;
+        id: string;
         createResponse() { return new PagedResponse<Address>(); }
         getTypeName() { return "ListAddresses"; }
     }
@@ -1389,6 +1390,7 @@ export module DTOs
     export class AddBuyerAddress extends DomainCommand implements IReturn<CommandResponse>
     {
         addressId: string;
+        alias: string;
         street: string;
         city: string;
         state: string;
@@ -1417,6 +1419,8 @@ export module DTOs
     // @Api(Description="Ordering")
     export class ListPaymentMethods extends Paged<PaymentMethod> implements IReturn<PagedResponse<PaymentMethod>>
     {
+        term: string;
+        id: string;
         createResponse() { return new PagedResponse<PaymentMethod>(); }
         getTypeName() { return "ListPaymentMethods"; }
     }
@@ -1479,10 +1483,10 @@ export module DTOs
     */
     // @Route("/order", "GET")
     // @Api(Description="Ordering")
-    export class UserOrders extends Paged<OrderingOrderIndex> implements IReturn<PagedResponse<OrderingOrderIndex>>
+    export class BuyerOrders extends Paged<OrderingOrderIndex> implements IReturn<PagedResponse<OrderingOrderIndex>>
     {
         createResponse() { return new PagedResponse<OrderingOrderIndex>(); }
-        getTypeName() { return "UserOrders"; }
+        getTypeName() { return "BuyerOrders"; }
     }
 
     /**
