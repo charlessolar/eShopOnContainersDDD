@@ -17,8 +17,24 @@ namespace eShop.Ordering.Buyer.Entities.Address
     {
         public async Task Handle(Queries.Addresses query, IMessageHandlerContext ctx)
         {
+            if(query.Id.HasValue)
+            {
+                var result = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Address>(query.Id.Value).ConfigureAwait(false);
+
+                await ctx.Result(new[] { result }, 1, 0).ConfigureAwait(false);
+                return;
+            }
+
             var builder = new QueryBuilder();
             builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
+            if (!string.IsNullOrEmpty(query.Term))
+            {
+                var group = builder.Grouped(Group.ANY);
+                group.Add("Street", query.Term, Operation.CONTAINS);
+                group.Add("City", query.Term, Operation.CONTAINS);
+                group.Add("State", query.Term, Operation.CONTAINS);
+                group.Add("Alias", query.Term, Operation.CONTAINS);
+            }
 
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.Address>(builder.Build())
                 .ConfigureAwait(false);

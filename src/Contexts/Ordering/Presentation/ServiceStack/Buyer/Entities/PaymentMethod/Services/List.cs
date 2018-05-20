@@ -10,5 +10,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod.Services
     [Route("/buyer/payment_method", "GET")]
     public class ListPaymentMethods : Paged<Models.PaymentMethod>
     {
+        public string Term { get; set; }
+        public Guid? Id { get; set; }
     }
 }

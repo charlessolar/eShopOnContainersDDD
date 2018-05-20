@@ -26,7 +26,9 @@ namespace eShop.Ordering.Buyer.Entities.Address
 
             return _bus.RequestPaged<Queries.Addresses, Models.Address>(new Queries.Addresses
             {
-                UserName = session.UserName
+                UserName = session.UserName,
+                Id = request.Id,
+                Term = request.Term
             });
         }
 

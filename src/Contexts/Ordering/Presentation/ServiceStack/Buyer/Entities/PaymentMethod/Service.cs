@@ -26,7 +26,9 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
 
             return _bus.RequestPaged<Queries.PaymentMethods, Models.PaymentMethod>(new Queries.PaymentMethods
             {
-                UserName = session.UserName
+                UserName = session.UserName,
+                Id = request.Id,
+                Term = request.Term
             });
         }
         public Task Any(Services.AddBuyerPaymentMethod request)

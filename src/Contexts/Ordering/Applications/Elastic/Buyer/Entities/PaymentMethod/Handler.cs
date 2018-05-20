@@ -17,9 +17,23 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
     {
         public async Task Handle(Queries.PaymentMethods query, IMessageHandlerContext ctx)
         {
+            if (query.Id.HasValue)
+            {
+                var result = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.PaymentMethod>(query.Id.Value).ConfigureAwait(false);
+
+                await ctx.Result(new[] { result }, 1, 0).ConfigureAwait(false);
+                return;
+            }
+
             var builder = new QueryBuilder();
             builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
-
+            if (!string.IsNullOrEmpty(query.Term))
+            {
+                var group = builder.Grouped(Group.ANY);
+                group.Add("Alias", query.Term, Operation.CONTAINS);
+                group.Add("CardholderName", query.Term, Operation.CONTAINS);
+                group.Add("CardType", query.Term, Operation.CONTAINS);
+            }
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.PaymentMethod>(builder.Build())
                 .ConfigureAwait(false);
 
@@ -32,10 +46,10 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
             {
                 Id = e.PaymentMethodId,
                 UserName = e.UserName,
-                Alias =e.Alias,
-                CardholderName=e.CardholderName,
-                CardNumber=e.CardNumber,
-                Expiration=e.Expiration,
+                Alias = e.Alias,
+                CardholderName = e.CardholderName,
+                CardNumber = e.CardNumber,
+                Expiration = e.Expiration,
                 SecurityNumber = e.SecurityNumber,
                 CardType = e.CardType.Value
             };

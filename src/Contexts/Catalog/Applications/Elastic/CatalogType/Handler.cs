@@ -29,6 +29,8 @@ namespace eShop.Catalog.CatalogType
             var builder = new QueryBuilder();
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.CatalogType>(builder.Build())
                 .ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(query.Term))
+                builder.Add("Type", query.Term, Operation.CONTAINS);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
         }

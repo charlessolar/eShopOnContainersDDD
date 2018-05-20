@@ -29,6 +29,8 @@ namespace eShop.Catalog.CatalogBrand
             var builder = new QueryBuilder();
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.CatalogBrand>(builder.Build())
                 .ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(query.Term))
+                builder.Add("Brand", query.Term, Operation.CONTAINS);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
         }

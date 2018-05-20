@@ -10,5 +10,7 @@ namespace eShop.Ordering.Buyer.Entities.Address.Services
     [Route("/buyer/address", "GET")]
     public class ListAddresses : Paged<Models.Address>
     {
+        public string Term { get; set; }
+        public Guid? Id { get; set; }
     }
 }
