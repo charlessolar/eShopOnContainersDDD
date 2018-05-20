@@ -37,6 +37,9 @@ namespace eShop.Ordering.Order.Models
 
         public long Total => SubTotal + Additional;
 
+        public long Created { get; set; }
+        public long Updated { get; set; }
+
         public bool Paid { get; set; }
     }
 }

@@ -75,6 +75,9 @@ namespace eShop.Ordering.Order
                 PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value,
                 SubTotal = items.Sum(x => x.SubTotal),
                 TotalQuantity = items.Sum(x => x.Quantity),
+
+                Created = e.Stamp,
+                Updated = e.Stamp
             };
 
             await ctx.App<Infrastructure.IUnitOfWork>().Add(e.OrderId, model).ConfigureAwait(false);
@@ -86,6 +89,7 @@ namespace eShop.Ordering.Order
 
             order.Status = Status.Cancelled.Value;
             order.StatusDescription = Status.Cancelled.Description;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -95,6 +99,7 @@ namespace eShop.Ordering.Order
 
             order.Status = Status.Confirmed.Value;
             order.StatusDescription = Status.Confirmed.Description;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -104,6 +109,7 @@ namespace eShop.Ordering.Order
 
             order.Status = Status.Paid.Value;
             order.StatusDescription = Status.Paid.Description;
+            order.Updated = e.Stamp;
             order.Paid = true;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
@@ -114,6 +120,7 @@ namespace eShop.Ordering.Order
 
             order.Status = Status.Shipped.Value;
             order.StatusDescription = Status.Shipped.Description;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -136,6 +143,7 @@ namespace eShop.Ordering.Order
             order.BillingCityState = $"{billing.City}, {billing.Street}";
             order.BillingZipCode = billing.ZipCode;
             order.BillingCountry = billing.Country;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -148,6 +156,7 @@ namespace eShop.Ordering.Order
 
             order.PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value;
             order.PaymentMethodId = method.Id;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -159,6 +168,7 @@ namespace eShop.Ordering.Order
             order.TotalItems++;
             order.TotalQuantity += e.Quantity;
             order.SubTotal += (e.Quantity * product.Price);
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -172,6 +182,7 @@ namespace eShop.Ordering.Order
             item.Price = e.Price;
 
             order.SubTotal += item.SubTotal;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
@@ -181,6 +192,7 @@ namespace eShop.Ordering.Order
             var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
             order.SubTotal -= item.SubTotal;
+            order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }

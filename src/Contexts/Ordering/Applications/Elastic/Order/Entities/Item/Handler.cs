@@ -40,7 +40,7 @@ namespace eShop.Ordering.Order.Entities.Item
             // add the items to order
             foreach (var id in itemIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItem>(id).ConfigureAwait(false);
+                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id).ConfigureAwait(false);
 
                 var model = new Models.OrderingOrderItem
                 {
