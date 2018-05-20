@@ -21,7 +21,8 @@ namespace eShop.Identity
 
         public async Task<bool> Seed()
         {
-            var roleId = Guid.NewGuid();
+            var roleId1 = Guid.NewGuid();
+            var roleId2 = Guid.NewGuid();
 
             await _bus.CommandToDomain(new User.Commands.Register
             {
@@ -32,15 +33,27 @@ namespace eShop.Identity
 
             await _bus.CommandToDomain(new Role.Commands.Define
             {
-                RoleId = roleId,
+                RoleId = roleId1,
                 Name = "administrator"
+            }).ConfigureAwait(false);
+            await _bus.CommandToDomain(new Role.Commands.Define
+            {
+                RoleId = roleId2,
+                Name = "customer"
             }).ConfigureAwait(false);
 
             await _bus.CommandToDomain(new User.Entities.Role.Commands.Assign
             {
                 UserName = "administrator",
-                RoleId = roleId
+                RoleId = roleId1
             }).ConfigureAwait(false);
+            await _bus.CommandToDomain(new User.Entities.Role.Commands.Assign
+            {
+                UserName = "administrator",
+                RoleId = roleId2
+            }).ConfigureAwait(false);
+
+
 
             this.Started = true;
             return true;

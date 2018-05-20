@@ -48,13 +48,13 @@ namespace eShop.Payment.Payment
                 Id = e.PaymentId,
                 UserName = e.UserName,
                 GivenName = buyer.GivenName,
-                Status = Status.Submitted.DisplayName,
+                Status = Status.Submitted.Value,
                 StatusDescription = Status.Submitted.Description,
                 OrderId = e.OrderId,
                 Reference = "",
                 TotalPayment = order.Total,
                 PaymentMethodCardholder = method.CardholderName,
-                PaymentMethodMethod = Ordering.Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).DisplayName,
+                PaymentMethodMethod = Ordering.Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value,
                 Created = e.Stamp,
                 Updated = e.Stamp,
             };
@@ -64,7 +64,7 @@ namespace eShop.Payment.Payment
         public async Task Handle(Events.Settled e, IMessageHandlerContext ctx)
         {
             var method = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.PaymentIndex>(e.PaymentId).ConfigureAwait(false);
-            method.Status = Status.Settled.DisplayName;
+            method.Status = Status.Settled.Value;
             method.StatusDescription = Status.Settled.Description;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(method.Id, method).ConfigureAwait(false);
@@ -72,7 +72,7 @@ namespace eShop.Payment.Payment
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
             var method = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.PaymentIndex>(e.PaymentId).ConfigureAwait(false);
-            method.Status = Status.Cancelled.DisplayName;
+            method.Status = Status.Cancelled.Value;
             method.StatusDescription = Status.Cancelled.Description;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(method.Id, method).ConfigureAwait(false);

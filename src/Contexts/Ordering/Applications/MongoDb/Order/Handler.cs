@@ -54,7 +54,7 @@ namespace eShop.Ordering.Order
                 Id = e.OrderId,
                 UserName = buyer.Id,
                 BuyerName = buyer.GivenName,
-                Status = Status.Submitted.DisplayName,
+                Status = Status.Submitted.Value,
                 StatusDescription = Status.Submitted.Description,
                 TotalItems = items.Count(),
                 AddressId = address.Id,
@@ -63,7 +63,7 @@ namespace eShop.Ordering.Order
                 ZipCode = address.ZipCode,
                 Country = address.Country,
                 PaymentMethodId = method.Id,
-                PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).DisplayName,
+                PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value,
                 SubTotal = items.Sum(x => x.SubTotal),
                 TotalQuantity = items.Sum(x => x.Quantity),
             };
@@ -75,7 +75,7 @@ namespace eShop.Ordering.Order
         {
             var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
-            order.Status = Status.Cancelled.DisplayName;
+            order.Status = Status.Cancelled.Value;
             order.StatusDescription = Status.Cancelled.Description;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
@@ -84,7 +84,7 @@ namespace eShop.Ordering.Order
         {
             var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
-            order.Status = Status.Confirmed.DisplayName;
+            order.Status = Status.Confirmed.Value;
             order.StatusDescription = Status.Confirmed.Description;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
@@ -93,7 +93,7 @@ namespace eShop.Ordering.Order
         {
             var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
-            order.Status = Status.Paid.DisplayName;
+            order.Status = Status.Paid.Value;
             order.StatusDescription = Status.Paid.Description;
             order.Paid = true;
 
@@ -103,7 +103,7 @@ namespace eShop.Ordering.Order
         {
             var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
-            order.Status = Status.Shipped.DisplayName;
+            order.Status = Status.Shipped.Value;
             order.StatusDescription = Status.Shipped.Description;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
@@ -129,7 +129,7 @@ namespace eShop.Ordering.Order
             var method = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
-            order.PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).DisplayName;
+            order.PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value;
             order.PaymentMethodId = method.Id;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);

@@ -51,7 +51,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
                 CardNumber = e.CardNumber,
                 Expiration = e.Expiration,
                 SecurityNumber = e.SecurityNumber,
-                CardType = e.CardType.DisplayName
+                CardType = e.CardType.Value
             };
 
             return ctx.App<Infrastructure.IUnitOfWork>().Add(e.PaymentMethodId, model);
