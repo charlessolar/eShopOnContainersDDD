@@ -68,7 +68,8 @@ namespace eShop.Ordering.Order
                 OrderId = request.OrderId,
                 UserName = session.UserName,
                 BasketId = request.BasketId,
-                AddressId = request.AddressId,
+                ShippingAddressId = request.ShippingAddressId,
+                BillingAddressId = request.BillingAddressId,
                 PaymentMethodId = request.PaymentMethodId
             });
         }
@@ -92,7 +93,8 @@ namespace eShop.Ordering.Order
             return _bus.CommandToDomain(new Commands.ChangeAddress
             {
                 OrderId = request.OrderId,
-                AddressId = request.AddressId
+                ShippingId = request.ShippingId,
+                BillingId = request.BillingId
             });
         }
 

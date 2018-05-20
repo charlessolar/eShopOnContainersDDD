@@ -12,7 +12,8 @@ namespace eShop.Ordering.Order.Commands
         public string UserName { get; set; }
         public Guid BasketId { get; set; }
 
-        public Guid AddressId { get; set; }
+        public Guid ShippingAddressId { get; set; }
+        public Guid BillingAddressId { get; set; }
         public Guid PaymentMethodId { get; set; }
     }
 }

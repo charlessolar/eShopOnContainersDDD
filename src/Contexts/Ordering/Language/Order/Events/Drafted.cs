@@ -12,7 +12,8 @@ namespace eShop.Ordering.Order.Events
         string UserName { get; set; }
         Guid BasketId { get; set; }
 
-        Guid AddressId { get; set; }
+        Guid ShippingAddressId { get; set; }
+        Guid BillingAddressId { get; set; }
         Guid PaymentMethodId { get; set; }
     }
 }

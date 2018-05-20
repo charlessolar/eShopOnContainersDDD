@@ -53,7 +53,8 @@ namespace eShop.Ordering.Order
             var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Models.OrderingBuyerIndex>(e.UserName)
                 .ConfigureAwait(false);
 
-            var address = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.Address.Models.Address>(e.AddressId).ConfigureAwait(false);
+            var shipping = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.Address.Models.Address>(e.ShippingAddressId).ConfigureAwait(false);
+            var billing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.Address.Models.Address>(e.BillingAddressId).ConfigureAwait(false);
             var method = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
             // get all items in basket
@@ -72,11 +73,19 @@ namespace eShop.Ordering.Order
                 BuyerName = buyer.GivenName,
                 Status = Status.Submitted.Value,
                 StatusDescription = Status.Submitted.Description,
-                AddressId = address.Id,
-                Address = address.Street,
-                CityState = $"{address.City}, {address.State}",
-                ZipCode = address.ZipCode,
-                Country = address.Country,
+
+                ShippingAddressId = shipping.Id,
+                ShippingAddress = shipping.Street,
+                ShippingCityState = $"{shipping.City}, {shipping.State}",
+                ShippingZipCode = shipping.ZipCode,
+                ShippingCountry = shipping.Country,
+
+                BillingAddressId = billing.Id,
+                BillingAddress = billing.Street,
+                BillingCityState = $"{billing.City}, {billing.State}",
+                BillingZipCode = billing.ZipCode,
+                BillingCountry = billing.Country,
+
                 PaymentMethodId = method.Id,
                 PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value,
                 TotalItems = items.Count(),
@@ -126,15 +135,23 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.AddressChanged e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var address = await ctx.App<Infrastructure.IUnitOfWork>()
-                .Get<Buyer.Entities.Address.Models.Address>(e.AddressId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
+            var billing = await ctx.App<Infrastructure.IUnitOfWork>()
+                .Get<Buyer.Entities.Address.Models.Address>(e.BillingId).ConfigureAwait(false);
+            var shipping = await ctx.App<Infrastructure.IUnitOfWork>()
+                .Get<Buyer.Entities.Address.Models.Address>(e.ShippingId).ConfigureAwait(false);
 
-            order.AddressId = address.Id;
-            order.Address = address.Street;
-            order.CityState = $"{address.City}, {address.Street}";
-            order.ZipCode = address.ZipCode;
-            order.Country = address.Country;
+            order.ShippingAddressId = shipping.Id;
+            order.ShippingAddress = shipping.Street;
+            order.ShippingCityState = $"{shipping.City}, {shipping.Street}";
+            order.ShippingZipCode = shipping.ZipCode;
+            order.ShippingCountry = shipping.Country;
+
+            order.BillingAddressId = billing.Id;
+            order.BillingAddress = billing.Street;
+            order.BillingCityState = $"{billing.City}, {billing.Street}";
+            order.BillingZipCode = billing.ZipCode;
+            order.BillingCountry = billing.Country;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }

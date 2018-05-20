@@ -14,11 +14,16 @@ namespace eShop.Ordering.Order.Models
         public string UserName { get; set; }
         public string BuyerName { get; set; }
 
-        public Guid AddressId { get; set; }
-        public string Address { get; set; }
-        public string CityState { get; set; }
-        public string ZipCode { get; set; }
-        public string Country { get; set; }
+        public Guid ShippingAddressId { get; set; }
+        public string ShippingAddress { get; set; }
+        public string ShippingCityState { get; set; }
+        public string ShippingZipCode { get; set; }
+        public string ShippingCountry { get; set; }
+        public Guid BillingAddressId { get; set; }
+        public string BillingAddress { get; set; }
+        public string BillingCityState { get; set; }
+        public string BillingZipCode { get; set; }
+        public string BillingCountry { get; set; }
 
         public Guid PaymentMethodId { get; set; }
         public string PaymentMethod { get; set; }

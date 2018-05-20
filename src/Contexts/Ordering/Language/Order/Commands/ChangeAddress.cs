@@ -9,6 +9,7 @@ namespace eShop.Ordering.Order.Commands
     {
         public Guid OrderId { get; set; }
 
-        public Guid AddressId { get; set; }
+        public Guid ShippingId { get; set; }
+        public Guid BillingId { get; set; }
     }
 }

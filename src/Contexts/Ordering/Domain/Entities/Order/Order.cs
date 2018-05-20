@@ -8,14 +8,15 @@ namespace eShop.Ordering.Order
     {
         private Order() { }
 
-        public void Draft(Buyer.State buyer, Basket.Basket.State basket, Buyer.Entities.Address.State address, Buyer.Entities.PaymentMethod.State method)
+        public void Draft(Buyer.State buyer, Basket.Basket.State basket, Buyer.Entities.Address.State shipping, Buyer.Entities.Address.State billing, Buyer.Entities.PaymentMethod.State method)
         {
             Apply<Events.Drafted>(x =>
             {
                 x.OrderId = Id;
                 x.UserName = buyer.Id;
                 x.BasketId = basket.Id;
-                x.AddressId = address.Id;
+                x.ShippingAddressId = shipping.Id;
+                x.BillingAddressId = billing.Id;
                 x.PaymentMethodId = method.Id;
             });
 
@@ -52,12 +53,13 @@ namespace eShop.Ordering.Order
                 x.OrderId = Id;
             });
         }
-        public void ChangeAddress(Buyer.Entities.Address.State address)
+        public void ChangeAddress(Buyer.Entities.Address.State shipping, Buyer.Entities.Address.State billing)
         {
             Apply<Events.AddressChanged>(x =>
             {
                 x.OrderId = Id;
-                x.AddressId = address.Id;
+                x.ShippingId = shipping.Id;
+                x.BillingId = billing.Id;
             });
         }
 

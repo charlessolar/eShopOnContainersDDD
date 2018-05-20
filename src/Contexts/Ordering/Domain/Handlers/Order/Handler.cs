@@ -22,10 +22,11 @@ namespace eShop.Ordering.Order
             var basket = await ctx.For<Basket.Basket.Basket>().Get(command.BasketId).ConfigureAwait(false);
 
             var order = await ctx.For<Order>().New(command.OrderId).ConfigureAwait(false);
-            var address = await buyer.For<Buyer.Entities.Address.Address>().Get(command.AddressId).ConfigureAwait(false);
+            var shipping = await buyer.For<Buyer.Entities.Address.Address>().Get(command.ShippingAddressId).ConfigureAwait(false);
+            var billing = await buyer.For<Buyer.Entities.Address.Address>().Get(command.BillingAddressId).ConfigureAwait(false);
             var method = await buyer.For<Buyer.Entities.PaymentMethod.PaymentMethod>().Get(command.PaymentMethodId).ConfigureAwait(false);
 
-            order.Draft(buyer.State, basket.State, address.State, method.State);
+            order.Draft(buyer.State, basket.State, shipping.State, billing.State, method.State);
         }
 
         public async Task Handle(Commands.Cancel command, IMessageHandlerContext ctx)
@@ -52,9 +53,10 @@ namespace eShop.Ordering.Order
         {
             var order = await ctx.For<Order>().Get(command.OrderId).ConfigureAwait(false);
             var buyer = await ctx.For<Buyer.Buyer>().Get(order.State.UserName).ConfigureAwait(false);
-            var address = await ctx.For<Buyer.Entities.Address.Address>().Get(command.AddressId).ConfigureAwait(false);
+            var shipping = await ctx.For<Buyer.Entities.Address.Address>().Get(command.ShippingId).ConfigureAwait(false);
+            var billing = await ctx.For<Buyer.Entities.Address.Address>().Get(command.BillingId).ConfigureAwait(false);
 
-            order.ChangeAddress(address.State);
+            order.ChangeAddress(shipping.State, billing.State);
         }
         public async Task Handle(Commands.ChangePaymentMethod command, IMessageHandlerContext ctx)
         {
