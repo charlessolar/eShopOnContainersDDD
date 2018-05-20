@@ -42,7 +42,7 @@ namespace eShop.Ordering.Order
             var method = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
             // get all items in basket
-            var itemIds = await ctx.Service<Basket.Basket.Entities.Item.Services.ItemsInBasket, Guid[]>(x => { x.BasketId = e.BasketId; })
+            var itemIds = await ctx.Service<Basket.Basket.Entities.Item.Services.ItemsInBasket, string[]>(x => { x.BasketId = e.BasketId; })
                 .ConfigureAwait(false);
 
             var items = await itemIds.SelectAsync(id =>

@@ -13,7 +13,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
         IHandleMessages<Item.Events.ItemAdded>,
         IHandleMessages<Item.Events.ItemRemoved>,
         IHandleMessages<Basket.Events.Destroyed>,
-        IProvideService<ItemsInBasket, Guid[]>
+        IProvideService<ItemsInBasket, string[]>
     {
         public async Task Handle(Item.Events.ItemAdded e, IMessageHandlerContext ctx)
         {
@@ -24,13 +24,13 @@ namespace eShop.Basket.Basket.Entities.Item.Services
                 basketitems = new ItemsBasket
                 {
                     Id = e.BasketId,
-                    Items = new[] { e.ProductId }
+                    Items = new[] { Handler.ItemIdGenerator(e.BasketId, e.ProductId) }
                 };
                 await ctx.App<Infrastructure.IUnitOfWork>().Add(e.BasketId, basketitems).ConfigureAwait(false);
             }
             else
             {
-                basketitems.Items = basketitems.Items.TryAdd(e.ProductId);
+                basketitems.Items = basketitems.Items.TryAdd(Handler.ItemIdGenerator(e.BasketId, e.ProductId));
                 await ctx.App<Infrastructure.IUnitOfWork>().Update(e.BasketId, basketitems).ConfigureAwait(false);
             }
         }
@@ -40,7 +40,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
             var basketitems = await ctx.App<Infrastructure.IUnitOfWork>().Get<ItemsBasket>(e.BasketId)
                 .ConfigureAwait(false);
 
-            basketitems.Items = basketitems.Items.TryRemove(e.ProductId);
+            basketitems.Items = basketitems.Items.TryRemove(Handler.ItemIdGenerator(e.BasketId, e.ProductId));
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.BasketId, basketitems).ConfigureAwait(false);
         }
 
@@ -48,17 +48,17 @@ namespace eShop.Basket.Basket.Entities.Item.Services
         {
             return ctx.App<Infrastructure.IUnitOfWork>().Delete<ItemsBasket>(e.BasketId);
         }
-        public async Task<Guid[]> Handle(ItemsInBasket service, IServiceContext ctx)
+        public async Task<string[]> Handle(ItemsInBasket service, IServiceContext ctx)
         {
             var basketitems = await ctx.App<Infrastructure.IUnitOfWork>().Get<ItemsBasket>(service.BasketId).ConfigureAwait(false);
 
-            return basketitems?.Items ?? new Guid[] { };
+            return basketitems?.Items ?? new string[] { };
         }
 
         class ItemsBasket
         {
             public Guid Id { get; set; }
-            public Guid[] Items { get; set; }
+            public string[] Items { get; set; }
         }
     }
 }

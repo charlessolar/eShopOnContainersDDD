@@ -5,7 +5,7 @@ using Aggregates;
 
 namespace eShop.Basket.Basket.Entities.Item.Services
 {
-    public class ItemsInBasket : IService<Guid[]>
+    public class ItemsInBasket : IService<string[]>
     {
         public Guid BasketId { get; set; }
     }

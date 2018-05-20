@@ -18,7 +18,7 @@ namespace eShop.Ordering.Order.Entities.Item
         public async Task Handle(Order.Events.Drafted e, IMessageHandlerContext ctx)
         {
             // get all items in basket
-            var itemIds = await ctx.Service<Basket.Basket.Entities.Item.Services.ItemsInBasket, Guid[]>(x => { x.BasketId = e.BasketId; })
+            var itemIds = await ctx.Service<Basket.Basket.Entities.Item.Services.ItemsInBasket, string[]>(x => { x.BasketId = e.BasketId; })
                 .ConfigureAwait(false);
 
             // add the items to order

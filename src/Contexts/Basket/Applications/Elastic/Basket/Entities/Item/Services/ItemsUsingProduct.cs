@@ -56,7 +56,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
         public async Task Handle(Basket.Events.Destroyed e, IMessageHandlerContext ctx)
         {
             // get all items in basket
-            var itemIds = await ctx.Service<Services.ItemsInBasket, Guid[]>(x => { x.BasketId = e.BasketId; })
+            var itemIds = await ctx.Service<Services.ItemsInBasket, string[]>(x => { x.BasketId = e.BasketId; })
                 .ConfigureAwait(false);
             
             // remove the basket id from all productitem lists
