@@ -19,6 +19,7 @@ namespace Infrastructure
             public string Field { get; set; }
             public string Value { get; set; }
             public Operation Op { get; set; }
+            public double? Boost { get; set; }
         }
 
         internal class QueryDefinition : Infrastructure.QueryDefinition
@@ -38,9 +39,9 @@ namespace Infrastructure
                 _fields = new List<Infrastructure.FieldQueryDefinition>();
             }
 
-            public GroupedBuilder Add(string field, string value, Operation op)
+            public GroupedBuilder Add(string field, string value, Operation op, double? boost = null)
             {
-                _fields.Add(new FieldQueryDefinition { Field = field, Value = value, Op = op });
+                _fields.Add(new FieldQueryDefinition { Field = field, Value = value, Op = op, Boost = boost });
                 return this;
             }
         }
@@ -52,9 +53,9 @@ namespace Infrastructure
             _groups = new List<GroupedBuilder>();
         }
 
-        public QueryBuilder Add(string field, string value, Operation op)
+        public QueryBuilder Add(string field, string value, Operation op, double? boost = null)
         {
-            _groups.Add(new GroupedBuilder(Group.ALL).Add(field, value, op));
+            _groups.Add(new GroupedBuilder(Group.ALL).Add(field, value, op, boost));
             return this;
         }
 

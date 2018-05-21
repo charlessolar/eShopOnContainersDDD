@@ -11,8 +11,7 @@ using Infrastructure.Queries;
 
 namespace eShop.Ordering.Order
 {
-    public class Handler :
-        IHandleQueries<Queries.Orders>,
+    public class BuyerOrders :
         IHandleQueries<Queries.BuyerOrders>,
         IHandleMessages<Events.Drafted>,
         IHandleMessages<Events.Canceled>,
@@ -25,26 +24,17 @@ namespace eShop.Ordering.Order
         IHandleMessages<Entities.Item.Events.PriceOverridden>,
         IHandleMessages<Entities.Item.Events.Removed>
     {
-        public async Task Handle(Queries.Orders query, IMessageHandlerContext ctx)
-        {
-            var builder = new QueryBuilder();
-
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderIndex>(builder.Build())
-                .ConfigureAwait(false);
-
-            await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
-        }
         public async Task Handle(Queries.BuyerOrders query, IMessageHandlerContext ctx)
         {
             var builder = new QueryBuilder();
             builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
 
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderIndex>(builder.Build())
+            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrder>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
         }
-    
+
 
         public async Task Handle(Events.Drafted e, IMessageHandlerContext ctx)
         {
@@ -66,7 +56,7 @@ namespace eShop.Ordering.Order
                 return ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
             }).ConfigureAwait(false);
 
-            var model = new Models.OrderingOrderIndex
+            var model = new Models.OrderingOrder
             {
                 Id = e.OrderId,
                 UserName = buyer.Id,
@@ -88,12 +78,21 @@ namespace eShop.Ordering.Order
 
                 PaymentMethodId = method.Id,
                 PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value,
-                TotalItems = items.Count(),
-                SubTotal = items.Sum(x => x.SubTotal),
-                TotalQuantity = items.Sum(x => x.Quantity),
 
                 Created = e.Stamp,
-                Updated = e.Stamp
+                Updated = e.Stamp,
+                Items = items.Select(x => new Entities.Item.Models.OrderingOrderItem
+                {
+                    Id = x.Id,
+                    OrderId = e.OrderId,
+                    ProductId =x.ProductId,
+                    ProductName=x.ProductName,
+                    ProductDescription=x.ProductDescription,
+                    ProductPictureContents=x.ProductPictureContents,
+                    ProductPictureContentType=x.ProductPictureContentType,
+                    ProductPrice=x.ProductPrice,
+                    Quantity=x.Quantity
+                }).ToArray()
             };
 
             await ctx.App<Infrastructure.IUnitOfWork>().Add(e.OrderId, model).ConfigureAwait(false);
@@ -101,7 +100,7 @@ namespace eShop.Ordering.Order
 
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Cancelled.Value;
             order.StatusDescription = Status.Cancelled.Description;
@@ -111,7 +110,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.Confirm e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Confirmed.Value;
             order.StatusDescription = Status.Confirmed.Description;
@@ -121,7 +120,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.Paid e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Paid.Value;
             order.StatusDescription = Status.Paid.Description;
@@ -132,7 +131,7 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Events.Shipped e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Shipped.Value;
             order.StatusDescription = Status.Shipped.Description;
@@ -166,7 +165,7 @@ namespace eShop.Ordering.Order
 
         public async Task Handle(Events.PaymentMethodChanged e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
             var method = await ctx.App<Infrastructure.IUnitOfWork>()
                 .Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
@@ -178,36 +177,42 @@ namespace eShop.Ordering.Order
         }
         public async Task Handle(Entities.Item.Events.Added e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
             var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
 
-            order.TotalItems++;
-            order.TotalQuantity += e.Quantity;
-            order.SubTotal += (e.Quantity * product.Price);
+            order.Items = order.Items.TryAdd(new Entities.Item.Models.OrderingOrderItem
+            {
+                Id = Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId),
+                OrderId = e.OrderId,
+                ProductId = product.Id,
+                ProductName = product.Name,
+                ProductDescription = product.Description,
+                ProductPictureContents = product.PictureContents,
+                ProductPictureContentType = product.PictureContentType,
+                ProductPrice = product.Price,
+                Quantity = e.Quantity
+            }, x => x.Id);
+
             order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.PriceOverridden e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
-            order.SubTotal -= item.SubTotal;
-
+            var item = order.Items.Single(x => x.ProductId == e.ProductId);
             item.Price = e.Price;
 
-            order.SubTotal += item.SubTotal;
             order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Removed e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
 
-            order.SubTotal -= item.SubTotal;
+            order.Items = order.Items.TryRemove(e.ProductId, x => x.ProductId);
             order.Updated = e.Stamp;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);

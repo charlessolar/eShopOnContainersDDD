@@ -30,9 +30,9 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
             if (!string.IsNullOrEmpty(query.Term))
             {
                 var group = builder.Grouped(Group.ANY);
-                group.Add("Alias", query.Term, Operation.CONTAINS);
-                group.Add("CardholderName", query.Term, Operation.CONTAINS);
-                group.Add("CardType", query.Term, Operation.CONTAINS);
+                group.Add("Alias", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("CardholderName", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("CardType", query.Term, Operation.AUTOCOMPLETE);
             }
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.PaymentMethod>(builder.Build())
                 .ConfigureAwait(false);

@@ -14,6 +14,7 @@ namespace Infrastructure
         LESS_THAN,
         LESS_THAN_OR_EQUAL,
         CONTAINS,
+        AUTOCOMPLETE
     }
 
     public enum Group
@@ -36,6 +37,8 @@ namespace Infrastructure
         string Value { get; set; }
 
         Operation Op { get; set; }
+
+        double? Boost { get; set; }
     }
 
     public interface IQueryResult<T> where T : class

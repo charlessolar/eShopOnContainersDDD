@@ -156,20 +156,28 @@ namespace eShop
             switch (definition.Op)
             {
                 case Operation.EQUAL:
-                    return descriptor.Term(term => term.Field(definition.Field).Value(definition.Value));
+                    return descriptor.Term(term => term.Field(definition.Field).Value(definition.Value).Boost(definition.Boost));
                 case Operation.CONTAINS:
-                    return descriptor.Term(term => term.Field(definition.Field).Value(definition.Value));
+                    return descriptor.Match(match => match.Field(definition.Field).Query(definition.Value).Boost(definition.Boost));
                 case Operation.GREATER_THAN:
-                    return descriptor.Range(number => number.Field(definition.Field).GreaterThan(double.Parse(definition.Value)));
+                    return descriptor.Range(number => number.Field(definition.Field).GreaterThan(double.Parse(definition.Value)).Boost(definition.Boost));
                 case Operation.GREATER_THAN_OR_EQUAL:
-                    return descriptor.Range(number => number.Field(definition.Field).GreaterThanOrEquals(double.Parse(definition.Value)));
+                    return descriptor.Range(number => number.Field(definition.Field).GreaterThanOrEquals(double.Parse(definition.Value)).Boost(definition.Boost));
                 case Operation.LESS_THAN:
-                    return descriptor.Range(number => number.Field(definition.Field).LessThan(double.Parse(definition.Value)));
+                    return descriptor.Range(number => number.Field(definition.Field).LessThan(double.Parse(definition.Value)).Boost(definition.Boost));
                 case Operation.LESS_THAN_OR_EQUAL:
-                    return descriptor.Range(number => number.Field(definition.Field).LessThanOrEquals(double.Parse(definition.Value)));
+                    return descriptor.Range(number => number.Field(definition.Field).LessThanOrEquals(double.Parse(definition.Value)).Boost(definition.Boost));
                 case Operation.NOT_EQUAL:
-                    return !descriptor.Term(term => term.Field(definition.Field).Value(definition.Value));
-
+                    return !descriptor.Term(term => term.Field(definition.Field).Value(definition.Value).Boost(definition.Boost));
+                case Operation.AUTOCOMPLETE:
+                    return descriptor.MultiMatch(match => match.Fields(f => f
+                        .Field($"{definition.Field}.default", 10)
+                        .Field($"{definition.Field}.stemmed", 2)
+                        .Field($"{definition.Field}.shingles", 2)
+                        .Field($"{definition.Field}.ngram"))
+                        .Query(definition.Value)
+                        .Operator(Operator.And)
+                        );
             }
 
             throw new ArgumentException($"operation {definition.Op} is not supported");

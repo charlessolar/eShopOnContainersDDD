@@ -30,10 +30,12 @@ namespace eShop.Ordering.Buyer.Entities.Address
             if (!string.IsNullOrEmpty(query.Term))
             {
                 var group = builder.Grouped(Group.ANY);
-                group.Add("Street", query.Term, Operation.CONTAINS);
-                group.Add("City", query.Term, Operation.CONTAINS);
-                group.Add("State", query.Term, Operation.CONTAINS);
-                group.Add("Alias", query.Term, Operation.CONTAINS);
+                group.Add("Alias", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("Street", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("City", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("State", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("Country", query.Term, Operation.AUTOCOMPLETE);
+                group.Add("ZipCode", query.Term, Operation.AUTOCOMPLETE);
             }
 
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.Address>(builder.Build())

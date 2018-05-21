@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace eShop.Ordering.Order.Models
@@ -28,10 +29,10 @@ namespace eShop.Ordering.Order.Models
         public Guid PaymentMethodId { get; set; }
         public string PaymentMethod { get; set; }
 
-        public int TotalItems { get; set; }
-        public long TotalQuantity { get; set; }
+        public int TotalItems => Items.Count();
+        public long TotalQuantity => Items.Sum(x => x.Quantity);
 
-        public long SubTotal { get; set; }
+        public long SubTotal => Items.Sum(x => x.SubTotal);
 
         public long AdditionalFees { get; set; }
         public long AdditionalTaxes { get; set; }
@@ -42,5 +43,7 @@ namespace eShop.Ordering.Order.Models
         public long Updated { get; set; }
 
         public bool Paid { get; set; }
+
+        public Entities.Item.Models.OrderingOrderItem[] Items { get; set; }
     }
 }
