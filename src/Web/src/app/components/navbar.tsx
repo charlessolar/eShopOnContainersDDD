@@ -1,5 +1,4 @@
 import * as React from 'react';
-import glamorous from 'glamorous';
 import { observable, action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 

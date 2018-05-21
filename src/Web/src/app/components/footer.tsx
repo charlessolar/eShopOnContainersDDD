@@ -1,27 +1,32 @@
 import * as React from 'react';
-import glamorous from 'glamorous';
+
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 interface FooterProps {
   version: string;
   title: string;
 }
 
-const FooterView = glamorous('footer')((_) => ({
-  padding: 20,
-  textAlign: 'center',
-  // background: palette.primaryLight
-}));
-export default class extends React.Component<FooterProps, {}> {
+const styles = (theme: Theme) => ({
+  footer: {
+    padding: 20,
+    textAlign: 'center'
+  }
+});
+
+class FooterView extends React.Component<FooterProps & WithStyles<'footer'>, {}> {
 
   public render() {
     const year = new Date().getFullYear();
-    const { title, version } = this.props;
+    const { classes, title, version } = this.props;
     return (
-      <FooterView>
+      <div className={classes.footer}>
         <div>
           {title} © {year} {version}
         </div>
-      </FooterView>
+      </div>
     );
   }
 }
+
+export default withStyles(styles as any)<FooterProps>(FooterView);

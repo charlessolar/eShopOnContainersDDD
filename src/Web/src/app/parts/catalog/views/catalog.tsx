@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
-import glamorous from 'glamorous';
 
 import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -30,6 +29,23 @@ interface CatalogProps {
 }
 
 const styles = (theme: Theme) => ({
+  appView: {
+    flex: '1 1 auto',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mainView: {
+    'width': '75vw',
+    'flex': '1',
+    'marginTop': 20,
+    '@media(max-width: 600px)': {
+      margin: 10
+    }
+  },
   flex: {
     flex: 1
   },
@@ -71,26 +87,8 @@ const styles = (theme: Theme) => ({
   }
 });
 
-const AppView = glamorous('div')((_) => ({
-  flex: '1 1 auto',
-  width: '100vw',
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'auto',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
-const MainView = glamorous('main')({
-  'width': '75vw',
-  'flex': '1',
-  'marginTop': 20,
-  '@media(max-width: 600px)': {
-    margin: 10
-  }
-});
-
 @observer
-class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'appbar' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card' | 'selectors' | 'controls' | 'dropdowns' | 'badge'>, {}> {
+class CatalogView extends React.Component<CatalogProps & WithStyles<'appView' | 'mainView' | 'flex' | 'appbar' | 'navbar' | 'button' | 'noProduct' | 'media' | 'card' | 'selectors' | 'controls' | 'dropdowns' | 'badge'>, {}> {
 
   private pullProducts = () => {
     const { store } = this.props;
@@ -107,7 +105,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
 
     const products = sort(Array.from(store.products.values()), 'id');
     return (
-      <AppView>
+      <div className={classes.appView}>
         <AppBar position='static' className={classes.appbar}>
           <Toolbar>
             <Using model={store}>
@@ -130,7 +128,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
             </Using>
           </Toolbar>
         </AppBar>
-        <MainView>
+        <main className={classes.mainView}>
           {products.length === 0 ?
             <Grid container justify='center'>
               <Grid item xs={6}>
@@ -162,10 +160,10 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
               ))}
             </Grid>
           }
-        </MainView>
-      </AppView>
+        </main>
+      </div>
     );
   }
 }
 
-export default hot(module)(withStyles(styles)(CatalogView));
+export default hot(module)(withStyles(styles as any)(CatalogView));

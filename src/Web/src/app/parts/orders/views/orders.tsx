@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
-import glamorous from 'glamorous';
 
 import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,9 +14,11 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import NotificationIcon from '@material-ui/icons/Notifications';
 
 import { sort } from '../../../utils';
 import { Using, Formatted, Field } from '../../../components/models';
@@ -28,6 +29,23 @@ interface OrderProps {
 }
 
 const styles = (theme: Theme) => ({
+  appView: {
+    flex: '1 1 auto',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mainView: {
+    'width': '75vw',
+    'flex': '1',
+    'marginTop': 20,
+    '@media(max-width: 600px)': {
+      margin: 10
+    }
+  },
   root: {
     marginTop: theme.spacing.unit * 3,
     width: '100%',
@@ -53,8 +71,8 @@ const styles = (theme: Theme) => ({
   },
   avatar: {
     margin: 10,
-    width: 120,
-    height: 120
+    width: 80,
+    height: 80
   },
   row: {
     '&:nth-of-type(odd)': {
@@ -83,12 +101,17 @@ const styles = (theme: Theme) => ({
     flex: 1
   },
   dropdowns: {
-    marginRight: 20
+    marginRight: 20,
   },
   controls: {
     display: 'flex',
     maxWidth: '60vw'
   },
+  status: {
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dashed',
+    textDecorationColor: theme.palette.primary.main,
+  }
 });
 
 const HeaderTableCell = withStyles(theme => ({
@@ -99,26 +122,8 @@ const HeaderTableCell = withStyles(theme => ({
   },
 }))(TableCell as any);
 
-const AppView = glamorous('div')((_) => ({
-  flex: '1 1 auto',
-  width: '100vw',
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'auto',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
-const MainView = glamorous('main')({
-  'width': '75vw',
-  'flex': '1',
-  'marginTop': 20,
-  '@media(max-width: 600px)': {
-    margin: 10
-  }
-});
-
 @observer
-class OrderView extends React.Component<OrderProps & WithStyles<'root' | 'container' | 'navbar' | 'appbar' | 'noOrders' | 'table' | 'avatar' | 'row' | 'details' | 'product' | 'avatarQuantity' | 'divider' | 'price' | 'button' | 'selectors' | 'controls' | 'dropdowns'>, {}> {
+class OrderView extends React.Component<OrderProps & WithStyles<'appView' | 'mainView' | 'root' | 'container' | 'navbar' | 'appbar' | 'noOrders' | 'table' | 'avatar' | 'row' | 'details' | 'product' | 'avatarQuantity' | 'divider' | 'price' | 'button' | 'selectors' | 'controls' | 'dropdowns' | 'status'>, {}> {
 
   private pullOrders = () => {
     const { store } = this.props;
@@ -131,25 +136,25 @@ class OrderView extends React.Component<OrderProps & WithStyles<'root' | 'contai
     const orders = sort(Array.from(store.orders.values()), 'created', 'desc');
 
     return (
-      <AppView>
+      <div className={classes.appView}>
         <AppBar position='static' className={classes.appbar}>
           <Toolbar>
             <Using model={store}>
-              <div className={classes.selectors}>
-                <div className={classes.controls}>
-                  <div className={classes.dropdowns}>
+              <Grid container>
+                <Grid item xs={3}>
                     <Field field='orderStatus' />
-                  </div>
-                  <div className={classes.dropdowns}>
+                  </Grid>
+                  <Grid item xs={2}>
                     <Field field='period' />
-                  </div>
+                  </Grid>
+                  <Grid item xs={1}>
                   <Button className={classes.button} variant='raised' size='small' color='primary' onClick={this.pullOrders}><KeyboardArrowRight /></Button>
-                </div>
-              </div>
+                  </Grid>
+              </Grid>
             </Using>
           </Toolbar>
         </AppBar>
-        <MainView>
+        <main className={classes.mainView}>
           {orders.length === 0 ?
             <Grid container justify='center'>
               <Grid item xs={6}>
@@ -165,12 +170,13 @@ class OrderView extends React.Component<OrderProps & WithStyles<'root' | 'contai
                         <HeaderTableCell><strong>Date Placed</strong><br />{order.placed}</HeaderTableCell>
                         <HeaderTableCell><strong>Total</strong><br /><Formatted field='total' /></HeaderTableCell>
                         <HeaderTableCell><strong>Ship To</strong><br />{order.shippingAddress}</HeaderTableCell>
-                        <HeaderTableCell><strong>Order #</strong> {order.id}</HeaderTableCell>
+                        <HeaderTableCell><strong>Order #</strong><br />{order.id}</HeaderTableCell>
+                        <HeaderTableCell><strong>Status</strong><br /><Tooltip title={order.statusDescription}><span className={classes.status}>{order.status}</span></Tooltip></HeaderTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       <TableRow>
-                        <TableCell colSpan={4}>
+                        <TableCell colSpan={5}>
                           <Typography variant='headline'>Order Items</Typography>
                             {order.items.map((item) => (
                               <Using model={item} key={item.id}>
@@ -211,8 +217,8 @@ class OrderView extends React.Component<OrderProps & WithStyles<'root' | 'contai
                 </Using>
               ))
           }
-        </MainView>
-      </AppView>
+        </main>
+      </div>
     );
   }
 }

@@ -28,7 +28,7 @@ const styles = theme => ({
   formControl: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 400,
+    maxWidth: 400,
   },
 });
 
@@ -44,7 +44,7 @@ class DropdownControl extends React.Component<DropdownProps & WithStyles<'formCo
     const { id, label, required, error, value, options, disabled, classes, allowEmpty, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} fullWidth disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <Select value={value} onChange={this.handleChange} {...fieldProps} inputProps={{ id }}>
           {allowEmpty === true || allowEmpty === undefined && <MenuItem value=''><em>None</em></MenuItem>}

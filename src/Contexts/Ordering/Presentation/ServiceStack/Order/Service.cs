@@ -28,7 +28,12 @@ namespace eShop.Ordering.Order
 
         public Task<object> Any(Services.ListOrders request)
         {
-            return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders { });
+            return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders
+            {
+                OrderStatus = string.IsNullOrEmpty(request.OrderStatus) ? null : Status.FromValue(request.OrderStatus),
+                From = request.From,
+                To = request.To
+            });
         }
 
         public Task<object> Any(Services.BuyerOrders request)
@@ -40,7 +45,7 @@ namespace eShop.Ordering.Order
             return _bus.RequestPaged<Queries.BuyerOrders, Models.OrderingOrder>(new Queries.BuyerOrders
             {
                 UserName = session.UserName,
-                OrderStatus = Status.FromValue(request.OrderStatus),
+                OrderStatus = string.IsNullOrEmpty(request.OrderStatus) ? null : Status.FromValue(request.OrderStatus),
                 From = request.From,
                 To = request.To
             });

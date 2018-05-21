@@ -8,12 +8,12 @@ import { FieldDefinition } from '../../../components/models';
 import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
 
-import { OrderType, OrderModel } from '../models/order';
+import { OrderIndexType, OrderIndexModel } from '../models/order';
 
 const debug = new Debug('orders');
 
-export interface OrderStoreType {
-  orders: Map<string, OrderType>;
+export interface OrdersStoreType {
+  orders: Map<string, OrderIndexType>;
   loading: boolean;
 
   orderStatus: string;
@@ -24,10 +24,10 @@ export interface OrderStoreType {
   readonly form: {[idx: string]: FieldDefinition};
 }
 
-export const OrderStoreModel = types
+export const OrdersStoreModel = types
 .model('OrderStore',
 {
-  orders: types.optional(types.map(OrderModel), {}),
+  orders: types.optional(types.map(OrderIndexModel), {}),
 
   orderStatus: types.maybe(types.string),
 
@@ -46,9 +46,11 @@ export const OrderStoreModel = types
         label: 'Status',
         options: [
           { value: 'SUBMITTED', label: 'Submitted'},
+          { value: 'WAITING_VALIDATION', label: 'Waiting Validation'},
           { value: 'CONFIRMED', label: 'Confirmed'},
           { value: 'PAID', label: 'Paid'},
           { value: 'SHIPPED', label: 'Shipped' },
+          { value: 'NO_STOCK', label: 'Stock Exception'},
           { value: 'CANCELED', label: 'Canceled' }
         ]
       },
@@ -61,7 +63,7 @@ export const OrderStoreModel = types
 }))
 .actions(self => {
   const get = flow(function*() {
-    const request = new DTOs.BuyerOrders();
+    const request = new DTOs.ListOrders();
 
     if (self.orderStatus) {
       request.orderStatus = self.orderStatus;
@@ -76,7 +78,7 @@ export const OrderStoreModel = types
     self.loading = true;
     try {
       const client = getEnv(self).api as ApiClientType;
-      const result: DTOs.PagedResponse<DTOs.OrderingOrder> = yield client.paged(request);
+      const result: DTOs.PagedResponse<DTOs.OrderingOrderIndex> = yield client.paged(request);
 
       self.orders.clear();
       result.records.forEach((record) => {

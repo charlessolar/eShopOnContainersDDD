@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import glamorous from 'glamorous';
+
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 import asyncView from './asyncView';
 
@@ -16,19 +17,18 @@ interface AppViewProps {
   store?: StoreType;
 }
 
-const AppRoot = glamorous('div')({
-  display: 'flex',
-  minHeight: '100vh'
-});
-
-const AppView = glamorous('div')((_) => ({
-  flex: '1 1 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'auto',
-}));
-
-const MainView = glamorous('main')({
+const styles = (theme: Theme) => ({
+  appRoot: {
+    display: 'flex',
+    minHeight: '100vh'
+  },
+  appView: {
+    flex: '1 1 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+  },
+  mainView: {
   'display': 'flex',
   'flex': '1',
   'justifyContent': 'center',
@@ -36,26 +36,29 @@ const MainView = glamorous('main')({
   '@media(max-width: 600px)': {
     margin: 10
   }
+  }
 });
 
 @inject('store')
 @observer
-export default class extends React.Component<AppViewProps, {}> {
+class AppView extends React.Component<AppViewProps & WithStyles<'appRoot' | 'appView' | 'mainView'>, {}> {
 
   public render() {
-    const { store, children, title, version } = this.props;
+    const { classes, store, children, title, version } = this.props;
 
     return (
-      <AppRoot>
-        <AppView>
+      <div className={classes.appRoot}>
+        <div className={classes.appView}>
           <NavBar title={title} authenticated={store.authenticated} name={store.auth.name} />
-          <MainView>
+          <main className={classes.mainView}>
             {children}
-          </MainView>
+          </main>
           <Footer title={title} version={version} />
-        </AppView>
-      </AppRoot>
+        </div>
+      </div>
     );
 
   }
 }
+
+export default withStyles(styles as any)<AppViewProps>(AppView);

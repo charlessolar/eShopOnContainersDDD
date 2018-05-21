@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
-import glamorous from 'glamorous';
 
 import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -36,6 +35,23 @@ interface BasketProps {
 }
 
 const styles = (theme: Theme) => ({
+  appView: {
+    flex: '1 1 auto',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mainView: {
+    'width': '75vw',
+    'flex': '1',
+    'marginTop': 20,
+    '@media(max-width: 600px)': {
+      margin: 10
+    }
+  },
   appbar: {
     boxShadow: '0 4px 2px -2px gray',
     backgroundColor: theme.palette.grey[100]
@@ -80,26 +96,8 @@ const styles = (theme: Theme) => ({
   }
 });
 
-const AppView = glamorous('div')((_) => ({
-  flex: '1 1 auto',
-  width: '100vw',
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'auto',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
-const MainView = glamorous('main')({
-  'width': '75vw',
-  'flex': '1',
-  'marginTop': 20,
-  '@media(max-width: 600px)': {
-    margin: 10
-  }
-});
-
 @observer
-class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appbar' | 'flex' | 'container' | 'table' | 'avatar' | 'row' | 'button' | 'total' | 'quantityButton'>, {}> {
+class BasketView extends React.Component<BasketProps & WithStyles<'appView' | 'mainView' | 'none' | 'appbar' | 'flex' | 'container' | 'table' | 'avatar' | 'row' | 'button' | 'total' | 'quantityButton'>, {}> {
 
   private checkout = () => {
     const { store } = this.props;
@@ -113,7 +111,7 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
     const items = sort(Array.from(store.items.values()), 'productId');
     return (
       <Using model={store.basket}>
-        <AppView>
+        <div className={classes.appView}>
           <AppBar position='static' className={classes.appbar}>
             <Toolbar>
               <div className={classes.flex}>
@@ -122,7 +120,7 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
               <Button variant='raised' color='primary' disabled={!store.basket || items.length === 0} onClick={this.checkout}>Checkout</Button>
             </Toolbar>
           </AppBar>
-          <MainView>
+          <main className={classes.mainView}>
             {!store.basket || items.length === 0 ?
 
               <Grid container justify='center'>
@@ -204,8 +202,8 @@ class BasketView extends React.Component<BasketProps & WithStyles<'none' | 'appb
               </Grid>
 
             }
-          </MainView>
-        </AppView>
+          </main>
+        </div>
       </Using>
     );
   }

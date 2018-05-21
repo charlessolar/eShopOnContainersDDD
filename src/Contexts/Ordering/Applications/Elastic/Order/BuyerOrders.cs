@@ -42,10 +42,10 @@ namespace eShop.Ordering.Order
                     group.Add("Status", query.OrderStatus.Value, Operation.EQUAL);
             }
 
-            if (!string.IsNullOrEmpty(query.From))
-                builder.Add("Created", query.From, Operation.GREATER_THAN_OR_EQUAL);
-            if (!string.IsNullOrEmpty(query.To))
-                builder.Add("Created", query.To, Operation.LESS_THAN_OR_EQUAL);
+            if (query.From.HasValue)
+                builder.Add("Created", new DateTimeOffset(query.From.Value).ToUnixTimeMilliseconds().ToString(), Operation.GREATER_THAN_OR_EQUAL);
+            if (query.To.HasValue)
+                builder.Add("Created", new DateTimeOffset(query.To.Value).ToUnixTimeMilliseconds().ToString(), Operation.LESS_THAN_OR_EQUAL);
 
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrder>(builder.Build())
                 .ConfigureAwait(false);

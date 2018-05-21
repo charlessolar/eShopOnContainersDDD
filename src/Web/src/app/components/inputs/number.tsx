@@ -100,7 +100,7 @@ class NumberControl extends React.Component<NumberProps & WithStyles<'formContro
     const { id, label, required, error, type, value, normalize, autoComplete, disabled, classes, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} fullWidth error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <Input id={id} onBlur={this.onBlur} onChange={this.handleChange} type={type || 'text'} autoComplete={autoComplete} value={this.state.value} onKeyDown={this.handleKeydown} {...fieldProps} />
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}
@@ -113,7 +113,7 @@ const styles = theme => ({
   formControl: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 400,
+    maxWidth: 400,
   },
 });
 

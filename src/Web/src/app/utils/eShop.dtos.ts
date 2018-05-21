@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-21 00:10:28
+Date: 2018-05-21 03:58:13
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -1500,6 +1500,9 @@ export module DTOs
     // @Api(Description="Ordering")
     export class BuyerOrders extends Paged<OrderingOrderIndex> implements IReturn<PagedResponse<OrderingOrderIndex>>
     {
+        orderStatus: string;
+        from: string;
+        to: string;
         createResponse() { return new PagedResponse<OrderingOrderIndex>(); }
         getTypeName() { return "BuyerOrders"; }
     }

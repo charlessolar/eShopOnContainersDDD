@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
-import glamorous from 'glamorous';
 
 import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -26,8 +25,8 @@ import { CatalogStoreType, CatalogStoreModel } from '../stores/catalog';
 
 import AvailableStockForm from '../components/availableStockForm';
 
-import ProductFormAdd from '../views/productAdd';
-import ProductFormEdit from '../views/productEdit';
+import ProductFormAdd from '../components/productAdd';
+import ProductFormEdit from '../components/productEdit';
 
 interface CatalogProps {
   store?: CatalogStoreType;

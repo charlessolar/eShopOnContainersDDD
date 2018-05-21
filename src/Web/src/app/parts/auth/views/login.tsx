@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { hot } from 'react-hot-loader';
-import glamorous from 'glamorous';
 
 import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';

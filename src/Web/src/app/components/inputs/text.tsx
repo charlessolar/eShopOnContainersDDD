@@ -27,7 +27,7 @@ const styles = theme => ({
   formControl: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 400,
+    maxWidth: 400,
   },
 });
 
@@ -49,7 +49,7 @@ class TextControl extends React.Component<TextProps & WithStyles<'formControl'>,
     const { id, label, required, error, type, value, autoComplete, classes, disabled, fieldProps } = this.props;
 
     return (
-      <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.formControl} disabled={disabled} fullWidth error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <Input id={id} onInput={this.handleInput} type={type || 'text'} autoComplete={autoComplete} value={value || ''} onKeyDown={this.handleKeydown} {...fieldProps} />
         {error && error[id] ? error[id].map((e, key) => (<FormHelperText key={key} id={id + '-' + key + '-text'}>{e}</FormHelperText>)) : undefined}

@@ -28,6 +28,14 @@ namespace eShop.Ordering.Order
         {
             var builder = new QueryBuilder();
 
+            if (query.OrderStatus != null)
+                builder.Add("Status", query.OrderStatus.Value, Operation.EQUAL);
+            
+            if (query.From.HasValue)
+                builder.Add("Created", new DateTimeOffset(query.From.Value).ToUnixTimeMilliseconds().ToString(), Operation.GREATER_THAN_OR_EQUAL);
+            if (query.To.HasValue)
+                builder.Add("Created", new DateTimeOffset(query.To.Value).ToUnixTimeMilliseconds().ToString(), Operation.LESS_THAN_OR_EQUAL);
+            
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderIndex>(builder.Build())
                 .ConfigureAwait(false);
 

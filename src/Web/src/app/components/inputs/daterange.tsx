@@ -96,7 +96,7 @@ class DateRangeControl extends React.Component<DateRangeProps & WithStyles<'cont
 
     const modifiers = { start: from, end: to };
     return (
-      <FormControl required={required} className={classes.container} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <FormControl required={required} className={classes.container} fullWidth disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <Grid container spacing={8}>
           <Grid item xs={4}>
             <DayPickerInput
