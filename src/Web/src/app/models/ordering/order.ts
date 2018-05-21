@@ -3,6 +3,8 @@ import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
 
+import { OrderItemType, OrderItemModel } from './orderitem';
+
 export interface OrderType {
   id: string;
   status: string;
@@ -11,11 +13,16 @@ export interface OrderType {
   userName: string;
   buyerName: string;
 
-  addressId: string;
-  address: string;
-  cityState: string;
-  zipCode: string;
-  country: string;
+  shippingAddressId: string;
+  shippingAddress: string;
+  shippingCityState: string;
+  shippingZipCode: string;
+  shippingCountry: string;
+  billingAddressId: string;
+  billingAddress: string;
+  billingCityState: string;
+  billingZipCode: string;
+  billingCountry: string;
 
   paymentMethodId: string;
   paymentMethod: string;
@@ -30,7 +37,12 @@ export interface OrderType {
 
   total: number;
 
+  created: number;
+  updated: number;
+
   paid: boolean;
+
+  items: OrderItemType[];
 }
 export const OrderModel = types
   .model('Ordering_Order', {
@@ -41,11 +53,17 @@ export const OrderModel = types
     userName: types.string,
     buyerName: types.string,
 
-    addressId: types.string,
-    address: types.string,
-    cityState: types.string,
-    zipCode: types.string,
-    country: types.string,
+    shippingAddressId: types.string,
+    shippingAddress: types.string,
+    shippingCityState: types.string,
+    shippingZipCode: types.string,
+    shippingCountry: types.string,
+    billingAddressId: types.string,
+    billingAddress: types.string,
+    billingCityState: types.string,
+    billingZipCode: types.string,
+    billingCountry: types.string,
+
     paymentMethodId: types.string,
     paymentMethod: types.string,
     totalItems: types.number,
@@ -55,7 +73,13 @@ export const OrderModel = types
     additionalFees: types.number,
     additionalTaxes: types.number,
     total: types.number,
-    paid: types.boolean
+
+    created: types.number,
+    updated: types.number,
+
+    paid: types.boolean,
+
+    items: types.array(OrderItemModel)
   });
 
 export interface OrderIndexType {
@@ -66,11 +90,16 @@ export interface OrderIndexType {
   userName: string;
   buyerName: string;
 
-  addressId: string;
-  address: string;
-  cityState: string;
-  zipCode: string;
-  country: string;
+  shippingAddressId: string;
+  shippingAddress: string;
+  shippingCityState: string;
+  shippingZipCode: string;
+  shippingCountry: string;
+  billingAddressId: string;
+  billingAddress: string;
+  billingCityState: string;
+  billingZipCode: string;
+  billingCountry: string;
 
   paymentMethodId: string;
   paymentMethod: string;
@@ -84,6 +113,9 @@ export interface OrderIndexType {
 
   total: number;
 
+  created: number;
+  updated: number;
+
   paid: boolean;
 }
 export const OrderIndexModel = types
@@ -95,10 +127,17 @@ export const OrderIndexModel = types
     userName: types.string,
     buyerName: types.string,
 
-    addressId: types.string,
-    address: types.string,
-    cityState: types.string,
-    zipCode: types.string,
+    shippingAddressId: types.string,
+    shippingAddress: types.string,
+    shippingCityState: types.string,
+    shippingZipCode: types.string,
+    shippingCountry: types.string,
+    billingAddressId: types.string,
+    billingAddress: types.string,
+    billingCityState: types.string,
+    billingZipCode: types.string,
+    billingCountry: types.string,
+
     paymentMethodId: types.string,
     paymentMethod: types.string,
     totalItems: types.number,
@@ -107,5 +146,9 @@ export const OrderIndexModel = types
     subTotal: types.number,
     additional: types.number,
     total: types.number,
+
+    created: types.number,
+    updated: types.number,
+
     paid: types.boolean
   });

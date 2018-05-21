@@ -31,6 +31,7 @@ export interface CheckoutStoreType {
 
   selectedPaymentMethod: PaymentMethodType;
 
+  orderCompleted: () => void;
   selectBilling: (address: AddressType) => void;
   selectShipping: (address: AddressType) => void;
   selectPayment: (payment: PaymentMethodType) => void;
@@ -117,6 +118,15 @@ export const CheckoutStoreModel = types
       const history = getEnv(self).history as History;
       history.push('/');
     };
+    const orderCompleted = () => {
+      localStorage.removeItem('basket.eShop');
+
+      const alerts = getEnv(self).alertStack as AlertStackType;
+      alerts.add('info', 'order placed!');
+
+      const history = getEnv(self).history as History;
+      history.push('/');
+    };
 
     const afterCreate = () => {
       const basketStorage = localStorage.getItem('basket.eShop');
@@ -134,5 +144,5 @@ export const CheckoutStoreModel = types
       self.selectedPaymentMethod = payment;
     };
 
-    return { load, validateBasket, afterCreate, selectBilling, selectShipping, selectPayment };
+    return { load, orderCompleted, validateBasket, afterCreate, selectBilling, selectShipping, selectPayment };
   });

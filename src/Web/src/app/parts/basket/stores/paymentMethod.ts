@@ -20,10 +20,11 @@ export interface PaymentMethodStoreType {
 
   readonly validation: {[idx: string]: FormatDefinition };
   readonly form: {[idx: string]: FieldDefinition };
+  submit: () => Promise<{}>;
 }
 export const PaymentMethodStoreModel = types
   .model({
-    paymentMethod: types.maybe(PaymentMethodModel)
+    paymentMethod: types.maybe(types.union(types.string, PaymentMethodModel))
   })
   .views(self => ({
     get validation() {
@@ -42,5 +43,10 @@ export const PaymentMethodStoreModel = types
           addComponent: PaymentMethodFormView,
         }
       });
+    }
+  }))
+  .actions(self => ({
+    submit() {
+      return new Promise(resolve => resolve());
     }
   }));

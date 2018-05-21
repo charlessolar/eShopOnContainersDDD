@@ -231,10 +231,14 @@ class IntegrationDownshift extends React.Component<SelectProps & WithStyles<'pap
   }
   private modelAdded = (model: any) => {
     const { store, onChange } = this.props;
-    onChange(model);
-    store.addModel(model);
-    const selected = store.records[0];
-    this._value = selected.id;
+    try {
+      onChange(model);
+      store.addModel(model);
+      const selected = store.records[0];
+      this._value = selected.id;
+    } catch (error) {
+      debug('failed to add model', error);
+    }
   }
   private openMenu = async (open: () => void) => {
     const { store } = this.props;

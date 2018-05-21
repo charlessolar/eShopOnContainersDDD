@@ -20,6 +20,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { sort } from '../../../utils';
 import { Using, Formatted } from '../../../components/models';
 import { CatalogStoreType, CatalogStoreModel } from '../stores/catalog';
 
@@ -65,7 +66,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'root' | 'co
   public render() {
     const { store, classes } = this.props;
 
-    const products = Array.from(store.products.values());
+    const products = sort(Array.from(store.products.values()), 'id');
     return (
       <div className={classes.root}>
       <Grid container justify='center'>

@@ -5,26 +5,30 @@ import AsyncView from '../../components/asyncView';
 import { models } from '../../utils';
 import { StoreType } from '../../stores';
 
-import { SetupType, SetupModel } from './stores/setup';
-import SetupView from './views/setup';
+import { OrderStoreType, OrderStoreModel } from './stores/orders';
 
-export class ConfigurationModule {
+export class OrdersModule {
   public routes: UniversalRouterRoute[];
 
   constructor(store: StoreType) {
 
     this.routes = [
       {
-        path: '/seed',
+        path: '/orders',
         action: () => {
-          if (store.status.isSetup) {
+          if (!store.authenticated) {
+            store.alertStack.add('error', 'not logged in');
             return { redirect: '/' };
           }
         },
         component: () => ({
-          title: 'Seed',
+          title: 'Orders',
           component: (
-            <SetupView/>
+            <AsyncView
+              actionStore={(store: StoreType) => OrderStoreModel.create({}, { api: store.api })}
+              action={(store: OrderStoreType) => store.get()}
+              getComponent={() => import('./views/orders')}
+            />
           )
         })
       }

@@ -79,11 +79,10 @@ export const ProductListModel = types
         results.records.forEach(record => {
           self.entries.put(record);
         });
-        self.loading = false;
       } catch (error) {
         debug('received http error: ', error);
       }
-
+      self.loading = false;
     });
     const add = (product: ProductType) => {
       self.entries.put(product);

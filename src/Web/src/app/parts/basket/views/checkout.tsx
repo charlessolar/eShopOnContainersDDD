@@ -64,7 +64,14 @@ class CheckoutView extends React.Component<CheckoutProps & WithStyles<'avatar' |
   }
 
   private handleNext = () => {
+    const { store } = this.props;
     const { activeStep } = this.state;
+
+    if (activeStep === 2) {
+      store.orderCompleted();
+      return;
+    }
+
     this.setState({activeStep: activeStep + 1});
   }
   private handlePrev = () => {

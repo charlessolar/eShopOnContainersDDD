@@ -10,11 +10,17 @@ import { CatalogStoreModel, CatalogStoreType } from './stores/catalog';
 export class AdministrationModule {
   public routes: UniversalRouterRoute[];
 
-  constructor() {
+  constructor(store: StoreType) {
 
     this.routes = [
       {
         path: '/administrate',
+        action: () => {
+          if (!store.auth.admin) {
+            store.alertStack.add('error', 'not an admin');
+            return { redirect: '/' };
+          }
+        },
         component: () => ({
           title: 'Catalog',
           component: (

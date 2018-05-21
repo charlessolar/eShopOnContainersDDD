@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 
 import { inject } from '../../../utils';
 import { Using, Formatted, Field, Submit } from '../../../components/models';
@@ -33,7 +34,12 @@ const styles = (theme: Theme) => ({
     justifyContent: 'flex-end',
   },
   stepButton: {
+    marginLeft: 20,
+    marginBottom: 20,
     alignSelf: 'flex-start'
+  },
+  divider: {
+    marginTop: 20
   }
 });
 
@@ -44,7 +50,7 @@ const styles = (theme: Theme) => ({
   };
 })
 @observer
-class AddressView extends React.Component<AddressProps & WithStyles<'paper' | 'stepActions' | 'stepButton'>, {}> {
+class AddressView extends React.Component<AddressProps & WithStyles<'paper' | 'stepActions' | 'stepButton' | 'divider'>, {}> {
 
   private handleNext = () => {
     const { store, checkout, handleNext } = this.props;
@@ -61,7 +67,7 @@ class AddressView extends React.Component<AddressProps & WithStyles<'paper' | 's
     return (
       <Using model={store}>
         <Grid container justify='center'>
-          <Grid item xs={6}>
+          <Grid item md={6} xs={12}>
             <Paper className={classes.paper} elevation={2}>
               <Typography variant='headline' gutterBottom color='primary'>Billing Address</Typography>
               {store.billingAddress ? (
@@ -75,10 +81,10 @@ class AddressView extends React.Component<AddressProps & WithStyles<'paper' | 's
               ) : (<Typography variant='title'>( none )</Typography>)}
             </Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item md={4} xs={12}>
             <Field field='billingAddress' />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} xs={12}>
             <Paper className={classes.paper} elevation={2}>
               <Typography variant='headline' gutterBottom color='primary'>Shipping Address</Typography>
               {store.shippingAddress ? (
@@ -92,11 +98,12 @@ class AddressView extends React.Component<AddressProps & WithStyles<'paper' | 's
               ) : (<Typography variant='title'>( none )</Typography>)}
             </Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item md={4} xs={12}>
             <Field field='shippingAddress' />
           </Grid>
         </Grid>
 
+        <Divider className={classes.divider}/>
         <div className={classes.stepActions}>
           <Submit buttonProps={{variant: 'raised', className: classes.stepButton, color: 'primary'}} onSuccess={this.handleNext} text='Next' />
         </div>

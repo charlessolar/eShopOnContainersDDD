@@ -39,7 +39,10 @@ namespace eShop.Ordering.Order
 
             return _bus.RequestPaged<Queries.BuyerOrders, Models.OrderingOrder>(new Queries.BuyerOrders
             {
-                UserName = session.UserName
+                UserName = session.UserName,
+                OrderStatus = Status.FromValue(request.OrderStatus),
+                From = request.From,
+                To = request.To
             });
         }
 

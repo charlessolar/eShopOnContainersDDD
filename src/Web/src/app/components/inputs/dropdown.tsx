@@ -34,7 +34,7 @@ const styles = theme => ({
 
 class DropdownControl extends React.Component<DropdownProps & WithStyles<'formControl'>, {}> {
 
-  private handleChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
+  private handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     if (this.props.onChange) {
       this.props.onChange(e.target.value.trim());
     }
@@ -46,8 +46,8 @@ class DropdownControl extends React.Component<DropdownProps & WithStyles<'formCo
     return (
       <FormControl required={required} className={classes.formControl} disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Select id={id} value={value} onChange={(e) => this.handleChange(e)} {...fieldProps}>
-          {allowEmpty === true || allowEmpty === undefined ? <MenuItem value=''><em>None</em></MenuItem> : <></>}
+        <Select value={value} onChange={this.handleChange} {...fieldProps} inputProps={{ id }}>
+          {allowEmpty === true || allowEmpty === undefined && <MenuItem value=''><em>None</em></MenuItem>}
           {options.map(option => (
             <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
           ))}

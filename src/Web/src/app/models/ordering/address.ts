@@ -5,7 +5,6 @@ import Debug from 'debug';
 
 export interface AddressType {
   id: string;
-  userName: string;
 
   alias: string;
   street: string;
@@ -17,7 +16,6 @@ export interface AddressType {
 export const AddressModel = types
   .model('Ordering_Buyer_Address', {
     id: types.identifier(types.string),
-    userName: types.string,
 
     alias: types.string,
     street: types.string,

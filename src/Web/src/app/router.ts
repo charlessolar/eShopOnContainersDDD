@@ -42,7 +42,8 @@ export function createRouter(store: StoreType, modules: Modules) {
       ...modules.catalog.routes,
       ...modules.configuration.routes,
       ...modules.administrate.routes,
-      ...modules.basket.routes
+      ...modules.basket.routes,
+      ...modules.orders.routes
     ]
   };
 

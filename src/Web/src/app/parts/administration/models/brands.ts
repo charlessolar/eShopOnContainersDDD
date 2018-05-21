@@ -49,11 +49,10 @@ export const BrandListModel = types
         results.records.forEach(record => {
           self.entries.put(record);
         });
-        self.loading = false;
       } catch (error) {
         debug('received http error: ', error);
       }
-
+      self.loading = false;
     });
     const add = (brand: BrandType) => {
         self.entries.put(brand);

@@ -76,9 +76,14 @@ export const PaymentMethodFormModel = types
           required: true
         },
         cardType: {
-          input: 'text',
+          input: 'dropdown',
           label: 'Card Type',
-          required: true
+          required: true,
+          options: [
+            { value: 'VISA', label: 'Visa' },
+            { value: 'AMEX', label: 'Amex' },
+            { value: 'MASTERCARD', label: 'Mastercard' },
+          ]
         }
       });
     }

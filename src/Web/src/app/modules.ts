@@ -3,6 +3,7 @@ import { CatalogModule } from './parts/catalog/catalogModule';
 import { ConfigurationModule } from './parts/configuration/configurationModule';
 import { AdministrationModule } from './parts/administration/administrationModule';
 import { BasketModule } from './parts/basket/BasketModule';
+import { OrdersModule } from './parts/orders/ordersModule';
 
 import { Store, StoreType } from './stores';
 
@@ -12,6 +13,7 @@ export interface Modules {
   auth: AuthModule;
   administrate: AdministrationModule;
   basket: BasketModule;
+  orders: OrdersModule;
 }
 
 export function createModules(store: StoreType) {
@@ -20,7 +22,8 @@ export function createModules(store: StoreType) {
     catalog: new CatalogModule(),
     configuration: new ConfigurationModule(store),
     auth: new AuthModule(store),
-    administrate: new AdministrationModule(),
-    basket: new BasketModule(store)
+    administrate: new AdministrationModule(store),
+    basket: new BasketModule(store),
+    orders: new OrdersModule(store)
   };
 }

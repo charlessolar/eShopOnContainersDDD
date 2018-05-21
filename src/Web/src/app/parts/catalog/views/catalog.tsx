@@ -19,7 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import BasketIcon from '@material-ui/icons/ShoppingBasket';
 
-import { inject, models } from '../../../utils';
+import { sort, inject, models } from '../../../utils';
 import { Using, Field, Formatted } from '../../../components/models';
 
 import { StoreType } from '../../../stores';
@@ -105,7 +105,7 @@ class CatalogView extends React.Component<CatalogProps & WithStyles<'flex' | 'ap
   public render() {
     const { store, classes } = this.props;
 
-    const products = Array.from(store.products.values());
+    const products = sort(Array.from(store.products.values()), 'id');
     return (
       <AppView>
         <AppBar position='static' className={classes.appbar}>

@@ -10,5 +10,8 @@ namespace eShop.Ordering.Order.Services
     [Route("/order", "GET")]
     public class BuyerOrders : Paged<Models.OrderingOrderIndex>
     {
+        public string OrderStatus { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
     }
 }

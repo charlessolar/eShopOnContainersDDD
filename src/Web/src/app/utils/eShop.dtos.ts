@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-20 00:55:40
+Date: 2018-05-21 00:10:28
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -261,11 +261,16 @@ export module DTOs
         statusDescription: string;
         userName: string;
         buyerName: string;
-        addressId: string;
-        address: string;
-        cityState: string;
-        zipCode: string;
-        country: string;
+        shippingAddressId: string;
+        shippingAddress: string;
+        shippingCityState: string;
+        shippingZipCode: string;
+        shippingCountry: string;
+        billingAddressId: string;
+        billingAddress: string;
+        billingCityState: string;
+        billingZipCode: string;
+        billingCountry: string;
         paymentMethodId: string;
         paymentMethod: string;
         totalItems: number;
@@ -274,7 +279,10 @@ export module DTOs
         additionalFees: number;
         additionalTaxes: number;
         total: number;
+        created: number;
+        updated: number;
         paid: boolean;
+        items: OrderingOrderItem[];
     }
 
     export class OrderingOrderIndex
@@ -284,11 +292,16 @@ export module DTOs
         statusDescription: string;
         userName: string;
         buyerName: string;
-        addressId: string;
-        address: string;
-        cityState: string;
-        zipCode: string;
-        country: string;
+        shippingAddressId: string;
+        shippingAddress: string;
+        shippingCityState: string;
+        shippingZipCode: string;
+        shippingCountry: string;
+        billingAddressId: string;
+        billingAddress: string;
+        billingCityState: string;
+        billingZipCode: string;
+        billingCountry: string;
         paymentMethodId: string;
         paymentMethod: string;
         totalItems: number;
@@ -296,6 +309,8 @@ export module DTOs
         subTotal: number;
         additional: number;
         total: number;
+        created: number;
+        updated: number;
         paid: boolean;
     }
 
@@ -1522,7 +1537,8 @@ export module DTOs
     {
         orderId: string;
         basketId: string;
-        addressId: string;
+        billingAddressId: string;
+        shippingAddressId: string;
         paymentMethodId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "DraftOrder"; }
@@ -1560,7 +1576,8 @@ export module DTOs
     export class ChangeAddressOrder extends DomainCommand implements IReturn<CommandResponse>
     {
         orderId: string;
-        addressId: string;
+        shippingId: string;
+        billingId: string;
         createResponse() { return new CommandResponse(); }
         getTypeName() { return "ChangeAddressOrder"; }
     }

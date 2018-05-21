@@ -29,6 +29,24 @@ namespace eShop.Ordering.Order
             var builder = new QueryBuilder();
             builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
 
+            if (query.OrderStatus != null)
+            {
+                var group = builder.Grouped(Group.ANY);
+                // Special case if searching for Submitted orders include WaitingValidation and StockException 
+                // those are internal statuses not visible to client
+                if (query.OrderStatus == Status.Submitted)
+                    group.Add("Status", Status.Submitted.Value, Operation.EQUAL)
+                         .Add("Status", Status.WaitingValidation.Value, Operation.EQUAL)
+                         .Add("Status", Status.StockException.Value, Operation.EQUAL);
+                else
+                    group.Add("Status", query.OrderStatus.Value, Operation.EQUAL);
+            }
+
+            if (!string.IsNullOrEmpty(query.From))
+                builder.Add("Created", query.From, Operation.GREATER_THAN_OR_EQUAL);
+            if (!string.IsNullOrEmpty(query.To))
+                builder.Add("Created", query.To, Operation.LESS_THAN_OR_EQUAL);
+
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrder>(builder.Build())
                 .ConfigureAwait(false);
 
