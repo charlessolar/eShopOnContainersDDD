@@ -89,7 +89,7 @@ namespace eShop.Ordering
                 .Mappings(mappings => mappings.Map<Buyer.Entities.Address.Models.Address>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
-                            .Text(s => s.Name(x => x.UserName).Fields(x => x.AutoCompleteFields()))
+                            .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
                             .Text(s => s.Name(x => x.Alias).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.Street).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.City).Fields(x => x.AutoCompleteFields()))
@@ -108,7 +108,7 @@ namespace eShop.Ordering
                 .Mappings(mappings => mappings.Map<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
-                            .Text(s => s.Name(x => x.UserName).Fields(x => x.AutoCompleteFields()))
+                            .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
                             .Text(s => s.Name(x => x.Alias).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.CardNumber).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.SecurityNumber).Fields(x => x.AutoCompleteFields()))
@@ -128,6 +128,8 @@ namespace eShop.Ordering
                 .Mappings(mappings => mappings.Map<Order.Models.OrderingOrder>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
+                            .Text(s => s.Name(x => x.BuyerName).Fields(x => x.AutoCompleteFields()))
                             .Keyword(s => s.Name(x => x.Status).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.StatusDescription).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.BillingAddressId).IgnoreAbove(256))
@@ -163,6 +165,8 @@ namespace eShop.Ordering
                 .Mappings(mappings => mappings.Map<Order.Models.OrderingOrderIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
+                            .Text(s => s.Name(x => x.BuyerName).Fields(x => x.AutoCompleteFields()))
                             .Keyword(s => s.Name(x => x.Status).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.StatusDescription).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.BillingAddressId).IgnoreAbove(256))
