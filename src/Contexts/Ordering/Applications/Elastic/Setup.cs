@@ -74,9 +74,6 @@ namespace eShop.Ordering
                             .Text(s => s.Name(x => x.PreferredPaymentCardholder).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.PreferredPaymentMethod).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.PreferredPaymentExpiration).Fields(x => x.AutoCompleteFields()))
-                            .Text(s => s.Name(x => x.GivenName).Fields(x => x.AutoCompleteFields()))
-                            .Text(s => s.Name(x => x.GivenName).Fields(x => x.AutoCompleteFields()))
-                            .Text(s => s.Name(x => x.GivenName).Fields(x => x.AutoCompleteFields()))
                     )))).ConfigureAwait(false);
 
             await _client.CreateIndexAsync(typeof(Buyer.Entities.Address.Models.Address).FullName.ToLower(), i => i

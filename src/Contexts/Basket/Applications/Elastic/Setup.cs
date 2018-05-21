@@ -8,6 +8,40 @@ using Nest;
 
 namespace eShop.Basket
 {
+    static class Extensions
+    {
+        public static AnalysisDescriptor AutoCompleteAnalyzers(this AnalysisDescriptor analysis)
+        {
+            return analysis.Tokenizers(t => t.Whitespace("whitespace_tokenizer"))
+                        .TokenFilters(t => t.EdgeNGram("ngram_filter", n => n.MinGram(1).MaxGram(8)))
+                        .Analyzers(a => a
+                            .Custom("default_autocomplete", c => c
+                                .Tokenizer("whitespace_tokenizer").Filters("lowercase", "asciifolding")
+                            )
+                            .Custom("snowball_autocomplete", c => c
+                                .Tokenizer("whitespace_tokenizer").Filters("lowercase", "asciifolding", "snowball")
+                            )
+                            .Custom("shingle_autocomplete", c => c
+                                .Tokenizer("whitespace_tokenizer").Filters("shingle", "lowercase", "asciifolding")
+                            )
+                            .Custom("ngram_autocomplete", c => c
+                                .Tokenizer("whitespace_tokenizer").Filters("lowercase", "asciifolding", "ngram_filter")
+                            )
+                            .Custom("search_autocomplete", c => c
+                                .Tokenizer("whitespace_tokenizer").Filters("lowercase", "asciifolding")
+                            )
+                        );
+        }
+        public static PropertiesDescriptor<T> AutoCompleteFields<T>(this PropertiesDescriptor<T> descriptor) where T : class
+        {
+            return descriptor
+                                .Text(sub => sub.Name("default").Analyzer("default_autocomplete"))
+                                .Text(sub => sub.Name("stemmed").Analyzer("snowball_autocomplete"))
+                                .Text(sub => sub.Name("shingles").Analyzer("shingle_autocomplete"))
+                                .Text(sub => sub.Name("ngrams").Analyzer("ngram_autocomplete").SearchAnalyzer("search_autocomplete"));
+        }
+    }
+
     [Category("Basket")]
     public class Setup : ISetup
     {
@@ -25,26 +59,18 @@ namespace eShop.Basket
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis
-                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
-                        .Analyzers(a => a
-                            .Custom("default",
-                                t => t.Tokenizer("keyword").Filters(new[]
-                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
-                        )
-                    )
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
                 .Mappings(mappings => mappings.Map<Basket.Models.BasketIndex>(map =>
                     map.Properties(props =>
-                        props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("CustomerId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("Customer").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Number(s => s.Name("TotalQuantity").Type(NumberType.Long))
-                            .Number(s => s.Name("SubTotal").Type(NumberType.Long))
-                            .Number(s => s.Name("ExtraTotal").Type(NumberType.Long))
-                            .Number(s => s.Name("Total").Type(NumberType.Long))
-                            .Number(s => s.Name("Created").Type(NumberType.Long))
-                            .Number(s => s.Name("Updated").Type(NumberType.Long))
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.CustomerId).IgnoreAbove(256))
+                            .Text(s => s.Name(x => x.Customer).Fields(x => x.AutoCompleteFields()))
+                            .Number(s => s.Name(x => x.TotalItems).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.TotalQuantity).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.SubTotal).Type(NumberType.Long))
+                            .Date(s => s.Name(x => x.Created).Format("epoch_millis"))
+                            .Date(s => s.Name(x => x.Updated).Format("epoch_millis"))
                     )))).ConfigureAwait(false);
 
             await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Models.BasketItemIndex).FullName.ToLower(), i => i
@@ -52,27 +78,20 @@ namespace eShop.Basket
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis
-                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
-                        .Analyzers(a => a
-                            .Custom("default",
-                                t => t.Tokenizer("keyword").Filters(new[]
-                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
-                        )
-                    )
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
                 .Mappings(mappings => mappings.Map<Basket.Entities.Item.Models.BasketItemIndex>(map =>
                     map.Properties(props =>
-                        props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("BasketId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Binary(s => s.Name("ProductPictureContents"))
-                            .Keyword(s => s.Name("ProductPictureContentType").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("ProductName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("ProductDescription").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Number(s => s.Name("ProductPrice").Type(NumberType.Long))
-                            .Number(s => s.Name("Quantity").Type(NumberType.Long))
-                            .Number(s => s.Name("Additional").Type(NumberType.Long))
-                            .Number(s => s.Name("Total").Type(NumberType.Long))
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.BasketId).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.ProductId).IgnoreAbove(256))
+                            .Binary(s => s.Name(x => x.ProductPictureContents))
+                            .Keyword(s => s.Name(x => x.ProductPictureContentType).IgnoreAbove(256))
+                            .Text(s => s.Name(x => x.ProductName).Fields(x => x.AutoCompleteFields()))
+                            .Text(s => s.Name(x => x.ProductDescription).Fields(x => x.AutoCompleteFields()))
+                            .Number(s => s.Name(x => x.ProductPrice).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.Quantity).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.SubTotal).Type(NumberType.Long))
                     )))).ConfigureAwait(false);
 
             await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Services.ItemsInBasketHandler.ItemsBasket).FullName.ToLower(), i => i
@@ -80,19 +99,12 @@ namespace eShop.Basket
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis
-                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
-                        .Analyzers(a => a
-                            .Custom("default",
-                                t => t.Tokenizer("keyword").Filters(new[]
-                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
-                        )
-                    )
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
                 .Mappings(mappings => mappings.Map<Basket.Entities.Item.Services.ItemsInBasketHandler.ItemsBasket>(map =>
                     map.Properties(props =>
-                        props.Keyword(s => s.Name("BasketId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("Items").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.Items).IgnoreAbove(256))
                     )))).ConfigureAwait(false);
 
             await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Services.ItemsUsingProductHandler.ProductItems).FullName.ToLower(), i => i
@@ -100,19 +112,12 @@ namespace eShop.Basket
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis
-                        .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
-                        .Analyzers(a => a
-                            .Custom("default",
-                                t => t.Tokenizer("keyword").Filters(new[]
-                                    {"standard", "lowercase", "asciifolding", "kstem", "ngram"}))
-                        )
-                    )
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
                 .Mappings(mappings => mappings.Map<Basket.Entities.Item.Services.ItemsUsingProductHandler.ProductItems>(map =>
                     map.Properties(props =>
-                        props.Keyword(s => s.Name("ProductId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                            .Keyword(s => s.Name("Baskets").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.Baskets).IgnoreAbove(256))
                     )))).ConfigureAwait(false);
             this.Done = true;
             return true;
