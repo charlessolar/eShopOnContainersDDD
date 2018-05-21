@@ -10,12 +10,50 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Setup\Entities\Catalog\Pics\1.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\10.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\11.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\12.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\2.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\3.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\4.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\5.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\6.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\7.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\8.png" />
+    <None Remove="Setup\Entities\Catalog\Pics\9.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\1.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\10.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\11.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\12.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\2.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\3.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\4.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\5.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\6.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\7.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\8.png" />
+    <EmbeddedResource Include="Setup\Entities\Catalog\Pics\9.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Catalog\Language\Catalog.Language.csproj" />
+    <ProjectReference Include="..\..\Identity\Language\Identity.Language.csproj" />
+    <ProjectReference Include="..\..\Ordering\Language\Ordering.Language.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Setup\Entities\Ordering\Types\" />
+    <Folder Include="Setup\Entities\Identity\Types\" />
   </ItemGroup>
 </Project>

@@ -107,6 +107,16 @@ namespace Infrastructure.Extensions
 
             response.Result.CommandResponse();
         }
+        public static Task CommandToDomain<T>(this IMessageHandlerContext ctx, T message) where T : StampedCommand
+        {
+            var options = new SendOptions();
+            options.SetDestination("domain");
+            options.SetHeader(Aggregates.Defaults.RequestResponse, "1");
+
+            // todo: when using IMessageHandlerContext request/response is not available
+            // there is no way to know if the command sent was accepted
+            return ctx.Send(message, options);
+        }
         public static async Task<object> RequestPaged<T, TResponse>(this IMessageSession bus, T message) where T : Paged where TResponse : class
         {
             var options = new SendOptions();

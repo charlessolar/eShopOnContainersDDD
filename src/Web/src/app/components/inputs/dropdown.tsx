@@ -46,7 +46,7 @@ class DropdownControl extends React.Component<DropdownProps & WithStyles<'formCo
     return (
       <FormControl required={required} className={classes.formControl} fullWidth disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
-        <Select value={value} onChange={this.handleChange} {...fieldProps} inputProps={{ id }}>
+        <Select value={value || ''} onChange={this.handleChange} {...fieldProps} inputProps={{ id }}>
           {allowEmpty === true || allowEmpty === undefined && <MenuItem value=''><em>None</em></MenuItem>}
           {options.map(option => (
             <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>

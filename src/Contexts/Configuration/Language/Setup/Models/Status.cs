@@ -9,5 +9,7 @@ namespace eShop.Configuration.Setup.Models
         // needed so mongo doesnt generate random id
         public string Id { get; set; }
         public bool IsSetup { get; set; }
+
+        public string[] SetupContexts { get; set; }
     }
 }

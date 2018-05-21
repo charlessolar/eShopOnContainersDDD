@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShop.Catalog.Import.Models
+namespace eShop.Configuration.Setup.Entities.Catalog.Types
 {
     public class Product
     {

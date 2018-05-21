@@ -130,6 +130,7 @@ namespace eShop
                 .NewtonsoftJson()
                 .NServiceBus(config)
                 .SetUniqueAddress(Defaults.Instance.ToString())
+                .SetParallelEvents(1)
                 .SetRetries(20)
             ).ConfigureAwait(false);
 

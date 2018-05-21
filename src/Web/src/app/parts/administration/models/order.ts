@@ -16,15 +16,11 @@ import { OrderItemType, OrderItemModel } from '../models/item';
 const debug = new Debug('orders');
 
 export interface OrderIndexType extends OrderIndexTypeBase {
-  items: OrderItemType[];
 
   readonly placed: string;
   readonly formatting: {[idx: string]: FieldDefinition};
 }
 export const OrderIndexModel = OrderIndexModelBase
-  .props({
-    items: types.array(OrderItemModel)
-  })
   .views(self => ({
     get formatting() {
       return ({
