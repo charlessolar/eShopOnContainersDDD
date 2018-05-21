@@ -37,7 +37,7 @@ namespace eShop.Ordering.Order
             if (!session.IsAuthenticated)
                 throw new HttpError("not logged in");
 
-            return _bus.RequestPaged<Queries.BuyerOrders, Models.OrderingOrderIndex>(new Queries.BuyerOrders
+            return _bus.RequestPaged<Queries.BuyerOrders, Models.OrderingOrder>(new Queries.BuyerOrders
             {
                 UserName = session.UserName
             });

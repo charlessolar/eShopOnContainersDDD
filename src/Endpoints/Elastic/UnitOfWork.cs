@@ -33,7 +33,7 @@ namespace eShop
         public Task Begin()
         {
             if (!Aggregates.Dynamic.ContainsProperty(Bag, "Saved"))
-                Bag.Saved = new HashSet<Id>();
+                Bag.Saved = new HashSet<string>();
             return Task.CompletedTask;
         }
 
@@ -53,7 +53,7 @@ namespace eShop
                 var response = await _client.BulkAsync(pending).ConfigureAwait(false);
                 if (response.Errors)
                 {
-                    foreach (var item in response.Items.Select(x => x.Id).Except(response.ItemsWithErrors.Select(x => x.Id)))
+                    foreach (var item in response.Items.Select(x => $"{x.Type}, {x.Id}").Except(response.ItemsWithErrors.Select(x => $"{x.Type}, {x.Id}")))
                         Bag.Saved.Add(item);
 
                     throw new StorageException(response.DebugInformation);
@@ -68,7 +68,7 @@ namespace eShop
 
         public Task Add<T>(string id, T document) where T : class
         {
-            if (Bag.Saved.Contains(id))
+            if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
                 return Task.CompletedTask;
 
             _logger.DebugEvent("Index", "Object {Object} Document {Id}", typeof(T).FullName, id);
@@ -84,12 +84,12 @@ namespace eShop
 
         public Task Update<T>(string id, T document) where T : class
         {
-            if (Bag.Saved.Contains(id))
+            if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
                 return Task.CompletedTask;
 
             var descriptor = new BulkUpdateDescriptor<T, object>().Index(typeof(T).FullName.ToLower()).Id(id)
                 .Doc(document);
-            if (_versions.ContainsKey(id))
+            if (_versions.ContainsKey($"{typeof(T).FullName}, {id}"))
                 descriptor.Version(_versions[$"{typeof(T).FullName}, {id}"]);
             else
                 _logger.WarnEvent("NoVersion",
@@ -134,7 +134,7 @@ namespace eShop
 
         public Task Delete<T>(string id) where T : class
         {
-            if (Bag.Saved.Contains(id))
+            if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
                 return Task.CompletedTask;
 
             _logger.DebugEvent("Delete", "Object {Object} Document {Id}", typeof(T).FullName, id);
