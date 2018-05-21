@@ -19,15 +19,15 @@ namespace eShop
         private readonly IElasticClient _client;
         private readonly ILogger _logger;
 
-        private readonly Dictionary<Id, IBulkOperation> _pendingDocs;
-        private readonly Dictionary<Id, long> _versions;
+        private readonly Dictionary<string, IBulkOperation> _pendingDocs;
+        private readonly Dictionary<string, long> _versions;
 
         public UnitOfWork(IElasticClient client)
         {
             _client = client;
             _logger = Log.Logger.For<UnitOfWork>();
-            _pendingDocs = new Dictionary<Id, IBulkOperation>();
-            _versions = new Dictionary<Id, long>();
+            _pendingDocs = new Dictionary<string, IBulkOperation>();
+            _versions = new Dictionary<string, long>();
         }
 
         public Task Begin()
@@ -72,7 +72,7 @@ namespace eShop
                 return Task.CompletedTask;
 
             _logger.DebugEvent("Index", "Object {Object} Document {Id}", typeof(T).FullName, id);
-            _pendingDocs[id] = new BulkIndexDescriptor<T>().Index(typeof(T).FullName.ToLower()).Id(id).Document(document);
+            _pendingDocs[$"{typeof(T).FullName}, {id}"] = new BulkIndexDescriptor<T>().Index(typeof(T).FullName.ToLower()).Id(id).Document(document);
 
             return Task.CompletedTask;
         }
@@ -90,13 +90,13 @@ namespace eShop
             var descriptor = new BulkUpdateDescriptor<T, object>().Index(typeof(T).FullName.ToLower()).Id(id)
                 .Doc(document);
             if (_versions.ContainsKey(id))
-                descriptor.Version(_versions[id]);
+                descriptor.Version(_versions[$"{typeof(T).FullName}, {id}"]);
             else
                 _logger.WarnEvent("NoVersion",
                     "Update document {Document} id {Id} lacks version information - try to GET it first");
 
             _logger.DebugEvent("Update", "Object {Object} Document {Id}", typeof(T).FullName, id);
-            _pendingDocs[id] = descriptor;
+            _pendingDocs[$"{typeof(T).FullName}, {id}"] = descriptor;
 
             return Task.CompletedTask;
         }
@@ -119,7 +119,7 @@ namespace eShop
                 return null;
             }
 
-            _versions[id] = response.Version;
+            _versions[$"{typeof(T).FullName}, {id}"] = response.Version;
 
             return response.Source;
         }
@@ -140,7 +140,7 @@ namespace eShop
             _logger.DebugEvent("Delete", "Object {Object} Document {Id}", typeof(T).FullName, id);
             var operation = new BulkDeleteOperation<T>(id);
             operation.Index = typeof(T).FullName.ToLower();
-            _pendingDocs[id] = operation;
+            _pendingDocs[$"{typeof(T).FullName}, {id}"] = operation;
 
             return Task.CompletedTask;
         }
