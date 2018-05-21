@@ -47,7 +47,7 @@ namespace eShop.Ordering.Order
 
             var items = await itemIds.SelectAsync(id =>
             {
-                return ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
+                return ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItem>(id);
             }).ConfigureAwait(false);
 
             var model = new Models.OrderingOrder

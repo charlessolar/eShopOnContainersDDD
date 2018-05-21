@@ -26,7 +26,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
             {
                 productitems = new ProductItems
                 {
-                    ProductId = e.ProductId,
+                    Id = e.ProductId,
                     Baskets = new[] {e.BasketId}
                 };
                 await ctx.App<Infrastructure.IUnitOfWork>().Add(e.ProductId, productitems).ConfigureAwait(false);
@@ -78,7 +78,7 @@ namespace eShop.Basket.Basket.Entities.Item.Services
 
         public class ProductItems
         {
-            public Guid ProductId { get; set; }
+            public Guid Id { get; set; }
             public Guid[] Baskets { get; set; }
         }
     }

@@ -153,6 +153,24 @@ namespace eShop.Ordering
                             .Date(s => s.Name(x => x.Created).Format("epoch_millis"))
                             .Date(s => s.Name(x => x.Updated).Format("epoch_millis"))
                             .Boolean(s => s.Name(x => x.Paid))
+                            .Nested<Order.Entities.Item.Models.OrderingOrderItem>(s => s
+                                .Name(x => x.Items)
+                                .Properties(prop => prop
+                                    .Keyword(t => t.Name(x => x.Id).IgnoreAbove(256))
+                                    .Keyword(t => t.Name(x => x.OrderId).IgnoreAbove(256))
+                                    .Keyword(t => t.Name(x => x.ProductId).IgnoreAbove(256))
+                                    .Binary(t => t.Name(x => x.ProductPictureContents))
+                                    .Keyword(t => t.Name(x => x.ProductPictureContentType).IgnoreAbove(256))
+                                    .Text(t => t.Name(x => x.ProductName).Fields(x => x.AutoCompleteFields()))
+                                    .Text(t => t.Name(x => x.ProductDescription).Fields(x => x.AutoCompleteFields()))
+                                    .Number(t => t.Name(x => x.ProductPrice).Type(NumberType.Long))
+                                    .Number(t => t.Name(x => x.Price).Type(NumberType.Long))
+                                    .Number(t => t.Name(x => x.Quantity).Type(NumberType.Long))
+                                    .Number(t => t.Name(x => x.SubTotal).Type(NumberType.Long))
+                                    .Number(t => t.Name(x => x.AdditionalFees).Type(NumberType.Long))
+                                    .Number(t => t.Name(x => x.AdditionalTaxes).Type(NumberType.Long))
+                                    .Number(t => t.Name(x => x.Total).Type(NumberType.Long))
+                                    ))
                     )))).ConfigureAwait(false);
 
             await _client.CreateIndexAsync(typeof(Order.Models.OrderingOrderIndex).FullName.ToLower(), i => i
