@@ -121,11 +121,11 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                         {
                             OrderId = orderid
                         }).ConfigureAwait(false);
-                        return;
+                        continue;
                     }
 
                     if (random.Next(2) != 0)
-                        return;
+                        continue;
 
                     await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Confirm
                     {
@@ -133,7 +133,7 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                     }).ConfigureAwait(false);
 
                     if (random.Next(2) != 0)
-                        return;
+                        continue;
 
                     await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Pay
                     {
@@ -141,7 +141,7 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                     }).ConfigureAwait(false);
 
                     if (random.Next(2) != 0)
-                        return;
+                        continue;
 
                     await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Ship
                     {
