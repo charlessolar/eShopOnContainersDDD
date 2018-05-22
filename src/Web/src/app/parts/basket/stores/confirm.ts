@@ -37,13 +37,23 @@ export const ConfirmStoreModel = types
       request.shippingAddressId = self.shippingAddress.id;
       request.paymentMethodId = self.paymentMethod.id;
 
+      const client = getEnv(self).api as ApiClientType;
       try {
-        const client = getEnv(self).api as ApiClientType;
         yield client.command(request);
 
        } catch (error) {
         debug('received http error: ', error);
         throw error;
+      }
+
+      const destroy = new DTOs.BasketDestroy();
+
+      destroy.basketId = self.basketId;
+
+      try {
+        yield client.command(destroy);
+      } catch (error) {
+        debug('failed to destroy basket: ', error);
       }
     });
 
