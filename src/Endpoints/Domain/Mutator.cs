@@ -28,6 +28,8 @@ namespace eShop
             // Make sure UserId and Stamp are transfer from message to message
             if (mutating.Message is StampedCommand)
             {
+                if ((mutating.Message as StampedCommand).Stamp != 0) return mutating;
+
                 if (_uow.CurrentMessage is StampedCommand)
                 {
                     var command = _uow.CurrentMessage as StampedCommand;
@@ -45,6 +47,8 @@ namespace eShop
             }
             else if (mutating.Message is IStampedEvent)
             {
+                if ((mutating.Message as IStampedEvent).Stamp != 0) return mutating;
+
                 if (_uow.CurrentMessage is StampedCommand)
                 {
                     var command = _uow.CurrentMessage as StampedCommand;

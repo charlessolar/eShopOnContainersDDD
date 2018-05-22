@@ -67,7 +67,7 @@ namespace eShop.Configuration.Setup.Entities.Identity
                     o.GivenName = f.Name.FindName(withPrefix: false, withSuffix: false);
                 });
 
-            var users = bogus.Generate(10);
+            var users = bogus.Generate(100);
             await ctx.LocalSaga(async bus =>
             {
                 foreach(var user in users)
