@@ -102,11 +102,11 @@ class OrdersView extends React.Component<OrdersProps & WithStyles<'root' | 'cont
                       <TableCell>{order.buyerName}</TableCell>
                       <TableCell>
                         <Typography variant='caption'>{order.shippingAddress}</Typography>
-                        <Typography className={classes.address} color='textSecondary' paragraph>{order.shippingCityState} {order.shippingZipCode}<br/>{order.shippingCountry}</Typography>
+                        <Typography className={classes.address} color='textSecondary' paragraph>{order.shippingCity}, {order.shippingState} {order.shippingZipCode}<br/>{order.shippingCountry}</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography variant='caption'>{order.billingAddress}</Typography>
-                        <Typography className={classes.address} color='textSecondary' paragraph>{order.billingCityState} {order.billingZipCode}<br/>{order.billingCountry}</Typography>
+                        <Typography className={classes.address} color='textSecondary' paragraph>{order.billingCity}, {order.billingState} {order.billingZipCode}<br/>{order.billingCountry}</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography variant='body1'>{order.paymentMethod}</Typography>

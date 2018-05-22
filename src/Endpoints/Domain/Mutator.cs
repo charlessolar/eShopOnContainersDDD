@@ -55,9 +55,9 @@ namespace eShop
                     var @event = _uow.CurrentMessage as IStampedEvent;
                     ((IStampedEvent)mutating.Message).Stamp = @event.Stamp;
                 }
-                else if ((mutating.Message as StampedCommand).Stamp == 0)
+                else if ((mutating.Message as IStampedEvent).Stamp == 0)
                 {
-                    (mutating.Message as StampedCommand).Stamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    (mutating.Message as IStampedEvent).Stamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 }
             }
 

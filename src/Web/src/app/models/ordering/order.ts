@@ -92,12 +92,14 @@ export interface OrderIndexType {
 
   shippingAddressId: string;
   shippingAddress: string;
-  shippingCityState: string;
+  shippingCity: string;
+  shippingState: string;
   shippingZipCode: string;
   shippingCountry: string;
   billingAddressId: string;
   billingAddress: string;
-  billingCityState: string;
+  billingCity: string;
+  billingState: string;
   billingZipCode: string;
   billingCountry: string;
 
@@ -129,12 +131,14 @@ export const OrderIndexModel = types
 
     shippingAddressId: types.string,
     shippingAddress: types.string,
-    shippingCityState: types.string,
+    shippingCity: types.string,
+    shippingState: types.string,
     shippingZipCode: types.string,
     shippingCountry: types.string,
     billingAddressId: types.string,
     billingAddress: types.string,
-    billingCityState: types.string,
+    billingCity: types.string,
+    billingState: types.string,
     billingZipCode: types.string,
     billingCountry: types.string,
 

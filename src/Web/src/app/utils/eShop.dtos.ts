@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* Options:
-Date: 2018-05-21 20:38:14
+Date: 2018-05-22 21:23:58
 Version: 5.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://10.0.0.201:8080
@@ -294,12 +294,14 @@ export module DTOs
         buyerName: string;
         shippingAddressId: string;
         shippingAddress: string;
-        shippingCityState: string;
+        shippingCity: string;
+        shippingState: string;
         shippingZipCode: string;
         shippingCountry: string;
         billingAddressId: string;
         billingAddress: string;
-        billingCityState: string;
+        billingCity: string;
+        billingState: string;
         billingZipCode: string;
         billingCountry: string;
         paymentMethodId: string;
@@ -336,6 +338,7 @@ export module DTOs
     {
         id: string;
         isSetup: boolean;
+        setupContexts: string[];
     }
 
     export class Point
