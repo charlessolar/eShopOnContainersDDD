@@ -1,4 +1,5 @@
-﻿using Infrastructure.Extensions;
+﻿using Aggregates;
+using Infrastructure.Extensions;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -15,33 +16,36 @@ namespace eShop.Configuration.Setup.Entities.Identity
             var roleId1 = Guid.NewGuid();
             var roleId2 = Guid.NewGuid();
 
-            await ctx.CommandToDomain(new eShop.Identity.User.Commands.Register
+            await ctx.LocalSaga(async bus =>
             {
-                GivenName = "administrator",
-                UserName = "administrator",
-                Password = "12345678"
-            }).ConfigureAwait(false);
+                await bus.CommandToDomain(new eShop.Identity.User.Commands.Register
+                {
+                    GivenName = "administrator",
+                    UserName = "administrator",
+                    Password = "12345678"
+                }).ConfigureAwait(false);
 
-            await ctx.CommandToDomain(new eShop.Identity.Role.Commands.Define
-            {
-                RoleId = roleId1,
-                Name = "administrator"
-            }).ConfigureAwait(false);
-            await ctx.CommandToDomain(new eShop.Identity.Role.Commands.Define
-            {
-                RoleId = roleId2,
-                Name = "customer"
-            }).ConfigureAwait(false);
+                await bus.CommandToDomain(new eShop.Identity.Role.Commands.Define
+                {
+                    RoleId = roleId1,
+                    Name = "administrator"
+                }).ConfigureAwait(false);
+                await bus.CommandToDomain(new eShop.Identity.Role.Commands.Define
+                {
+                    RoleId = roleId2,
+                    Name = "customer"
+                }).ConfigureAwait(false);
 
-            await ctx.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
-            {
-                UserName = "administrator",
-                RoleId = roleId1
-            }).ConfigureAwait(false);
-            await ctx.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
-            {
-                UserName = "administrator",
-                RoleId = roleId2
+                await bus.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
+                {
+                    UserName = "administrator",
+                    RoleId = roleId1
+                }).ConfigureAwait(false);
+                await bus.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
+                {
+                    UserName = "administrator",
+                    RoleId = roleId2
+                }).ConfigureAwait(false);
             }).ConfigureAwait(false);
         }
     }

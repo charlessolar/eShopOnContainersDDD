@@ -56,4 +56,8 @@
     <Folder Include="Setup\Entities\Ordering\Types\" />
     <Folder Include="Setup\Entities\Identity\Types\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.6.262" />
+  </ItemGroup>
 </Project>

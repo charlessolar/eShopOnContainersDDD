@@ -1,4 +1,5 @@
-﻿using Infrastructure.Extensions;
+﻿using Aggregates;
+using Infrastructure.Extensions;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -45,78 +46,87 @@ namespace eShop.Configuration.Setup.Entities.Catalog
 
         public static async Task Seed(IMessageHandlerContext ctx)
         {
-            // Create types
-            foreach (var type in Types)
+            await ctx.LocalSaga(async bus =>
             {
-                await ctx.CommandToDomain(new eShop.Catalog.CatalogType.Commands.Define
+                // Create types
+                foreach (var type in Types)
                 {
-                    TypeId = type.Id,
-                    Type = type.Type,
-                }).ConfigureAwait(false);
-            }
-
-            // Create brands
-            foreach (var brand in Brands)
-            {
-                await ctx.CommandToDomain(new eShop.Catalog.CatalogBrand.Commands.Define
-                {
-                    BrandId = brand.Id,
-                    Brand = brand.Brand,
-                }).ConfigureAwait(false);
-            }
-
-            var assembly = Assembly.GetExecutingAssembly();
-            // Create products
-            foreach (var product in Products)
-            {
-                await ctx.CommandToDomain(new eShop.Catalog.Product.Commands.Add
-                {
-                    ProductId = product.Id,
-                    CatalogBrandId = product.CatalogBrandId,
-                    CatalogTypeId = product.CatalogTypeId,
-                    Name = product.Name,
-                    Price = product.Price
-                }).ConfigureAwait(false);
-
-                await ctx.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateDescription
-                {
-                    ProductId = product.Id,
-                    Description = product.Description
-                }).ConfigureAwait(false);
-
-                if (product.AvailableStock > 0)
-                    await ctx.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateStock
+                    await bus.CommandToDomain(new eShop.Catalog.CatalogType.Commands.Define
                     {
-                        ProductId = product.Id,
-                        Stock = product.AvailableStock
-                    }).ConfigureAwait(false);
-                if (product.RestockThreshold > 0 || product.MaxStockThreshold > 0)
-                    await ctx.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateThresholds
-                    {
-                        ProductId = product.Id,
-                        RestockThreshold = product.RestockThreshold,
-                        MaxStockThreshold = product.MaxStockThreshold
-                    }).ConfigureAwait(false);
-
-                if (product.OnReorder)
-                    await ctx.CommandToDomain(new eShop.Catalog.Product.Commands.MarkReordered
-                    {
-                        ProductId = product.Id,
-                    }).ConfigureAwait(false);
-
-                var stream = assembly.GetManifestResourceStream($"eShop.Configuration.Setup.Entities.Catalog.Pics.{product.Picture}");
-                using (var memory = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memory).ConfigureAwait(false);
-
-                    await ctx.CommandToDomain(new eShop.Catalog.Product.Commands.SetPicture
-                    {
-                        ProductId = product.Id,
-                        Content = Convert.ToBase64String(memory.ToArray()),
-                        ContentType = "image/png"
+                        TypeId = type.Id,
+                        Type = type.Type,
                     }).ConfigureAwait(false);
                 }
-            }
+            }).ConfigureAwait(false);
+
+            await ctx.LocalSaga(async bus =>
+            {
+                // Create brands
+                foreach (var brand in Brands)
+                {
+                    await bus.CommandToDomain(new eShop.Catalog.CatalogBrand.Commands.Define
+                    {
+                        BrandId = brand.Id,
+                        Brand = brand.Brand,
+                    }).ConfigureAwait(false);
+                }
+            }).ConfigureAwait(false);
+
+            var assembly = Assembly.GetExecutingAssembly();
+            await ctx.LocalSaga(async bus =>
+            {
+                // Create products
+                foreach (var product in Products)
+                {
+                    await bus.CommandToDomain(new eShop.Catalog.Product.Commands.Add
+                    {
+                        ProductId = product.Id,
+                        CatalogBrandId = product.CatalogBrandId,
+                        CatalogTypeId = product.CatalogTypeId,
+                        Name = product.Name,
+                        Price = product.Price
+                    }).ConfigureAwait(false);
+
+                    await bus.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateDescription
+                    {
+                        ProductId = product.Id,
+                        Description = product.Description
+                    }).ConfigureAwait(false);
+
+                    if (product.AvailableStock > 0)
+                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateStock
+                        {
+                            ProductId = product.Id,
+                            Stock = product.AvailableStock
+                        }).ConfigureAwait(false);
+                    if (product.RestockThreshold > 0 || product.MaxStockThreshold > 0)
+                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateThresholds
+                        {
+                            ProductId = product.Id,
+                            RestockThreshold = product.RestockThreshold,
+                            MaxStockThreshold = product.MaxStockThreshold
+                        }).ConfigureAwait(false);
+
+                    if (product.OnReorder)
+                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.MarkReordered
+                        {
+                            ProductId = product.Id,
+                        }).ConfigureAwait(false);
+
+                    var stream = assembly.GetManifestResourceStream($"eShop.Configuration.Setup.Entities.Catalog.Pics.{product.Picture}");
+                    using (var memory = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memory).ConfigureAwait(false);
+
+                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.SetPicture
+                        {
+                            ProductId = product.Id,
+                            Content = Convert.ToBase64String(memory.ToArray()),
+                            ContentType = "image/png"
+                        }).ConfigureAwait(false);
+                    }
+                }
+            }).ConfigureAwait(false);
         }
     }
 }
