@@ -47,17 +47,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Basket\Language\Basket.Language.csproj" />
     <ProjectReference Include="..\..\Catalog\Language\Catalog.Language.csproj" />
     <ProjectReference Include="..\..\Identity\Language\Identity.Language.csproj" />
     <ProjectReference Include="..\..\Ordering\Language\Ordering.Language.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Setup\Entities\Ordering\Types\" />
-    <Folder Include="Setup\Entities\Identity\Types\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.6.262" />
+    <PackageReference Include="Bogus" Version="22.1.1" />
   </ItemGroup>
 </Project>

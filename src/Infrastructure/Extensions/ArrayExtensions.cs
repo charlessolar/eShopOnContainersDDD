@@ -93,5 +93,24 @@ namespace Infrastructure.Extensions
             ret.Remove(idx);
             return ret.ToArray();
         }
+        public static T RandomPick<T>(this T[] source)
+        {
+            var random = new Random();
+            return source[random.Next(source.Length)];
+        }
+        public static T[] RandomPick<T>(this T[] source, int count)
+        {
+            var random = new Random();
+
+            var indices = Enumerable.Range(0, count).Select(_ => random.Next(source.Length)).Distinct();
+            return indices.Select(idx => source[idx]).ToArray();
+        }
+        public static T[] RandomPicks<T>(this T[] source, int max)
+        {
+            var random = new Random();
+
+            var indices = Enumerable.Range(0, random.Next(max) + 1).Select(_ => random.Next(source.Length)).Distinct();
+            return indices.Select(idx => source[idx]).ToArray();
+        }
     }
 }

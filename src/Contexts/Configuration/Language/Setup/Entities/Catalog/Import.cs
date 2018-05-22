@@ -12,7 +12,7 @@ namespace eShop.Configuration.Setup.Entities.Catalog
 {
     public class Import
     {
-        private static readonly Types.CatalogBrand[] Brands = new[]
+        public static readonly Types.CatalogBrand[] Brands = new[]
         {
             new Types.CatalogBrand {Id = Guid.NewGuid(), Brand = "Azure"},
             new Types.CatalogBrand {Id = Guid.NewGuid(), Brand = ".NET"},
@@ -21,14 +21,14 @@ namespace eShop.Configuration.Setup.Entities.Catalog
             new Types.CatalogBrand {Id = Guid.NewGuid(), Brand = "Other"},
         };
 
-        private static readonly Types.CatalogType[] Types = new[]
+        public static readonly Types.CatalogType[] Types = new[]
         {
             new Types.CatalogType {Id = Guid.NewGuid(), Type = "Mug"},
             new Types.CatalogType {Id = Guid.NewGuid(), Type = "T-Shirt"},
             new Types.CatalogType {Id = Guid.NewGuid(), Type = "Sheet"},
             new Types.CatalogType {Id = Guid.NewGuid(), Type = "USB Memory Stick"},
         };
-        private static readonly Types.Product[] Products = new[]
+        public static readonly Types.Product[] Products = new[]
         {
             new Types.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[1].Id, CatalogBrandId = Brands[1].Id, Name=".NET Bot Black Hoodie", Description = ".NET Bot Black Hoodie, and more", Picture="1.png", Price=1950, AvailableStock=100, OnReorder=false },
             new Types.Product { Id = Guid.NewGuid(), CatalogTypeId = Types[0].Id, CatalogBrandId = Brands[1].Id, Name=".NET Black & White Mug", Description = ".NET Black & White Mug", Picture="2.png", Price=850, AvailableStock=90,RestockThreshold=10, OnReorder=true },

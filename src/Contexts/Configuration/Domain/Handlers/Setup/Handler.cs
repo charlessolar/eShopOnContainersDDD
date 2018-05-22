@@ -18,12 +18,10 @@ namespace eShop.Configuration.Setup
             var setup = await ctx.For<Setup>().New("setup").ConfigureAwait(false);
             setup.Seed();
 
-            await ctx.LocalSaga(async bus =>
-            {
-                await bus.CommandToDomain(new Entities.Identity.Commands.Seed()).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Catalog.Commands.Seed()).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Ordering.Commands.Seed()).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+            await ctx.SendToSelf(new Entities.Identity.Commands.Seed()).ConfigureAwait(false);
+            await ctx.SendToSelf(new Entities.Catalog.Commands.Seed()).ConfigureAwait(false);
+            await ctx.SendToSelf(new Entities.Basket.Commands.Seed()).ConfigureAwait(false);
+            await ctx.SendToSelf(new Entities.Ordering.Commands.Seed()).ConfigureAwait(false);
         }
     }
 }
