@@ -51,7 +51,7 @@ export const OrdersStoreModel = types
           { value: 'PAID', label: 'Paid'},
           { value: 'SHIPPED', label: 'Shipped' },
           { value: 'NO_STOCK', label: 'Stock Exception'},
-          { value: 'CANCELED', label: 'Canceled' }
+          { value: 'CANCELLED', label: 'Cancelled' }
         ]
       },
       period: {

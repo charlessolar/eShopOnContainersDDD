@@ -49,7 +49,7 @@ export const OrderStoreModel = types
           { value: 'CONFIRMED', label: 'Confirmed'},
           { value: 'PAID', label: 'Paid'},
           { value: 'SHIPPED', label: 'Shipped' },
-          { value: 'CANCELED', label: 'Canceled' }
+          { value: 'CANCELLED', label: 'Cancelled' }
         ]
       },
       period: {

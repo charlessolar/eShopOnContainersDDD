@@ -35,7 +35,7 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                 .Rules((f, o) =>
                 {
                     o.PaymentMethodId = Guid.NewGuid();
-                    o.CardholderName = f.Name.FindName();
+                    o.CardholderName = f.Name.FindName(withPrefix: false, withSuffix: false);
                     o.CardNumber = f.Finance.CreditCardNumber();
                     o.Expiration = DateTime.UtcNow.AddMonths(2);
                     o.SecurityNumber = f.Finance.CreditCardCvv();

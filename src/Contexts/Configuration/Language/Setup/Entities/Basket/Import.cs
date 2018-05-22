@@ -23,7 +23,7 @@ namespace eShop.Configuration.Setup.Entities.Basket
             {
                 Id = Guid.NewGuid(),
                 UserName = Identity.Import.Users.RandomPick().UserName,
-                Products = Catalog.Import.Products.RandomPicks(3).Select(p => Tuple.Create(p.Id, (long)random.Next(3))).ToArray()
+                Products = Catalog.Import.Products.RandomPicks(3).Select(p => Tuple.Create(p.Id, (long)random.Next(3) + 1)).ToArray()
             }).ToArray();
 
             await ctx.LocalSaga(async bus =>

@@ -3,6 +3,7 @@ using NServiceBus;
 using System.Collections.Generic;
 using Aggregates.Contracts;
 using Infrastructure.Commands;
+using System;
 
 namespace eShop
 {
@@ -32,10 +33,14 @@ namespace eShop
                     var command = _uow.CurrentMessage as StampedCommand;
                     ((StampedCommand)mutating.Message).Stamp = command.Stamp;
                 }
-                if (_uow.CurrentMessage is IStampedEvent)
+                else if (_uow.CurrentMessage is IStampedEvent)
                 {
                     var @event = _uow.CurrentMessage as IStampedEvent;
                     ((StampedCommand)mutating.Message).Stamp = @event.Stamp;
+                }
+                else if((mutating.Message as StampedCommand).Stamp == 0)
+                {
+                    (mutating.Message as StampedCommand).Stamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 }
             }
             else if (mutating.Message is IStampedEvent)
@@ -45,10 +50,14 @@ namespace eShop
                     var command = _uow.CurrentMessage as StampedCommand;
                     ((IStampedEvent)mutating.Message).Stamp = command.Stamp;
                 }
-                if (_uow.CurrentMessage is IStampedEvent)
+                else if (_uow.CurrentMessage is IStampedEvent)
                 {
                     var @event = _uow.CurrentMessage as IStampedEvent;
                     ((IStampedEvent)mutating.Message).Stamp = @event.Stamp;
+                }
+                else if ((mutating.Message as StampedCommand).Stamp == 0)
+                {
+                    (mutating.Message as StampedCommand).Stamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 }
             }
 

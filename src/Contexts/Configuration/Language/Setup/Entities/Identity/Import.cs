@@ -64,7 +64,7 @@ namespace eShop.Configuration.Setup.Entities.Identity
                 {
                     o.UserName = f.Internet.UserName();
                     o.Password = f.Internet.Password();
-                    o.GivenName = f.Name.FindName();
+                    o.GivenName = f.Name.FindName(withPrefix: false, withSuffix: false);
                 });
 
             var users = bogus.Generate(10);

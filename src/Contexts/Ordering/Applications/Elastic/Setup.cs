@@ -186,12 +186,14 @@ namespace eShop.Ordering
                             .Keyword(s => s.Name(x => x.StatusDescription).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.BillingAddressId).IgnoreAbove(256))
                             .Text(s => s.Name(x => x.BillingAddress).Fields(x => x.AutoCompleteFields()))
-                            .Text(s => s.Name(x => x.BillingCityState).Fields(x => x.AutoCompleteFields()))
+                            .Text(s => s.Name(x => x.BillingCity).Fields(x => x.AutoCompleteFields()))
+                            .Text(s => s.Name(x => x.BillingState).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.BillingZipCode).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.BillingCountry).Fields(x => x.AutoCompleteFields()))
                             .Keyword(s => s.Name(x => x.ShippingAddressId).IgnoreAbove(256))
                             .Text(s => s.Name(x => x.ShippingAddress).Fields(x => x.AutoCompleteFields()))
-                            .Text(s => s.Name(x => x.ShippingCityState).Fields(x => x.AutoCompleteFields()))
+                            .Text(s => s.Name(x => x.ShippingCity).Fields(x => x.AutoCompleteFields()))
+                            .Text(s => s.Name(x => x.ShippingState).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.ShippingZipCode).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.ShippingCountry).Fields(x => x.AutoCompleteFields()))
                             .Keyword(s => s.Name(x => x.PaymentMethodId).IgnoreAbove(256))
@@ -229,6 +231,51 @@ namespace eShop.Ordering
                             .Number(s => s.Name(x => x.AdditionalFees).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.AdditionalTaxes).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.Total).Type(NumberType.Long))
+                    )))).ConfigureAwait(false);
+
+            await _client.CreateIndexAsync(typeof(Order.Models.SalesByState).FullName.ToLower(), i => i
+                .Settings(s => s
+                    .NumberOfShards(3)
+                    .TotalShardsPerNode(3)
+                    .NumberOfReplicas(0)
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
+                )
+                .Mappings(mappings => mappings.Map<Order.Models.SalesByState>(map =>
+                    map.Properties(props =>
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.State).IgnoreAbove(256))
+                            .Number(s => s.Name(x => x.Relevancy).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.Value).Type(NumberType.Long))
+                    )))).ConfigureAwait(false);
+
+            await _client.CreateIndexAsync(typeof(Order.Models.SalesChart).FullName.ToLower(), i => i
+                .Settings(s => s
+                    .NumberOfShards(3)
+                    .TotalShardsPerNode(3)
+                    .NumberOfReplicas(0)
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
+                )
+                .Mappings(mappings => mappings.Map<Order.Models.SalesChart>(map =>
+                    map.Properties(props =>
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.Label).IgnoreAbove(256))
+                            .Number(s => s.Name(x => x.Relevancy).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.Value).Type(NumberType.Long))
+                    )))).ConfigureAwait(false);
+
+            await _client.CreateIndexAsync(typeof(Order.Models.SalesWeekOverWeek).FullName.ToLower(), i => i
+                .Settings(s => s
+                    .NumberOfShards(3)
+                    .TotalShardsPerNode(3)
+                    .NumberOfReplicas(0)
+                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
+                )
+                .Mappings(mappings => mappings.Map<Order.Models.SalesWeekOverWeek>(map =>
+                    map.Properties(props =>
+                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
+                            .Keyword(s => s.Name(x => x.DayOfWeek).IgnoreAbove(256))
+                            .Number(s => s.Name(x => x.Relevancy).Type(NumberType.Long))
+                            .Number(s => s.Name(x => x.Value).Type(NumberType.Long))
                     )))).ConfigureAwait(false);
             this.Done = true;
             return true;

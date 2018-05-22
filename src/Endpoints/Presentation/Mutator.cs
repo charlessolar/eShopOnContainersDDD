@@ -15,7 +15,7 @@ namespace eShop
         }
         public IMutating MutateOutgoing(IMutating mutating)
         {
-            if (!(mutating.Message is StampedCommand)) return mutating;
+            if (!(mutating.Message is StampedCommand) || (mutating.Message as StampedCommand).Stamp != 0) return mutating;
 
             (mutating.Message as StampedCommand).Stamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 

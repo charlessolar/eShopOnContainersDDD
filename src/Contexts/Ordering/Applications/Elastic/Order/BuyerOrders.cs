@@ -43,9 +43,9 @@ namespace eShop.Ordering.Order
             }
 
             if (query.From.HasValue)
-                builder.Add("Created", new DateTimeOffset(query.From.Value).ToUnixTimeMilliseconds().ToString(), Operation.GREATER_THAN_OR_EQUAL);
+                builder.Add("Created", query.From.Value.ToUnix().ToString(), Operation.GREATER_THAN_OR_EQUAL);
             if (query.To.HasValue)
-                builder.Add("Created", new DateTimeOffset(query.To.Value).ToUnixTimeMilliseconds().ToString(), Operation.LESS_THAN_OR_EQUAL);
+                builder.Add("Created", query.To.Value.ToUnix().ToString(), Operation.LESS_THAN_OR_EQUAL);
 
             var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrder>(builder.Build())
                 .ConfigureAwait(false);

@@ -73,13 +73,15 @@ namespace eShop.Ordering.Order
 
                 ShippingAddressId = shipping.Id,
                 ShippingAddress = shipping.Street,
-                ShippingCityState = $"{shipping.City}, {shipping.State}",
+                ShippingCity = shipping.City,
+                ShippingState = shipping.State,
                 ShippingZipCode = shipping.ZipCode,
                 ShippingCountry = shipping.Country,
 
                 BillingAddressId = billing.Id,
                 BillingAddress = billing.Street,
-                BillingCityState = $"{billing.City}, {billing.State}",
+                BillingCity = shipping.City,
+                BillingState = shipping.State,
                 BillingZipCode = billing.ZipCode,
                 BillingCountry = billing.Country,
 
