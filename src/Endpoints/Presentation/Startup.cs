@@ -108,6 +108,8 @@ namespace eShop
             _container = new Container(x =>
             {
                 x.For<IMessageSession>().Use(() => Aggregates.Bus.Instance);
+                x.For<Mutator>().Use<Mutator>();
+
                 x.Scan(y =>
                 {
                     y.TheCallingAssembly();

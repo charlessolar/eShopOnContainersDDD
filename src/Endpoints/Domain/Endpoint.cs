@@ -71,6 +71,7 @@ namespace eShop
             {
                 x.For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
                 x.For<IMessageSession>().Use(() => Aggregates.Bus.Instance);
+                x.For<Mutator>().Use<Mutator>();
 
                 x.Scan(y =>
                 {
