@@ -43,7 +43,7 @@ services:
       - ESHOP_RabbitPassword=${RABBIT_PASSWORD}
       - ESHOP_ServiceStackLicense=${SERVICESTACK_LICENSE}
       #- ESHOP_SeqConnection=${SEQ_SERVER:-http://seq:5341}
-  #frontend:
-  #  build:
-  #    args:
-  #      API_SERVER: http://localhost:8080
+  frontend:
+    build:
+      args:
+        API_SERVER: http://localhost:8080

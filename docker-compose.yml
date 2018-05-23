@@ -8,7 +8,6 @@ services:
       dockerfile: src/Endpoints/Domain/Dockerfile
     depends_on:
       - rabbitmq
-      - seq
       - eventstore
     restart: always
   mongo:
@@ -18,7 +17,6 @@ services:
       dockerfile: src/Endpoints/MongoDb/Dockerfile
     depends_on:
       - rabbitmq
-      - seq
       - eventstore
       - mongodb
     restart: always
@@ -29,7 +27,6 @@ services:
       dockerfile: src/Endpoints/Elastic/Dockerfile
     depends_on:
       - rabbitmq
-      - seq
       - eventstore
       - elasticdb
     restart: always
@@ -40,19 +37,18 @@ services:
       dockerfile: src/Endpoints/Presentation/Dockerfile
     depends_on:
       - rabbitmq
-      - seq
     ports:
       - "8080:80"
     restart: always
-  #frontend:
-  #  image: eshop/frontend:${TAG:-latest}
-  #  build:
-  #    context: .
-  #    dockerfile: src/Web/Dockerfile
-  #  depends_on:
-  #    - presentation
-  #  ports:
-  #    - "80:80"
+  frontend:
+    image: eshop/frontend:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+    depends_on:
+      - presentation
+    ports:
+      - "80:80"
 
   # windows image
   #rabbitmq:
