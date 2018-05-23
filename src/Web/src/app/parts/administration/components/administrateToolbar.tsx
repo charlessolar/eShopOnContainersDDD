@@ -58,6 +58,7 @@ class AdministrateToolbarView extends React.Component<ToolbarProps & WithStyles<
               <Tab value='/administrate' label='Dashboard'/>
               <Tab value='/administrate/catalog' label='Catalog' />
               <Tab value='/administrate/orders' label='Orders' />
+              <Tab value='/administrate/buyers' label='Buyers' />
             </Tabs>
         </AppBar>
         <div className={classes.mainView}>

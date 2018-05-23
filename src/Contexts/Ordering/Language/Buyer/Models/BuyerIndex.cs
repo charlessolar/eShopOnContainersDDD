@@ -12,6 +12,9 @@ namespace eShop.Ordering.Buyer.Models
         public bool GoodStanding { get; set; }
 
         public long TotalSpent { get; set; }
+        public long TotalOrders { get; set; }
+
+        public long LastOrder { get; set; }
 
         public string PreferredCity { get; set; }
         public string PreferredState { get; set; }

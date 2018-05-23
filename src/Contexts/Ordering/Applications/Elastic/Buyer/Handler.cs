@@ -18,6 +18,7 @@ namespace eShop.Ordering.Buyer
         IHandleMessages<Events.PreferredAddressSet>,
         IHandleMessages<Events.PreferredPaymentSet>,
         IHandleMessages<Events.Suspended>,
+        IHandleMessages<Order.Events.Drafted>,
         IHandleMessages<Order.Events.Paid>,
         IHandleMessages<Order.Events.Canceled>
     {
@@ -79,12 +80,20 @@ namespace eShop.Ordering.Buyer
             buyer.GoodStanding = false;
             await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
         }
+        public async Task Handle(Order.Events.Drafted e, IMessageHandlerContext ctx)
+        {
+            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyerIndex>(e.UserName).ConfigureAwait(false);
+            buyer.TotalOrders++;
+            buyer.LastOrder = e.Stamp;
+            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+        }
         public async Task Handle(Order.Events.Paid e, IMessageHandlerContext ctx)
         {
             var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Order.Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
             var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyerIndex>(order.UserName).ConfigureAwait(false);
 
             buyer.TotalSpent += order.Total;
+            buyer.TotalOrders++;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(order.UserName, buyer).ConfigureAwait(false);
         }
@@ -93,10 +102,12 @@ namespace eShop.Ordering.Buyer
             var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Order.Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
             var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyerIndex>(order.UserName).ConfigureAwait(false);
 
-            if (!order.Paid)
-                return;
+            if (order.Paid)
+            {
+                buyer.TotalSpent -= order.Total;
+            }
 
-            buyer.TotalSpent -= order.Total;
+            buyer.TotalOrders--;
 
             await ctx.App<Infrastructure.IUnitOfWork>().Update(order.UserName, buyer).ConfigureAwait(false);
         }

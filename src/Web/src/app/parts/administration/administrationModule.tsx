@@ -8,6 +8,7 @@ import { StoreType } from '../../stores';
 import { CatalogStoreModel, CatalogStoreType } from './stores/catalog';
 import { OrdersStoreModel, OrdersStoreType } from './stores/orders';
 import { DashboardStoreModel, DashboardStoreType } from './stores/dashboard';
+import { BuyerStoreModel, BuyerStoreType } from './stores/buyers';
 import ToolbarView from './components/administrateToolbar';
 
 export class AdministrationModule {
@@ -64,6 +65,20 @@ export class AdministrationModule {
                   action={(store: OrdersStoreType) => store.get()}
                   loading={(store: OrdersStoreType) => store.loading}
                   getComponent={() => import('./views/orders')}
+                />
+              )
+            })
+          },
+          {
+            path: '/buyers',
+            component: () => ({
+              title: 'Buyers',
+              component: (
+                <AsyncView
+                  actionStore={(store: StoreType) => BuyerStoreModel.create({}, { api: store.api })}
+                  action={(store: BuyerStoreType) => store.get()}
+                  loading={(store: BuyerStoreType) => store.loading}
+                  getComponent={() => import('./views/buyers')}
                 />
               )
             })

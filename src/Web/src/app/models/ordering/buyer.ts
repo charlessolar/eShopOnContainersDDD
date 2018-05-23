@@ -30,6 +30,8 @@ export interface BuyerIndexType {
   goodStanding: boolean;
 
   totalSpent: number;
+  totalOrders: number;
+  lastOrder: number;
 
   preferredCity?: string;
   preferredState?: string;
@@ -48,6 +50,8 @@ export const BuyerIndexModel = types
     goodStanding: types.boolean,
 
     totalSpent: types.number,
+    totalOrders: types.number,
+    lastOrder: types.number,
 
     preferredCity: types.maybe(types.string),
     preferredState: types.maybe(types.string),

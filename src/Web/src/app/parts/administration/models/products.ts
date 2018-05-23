@@ -3,7 +3,6 @@ import * as validate from 'validate.js';
 import uuid from 'uuid/v4';
 import Debug from 'debug';
 
-import { models } from '../../../utils';
 import { FormatDefinition, FieldDefinition } from '../../../components/models';
 
 import { DTOs } from '../../../utils/eShop.dtos';
