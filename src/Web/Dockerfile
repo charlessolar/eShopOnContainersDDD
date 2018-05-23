@@ -19,5 +19,8 @@ ENV API_SERVER=${API_SERVER}
 RUN yarn build
 
 FROM nginx:stable as runtime
-WORKDIR /usr/share/nginx/html
+
+COPY nginx-site.conf /etc/nginx/conf.d/default.conf
+RUN mkdir /app
+WORKDIR /app
 COPY --from=build /src/src/Web/dist .

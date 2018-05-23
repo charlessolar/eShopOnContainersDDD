@@ -3,9 +3,6 @@ import Debug from 'debug';
 import * as React from 'react';
 import Alert from './alert';
 
-
-
-
 const debug = new Debug('alertAjax');
 
 interface AlertAjaxProps {

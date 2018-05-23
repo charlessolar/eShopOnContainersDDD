@@ -39,7 +39,7 @@ services:
       - ESHOP_RabbitUserName=${RABBIT_USERNAME}
       - ESHOP_RabbitPassword=${RABBIT_PASSWORD}
       - ESHOP_ServiceStackLicense=${SERVICESTACK_LICENSE}
-      - ESHOP_HostServer=${HOST_SERVER}
+      - ESHOP_HostServer=http://${HOST_SERVER}
   frontend:
     build:
       args:
