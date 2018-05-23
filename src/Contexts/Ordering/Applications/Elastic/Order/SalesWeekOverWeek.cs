@@ -82,7 +82,7 @@ namespace eShop.Ordering.Order
 
             var day = order.Created.FromUnix().Date;
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesByState>(IdGenerator(day)).ConfigureAwait(false);
+            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesWeekOverWeek>(IdGenerator(day)).ConfigureAwait(false);
             existing.Value -= order.Total;
             await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
         }
@@ -93,7 +93,7 @@ namespace eShop.Ordering.Order
 
             var day = order.Created.FromUnix().Date;
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesByState>(IdGenerator(day)).ConfigureAwait(false);
+            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesWeekOverWeek>(IdGenerator(day)).ConfigureAwait(false);
             existing.Value += product.Price * e.Quantity;
             await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
         }
@@ -104,7 +104,7 @@ namespace eShop.Ordering.Order
 
             var day = order.Created.FromUnix().Date;
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesByState>(IdGenerator(day)).ConfigureAwait(false);
+            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesWeekOverWeek>(IdGenerator(day)).ConfigureAwait(false);
             // remove existing value
             existing.Value -= orderItem.Total;
 
@@ -122,7 +122,7 @@ namespace eShop.Ordering.Order
 
             var day = order.Created.FromUnix().Date;
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesByState>(IdGenerator(day)).ConfigureAwait(false);
+            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesWeekOverWeek>(IdGenerator(day)).ConfigureAwait(false);
             // remove existing value
             existing.Value -= orderItem.Total;
 

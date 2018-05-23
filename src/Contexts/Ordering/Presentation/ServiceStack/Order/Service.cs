@@ -26,16 +26,6 @@ namespace eShop.Ordering.Order
             });
         }
 
-        public Task<object> Any(Services.ListOrders request)
-        {
-            return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders
-            {
-                OrderStatus = string.IsNullOrEmpty(request.OrderStatus) ? null : Status.FromValue(request.OrderStatus),
-                From = request.From,
-                To = request.To
-            });
-        }
-
         public Task<object> Any(Services.BuyerOrders request)
         {
             var session = GetSession();
@@ -50,6 +40,39 @@ namespace eShop.Ordering.Order
                 To = request.To
             });
         }
+        public Task<object> Any(Services.ListOrders request)
+        {
+            return _bus.RequestPaged<Queries.Orders, Models.OrderingOrderIndex>(new Queries.Orders
+            {
+                From = request.From,
+                To = request.To
+            });
+        }
+        public Task<object> Any(Services.SalesWeekOverWeek request)
+        {
+            return _bus.RequestPaged<Queries.SalesWeekOverWeek, Models.SalesWeekOverWeek>(new Queries.SalesWeekOverWeek
+            {
+                From = request.From,
+                To = request.To
+            });
+        }
+        public Task<object> Any(Services.SalesByState request)
+        {
+            return _bus.RequestPaged<Queries.SalesByState, Models.SalesByState>(new Queries.SalesByState
+            {
+                From = request.From,
+                To = request.To
+            });
+        }
+        public Task<object> Any(Services.SalesChart request)
+        {
+            return _bus.RequestPaged<Queries.Sales, Models.SalesChart>(new Queries.Sales
+            {
+                From = request.From,
+                To = request.To
+            });
+        }
+
 
         public Task Any(Services.CancelOrder request)
         {
