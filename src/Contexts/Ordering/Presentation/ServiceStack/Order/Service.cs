@@ -48,7 +48,7 @@ namespace eShop.Ordering.Order
                 To = request.To
             });
         }
-        public Task<object> Any(Services.SalesWeekOverWeek request)
+        public Task<object> Any(Services.OrderingSalesWeekOverWeek request)
         {
             return _bus.RequestPaged<Queries.SalesWeekOverWeek, Models.SalesWeekOverWeek>(new Queries.SalesWeekOverWeek
             {
@@ -56,7 +56,7 @@ namespace eShop.Ordering.Order
                 To = request.To
             });
         }
-        public Task<object> Any(Services.SalesByState request)
+        public Task<object> Any(Services.OrderingSalesByState request)
         {
             return _bus.RequestPaged<Queries.SalesByState, Models.SalesByState>(new Queries.SalesByState
             {
@@ -64,7 +64,7 @@ namespace eShop.Ordering.Order
                 To = request.To
             });
         }
-        public Task<object> Any(Services.SalesChart request)
+        public Task<object> Any(Services.OrderingSalesChart request)
         {
             return _bus.RequestPaged<Queries.Sales, Models.SalesChart>(new Queries.Sales
             {

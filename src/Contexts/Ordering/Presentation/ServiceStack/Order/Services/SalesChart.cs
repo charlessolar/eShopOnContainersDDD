@@ -8,7 +8,7 @@ namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
     [Route("/orders/sales", "GET")]
-    public class SalesChart : Paged<Models.SalesChart>
+    public class OrderingSalesChart : Paged<Models.SalesChart>
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }

@@ -8,7 +8,7 @@ namespace eShop.Ordering.Order.Services
 {
     [Api("Ordering")]
     [Route("/orders/sales_by_state", "GET")]
-    public class SalesByState : Paged<Models.SalesByState>
+    public class OrderingSalesByState : Paged<Models.SalesByState>
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
