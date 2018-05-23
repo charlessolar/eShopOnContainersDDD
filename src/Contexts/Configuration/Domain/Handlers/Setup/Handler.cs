@@ -23,10 +23,10 @@ namespace eShop.Configuration.Setup
         {
             await ctx.LocalSaga(async bus =>
             {
-                await bus.CommandToDomain(new Entities.Identity.Commands.Seed()).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Catalog.Commands.Seed()).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Basket.Commands.Seed()).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Ordering.Commands.Seed()).ConfigureAwait(false);
+                await bus.CommandToDomain(new Entities.Identity.Commands.Seed(), timeout: false).ConfigureAwait(false);
+                await bus.CommandToDomain(new Entities.Catalog.Commands.Seed(), timeout: false).ConfigureAwait(false);
+                await bus.CommandToDomain(new Entities.Basket.Commands.Seed(), timeout: false).ConfigureAwait(false);
+                await bus.CommandToDomain(new Entities.Ordering.Commands.Seed(), timeout: false).ConfigureAwait(false);
             }).ConfigureAwait(false);
         }
     }

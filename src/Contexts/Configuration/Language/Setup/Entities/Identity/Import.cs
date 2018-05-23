@@ -65,6 +65,7 @@ namespace eShop.Configuration.Setup.Entities.Identity
                     o.UserName = f.Internet.UserName();
                     o.Password = f.Internet.Password();
                     o.GivenName = f.Name.FindName(withPrefix: false, withSuffix: false);
+                    o.Roles = new[] { "customer" };
                 });
 
             var users = bogus.Generate(100);
@@ -79,11 +80,14 @@ namespace eShop.Configuration.Setup.Entities.Identity
                         Password = user.Password
                     }).ConfigureAwait(false);
 
-                    await bus.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
+                    foreach (var role in user.Roles)
                     {
-                        UserName = user.UserName,
-                        RoleId = roleIds["customer"]
-                    }).ConfigureAwait(false);
+                        await bus.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
+                        {
+                            UserName = user.UserName,
+                            RoleId = roleIds[role]
+                        }).ConfigureAwait(false);
+                    }
                 }
             }).ConfigureAwait(false);
 

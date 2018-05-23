@@ -90,7 +90,7 @@ namespace Infrastructure.Extensions
                 Payload = package.Payload as TResponse
             };
         }
-        public static async Task CommandToDomain<T>(this IMessageSession bus, T message) where T : StampedCommand
+        public static async Task CommandToDomain<T>(this IMessageSession bus, T message, bool timeout = true) where T : StampedCommand
         {
             var options = new SendOptions();
             options.SetDestination("domain");
@@ -98,16 +98,21 @@ namespace Infrastructure.Extensions
 
             var response = bus.Request<Aggregates.Messages.IMessage>(message, options);
 
-            await Task.WhenAny(
-                    Task.Delay(TenSeconds), response)
-                .ConfigureAwait(false);
+            if (timeout)
+            {
+                await Task.WhenAny(
+                        Task.Delay(TenSeconds), response)
+                    .ConfigureAwait(false);
+            }
+            else
+                await response.ConfigureAwait(false);
 
             if (!response.IsCompleted)
                 throw new CommandTimeoutException("Command timed out");
 
             response.Result.CommandResponse();
         }
-        public static async Task<object> RequestPaged<T, TResponse>(this IMessageSession bus, T message) where T : Paged where TResponse : class
+        public static async Task<object> RequestPaged<T, TResponse>(this IMessageSession bus, T message, bool timeout = true) where T : Paged where TResponse : class
         {
             var options = new SendOptions();
             options.SetDestination("elastic");
@@ -115,16 +120,21 @@ namespace Infrastructure.Extensions
 
             var response = bus.Request<PagedReply>(message, options);
 
-            await Task.WhenAny(
-                Task.Delay(TenSeconds), response)
-                .ConfigureAwait(false);
+            if (timeout)
+            {
+                await Task.WhenAny(
+                        Task.Delay(TenSeconds), response)
+                    .ConfigureAwait(false);
+            }
+            else
+                await response.ConfigureAwait(false);
 
-            if(!response.IsCompleted)
+            if (!response.IsCompleted)
                 throw new CommandTimeoutException("Request timed out");
 
             return response.Result.RequestPaged<TResponse>();
         }
-        public static async Task<object> RequestQuery<T, TResponse>(this IMessageSession bus, T message) where T : Query where TResponse : class
+        public static async Task<object> RequestQuery<T, TResponse>(this IMessageSession bus, T message, bool timeout = true) where T : Query where TResponse : class
         {
             var options = new SendOptions();
             options.SetDestination("mongodb");
@@ -132,9 +142,14 @@ namespace Infrastructure.Extensions
 
             var response = bus.Request<Reply>(message, options);
 
-            await Task.WhenAny(
-                    Task.Delay(TenSeconds), response)
-                .ConfigureAwait(false);
+            if (timeout)
+            {
+                await Task.WhenAny(
+                        Task.Delay(TenSeconds), response)
+                    .ConfigureAwait(false);
+            }
+            else
+                await response.ConfigureAwait(false);
 
             if (!response.IsCompleted)
                 throw new CommandTimeoutException("Request timed out");
