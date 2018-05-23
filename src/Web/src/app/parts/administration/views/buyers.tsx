@@ -80,15 +80,18 @@ class BuyerView extends React.Component<BuyerViewProps & WithStyles<'root' | 'co
                       <Using model={buyer}>
                         <TableCell component='th' scope='row'>
                           <Typography variant='subheading'>{buyer.givenName}</Typography>
-                          <Tooltip title='whether the guyer is in good standing'><Typography variant='body1' color='textSecondary'>{buyer.goodStanding ? 'GOOD' : 'SUSPENDED'}</Typography></Tooltip>
+                          <Tooltip title='Whether the buyer is in good standing'><Typography variant='body1' color='textSecondary'>{buyer.goodStanding ? 'GOOD' : 'SUSPENDED'}</Typography></Tooltip>
 
                         </TableCell>
                         <TableCell numeric>
-                          <Typography variant='subheading'>Spent: {buyer.totalSpent}</Typography>
-                          <Typography variant='body1' color='textSecondary'>Orders: {buyer.totalOrders}</Typography>
+                          <Typography variant='subheading'><Formatted field='totalSpent'/></Typography>
+                          <Typography variant='body1' color='textSecondary'>Orders: <Formatted field='totalOrders'/></Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant='caption'>{buyer.preferredCity}, {buyer.preferredState}</Typography>
+                          <Typography variant='title'>{buyer.lastOrderPlaced}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant='caption'>{buyer.preferredCity} {buyer.preferredState}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant='caption'>{buyer.preferredPaymentCardholder}</Typography>

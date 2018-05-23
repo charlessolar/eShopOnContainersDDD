@@ -91,6 +91,17 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                         Alias = buyer.PaymentMethod.Alias,
                         UserName = buyer.UserName
                     }).ConfigureAwait(false);
+
+                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Commands.SetPreferredAddress
+                    {
+                        UserName = buyer.UserName,
+                        AddressId = buyer.Address.AddressId
+                    }).ConfigureAwait(false);
+                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Commands.SetPreferredPaymentMethod
+                    {
+                        UserName = buyer.UserName,
+                        PaymentMethodId = buyer.PaymentMethod.PaymentMethodId
+                    }).ConfigureAwait(false);
                 }
             }).ConfigureAwait(false);
 

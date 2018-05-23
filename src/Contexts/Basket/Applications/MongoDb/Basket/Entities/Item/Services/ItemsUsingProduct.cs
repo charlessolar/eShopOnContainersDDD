@@ -63,7 +63,9 @@ namespace eShop.Basket.Basket.Entities.Item.Services
             // remove the basket id from all productitem lists
             foreach (var id in itemIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<ProductItems>(id).ConfigureAwait(false);
+                var basketItem = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.BasketItem>(id).ConfigureAwait(false);
+                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<ProductItems>(basketItem.ProductId).ConfigureAwait(false);
+
                 item.Baskets = item.Baskets.TryRemove(e.BasketId);
 
                 await ctx.App<Infrastructure.IUnitOfWork>().Update(id, item).ConfigureAwait(false);
