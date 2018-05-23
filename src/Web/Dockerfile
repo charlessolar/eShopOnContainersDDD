@@ -12,6 +12,10 @@ RUN yarn
 
 COPY . .
 WORKDIR /src/src/Web
+
+ARG API_SERVER
+ENV API_SERVER=${API_SERVER}
+
 RUN yarn build
 
 FROM nginx:stable as runtime

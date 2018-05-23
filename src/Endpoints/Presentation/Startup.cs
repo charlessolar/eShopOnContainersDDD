@@ -218,11 +218,12 @@ namespace eShop
             {
                 DefaultLabelFmt = new List<string> { "type: english", " ", "route" }
             });
+
+            var hostServer = AppSettings.GetString("HostServer");
             Plugins.Add(new CorsFeature(
                 allowOriginWhitelist: new[]
                 {
-                    "http://localhost:9000",
-                    "http://localhost",
+                    string.IsNullOrEmpty(hostServer) ? "http://localhost:9000" : hostServer
                 },
                 allowCredentials: true,
                 allowedHeaders: "Content-Type, Authorization",

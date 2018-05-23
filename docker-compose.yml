@@ -58,10 +58,6 @@ services:
   #    - "5672:5672"
 
   # linux images
-  #elastichq:
-  #  image: elastichq/elasticsearch-hq
-  #  ports:
-  #    - "5000:5000"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
@@ -99,10 +95,3 @@ services:
     ports:
       - "9200:9200"
     restart: always
-  #seq:
-  #  image: datalust/seq
-  #  environment:
-  #    - ACCEPT_EULA=Y
-  #  ports:
-  #    - "5341:5341"
-  #    - "15341:80"

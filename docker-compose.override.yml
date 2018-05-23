@@ -13,7 +13,6 @@ services:
       - ESHOP_EventStoreConnection=${EVENTSTORE_SERVER:-eventstore}
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
-      #- ESHOP_SeqConnection=${SEQ_SERVER:-http://seq:5341}
   mongo:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
@@ -23,7 +22,6 @@ services:
       - ESHOP_EventStoreUserName=${EVENTSTORE_USERNAME}
       - ESHOP_EventStorePassword=${EVENTSTORE_PASSWORD}
       - ESHOP_MongoDbConnection=${MONGODB_SERVER:-mongodb://mongodb:27017}
-      #- ESHOP_SeqConnection=${SEQ_SERVER:-http://seq:5341}
   elastic:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
@@ -35,15 +33,14 @@ services:
       - ESHOP_ElasticConnection=${ELASTIC_SERVER:-http://elasticdb:9200}
       - ESHOP_ElasticUserName=${EVENTSTORE_USERNAME}
       - ESHOP_ElasticPassword=${EVENTSTORE_PASSWORD}
-      #- ESHOP_SeqConnection=${SEQ_SERVER:-http://seq:5341}
   presentation:
     environment:
       - ESHOP_RabbitConnection=${RABBIT_SERVER:-rabbitmq}
       - ESHOP_RabbitUserName=${RABBIT_USERNAME}
       - ESHOP_RabbitPassword=${RABBIT_PASSWORD}
       - ESHOP_ServiceStackLicense=${SERVICESTACK_LICENSE}
-      #- ESHOP_SeqConnection=${SEQ_SERVER:-http://seq:5341}
+      - ESHOP_HostServer=${HOST_SERVER}
   frontend:
     build:
       args:
-        API_SERVER: http://localhost:8080
+        API_SERVER: http://${HOST_SERVER}:8080
