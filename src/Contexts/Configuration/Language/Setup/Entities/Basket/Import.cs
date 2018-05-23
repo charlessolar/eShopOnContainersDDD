@@ -19,7 +19,7 @@ namespace eShop.Configuration.Setup.Entities.Basket
         {
             var random = new Random();
             // create 40 random baskets (which will be orders eventually)
-            Baskets = Enumerable.Range(0, 400).Select(x => new Types.Basket
+            Baskets = Enumerable.Range(0, 100).Select(x => new Types.Basket
             {
                 Id = Guid.NewGuid(),
                 UserName = Identity.Import.Users.RandomPick().UserName,

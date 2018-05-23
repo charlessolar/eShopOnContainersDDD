@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.7.263" />
+    <PackageReference Include="Aggregates.NET" Version="0.13.8.264" />
     <PackageReference Include="FluentValidation" Version="7.5.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NServiceBus" Version="7.0.0-rc0002" />

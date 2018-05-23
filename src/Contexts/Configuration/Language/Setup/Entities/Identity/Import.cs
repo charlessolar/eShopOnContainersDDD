@@ -68,7 +68,7 @@ namespace eShop.Configuration.Setup.Entities.Identity
                     o.Roles = new[] { "customer" };
                 });
 
-            var users = bogus.Generate(100);
+            var users = bogus.Generate(20);
             await ctx.LocalSaga(async bus =>
             {
                 foreach(var user in users)
