@@ -1,6 +1,6 @@
 import { AdministrationModule } from './parts/administration/administrationModule';
 import { AuthModule } from './parts/auth/authModule';
-import { BasketModule } from './parts/basket/BasketModule';
+import { BasketModule } from './parts/basket/basketModule';
 import { CatalogModule } from './parts/catalog/catalogModule';
 import { ConfigurationModule } from './parts/configuration/configurationModule';
 import { OrdersModule } from './parts/orders/ordersModule';
