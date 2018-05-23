@@ -1,15 +1,10 @@
-import { types, flow, getEnv, getParent, applySnapshot, getSnapshot } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import { DateTime } from 'luxon';
 import Debug from 'debug';
-
-import { sort } from '../../../utils';
-import { FormatDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { DateTime } from 'luxon';
+import { flow, getEnv, types } from 'mobx-state-tree';
 import { ApiClientType } from '../../../stores';
-
-import { ChartType, ChartModel, WeekOverWeekType, WeekOverWeekModel, ByStateType, ByStateModel } from '../models/sales';
+import { sort } from '../../../utils';
+import { DTOs } from '../../../utils/eShop.dtos';
+import { ByStateModel, ByStateType, ChartModel, ChartType, WeekOverWeekModel, WeekOverWeekType } from '../models/sales';
 
 const debug = new Debug('dashboard');
 

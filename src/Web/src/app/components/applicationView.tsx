@@ -1,14 +1,9 @@
-import * as React from 'react';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import { inject, observer } from 'mobx-react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-
-import asyncView from './asyncView';
-
-import NavBar from './navbar';
-import Footer from './footer';
-
+import * as React from 'react';
 import { StoreType } from '../stores';
+import Footer from './footer';
+import NavBar from './navbar';
 
 interface AppViewProps {
   title: string;

@@ -1,26 +1,19 @@
-import * as React from 'react';
-import { observable, action, computed } from 'mobx';
-import { observer, inject } from 'mobx-react';
-import { types, flow, getEnv, IModelType, getSnapshot, getIdentifier, IStateTreeNode, isStateTreeNode } from 'mobx-state-tree';
-import * as keycode from 'keycode';
-import Downshift from 'downshift';
-import Debug from 'debug';
-
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
 import Close from '@material-ui/icons/Close';
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
-
-import { models, inject_props } from '../../utils';
+import Debug from 'debug';
+import Downshift from 'downshift';
+import { inject, observer } from 'mobx-react';
+import { IModelType, IStateTreeNode, flow, getEnv, getIdentifier, getSnapshot, types } from 'mobx-state-tree';
+import * as React from 'react';
 
 const debug = new Debug('selecter');
 

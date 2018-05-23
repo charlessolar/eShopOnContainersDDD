@@ -1,18 +1,12 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Face from '@material-ui/icons/Face';
-import ExitToApp from '@material-ui/icons/ExitToApp';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import Typography from '@material-ui/core/Typography';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import Face from '@material-ui/icons/Face';
+import * as React from 'react';
 
 export interface Route {
   route: string;

@@ -1,19 +1,15 @@
-import * as React from 'react';
-import { applyPatch, IStateTreeNode } from 'mobx-state-tree';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
+import Tooltip from '@material-ui/core/Tooltip';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
-
-import { ProductType } from '../models/products';
-import { ProductFormType } from '../stores/product';
-import { CatalogStoreType } from '../stores/catalog';
-
+import { IStateTreeNode, applyPatch } from 'mobx-state-tree';
+import * as React from 'react';
 import FormView from '../components/productForm';
+import { ProductType } from '../models/products';
+import { CatalogStoreType } from '../stores/catalog';
+import { ProductFormType } from '../stores/product';
 
 interface ProductFormProps {
   product: ProductType;

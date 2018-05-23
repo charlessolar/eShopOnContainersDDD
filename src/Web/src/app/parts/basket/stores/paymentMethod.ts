@@ -1,17 +1,11 @@
+import Debug from 'debug';
 import { types } from 'mobx-state-tree';
 import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
-import Debug from 'debug';
-
-import rules from '../validation';
-import { FormatDefinition, FieldDefinition } from '../../../components/models';
-
-import { ApiClientType } from '../../../stores';
-
-import { PaymentMethodType, PaymentMethodModel } from '../../../models/ordering/paymentMethod';
-
-import { PaymentMethodListType, PaymentMethodListModel } from '../models/paymentMethod';
+import { FieldDefinition, FormatDefinition } from '../../../components/models';
+import { PaymentMethodModel, PaymentMethodType } from '../../../models/ordering/paymentMethod';
 import PaymentMethodFormView from '../components/paymentMethodForm';
+import { PaymentMethodListModel } from '../models/paymentMethod';
+import rules from '../validation';
 
 const debug = new Debug('buyer payment method');
 

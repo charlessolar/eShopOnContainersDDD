@@ -1,14 +1,11 @@
-import * as React from 'react';
-import { observable, action, computed } from 'mobx';
-import { DateTime } from 'luxon';
-
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { DateTime } from 'luxon';
+import * as React from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
@@ -92,11 +89,12 @@ class DateRangeControl extends React.Component<DateRangeProps & WithStyles<'cont
 
   public render() {
     const { from, to } = this.state;
-    const { id, label, required, error, value, disabled, classes } = this.props;
+    const { id, label, required, error, disabled, classes } = this.props;
 
     const modifiers = { start: from, end: to };
     return (
       <FormControl required={required} className={classes.container} fullWidth disabled={disabled} error={error && error[id] ? true : false} aria-describedby={id + '-text'}>
+      <InputLabel>{label}</InputLabel>
         <Grid container spacing={8}>
           <Grid item xs={4}>
             <DayPickerInput

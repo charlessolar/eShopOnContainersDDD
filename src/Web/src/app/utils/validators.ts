@@ -1,6 +1,5 @@
-import * as validate from 'validate.js';
 import { DateTime } from 'luxon';
-
+import * as validate from 'validate.js';
 import { Data } from './image';
 
 export default function install() {
@@ -43,7 +42,7 @@ export default function install() {
       return 'invalid array elements';
     }
   };
-  validate.validators.credit_card = (value: string, options) => {
+  validate.validators.credit_card = (value: string) => {
     if (!value) {
       return;
     }

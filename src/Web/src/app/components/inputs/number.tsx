@@ -1,15 +1,10 @@
-import * as React from 'react';
-import { observable, action, computed } from 'mobx';
-import { observer } from 'mobx-react';
-
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import NumberFormat from 'react-number-format';
-import MaskedInput from 'react-text-mask';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
 import * as numeral from 'numeral';
+import * as React from 'react';
 
 interface NumberProps {
   id: string;
@@ -97,7 +92,7 @@ class NumberControl extends React.Component<NumberProps & WithStyles<'formContro
   }
 
   public render() {
-    const { id, label, required, error, type, value, normalize, autoComplete, disabled, classes, fieldProps } = this.props;
+    const { id, label, required, error, type, autoComplete, disabled, classes, fieldProps } = this.props;
 
     return (
       <FormControl required={required} className={classes.formControl} disabled={disabled} fullWidth error={error && error[id] ? true : false} aria-describedby={id + '-text'}>

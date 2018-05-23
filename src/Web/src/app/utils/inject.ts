@@ -1,7 +1,6 @@
 
-import { IModelType, getSnapshot } from 'mobx-state-tree';
 import { inject as mobx_inject } from 'mobx-react';
-
+import { IModelType, getSnapshot } from 'mobx-state-tree';
 import { StoreType } from '../stores';
 
 export function inject<S, T>(storeType: IModelType<S, T>, prop?: string, snapshotProp?: string, snapshotProjection?: (snapshot: any) => any) {

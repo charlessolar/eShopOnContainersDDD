@@ -1,14 +1,8 @@
-import { types, getEnv, flow } from 'mobx-state-tree';
 import Debug from 'debug';
-
-import rules from '../validation';
-import { models } from '../../../utils';
-import { FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import { AddressModel, AddressType } from '../../../models/ordering/address';
 import { ApiClientType } from '../../../stores';
-
-import { AddressType, AddressModel } from '../../../models/ordering/address';
+import { DTOs } from '../../../utils/eShop.dtos';
 
 const debug = new Debug('buyer address');
 

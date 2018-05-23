@@ -1,15 +1,11 @@
 import * as React from 'react';
-import { types, getRoot } from 'mobx-state-tree';
-
 import AsyncView from '../../components/asyncView';
-import { models } from '../../utils';
 import { StoreType } from '../../stores';
-
-import { CatalogStoreModel, CatalogStoreType } from './stores/catalog';
-import { OrdersStoreModel, OrdersStoreType } from './stores/orders';
-import { DashboardStoreModel, DashboardStoreType } from './stores/dashboard';
-import { BuyerStoreModel, BuyerStoreType } from './stores/buyers';
 import ToolbarView from './components/administrateToolbar';
+import { BuyerStoreModel, BuyerStoreType } from './stores/buyers';
+import { CatalogStoreModel, CatalogStoreType } from './stores/catalog';
+import { DashboardStoreModel, DashboardStoreType } from './stores/dashboard';
+import { OrdersStoreModel, OrdersStoreType } from './stores/orders';
 
 export class AdministrationModule {
   public routes: UniversalRouterRoute[];

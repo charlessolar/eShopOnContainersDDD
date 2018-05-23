@@ -1,17 +1,11 @@
-import { types, flow, getEnv, IStateTreeNode } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import rules from '../validation';
-import { FormatDefinition, FieldDefinition } from '../../../components/models';
-
-import { ApiClientType } from '../../../stores';
-
-import { AddressType, AddressModel } from '../../../models/ordering/address';
-
-import { AddressListType, AddressListModel } from '../models/address';
+import { types } from 'mobx-state-tree';
+import * as validate from 'validate.js';
+import { FieldDefinition, FormatDefinition } from '../../../components/models';
+import { AddressModel, AddressType } from '../../../models/ordering/address';
 import AddressFormView from '../components/addressForm';
+import { AddressListModel } from '../models/address';
+import rules from '../validation';
 
 const debug = new Debug('buyer address');
 

@@ -1,6 +1,4 @@
-import { IModelType, types, flow, getSnapshot } from 'mobx-state-tree';
-import { Component } from 'react';
-import { StoreType } from '../stores';
+import { IModelType, types } from 'mobx-state-tree';
 
 const ResponseError = types.model(
   'ResponseError',

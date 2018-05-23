@@ -1,28 +1,19 @@
-import * as React from 'react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import Slide from '@material-ui/core/Slide';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-
-import { inject } from '../../../utils';
-import { Using, Field, Submit, Action } from '../../../components/models';
+import * as React from 'react';
 import Confirm from '../../../components/dialogs/confirm';
-
+import { Action, Field, Submit, Using } from '../../../components/models';
+import { inject } from '../../../utils';
 import { ProductType } from '../models/products';
-import { ProductFormType, ProductFormModel } from '../stores/product';
 import { CatalogStoreType } from '../stores/catalog';
+import { ProductFormModel, ProductFormType } from '../stores/product';
 
 const styles = (theme: Theme) => ({
   root: {

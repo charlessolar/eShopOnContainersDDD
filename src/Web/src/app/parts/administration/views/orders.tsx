@@ -1,25 +1,20 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-
+import { observer } from 'mobx-react';
+import * as React from 'react';
+import { hot } from 'react-hot-loader';
+import { Field, Formatted, Using } from '../../../components/models';
 import { sort } from '../../../utils';
-import { Using, Formatted, Field } from '../../../components/models';
-import { OrdersStoreType, OrdersStoreModel } from '../stores/orders';
+import { OrdersStoreType } from '../stores/orders';
 
 interface OrdersProps {
   store?: OrdersStoreType;

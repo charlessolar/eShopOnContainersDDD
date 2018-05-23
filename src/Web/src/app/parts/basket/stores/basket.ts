@@ -1,17 +1,10 @@
-import { types, getRoot, getEnv, flow, applyAction, applySnapshot, onSnapshot, addDisposer } from 'mobx-state-tree';
-import { History } from 'history';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import rules from '../validation';
-import { FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { History } from 'history';
+import { addDisposer, applyAction, applySnapshot, flow, getEnv, types } from 'mobx-state-tree';
 import { ApiClientType } from '../../../stores';
-
-import { BasketType, BasketModel } from '../models/basket';
-import { ItemIndexType, ItemIndexModel } from '../models/items';
+import { DTOs } from '../../../utils/eShop.dtos';
+import { BasketModel, BasketType } from '../models/basket';
+import { ItemIndexModel, ItemIndexType } from '../models/items';
 
 const debug = new Debug('basket');
 

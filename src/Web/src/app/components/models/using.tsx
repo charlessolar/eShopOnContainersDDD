@@ -1,9 +1,7 @@
+import { action, computed, observable, runInAction } from 'mobx';
+import { IStateTreeNode, applyPatch } from 'mobx-state-tree';
 import * as React from 'react';
-import { observable, action, computed, runInAction } from 'mobx';
-import { observer } from 'mobx-react';
-import { flow, applyPatch, IStateTreeNode } from 'mobx-state-tree';
-
-import { FormatDefinition, FieldDefinition } from '.';
+import { FieldDefinition, FormatDefinition } from '.';
 import { Data } from '../../utils/image';
 
 export const UsingContext = React.createContext<UsingType<any>>(undefined);

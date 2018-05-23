@@ -1,15 +1,10 @@
-import { types, flow, getEnv, getParent, applySnapshot, getSnapshot } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import rules from '../validation';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import * as validate from 'validate.js';
 import { FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
 import { ApiClientType } from '../../../stores';
-
-import { ProductType, ProductModel } from '../../../models/catalog/products';
+import { DTOs } from '../../../utils/eShop.dtos';
+import rules from '../validation';
 
 const debug = new Debug('product stock');
 

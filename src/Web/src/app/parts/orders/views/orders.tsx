@@ -1,28 +1,24 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import NotificationIcon from '@material-ui/icons/Notifications';
-
+import { observer } from 'mobx-react';
+import * as React from 'react';
+import { hot } from 'react-hot-loader';
+import { Field, Formatted, Using } from '../../../components/models';
 import { sort } from '../../../utils';
-import { Using, Formatted, Field } from '../../../components/models';
-import { OrderStoreType, OrderStoreModel } from '../stores/orders';
+import { OrderStoreType } from '../stores/orders';
 
 interface OrderProps {
   store?: OrderStoreType;
@@ -133,7 +129,7 @@ class OrderView extends React.Component<OrderProps & WithStyles<'appView' | 'mai
   public render() {
     const { store, classes } = this.props;
 
-    const orders = sort(Array.from(store.orders.values()), 'created', 'desc');
+    const orders = sort(Array.from(store.orders.values()), 'created');
 
     return (
       <div className={classes.appView}>

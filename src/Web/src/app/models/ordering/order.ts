@@ -1,6 +1,5 @@
 import { types } from 'mobx-state-tree';
-
-import { OrderItemType, OrderItemModel } from './orderitem';
+import { OrderItemModel, OrderItemType } from './orderitem';
 
 export interface OrderType {
   id: string;

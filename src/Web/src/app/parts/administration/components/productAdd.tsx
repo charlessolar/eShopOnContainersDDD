@@ -1,15 +1,12 @@
-import * as React from 'react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
-
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import * as React from 'react';
 import { ProductType } from '../../../models/catalog/products';
-import { ProductFormType } from '../stores/product';
-import { CatalogStoreType } from '../stores/catalog';
-
 import FormView from '../components/productForm';
+import { CatalogStoreType } from '../stores/catalog';
+import { ProductFormType } from '../stores/product';
 
 interface ProductFormProps {
   list: CatalogStoreType;

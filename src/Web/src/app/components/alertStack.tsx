@@ -1,15 +1,13 @@
-import * as React from 'react';
-import { observable, action } from 'mobx';
-import { observer, inject } from 'mobx-react';
-import Debug from 'debug';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-
-import Alert from './alert';
+import Debug from 'debug';
+import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
 import { StoreType } from '../stores';
+import Alert from './alert';
 
 const debug = new Debug('alerts');
 

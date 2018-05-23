@@ -1,14 +1,9 @@
-import { types, getRoot, getEnv, flow } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import { FormatDefinition, FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import { FormatDefinition } from '../../../components/models';
+import { ProductModel as ProductModelBase, ProductType as ProductTypeBase } from '../../../models/catalog/products';
 import { ApiClientType } from '../../../stores';
-
-import { ProductType as ProductTypeBase, ProductModel as ProductModelBase } from '../../../models/catalog/products';
+import { DTOs } from '../../../utils/eShop.dtos';
 
 const debug = new Debug('catalog products');
 

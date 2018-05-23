@@ -1,11 +1,10 @@
+import { AdministrationModule } from './parts/administration/administrationModule';
 import { AuthModule } from './parts/auth/authModule';
+import { BasketModule } from './parts/basket/BasketModule';
 import { CatalogModule } from './parts/catalog/catalogModule';
 import { ConfigurationModule } from './parts/configuration/configurationModule';
-import { AdministrationModule } from './parts/administration/administrationModule';
-import { BasketModule } from './parts/basket/BasketModule';
 import { OrdersModule } from './parts/orders/ordersModule';
-
-import { Store, StoreType } from './stores';
+import { StoreType } from './stores';
 
 export interface Modules {
   catalog: CatalogModule;

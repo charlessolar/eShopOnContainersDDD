@@ -1,16 +1,12 @@
 
-import * as ReactDOM from 'react-dom';
 import { JsonServiceClient } from '@servicestack/client';
-import createBrowserHistory from 'history/createBrowserHistory';
-import { onSnapshot } from 'mobx-state-tree';
 import Debug from 'debug';
-
-import theme from './theme';
-
-import { config } from './config';
+import createBrowserHistory from 'history/createBrowserHistory';
 import { Client } from './client';
+import { config } from './config';
+import { Modules, createModules } from './modules';
 import { Store, StoreType } from './stores';
-import { createModules, Modules } from './modules';
+import theme from './theme';
 
 const debug = new Debug('app');
 

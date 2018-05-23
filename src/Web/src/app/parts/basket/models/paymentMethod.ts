@@ -1,14 +1,8 @@
-import { types, getEnv, flow } from 'mobx-state-tree';
 import Debug from 'debug';
-
-import rules from '../validation';
-import { models } from '../../../utils';
-import { FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import { PaymentMethodModel, PaymentMethodType } from '../../../models/ordering/paymentMethod';
 import { ApiClientType } from '../../../stores';
-
-import { PaymentMethodType, PaymentMethodModel } from '../../../models/ordering/paymentMethod';
+import { DTOs } from '../../../utils/eShop.dtos';
 
 const debug = new Debug('buyer payment method');
 

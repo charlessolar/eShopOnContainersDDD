@@ -1,19 +1,16 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-import * as ReactCrop from 'react-image-crop';
-import Dropzone, { ImageFile } from 'react-dropzone';
-
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-
-import { Data, urlToBase64 } from '../../utils/image';
-
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { observer } from 'mobx-react';
+import * as React from 'react';
+import Dropzone, { ImageFile } from 'react-dropzone';
+import * as ReactCrop from 'react-image-crop';
 // tslint:disable-next-line:no-submodule-imports
 import 'react-image-crop/dist/ReactCrop.css';
+import { Data, urlToBase64 } from '../../utils/image';
 
 interface ImageProps {
   id: string;

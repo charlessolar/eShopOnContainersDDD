@@ -1,5 +1,5 @@
+import { IModelType } from 'mobx-state-tree';
 import * as React from 'react';
-import { types, IModelType, flow } from 'mobx-state-tree';
 
 export { Using } from './using';
 export { Formatted } from './formatted';

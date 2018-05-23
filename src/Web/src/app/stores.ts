@@ -1,11 +1,9 @@
-import { IType, types, getEnv, getRoot, flow, applySnapshot, onSnapshot, addDisposer } from 'mobx-state-tree';
-import { JsonServiceClient } from '@servicestack/client';
-import { History } from 'history';
-import Debug from 'debug';
-
 import { Theme } from '@material-ui/core/styles';
+import { JsonServiceClient } from '@servicestack/client';
+import Debug from 'debug';
+import { History } from 'history';
+import { addDisposer, applySnapshot, flow, getEnv, getRoot, onSnapshot, types } from 'mobx-state-tree';
 import { DTOs } from './utils/eShop.dtos';
-import theme from './theme';
 
 const debug = new Debug('stores');
 

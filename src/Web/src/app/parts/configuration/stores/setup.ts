@@ -1,8 +1,7 @@
-import { types, getRoot, getEnv, flow } from 'mobx-state-tree';
 import Debug from 'debug';
-
+import { flow, getEnv, types } from 'mobx-state-tree';
+import { StoreType } from '../../../stores';
 import { DTOs } from '../../../utils/eShop.dtos';
-import { StoreType, ConfigurationStatusModel, ConfigurationStatusType } from '../../../stores';
 
 const debug = new Debug('configuration setup');
 

@@ -1,33 +1,25 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-
+import Stepper from '@material-ui/core/Stepper';
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { observer } from 'mobx-react';
+import * as React from 'react';
+import { hot } from 'react-hot-loader';
+import { Formatted, Using } from '../../../components/models';
 import { sort } from '../../../utils';
-import { Using, Formatted } from '../../../components/models';
-import { CheckoutStoreType, CheckoutStoreModel } from '../stores/checkout';
-
 import CheckoutAddress from '../components/checkoutAddress';
-import CheckoutPayment from '../components/checkoutPayment';
 import CheckoutConfirm from '../components/checkoutConfirm';
+import CheckoutPayment from '../components/checkoutPayment';
+import { CheckoutStoreType } from '../stores/checkout';
 
 interface CheckoutProps {
   store?: CheckoutStoreType;

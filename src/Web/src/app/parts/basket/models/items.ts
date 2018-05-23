@@ -1,17 +1,10 @@
-import { types, getRoot, getEnv, flow, getParent } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import { DateTime } from 'luxon';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import { models } from '../../../utils';
+import { flow, getEnv, getParent, types } from 'mobx-state-tree';
 import { FormatDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { ItemIndexModel as ItemIndexModelBase, ItemIndexType as ItemIndexTypeBase } from '../../../models/basket/items';
 import { ApiClientType } from '../../../stores';
-
+import { DTOs } from '../../../utils/eShop.dtos';
 import { BasketType } from './basket';
-import { ItemIndexType as ItemIndexTypeBase, ItemIndexModel as ItemIndexModelBase } from '../../../models/basket/items';
 
 const debug = new Debug('basket item');
 

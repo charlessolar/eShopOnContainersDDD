@@ -1,15 +1,9 @@
-import { types, getRoot, getEnv, flow } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import { models } from '../../../utils';
-import { FormatDefinition, FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import { FormatDefinition } from '../../../components/models';
+import { OrderItemModel as OrderItemModelBase, OrderItemType as OrderItemTypeBase } from '../../../models/ordering/orderitem';
 import { ApiClientType } from '../../../stores';
-
-import { OrderItemType as OrderItemTypeBase, OrderItemModel as OrderItemModelBase } from '../../../models/ordering/orderitem';
+import { DTOs } from '../../../utils/eShop.dtos';
 
 const debug = new Debug('order items');
 

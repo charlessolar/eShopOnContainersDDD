@@ -1,10 +1,8 @@
-import * as React from 'react';
 import { observer } from 'mobx-react';
-
-import { UsingContext, UsingType } from './using';
-import { Text, TextArea, Number, Selecter, Dropdown, Checkbox, Image, DateRange } from '../inputs';
-
+import * as React from 'react';
 import { Data } from '../../utils/image';
+import { Checkbox, DateRange, Dropdown, Image, Number, Selecter, Text, TextArea } from '../inputs';
+import { UsingContext, UsingType } from './using';
 
 interface FieldProps {
   field: string;

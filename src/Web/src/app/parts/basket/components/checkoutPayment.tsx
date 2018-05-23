@@ -1,19 +1,16 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-import { getSnapshot } from 'mobx-state-tree';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { observer } from 'mobx-react';
+import { getSnapshot } from 'mobx-state-tree';
+import * as React from 'react';
+import { Field, Submit, Using } from '../../../components/models';
 import { inject } from '../../../utils';
-import { Using, Formatted, Field, Submit } from '../../../components/models';
-
-import { PaymentMethodStoreType, PaymentMethodStoreModel } from '../stores/paymentMethod';
 import { CheckoutStoreType } from '../stores/checkout';
+import { PaymentMethodStoreModel, PaymentMethodStoreType } from '../stores/paymentMethod';
 
 interface PaymentMethodProps {
   handleNext: () => void;

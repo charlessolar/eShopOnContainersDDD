@@ -1,10 +1,10 @@
-import * as React from 'react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import Debug from 'debug';
-
+import * as React from 'react';
 import Alert from './alert';
+
+
+
 
 const debug = new Debug('alertAjax');
 

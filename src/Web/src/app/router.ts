@@ -1,10 +1,7 @@
-import * as React from 'react';
-import Router from 'universal-router';
 import Debug from 'debug';
-
-import asyncView from './components/asyncView';
-import { StoreType } from './stores';
+import Router from 'universal-router';
 import { Modules } from './modules';
+import { StoreType } from './stores';
 
 const debug = new Debug('router');
 

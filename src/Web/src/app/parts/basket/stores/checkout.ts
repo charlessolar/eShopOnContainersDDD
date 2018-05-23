@@ -1,21 +1,13 @@
-import { types, flow, getEnv, getParent, applySnapshot, getSnapshot, onSnapshot, addDisposer } from 'mobx-state-tree';
-import { History } from 'history';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import rules from '../validation';
-import { FieldDefinition } from '../../../components/models';
-
+import { History } from 'history';
+import { applySnapshot, flow, getEnv, types } from 'mobx-state-tree';
+import { BuyerModel, BuyerType } from '../../../models/ordering/buyer';
+import { AlertStackType, ApiClientType, AuthenticationType } from '../../../stores';
 import { DTOs } from '../../../utils/eShop.dtos';
-import { ApiClientType, AlertStackType, AuthenticationType } from '../../../stores';
-
-import { AddressType, AddressModel } from '../models/address';
-import { PaymentMethodType, PaymentMethodModel } from '../models/paymentMethod';
-import { BasketType, BasketModel } from '../models/basket';
-import { ItemIndexType, ItemIndexModel } from '../models/items';
-
-import { BuyerType, BuyerModel } from '../../../models/ordering/buyer';
+import { AddressModel, AddressType } from '../models/address';
+import { BasketModel, BasketType } from '../models/basket';
+import { ItemIndexModel, ItemIndexType } from '../models/items';
+import { PaymentMethodModel, PaymentMethodType } from '../models/paymentMethod';
 
 const debug = new Debug('checkout');
 

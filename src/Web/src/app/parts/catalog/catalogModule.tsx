@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { types, getRoot } from 'mobx-state-tree';
-
 import AsyncView from '../../components/asyncView';
-import { models } from '../../utils';
 import { StoreType } from '../../stores';
-
 import { CatalogStoreModel, CatalogStoreType } from './stores/catalog';
 
 export class CatalogModule {

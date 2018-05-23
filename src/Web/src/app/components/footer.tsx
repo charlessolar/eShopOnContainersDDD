@@ -1,6 +1,5 @@
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 interface FooterProps {
   version: string;

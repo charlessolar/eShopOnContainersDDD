@@ -1,16 +1,8 @@
-import { types, getEnv, flow } from 'mobx-state-tree';
-import * as validate from 'validate.js';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import rules from '../validation';
-import { models } from '../../../utils';
-import { FieldDefinition } from '../../../components/models';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import { TypeModel, TypeType } from '../../../models/catalog/types';
 import { ApiClientType } from '../../../stores';
-
-import { TypeType, TypeModel } from '../../../models/catalog/types';
+import { DTOs } from '../../../utils/eShop.dtos';
 
 export { TypeType, TypeModel };
 

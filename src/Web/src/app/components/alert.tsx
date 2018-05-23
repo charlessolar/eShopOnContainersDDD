@@ -1,12 +1,9 @@
-import * as React from 'react';
-import { action } from 'mobx';
-import { observer } from 'mobx-react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import red from '@material-ui/core/colors/red';
-import blue from '@material-ui/core/colors/blue';
 import amber from '@material-ui/core/colors/amber';
+import blue from '@material-ui/core/colors/blue';
+import red from '@material-ui/core/colors/red';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import * as React from 'react';
 
 interface AlertProps {
   type: 'info' | 'warn' | 'error';

@@ -1,5 +1,5 @@
-import { types } from 'mobx-state-tree';
 import html2canvas from 'html2canvas';
+import { types } from 'mobx-state-tree';
 import * as ReactCrop from 'react-image-crop';
 
 export function fileToBase64(file: File): Promise<Data> {

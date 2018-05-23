@@ -1,12 +1,10 @@
-import { types, flow, getEnv } from 'mobx-state-tree';
-import uuid from 'uuid/v4';
 import Debug from 'debug';
-
-import { DTOs } from '../../../utils/eShop.dtos';
+import { flow, getEnv, types } from 'mobx-state-tree';
+import uuid from 'uuid/v4';
 import { ApiClientType } from '../../../stores';
-
-import { AddressType, AddressModel } from '../models/address';
-import { PaymentMethodType, PaymentMethodModel } from '../models/paymentMethod';
+import { DTOs } from '../../../utils/eShop.dtos';
+import { AddressModel, AddressType } from '../models/address';
+import { PaymentMethodModel, PaymentMethodType } from '../models/paymentMethod';
 
 const debug = new Debug('order confirm');
 

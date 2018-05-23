@@ -1,32 +1,24 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-import { hot } from 'react-hot-loader';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import EditIcon from '@material-ui/icons/Edit';
-
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { observer } from 'mobx-react';
+import * as React from 'react';
+import { hot } from 'react-hot-loader';
+import { Formatted, Using } from '../../../components/models';
 import { sort } from '../../../utils';
-import { Using, Formatted } from '../../../components/models';
-import { CatalogStoreType, CatalogStoreModel } from '../stores/catalog';
-
 import AvailableStockForm from '../components/availableStockForm';
-
 import ProductFormAdd from '../components/productAdd';
 import ProductFormEdit from '../components/productEdit';
+import { CatalogStoreType } from '../stores/catalog';
 
 interface CatalogProps {
   store?: CatalogStoreType;

@@ -1,15 +1,13 @@
-import * as React from 'react';
-import { observable, action } from 'mobx';
-import { inject, observer } from 'mobx-react';
-
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-
-import Menu, { Route } from './menu';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { action, observable } from 'mobx';
+import { inject } from 'mobx-react';
+import * as React from 'react';
 import { StoreType } from '../stores';
+import Menu, { Route } from './menu';
 
 interface NavBarProps {
   authenticated: boolean;

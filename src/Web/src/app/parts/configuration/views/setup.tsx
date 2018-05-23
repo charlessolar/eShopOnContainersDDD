@@ -1,23 +1,19 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Fade from '@material-ui/core/Fade';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { observer } from 'mobx-react';
+import * as React from 'react';
 import { inject_factory } from '../../../utils';
-
-import { StoreType } from '../../../stores';
 import { SetupModel, SetupType } from '../stores/setup';
 
 interface SetupProps {
   store?: SetupType;
 }
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     flexGrow: 1
   },

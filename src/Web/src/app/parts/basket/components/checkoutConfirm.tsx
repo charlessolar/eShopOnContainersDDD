@@ -1,21 +1,16 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import CreditIcon from '@material-ui/icons/CreditCard';
 import MailIcon from '@material-ui/icons/Mail';
 import ReceiptIcon from '@material-ui/icons/Receipt';
-import CreditIcon from '@material-ui/icons/CreditCard';
-
+import * as React from 'react';
+import { Submit, Using } from '../../../components/models';
 import { inject } from '../../../utils';
-import { Using, Formatted, Field, Submit } from '../../../components/models';
-
-import { ConfirmStoreType, ConfirmStoreModel } from '../stores/confirm';
 import { CheckoutStoreType } from '../stores/checkout';
+import { ConfirmStoreModel, ConfirmStoreType } from '../stores/confirm';
 
 interface ConfirmProps {
   handleNext: () => void;

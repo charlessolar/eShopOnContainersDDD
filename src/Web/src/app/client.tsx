@@ -1,22 +1,16 @@
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import Debug from 'debug';
+import { Provider } from 'mobx-react';
 import * as React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'mobx-react';
-
 import { hot } from 'react-hot-loader';
-
-import { parse } from 'qs';
-import Debug from 'debug';
-
-import { MuiThemeProvider } from '@material-ui/core/styles';
-
+import AlertStack from './components/alertStack';
+import ApplicationView from './components/applicationView';
+import asyncView from './components/asyncView';
+import { config } from './config';
+import { Modules } from './modules';
 import { createRouter } from './router';
 import { StoreType } from './stores';
-import { Modules } from './modules';
-import { config } from './config';
-
-import asyncView from './components/asyncView';
-import ApplicationView from './components/applicationView';
-import AlertStack from './components/alertStack';
 
 const debug = new Debug('client');
 

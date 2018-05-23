@@ -1,11 +1,6 @@
-import * as React from 'react';
 import { observer } from 'mobx-react';
 import * as numeral from 'numeral';
-import { DateTime } from 'luxon';
-
-import { Typography } from '@material-ui/core';
-
-import { toFixed, Round } from '../../utils/math';
+import * as React from 'react';
 import { UsingContext, UsingType } from './using';
 
 interface FormattedProps {

@@ -1,17 +1,14 @@
-import * as React from 'react';
-import * as V from 'victory';
-import { VectorMap } from 'react-jvectormap';
-import numeral from 'numeral';
-import Dimensions from 'react-dimensions';
-import { hot } from 'react-hot-loader';
-
-import 'jvectormap/jquery-jvectormap.css';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
-import { DashboardStoreType, DashboardStoreModel } from '../stores/dashboard';
+import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import 'jvectormap/jquery-jvectormap.css';
+import numeral from 'numeral';
+import * as React from 'react';
+import Dimensions from 'react-dimensions';
+import { hot } from 'react-hot-loader';
+import { VectorMap } from 'react-jvectormap';
+import * as V from 'victory';
+import { DashboardStoreType } from '../stores/dashboard';
 
 interface DashboardProps {
   store?: DashboardStoreType;

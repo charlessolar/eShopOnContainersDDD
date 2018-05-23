@@ -1,21 +1,17 @@
-import * as React from 'react';
-
-import { Theme, withStyles, WithStyles } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
+import { Theme, WithStyles, withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-
+import * as React from 'react';
+import { Field, Submit, Using } from '../../../components/models';
 import { inject } from '../../../utils';
-import { Using, Field, Submit } from '../../../components/models';
-
 import { ProductType } from '../models/products';
-import { StockFormType, StockFormModel } from '../stores/availableStock';
+import { StockFormModel, StockFormType } from '../stores/availableStock';
 
 const styles = (theme: Theme) => ({
   button: {

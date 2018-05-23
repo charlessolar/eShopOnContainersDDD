@@ -1,12 +1,9 @@
-import * as React from 'react';
-import { observable, action, computed } from 'mobx';
-import { observer } from 'mobx-react';
-
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import * as React from 'react';
 
 interface TextProps {
   id: string;
