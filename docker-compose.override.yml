@@ -39,8 +39,8 @@ services:
       - ESHOP_RabbitUserName=${RABBIT_USERNAME}
       - ESHOP_RabbitPassword=${RABBIT_PASSWORD}
       - ESHOP_ServiceStackLicense=${SERVICESTACK_LICENSE}
-      - ESHOP_HostServer=http://${HOST_SERVER}
+      - ESHOP_HostServer=http://${HOST_SERVER:-localhost}
   frontend:
     build:
       args:
-        API_SERVER: http://${HOST_SERVER}:8080
+        API_SERVER: http://${HOST_SERVER:-localhost}:8080

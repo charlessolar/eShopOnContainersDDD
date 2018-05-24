@@ -6,33 +6,18 @@ One docker image we require to run (eventstore) doesn't have a windows container
 
 **Start**
 
+from the linux-cli directory
 ```
-docker-compose -f docker-compose.yml -f docker-compose.override.yml build
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+export SERVICESTACK_LICENSE=<-Your license->
+export HOST_SERVER=<-Machine's ip address->
+./build.sh
+./up.sh
 ```
 
 **Note**
-The web frontend is configured to talk to the api server via `http://localhost:8080` in `docker-compose.override.yml`
-If you are running `docker-compose up` on another machine you need to change that address to the remote machines ip.
-Example: 
-```
-frontend:
-    build:
-      args:
-        API_SERVER: http://10.0.0.200:8080
-```
 
-# Source Code!
-
-Being this project has such a small domain context there are only a couple source files which contain real logic.  Other files are helpers, extensions, or setup.  
-
-### Important backend files:
-
-* [Domain Command Handler](src/Domain/Todo/Handler.cs)
-* [Domain Todo Aggregate](src/Domain/Todo/Todo.cs)
-* [Read Model Projector](src/Application/Todo/Handler.cs)
-* [Web Request Handler](src/Presentation/Service.cs)
-
+A NServiceBus license is not required to run this example - but a servicestack license is.
+Its also required to supply the host machine's ip - use `localhost` if running localy
 
 ### What is EventSourcing?
 
@@ -70,11 +55,3 @@ Commands do not return any data other than if they were *Accepted* or *Rejected*
 
 * [Microsoft's CQRS architecture guide](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/cqrs)
 * [Microsoft's eventsourcing architecture guide](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
-
-### EventStore Management
-
-{host}:2113
-
-### RabbitMq Management
-
-{host}:15672

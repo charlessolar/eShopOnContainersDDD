@@ -20,7 +20,7 @@ RUN yarn build
 
 FROM nginx:stable as runtime
 
-COPY nginx-site.conf /etc/nginx/conf.d/default.conf
+COPY src/Web/nginx-site.conf /etc/nginx/conf.d/default.conf
 RUN mkdir /app
 WORKDIR /app
 COPY --from=build /src/src/Web/dist .
