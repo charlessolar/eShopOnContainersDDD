@@ -40,6 +40,8 @@ namespace eShop.Identity.Role
 
         public void Destroy()
         {
+            if (!State.Disabled)
+                throw new BusinessException("Role is currently active");
             Apply<Events.Destroyed>(x => { x.RoleId = Id; });
         }
 

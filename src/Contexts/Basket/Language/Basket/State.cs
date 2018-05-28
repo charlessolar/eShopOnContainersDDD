@@ -8,12 +8,12 @@ namespace eShop.Basket.Basket
     {
         public string UserName { get; private set; }
 
-        public void Handle(Events.Initiated e)
+        private void Handle(Events.Initiated e)
         {
             this.UserName = e.UserName;
         }
 
-        public void Handle(Events.BasketClaimed e)
+        private void Handle(Events.BasketClaimed e)
         {
             this.UserName = e.UserName;
         }

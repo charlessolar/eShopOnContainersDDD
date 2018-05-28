@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../../Common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>eShop.Identity</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Title>eShop.Identity</Title>
+    <AssemblyName>eShop.Identity.Domain.Tests</AssemblyName>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aggregates.NET.Testing" Version="0.13.15.271" />
+    <PackageReference Include="AutoFixture" Version="4.4.0" />
+    <PackageReference Include="AutoFixture.AutoFakeItEasy" Version="4.4.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.4.0" />
+    <PackageReference Include="FakeItEasy" Version="4.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure.Testing\Infrastructure.Testing.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Language\Identity.Language.csproj" />
+    <ProjectReference Include="..\Entities\Identity.Domain.Entities.csproj" />
+    <ProjectReference Include="..\Handlers\Identity.Domain.Handlers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="User\Entities\Role\" />
+  </ItemGroup>
+  
+
+</Project>

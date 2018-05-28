@@ -23,6 +23,8 @@ namespace eShop.Identity.User
 
         public void Identify(string password)
         {
+            if (State.Disabled)
+                throw new BusinessException("user disabled");
             if (!PasswordStorage.VerifyPassword(password, State.HashedPassword))
                 throw new BusinessException("invalid password");
 
@@ -31,11 +33,15 @@ namespace eShop.Identity.User
 
         public void Disable()
         {
+            if (State.Disabled)
+                throw new BusinessException("user already disabled");
             Apply<Events.Disabled>(x => { x.UserName = Id; });
         }
 
         public void Enable()
         {
+            if (!State.Disabled)
+                throw new BusinessException("user already enabled");
             Apply<Events.Enabled>(x => { x.UserName = Id; });
         }
 

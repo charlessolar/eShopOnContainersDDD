@@ -23,7 +23,7 @@ namespace eShop.Catalog.Product
             var product = await ctx.For<Product>().New(command.ProductId).ConfigureAwait(false);
             var brand = await ctx.For<CatalogBrand.Brand>().Get(command.CatalogBrandId).ConfigureAwait(false);
             var type = await ctx.For<CatalogType.Type>().Get(command.CatalogTypeId).ConfigureAwait(false);
-
+            
             product.Add(command.Name, command.Price, brand.State, type.State);
         }
         public async Task Handle(Commands.Remove command, IMessageHandlerContext ctx)

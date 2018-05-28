@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.8.264" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.8.264" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.8.264" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.8.264" />
-    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.8.264" />
+    <PackageReference Include="Aggregates.NET" Version="0.13.15.271" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.13.15.271" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.13.15.271" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.13.15.271" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.13.15.271" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.5.1" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aggregates;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -67,11 +68,15 @@ namespace eShop.Catalog.Product
 
         public void MarkReordered()
         {
+            if (State.ReorderMarked)
+                throw new BusinessException("Already reordering");
             Apply<Events.ReorderMarked>(x => { x.ProductId = Id; });
         }
 
         public void UnMarkReordered()
         {
+            if (!State.ReorderMarked)
+                throw new BusinessException("Not reordering");
             Apply<Events.ReorderUnMarked>(x => { x.ProductId = Id; });
         }
 
