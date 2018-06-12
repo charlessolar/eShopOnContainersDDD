@@ -8,12 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import { Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import * as React from 'react';
-import Confirm from '../../../components/dialogs/confirm';
-import { Action, Field, Submit, Using } from '../../../components/models';
-import { inject } from '../../../utils';
-import { ProductType } from '../models/products';
-import { CatalogStoreType } from '../stores/catalog';
-import { ProductFormModel, ProductFormType } from '../stores/product';
+import Confirm from '../../../../components/dialogs/confirm';
+import { Action, Field, Submit, Using } from '../../../../components/models';
+import { inject } from '../../../../utils';
+import { ProductType } from '../../models/products';
+import { CatalogStoreType } from '../../stores/catalog';
+import { ProductFormModel, ProductFormType } from '../../stores/product';
 
 const styles = (theme: Theme) => ({
   root: {
