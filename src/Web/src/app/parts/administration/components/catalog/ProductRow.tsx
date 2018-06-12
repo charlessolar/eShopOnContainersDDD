@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import { Formatted, Using } from '../../../../components/models';
-import ProductFormEdit from './productEdit';
+import ProductFormEdit from './ProductEdit';
 import AvailableStockForm from '../availableStockForm';
 import { CatalogStoreType } from '../../stores/catalog';
 

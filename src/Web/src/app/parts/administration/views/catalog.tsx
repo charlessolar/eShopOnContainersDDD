@@ -10,7 +10,7 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { sort } from '../../../utils';
-import ProductFormAdd from '../components/catalog/productAdd';
+import ProductFormAdd from '../components/catalog/ProductAdd';
 import ProductRow from '../components/catalog/ProductRow';
 import { CatalogStoreType } from '../stores/catalog';
 
