@@ -48,7 +48,7 @@ namespace Infrastructure
         long ElapsedMs { get; set; }
     }
 
-    public interface IUnitOfWork : Aggregates.IUnitOfWork
+    public interface IUnitOfWork : Aggregates.IAppUnitOfWork
     {
         Task Add<T>(string id, T document) where T : class;
         Task Add<T>(Guid id, T document) where T : class;

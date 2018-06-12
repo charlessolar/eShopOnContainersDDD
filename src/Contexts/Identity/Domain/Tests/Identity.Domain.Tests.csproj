@@ -18,12 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.Testing" Version="0.13.15.271" />
+    <PackageReference Include="Aggregates.NET.Testing" Version="0.13.39.292" />
     <PackageReference Include="AutoFixture" Version="4.4.0" />
     <PackageReference Include="AutoFixture.AutoFakeItEasy" Version="4.4.0" />
     <PackageReference Include="AutoFixture.Xunit2" Version="4.4.0" />
     <PackageReference Include="FakeItEasy" Version="4.6.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />

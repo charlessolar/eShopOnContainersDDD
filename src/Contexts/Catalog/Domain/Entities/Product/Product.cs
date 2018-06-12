@@ -68,15 +68,13 @@ namespace eShop.Catalog.Product
 
         public void MarkReordered()
         {
-            if (State.ReorderMarked)
-                throw new BusinessException("Already reordering");
+            Rule("Reordered", x => x.ReorderMarked, "Already reordering");
             Apply<Events.ReorderMarked>(x => { x.ProductId = Id; });
         }
 
         public void UnMarkReordered()
         {
-            if (!State.ReorderMarked)
-                throw new BusinessException("Not reordering");
+            Rule("Reordered", x => !x.ReorderMarked, "Not reordering");
             Apply<Events.ReorderUnMarked>(x => { x.ProductId = Id; });
         }
 

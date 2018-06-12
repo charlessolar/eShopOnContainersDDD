@@ -21,8 +21,7 @@ namespace eShop.Basket.Basket
 
         public void Claim(Identity.User.State user)
         {
-            if (!string.IsNullOrEmpty(State.UserName))
-                throw new BusinessException("Basket already claimed");
+            Rule("Claimed", x => !string.IsNullOrEmpty(State.UserName), "Basket already claimed");
 
             Apply<Events.BasketClaimed>(x =>
             {

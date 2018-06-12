@@ -32,10 +32,8 @@ export const CatalogStoreModel = types
       const client = getEnv(self).api as ApiClientType;
       const result: DTOs.PagedResponse<DTOs.CatalogProductIndex> = yield client.paged(request);
 
-      self.products.clear();
-      result.records.forEach((record) => {
-        self.products.put(record);
-      });
+      self.products.replace(result.records.map(x => [x.id, x]));
+
      } catch (error) {
       debug('received http error: ', error);
       throw error;

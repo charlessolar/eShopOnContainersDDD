@@ -15,6 +15,5 @@ namespace Presentation.Services.Configuration
             _bus = bus;
         }
 
-
     }
 }

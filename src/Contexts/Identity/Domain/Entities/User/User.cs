@@ -23,25 +23,21 @@ namespace eShop.Identity.User
 
         public void Identify(string password)
         {
-            if (State.Disabled)
-                throw new BusinessException("user disabled");
-            if (!PasswordStorage.VerifyPassword(password, State.HashedPassword))
-                throw new BusinessException("invalid password");
+            Rule("Disabled", x => x.Disabled, "user disabled");
+            Rule("Password", x => !PasswordStorage.VerifyPassword(password, x.HashedPassword), "invalid password");
 
             Apply<Events.Identified>(x => { x.UserName = Id; });
         }
 
         public void Disable()
         {
-            if (State.Disabled)
-                throw new BusinessException("user already disabled");
+            Rule("Disabled", x => x.Disabled, "user disabled");
             Apply<Events.Disabled>(x => { x.UserName = Id; });
         }
 
         public void Enable()
         {
-            if (!State.Disabled)
-                throw new BusinessException("user already enabled");
+            Rule("Disabled", x => !x.Disabled, "user already enabled");
             Apply<Events.Enabled>(x => { x.UserName = Id; });
         }
 
@@ -56,8 +52,7 @@ namespace eShop.Identity.User
 
         public void ChangePassword(string currentPassword, string newPassword)
         {
-            if (!PasswordStorage.VerifyPassword(currentPassword, State.HashedPassword))
-                throw new BusinessException("invalid current password");
+            Rule("Password", x => !PasswordStorage.VerifyPassword(currentPassword, x.HashedPassword), "invalid current password");
 
             var hashed = PasswordStorage.CreateHash(newPassword);
             Apply<Events.PasswordChanged>(x =>

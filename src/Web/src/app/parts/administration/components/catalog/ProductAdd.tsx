@@ -3,10 +3,10 @@ import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-import { ProductType } from '../../../models/catalog/products';
-import FormView from '../components/productForm';
-import { CatalogStoreType } from '../stores/catalog';
-import { ProductFormType } from '../stores/product';
+import { ProductType } from '../../models/products';
+import { CatalogStoreType } from '../../stores/catalog';
+import { ProductFormType } from '../../stores/product';
+import FormView from './ProductForm';
 
 interface ProductFormProps {
   list: CatalogStoreType;

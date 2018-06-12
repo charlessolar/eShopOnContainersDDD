@@ -197,7 +197,8 @@ namespace eShop
                 {
                     new JwtAuthProvider(AppSettings) {
                         AuthKeyBase64 = AppSettings.GetString("jwt.AuthKeyBase64"),
-                        RequireSecureConnection=false },
+                        RequireSecureConnection=false
+                    },
                     new CredentialsAuthProvider()
                 }));
             Plugins.Add(new RegistrationFeature());

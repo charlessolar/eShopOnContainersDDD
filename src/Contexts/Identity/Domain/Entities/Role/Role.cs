@@ -11,20 +11,16 @@ namespace eShop.Identity.Role
 
         public void Activate()
         {
-            if (State.Destroyed)
-                throw new BusinessException("Role is already destroyed");
-            if (!State.Disabled)
-                throw new BusinessException("Role is not disabled");
+            Rule("Destroyed", x => x.Destroyed, "Role is already destroyed");
+            Rule("Disabled", x => !x.Disabled, "Role is not disabled");
 
             Apply<Events.Activated>(x => { x.RoleId = Id; });
         }
 
         public void Deactivate()
         {
-            if (State.Destroyed)
-                throw new BusinessException("Role is already destroyed");
-            if (State.Disabled)
-                throw new BusinessException("Role is already disabled");
+            Rule("Destroyed", x => x.Destroyed, "Role is already destroyed");
+            Rule("Disabled", x => x.Disabled, "Role is already disabled");
 
             Apply<Events.Deactivated>(x => { x.RoleId = Id; });
         }
@@ -40,15 +36,14 @@ namespace eShop.Identity.Role
 
         public void Destroy()
         {
-            if (!State.Disabled)
-                throw new BusinessException("Role is currently active");
+            Rule("Disabled", x => !x.Disabled, "Role is currently active");
+
             Apply<Events.Destroyed>(x => { x.RoleId = Id; });
         }
 
         public void Revoke()
         {
-            if (State.Destroyed)
-                throw new BusinessException("Role is already destroyed");
+            Rule("Destroyed", x => x.Destroyed, "Role is already destroyed");
 
             Apply<Events.Revoked>(x => { x.RoleId = Id; });
         }

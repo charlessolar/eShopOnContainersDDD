@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.13.15.271" />
+    <PackageReference Include="Aggregates.NET" Version="0.13.39.292" />
   </ItemGroup>
 
   <ItemGroup>

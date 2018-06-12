@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
+    "test": "jest",
     "start": "cross-env NODE_ENV=development webpack-dev-server --colors --env.server --hot --mode development --progress",
     "build": "cross-env NODE_ENV=production webpack -p --colors --env.production",
     "prettier": "prettier --write \"src/**/*.{ts,tsx,css}\""
@@ -38,9 +38,12 @@
     "git-revision-webpack-plugin": "^3.0.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "jest-cli": "^23.0.0",
+    "jest": "^23.0.0",
     "mini-css-extract-plugin": "^0.4.0",
     "prettier": "^1.12.1",
     "source-map-loader": "^0.2.3",
+    "ts-jest": "^22.4.6",
     "style-loader": "^0.21.0",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.13.0",
@@ -99,14 +102,32 @@
   },
   "jest": {
     "modulePaths": [
-      "<rootDir>/src",
-      "<rootDir>/node_modules"
+      "<rootDir>/src"
     ],
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
-    ]
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "\\.spec\\.(ts|js)x?$",
+
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts}",
+      "!**/*.spec.{js,ts}",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "<rootDir>/test/coverage-jest",
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "html"
+    ],
+    "mapCoverage": true
   },
   "engines": {
     "node": ">= 8.0.0"

@@ -20,6 +20,7 @@ namespace eShop.Basket.Basket
             await handler.Handle(new Commands.Initiate
             {
                 BasketId = context.Id(),
+                UserName = "test"
             }, context).ConfigureAwait(false);
 
             context.UoW.Check<Basket>(context.Id()).Raised<Events.Initiated>();

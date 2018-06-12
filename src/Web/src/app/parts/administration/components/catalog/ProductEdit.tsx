@@ -6,10 +6,10 @@ import { WithStyles, withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import { IStateTreeNode, applyPatch } from 'mobx-state-tree';
 import * as React from 'react';
-import FormView from '../components/productForm';
-import { ProductType } from '../models/products';
-import { CatalogStoreType } from '../stores/catalog';
-import { ProductFormType } from '../stores/product';
+import { ProductType } from '../../models/products';
+import { CatalogStoreType } from '../../stores/catalog';
+import { ProductFormType } from '../../stores/product';
+import FormView from './ProductForm';
 
 interface ProductFormProps {
   product: ProductType;
@@ -57,6 +57,9 @@ class ProductFormEditView extends React.Component<ProductFormProps & WithStyles<
     }
     if (patch.description) {
       applyPatch(product as IStateTreeNode, { op: 'replace', path: '/description', value: patch.description });
+    }
+    if (patch.pictureContents) {
+      applyPatch(product as IStateTreeNode, { op: 'replace', path: '/pictureContents', value: patch.pictureContents });
     }
   }
 
