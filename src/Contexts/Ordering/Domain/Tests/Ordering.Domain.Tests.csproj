@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.Testing" Version="0.13.39.292" />
+    <PackageReference Include="Aggregates.NET.Testing" Version="0.13.43.295" />
     <PackageReference Include="AutoFixture" Version="4.4.0" />
     <PackageReference Include="AutoFixture.AutoFakeItEasy" Version="4.4.0" />
     <PackageReference Include="AutoFixture.Xunit2" Version="4.4.0" />
