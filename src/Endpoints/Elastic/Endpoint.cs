@@ -79,7 +79,7 @@ namespace eShop
                 x.For<IMessageSession>().Use(() => Aggregates.Bus.Instance);
                 x.For<IElasticClient>().Use(client);
                 x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
-                x.For<Aggregates.IUnitOfWork>().Add(b => (Aggregates.IUnitOfWork)b.GetInstance<Infrastructure.IUnitOfWork>());
+                x.For<Aggregates.IAppUnitOfWork>().Add(b => (Aggregates.IAppUnitOfWork)b.GetInstance<Infrastructure.IUnitOfWork>());
 
                 x.Scan(y =>
                 {
