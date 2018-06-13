@@ -1,3 +1,23 @@
+# eShopOnContainers (Aggregates.Net Edition)
+
+This project is a fork (maybe better a loose copy) of Microsoft's container example [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers).  I implemented many of the same objects using my own DDD, EventSourcing library [Aggregates.NET](https://github.com/volak/Aggregates.NET) and its meant to be an illustrative example of a fully event sourced application.
+
+## Like what you see?
+
+We're hiring developers!  We are currently looking for a couple people to help develop new software for small/medium businesses - remote OK but located around Chicago is ideal.  If you have an interest in learning DDD, CQRS, EventSourcing and making distributed systems less complex send me an email or better yet open a pull request!
+
+### Live Demo
+
+[Currently running the app here](http://65.52.205.131) - might occasionally not work but the app is completely recycled every hour
+
+### Wiki
+
+There are articles in the Wiki about certain features of the app / how certain things are handled and implemented - check them out!
+
+### Disclaimer
+
+This is a project written over the course of a month in my free time.  Its not bug free, its not exploit free, it may not even be very clean in places.  Please don't judge too harsly 🙏 
+
 # Instructions
 
 **Linux Only**
