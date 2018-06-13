@@ -12,7 +12,7 @@ using Serilog;
 
 namespace eShop
 {
-    public class UnitOfWork : Infrastructure.IUnitOfWork
+    public class UnitOfWork : Infrastructure.IUnitOfWork, Aggregates.IUnitOfWork
     {
         public dynamic Bag { get; set; }
 
