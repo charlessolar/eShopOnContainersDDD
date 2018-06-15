@@ -75,3 +75,18 @@ Commands do not return any data other than if they were *Accepted* or *Rejected*
 
 * [Microsoft's CQRS architecture guide](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/cqrs)
 * [Microsoft's eventsourcing architecture guide](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
+
+### Libraries Used
+
+**Backend**
+* [Aggregates.NET](https://github.com/volak/Aggregates.NET)
+* [NServiceBus](https://github.com/Particular/NServiceBus)
+* [ServiceStack](https://github.com/ServiceStack/ServiceStack)
+* [NEST](https://github.com/elastic/elasticsearch-net)
+* [MongoDB.Driver](https://docs.mongodb.com/ecosystem/drivers/csharp/)
+
+**FrontEnd**
+* [Typescript](https://github.com/Microsoft/TypeScript)
+* [MobX State Tree](https://github.com/mobxjs/mobx-state-tree)
+* [React](https://github.com/facebook/react)
+* [MaterialUi](https://github.com/mui-org/material-ui)
