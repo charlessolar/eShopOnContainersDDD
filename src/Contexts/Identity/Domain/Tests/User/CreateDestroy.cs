@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Identity.User
 {
-    public class create_destroy
+    public class CreateDestroy
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_create_user(
+        public async Task ShouldCreateUser(
             TestableContext context,
             Handler handler
             )
@@ -28,7 +28,7 @@ namespace eShop.Identity.User
             context.UoW.Check<User>(context.Id()).Raised<Events.Registered>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_disable_user(
+        public async Task ShouldDisableUser(
             TestableContext context,
             Handler handler
             )

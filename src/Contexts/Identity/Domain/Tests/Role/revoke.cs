@@ -10,10 +10,10 @@ using Xunit;
 
 namespace eShop.Identity.Role
 {
-    public class revoke
+    public class Revoke
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_revoke(
+        public async Task ShouldRevoke(
             TestableContext context,
             Handler handler
             )
@@ -34,7 +34,7 @@ namespace eShop.Identity.Role
 
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_revoke_destroyed(
+        public async Task ShouldNotRevokeDestroyed(
             TestableContext context,
             Handler handler
             )

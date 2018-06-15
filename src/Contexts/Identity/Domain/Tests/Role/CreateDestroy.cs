@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Identity.Role
 {
-    public class create_destroy
+    public class CreateDestroy
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_create_role(
+        public async Task ShouldCreateRole(
             TestableContext context,
             Handler handler
             )
@@ -26,7 +26,7 @@ namespace eShop.Identity.Role
             context.UoW.Check<Role>(context.Id()).Raised<Events.Defined>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_destroy_role(
+        public async Task ShouldDestroyRole(
             TestableContext context,
             Handler handler
             )
@@ -53,7 +53,7 @@ namespace eShop.Identity.Role
             });
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_destroy_unknown(
+        public async Task ShouldNotDestroyUnknown(
             TestableContext context,
             Handler handler
             )
@@ -65,7 +65,7 @@ namespace eShop.Identity.Role
             await Assert.ThrowsAsync<NotFoundException>(() => handler.Handle(command, context)).ConfigureAwait(false);
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_destroy_active_role(
+        public async Task ShouldNotDestroyActiveRole(
             TestableContext context,
             Handler handler
             )

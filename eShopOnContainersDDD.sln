@@ -177,8 +177,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Applications.Elasti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Domain.Tests", "src\Contexts\Catalog\Domain\Tests\Catalog.Domain.Tests.csproj", "{26748662-FB09-469E-B405-149FB5F57E9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Testing", "src\Infrastructure.Testing\Infrastructure.Testing.csproj", "{E0B1F792-2F47-4C9F-A8BB-914B6EE0813C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Domain.Tests", "src\Contexts\Basket\Domain\Tests\Basket.Domain.Tests.csproj", "{63E49985-9DEC-4D2B-BDE1-24D62F9C33FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Domain.Tests", "src\Contexts\Identity\Domain\Tests\Identity.Domain.Tests.csproj", "{C8A59E14-89E9-453C-AC3E-98EDD51F0FDB}"
@@ -403,10 +401,6 @@ Global
 		{26748662-FB09-469E-B405-149FB5F57E9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26748662-FB09-469E-B405-149FB5F57E9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26748662-FB09-469E-B405-149FB5F57E9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0B1F792-2F47-4C9F-A8BB-914B6EE0813C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0B1F792-2F47-4C9F-A8BB-914B6EE0813C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0B1F792-2F47-4C9F-A8BB-914B6EE0813C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0B1F792-2F47-4C9F-A8BB-914B6EE0813C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63E49985-9DEC-4D2B-BDE1-24D62F9C33FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63E49985-9DEC-4D2B-BDE1-24D62F9C33FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E49985-9DEC-4D2B-BDE1-24D62F9C33FF}.Release|Any CPU.ActiveCfg = Release|Any CPU

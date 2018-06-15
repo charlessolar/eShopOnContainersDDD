@@ -7,53 +7,56 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-
-namespace eShop.Catalog.CatalogType
+namespace eShop.Catalog.CatalogBrand
 {
-    public class create_destroy
+    public class CreateDestroy
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_create_brand(
+        public async Task ShouldCreateBrand(
             TestableContext context,
             Handler handler
             )
         {
             await handler.Handle(new Commands.Define
             {
-                TypeId = context.Id(),
-                Type = "test"
+                BrandId = context.Id(),
+                Brand = "test"
             }, context).ConfigureAwait(false);
 
-            context.UoW.Check<Type>(context.Id()).Raised<Events.Defined>();
+            context.UoW.Check<Brand>(context.Id()).Raised<Events.Defined>(x =>
+            {
+                x.BrandId = context.Id();
+                x.Brand = "test";
+            });
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_destroy_brand(
+        public async Task ShouldDestoyBrand(
             TestableContext context,
             Handler handler
             )
         {
-            context.UoW.Plan<Type>(context.Id()).HasEvent<Events.Defined>(x =>
+            context.UoW.Plan<Brand>(context.Id()).HasEvent<Events.Defined>(x =>
             {
-                x.TypeId = context.Id();
-                x.Type = "test";
+                x.BrandId = context.Id();
+                x.Brand = "test";
             });
 
             await handler.Handle(new Commands.Destroy
             {
-                TypeId = context.Id()
+                BrandId = context.Id()
             }, context).ConfigureAwait(false);
 
-            context.UoW.Check<Type>(context.Id()).Raised<Events.Destroyed>();
+            context.UoW.Check<Brand>(context.Id()).Raised<Events.Destroyed>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_destroy_unknown(
+        public async Task ShouldNotDestroyUnknown(
             TestableContext context,
             Handler handler
             )
-        {
+        {            
             await Assert.ThrowsAsync<NotFoundException>(() => handler.Handle(new Commands.Destroy
             {
-                TypeId = context.Id()
+                BrandId = context.Id()
             }, context)).ConfigureAwait(false);
 
         }

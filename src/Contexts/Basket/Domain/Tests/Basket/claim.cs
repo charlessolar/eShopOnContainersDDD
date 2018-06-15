@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Basket.Basket
 {
-    public class claim
+    public class Claim
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_claim_basket(
+        public async Task ShouldClaimBucket(
             TestableContext context,
             Handler handler
             )
@@ -29,7 +29,7 @@ namespace eShop.Basket.Basket
             context.UoW.Check<Basket>(context.Id()).Raised<Events.BasketClaimed>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_claim_basket(
+        public async Task ShouldNotClaimBucket(
             TestableContext context,
             Handler handler
             )

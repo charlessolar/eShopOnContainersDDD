@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Catalog.Product
 {
-    public class create_destroy
+    public class CreateDestroy
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_create_product(
+        public async Task ShouldCreateProduct(
             TestableContext context,
             Handler handler
             )
@@ -40,7 +40,7 @@ namespace eShop.Catalog.Product
             });
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_destroy_product(
+        public async Task ShouldDestroyProduct(
             TestableContext context,
             Handler handler
             )
@@ -65,7 +65,7 @@ namespace eShop.Catalog.Product
             });
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_destroy_unknown(
+        public async Task ShouldNotDestroyUnknown(
             TestableContext context,
             Handler handler
             )

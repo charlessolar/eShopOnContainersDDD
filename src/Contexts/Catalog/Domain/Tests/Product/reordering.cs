@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Catalog.Product
 {
-    public class reordering
+    public class Reordering
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_mark_reorder(
+        public async Task ShouldMarkReordered(
             TestableContext context,
             Handler handler
             )
@@ -37,7 +37,7 @@ namespace eShop.Catalog.Product
             });
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_unmark_reorder(
+        public async Task ShouldUnmarkReorder(
             TestableContext context,
             Handler handler
             )
@@ -67,7 +67,7 @@ namespace eShop.Catalog.Product
             });
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_double_mark_reorder(
+        public async Task ShouldNotDoubleMarkReorder(
             TestableContext context,
             Handler handler
             )
@@ -93,7 +93,7 @@ namespace eShop.Catalog.Product
 
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_unmark_reorder(
+        public async Task ShouldNotUnmarkReorder(
             TestableContext context,
             Handler handler
             )

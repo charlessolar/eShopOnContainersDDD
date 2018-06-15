@@ -10,10 +10,10 @@ using Xunit;
 
 namespace eShop.Identity.User
 {
-    public class identify
+    public class Identify
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_user_identified(
+        public async Task ShouldUserIdentified(
             TestableContext context,
             Handler handler
             )
@@ -36,7 +36,7 @@ namespace eShop.Identity.User
             context.UoW.Check<User>(context.Id()).Raised<Events.Identified>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_identify_user(
+        public async Task ShouldNotIdentifyUser(
             TestableContext context,
             Handler handler
             )
@@ -57,7 +57,7 @@ namespace eShop.Identity.User
             await Assert.ThrowsAsync<BusinessException>(() => handler.Handle(command, context)).ConfigureAwait(false);
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_identify_with_new_password(
+        public async Task ShouldIdentifyWithNewPassword(
             TestableContext context,
             Handler handler
             )
@@ -85,7 +85,7 @@ namespace eShop.Identity.User
             context.UoW.Check<User>(context.Id()).Raised<Events.Identified>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_identify_user_with_old_password(
+        public async Task ShouldNotIdentifyUserWithOldPassword(
             TestableContext context,
             Handler handler
             )
@@ -111,7 +111,7 @@ namespace eShop.Identity.User
             await Assert.ThrowsAsync<BusinessException>(() => handler.Handle(command, context)).ConfigureAwait(false);
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_identify_disabled_user(
+        public async Task ShouldNotIdentifyDisabledUser(
             TestableContext context,
             Handler handler
             )

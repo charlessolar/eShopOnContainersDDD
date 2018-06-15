@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Basket.Basket
 {
-    public class create_destroy
+    public class CreateDestroy
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_create_basket(
+        public async Task ShouldCreateBasket(
             TestableContext context,
             Handler handler
             )
@@ -26,7 +26,7 @@ namespace eShop.Basket.Basket
             context.UoW.Check<Basket>(context.Id()).Raised<Events.Initiated>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_destroy_basket(
+        public async Task ShouldDestoyBasket(
             TestableContext context,
             Handler handler
             )
@@ -44,7 +44,7 @@ namespace eShop.Basket.Basket
             context.UoW.Check<Basket>(context.Id()).Raised<Events.Destroyed>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_destroy_unknown(
+        public async Task ShouldNotDestroyUnknown(
             TestableContext context,
             Handler handler
             )

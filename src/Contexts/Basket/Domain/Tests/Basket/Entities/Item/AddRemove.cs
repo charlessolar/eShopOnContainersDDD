@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Basket.Basket.Entities.Item
 {
-    public class add_remove
+    public class AddRemove
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_add_item(
+        public async Task ShouldAddItem(
             TestableContext context,
             Handler handler
             )
@@ -33,7 +33,7 @@ namespace eShop.Basket.Basket.Entities.Item
             context.UoW.Check<Basket>(context.Id()).Check<Item>(context.Id()).Raised<Events.ItemAdded>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_remove_item(
+        public async Task ShouldRemoveItem(
             TestableContext context,
             Handler handler
             )
@@ -59,7 +59,7 @@ namespace eShop.Basket.Basket.Entities.Item
             context.UoW.Check<Basket>(context.Id()).Check<Item>(context.Id()).Raised<Events.ItemRemoved>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_re_add_item(
+        public async Task ShouldReAddItem(
             TestableContext context,
             Handler handler
             )
@@ -91,7 +91,7 @@ namespace eShop.Basket.Basket.Entities.Item
             context.UoW.Check<Basket>(context.Id()).Check<Item>(context.Id()).Raised<Events.ItemAdded>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_remove_unknown_item(
+        public async Task ShouldNotRemoveUnknownItem(
             TestableContext context,
             Handler handler
             )

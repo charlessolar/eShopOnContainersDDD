@@ -9,10 +9,10 @@ using Xunit;
 
 namespace eShop.Identity.Role
 {
-    public class activation
+    public class Activation
     {
         [Theory, AutoFakeItEasyData]
-        public async Task Should_activate(
+        public async Task ShouldActivate(
             TestableContext context,
             Handler handler
             )
@@ -37,7 +37,7 @@ namespace eShop.Identity.Role
 
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_initial_already_active(
+        public async Task ShouldInitialAlreadyActive(
             TestableContext context,
             Handler handler
             )
@@ -57,7 +57,7 @@ namespace eShop.Identity.Role
 
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_activate_already_activated(
+        public async Task ShouldNotActivateAlreadyActivated(
             TestableContext context,
             Handler handler
             )
@@ -81,7 +81,7 @@ namespace eShop.Identity.Role
 
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_activate_destroyed(
+        public async Task ShouldNotActivateDestroyed(
             TestableContext context,
             Handler handler
             )
@@ -105,7 +105,7 @@ namespace eShop.Identity.Role
 
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_deactivate(
+        public async Task ShouldDeactivate(
             TestableContext context,
             Handler handler
             )
@@ -125,7 +125,7 @@ namespace eShop.Identity.Role
             context.UoW.Check<Role>(context.Id()).Raised<Events.Deactivated>();
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_deactivate_deactivated(
+        public async Task ShouldNotDeactivateDeactivated(
             TestableContext context,
             Handler handler
             )
@@ -147,7 +147,7 @@ namespace eShop.Identity.Role
             await Assert.ThrowsAsync<BusinessException>(() => handler.Handle(command, context)).ConfigureAwait(false);
         }
         [Theory, AutoFakeItEasyData]
-        public async Task Should_not_deactivate_destroyed(
+        public async Task ShouldNotDeactivateDestroyed(
             TestableContext context,
             Handler handler
             )
