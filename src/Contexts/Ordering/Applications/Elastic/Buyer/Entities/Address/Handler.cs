@@ -19,26 +19,26 @@ namespace eShop.Ordering.Buyer.Entities.Address
         {
             if(query.Id.HasValue)
             {
-                var result = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Address>(query.Id.Value).ConfigureAwait(false);
+                var result = await ctx.UoW().Get<Models.Address>(query.Id.Value).ConfigureAwait(false);
 
                 await ctx.Result(new[] { result }, 1, 0).ConfigureAwait(false);
                 return;
             }
 
             var builder = new QueryBuilder();
-            builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
+            builder.Add("UserName", query.UserName.ToString(), Operation.Equal);
             if (!string.IsNullOrEmpty(query.Term))
             {
-                var group = builder.Grouped(Group.ANY);
-                group.Add("Alias", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("Street", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("City", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("State", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("Country", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("ZipCode", query.Term, Operation.AUTOCOMPLETE);
+                var group = builder.Grouped(Group.Any);
+                group.Add("Alias", query.Term, Operation.Autocomplete);
+                group.Add("Street", query.Term, Operation.Autocomplete);
+                group.Add("City", query.Term, Operation.Autocomplete);
+                group.Add("State", query.Term, Operation.Autocomplete);
+                group.Add("Country", query.Term, Operation.Autocomplete);
+                group.Add("ZipCode", query.Term, Operation.Autocomplete);
             }
 
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.Address>(builder.Build())
+            var results = await ctx.UoW().Query<Models.Address>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -58,12 +58,12 @@ namespace eShop.Ordering.Buyer.Entities.Address
                 ZipCode = e.ZipCode
             };
 
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.AddressId, model);
+            return ctx.UoW().Add(e.AddressId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.Address>(e.AddressId);
+            return ctx.UoW().Delete<Models.Address>(e.AddressId);
         }
     }
 }

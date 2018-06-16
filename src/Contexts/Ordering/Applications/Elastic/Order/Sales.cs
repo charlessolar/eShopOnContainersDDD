@@ -28,11 +28,11 @@ namespace eShop.Ordering.Order
             var builder = new QueryBuilder();
 
             if (query.From.HasValue)
-                builder.Add("Relevancy", query.From.Value.ToUnix().ToString(), Operation.GREATER_THAN_OR_EQUAL);
+                builder.Add("Relevancy", query.From.Value.ToUnix().ToString(), Operation.GreaterThanOrEqual);
             if (query.To.HasValue)
-                builder.Add("Relevancy", query.To.Value.ToUnix().ToString(), Operation.LESS_THAN_OR_EQUAL);
+                builder.Add("Relevancy", query.To.Value.ToUnix().ToString(), Operation.LessThanOrEqual);
 
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.SalesChart>(builder.Build())
+            var results = await ctx.UoW().Query<Models.SalesChart>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -47,10 +47,10 @@ namespace eShop.Ordering.Order
 
             var items = await itemIds.SelectAsync(id =>
             {
-                return ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
+                return ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
             }).ConfigureAwait(false);
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesChart>(IdGenerator(day)).ConfigureAwait(false);
+            var existing = await ctx.UoW().Get<Models.SalesChart>(IdGenerator(day)).ConfigureAwait(false);
             if(existing == null)
             {
                 existing = new Models.SalesChart
@@ -60,38 +60,38 @@ namespace eShop.Ordering.Order
                     Label = day.ToString("s"),
                     Value = items.Sum(x => x.SubTotal)
                 };
-                await ctx.App<Infrastructure.IUnitOfWork>().Add(existing.Id, existing).ConfigureAwait(false);
+                await ctx.UoW().Add(existing.Id, existing).ConfigureAwait(false);
             }
             else
             {
                 // todo: add additional fees when additional fees exist
                 existing.Value += items.Sum(x => x.SubTotal);
-                await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
+                await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
             }
         }
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
+            var existing = await ctx.UoW().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
             existing.Value -= order.Total;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Added e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var product = await ctx.UoW().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
+            var existing = await ctx.UoW().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
             existing.Value += product.Price * e.Quantity;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.PriceOverridden e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var orderItem = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var orderItem = await ctx.UoW().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
+            var existing = await ctx.UoW().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
             // remove existing value
             existing.Value -= orderItem.Total;
 
@@ -100,18 +100,18 @@ namespace eShop.Ordering.Order
             // add updated total
             existing.Value += orderItem.Total;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Removed e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var orderItem = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var orderItem = await ctx.UoW().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
-            var existing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
+            var existing = await ctx.UoW().Get<Models.SalesChart>(IdGenerator(order.Created.FromUnix().Date)).ConfigureAwait(false);
             // remove existing value
             existing.Value -= orderItem.Total;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
         }
     }
 }

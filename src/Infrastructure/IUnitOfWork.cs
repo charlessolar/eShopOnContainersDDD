@@ -1,66 +1,37 @@
-﻿using System;
+﻿using Aggregates;
+using Aggregates.Internal;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public enum Operation
+    public class Operation : Enumeration<Operation, string>
     {
-        EQUAL,
-        NOT_EQUAL,
-        GREATER_THAN,
-        GREATER_THAN_OR_EQUAL,
-        LESS_THAN,
-        LESS_THAN_OR_EQUAL,
-        CONTAINS,
-        AUTOCOMPLETE
+
+        public static Operation Equal = new Operation("EQ", "Equal");
+        public static Operation NotEqual = new Operation("NE", "Not Equal");
+        public static Operation GreaterThan = new Operation("GT", "Greater Than");
+        public static Operation GreaterThanOrEqual = new Operation("GTE", "Greater Than or Equal");
+        public static Operation LessThan = new Operation("LT", "Less Than");
+        public static Operation LessThanOrEqual = new Operation("LTE", "Less Than or Equal");
+        public static Operation Contains = new Operation("CN", "Contains");
+        public static Operation Autocomplete = new Operation("AC", "Autocomplete");
+
+        public Operation(string value, string displayName) : base(value, displayName) { }
     }
-
-    public enum Group
+    public class Group : Enumeration<Group, string>
     {
-        ALL,
-        ANY,
-        NOT
+        public static Group All = new Group("ALL", "All");
+        public static Group Any = new Group("Any", "Any");
+        public static Group Not = new Group("Not", "Not");
+
+        public Group(string value, string displayName) : base(value, displayName) { }
     }
-    public interface QueryDefinition
+    
+
+    public interface IUnitOfWork : Aggregates.UnitOfWork.IGeneric
     {
-        List<Tuple<Group, FieldQueryDefinition[]>> FieldDefinitions { get; set; }
-
-        long Skip { get; set; }
-        long Take { get; set; }
-    }
-    public interface FieldQueryDefinition
-    {
-        string Field { get; set; }
-
-        string Value { get; set; }
-
-        Operation Op { get; set; }
-
-        double? Boost { get; set; }
-    }
-
-    public interface IQueryResult<T> where T : class
-    {
-        T[] Records { get; set; }
-        long Total { get; set; }
-        long ElapsedMs { get; set; }
-    }
-
-    public interface IUnitOfWork : Aggregates.IAppUnitOfWork
-    {
-        Task Add<T>(string id, T document) where T : class;
-        Task Add<T>(Guid id, T document) where T : class;
-        Task Update<T>(string id, T document) where T : class;
-        Task Update<T>(Guid id, T document) where T : class;
-
-        Task<T> Get<T>(string id) where T : class;
-        Task<T> Get<T>(Guid id) where T : class;
-
-        Task Delete<T>(string id) where T : class;
-        Task Delete<T>(Guid id) where T : class;
-
-        Task<IQueryResult<T>> Query<T>(QueryDefinition query) where T : class;
     }
 }

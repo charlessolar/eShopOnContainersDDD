@@ -21,7 +21,7 @@ namespace eShop.Ordering.Buyer
     {
         public async Task Handle(Queries.Buyer query, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyer>(query.UserName).ConfigureAwait(false);
+            var buyer = await ctx.UoW().Get<Models.OrderingBuyer>(query.UserName).ConfigureAwait(false);
 
             await ctx.Result(buyer).ConfigureAwait(false);
         }
@@ -34,32 +34,32 @@ namespace eShop.Ordering.Buyer
                 GoodStanding = true
             };
 
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.UserName, model);
+            return ctx.UoW().Add(e.UserName, model);
         }
 
         public async Task Handle(Events.InGoodStanding e, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
+            var buyer = await ctx.UoW().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
             buyer.GoodStanding = true;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+            await ctx.UoW().Update(e.UserName, buyer).ConfigureAwait(false);
         }
         public async Task Handle(Events.PreferredAddressSet e, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
+            var buyer = await ctx.UoW().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
             buyer.PreferredAddressId = e.AddressId;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+            await ctx.UoW().Update(e.UserName, buyer).ConfigureAwait(false);
         }
         public async Task Handle(Events.PreferredPaymentSet e, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
+            var buyer = await ctx.UoW().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
             buyer.PreferredPaymentMethodId = e.PaymentMethodId;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+            await ctx.UoW().Update(e.UserName, buyer).ConfigureAwait(false);
         }
         public async Task Handle(Events.Suspended e, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
+            var buyer = await ctx.UoW().Get<Models.OrderingBuyer>(e.UserName).ConfigureAwait(false);
             buyer.GoodStanding = false;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.UserName, buyer).ConfigureAwait(false);
+            await ctx.UoW().Update(e.UserName, buyer).ConfigureAwait(false);
         }
 
     }

@@ -23,9 +23,9 @@ namespace eShop.Ordering.Order.Entities.Item
         public async Task Handle(Queries.Items query, IMessageHandlerContext ctx)
         {
             var builder = new QueryBuilder();
-            builder.Add("OrderId", query.OrderId.ToString(), Operation.EQUAL);
+            builder.Add("OrderId", query.OrderId.ToString(), Operation.Equal);
 
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderItem>(builder.Build())
+            var results = await ctx.UoW().Query<Models.OrderingOrderItem>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -40,7 +40,7 @@ namespace eShop.Ordering.Order.Entities.Item
             // add the items to order
             foreach (var id in itemIds)
             {
-                var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id).ConfigureAwait(false);
+                var item = await ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id).ConfigureAwait(false);
 
                 var model = new Models.OrderingOrderItem
                 {
@@ -55,13 +55,13 @@ namespace eShop.Ordering.Order.Entities.Item
                     Quantity = item.Quantity,
                 };
 
-                await ctx.App<Infrastructure.IUnitOfWork>().Add(model.Id, model).ConfigureAwait(false);
+                await ctx.UoW().Add(model.Id, model).ConfigureAwait(false);
             }
         }
 
         public async Task Handle(Events.Added e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.App<Infrastructure.IUnitOfWork>()
+            var product = await ctx.UoW()
                 .Get<Catalog.Product.Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
 
             var model = new Models.OrderingOrderItem
@@ -77,19 +77,19 @@ namespace eShop.Ordering.Order.Entities.Item
                 Quantity = e.Quantity
             };
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Add(model.Id, model).ConfigureAwait(false);
+            await ctx.UoW().Add(model.Id, model).ConfigureAwait(false);
         }
 
         public async Task Handle(Events.PriceOverridden e, IMessageHandlerContext ctx)
         {
-            var orderitem = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var orderitem = await ctx.UoW().Get<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
             orderitem.Price = e.Price;
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(orderitem.Id, orderitem).ConfigureAwait(false);
+            await ctx.UoW().Update(orderitem.Id, orderitem).ConfigureAwait(false);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId));
+            return ctx.UoW().Delete<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId));
         }
     }
 }

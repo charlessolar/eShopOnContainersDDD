@@ -25,12 +25,12 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
                 CardType = e.CardType.Value
             };
 
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.PaymentMethodId, model);
+            return ctx.UoW().Add(e.PaymentMethodId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.PaymentMethod>(e.PaymentMethodId);
+            return ctx.UoW().Delete<Models.PaymentMethod>(e.PaymentMethodId);
         }
     }
 }

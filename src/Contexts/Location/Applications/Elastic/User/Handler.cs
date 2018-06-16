@@ -12,9 +12,9 @@ namespace eShop.Location.User
     {
         public async Task Handle(Events.Recorded e, IMessageHandlerContext ctx)
         {
-            var location = await ctx.App<Infrastructure.IUnitOfWork>().Get<Location.Models.Location>(e.LocationId)
+            var location = await ctx.UoW().Get<Location.Models.Location>(e.LocationId)
                 .ConfigureAwait(false);
-            var user = await ctx.App<Infrastructure.IUnitOfWork>().Get<Identity.User.Models.User>(e.UserId)
+            var user = await ctx.UoW().Get<Identity.User.Models.User>(e.UserId)
                 .ConfigureAwait(false);
 
             var model = new Models.Record
@@ -26,7 +26,7 @@ namespace eShop.Location.User
                 UserName = user.Id
             };
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Add(e.RecordId, model).ConfigureAwait(false);
+            await ctx.UoW().Add(e.RecordId, model).ConfigureAwait(false);
         }
     }
 }

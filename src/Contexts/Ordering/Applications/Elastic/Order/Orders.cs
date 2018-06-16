@@ -29,14 +29,14 @@ namespace eShop.Ordering.Order
             var builder = new QueryBuilder();
 
             if (query.OrderStatus != null)
-                builder.Add("Status", query.OrderStatus.Value, Operation.EQUAL);
+                builder.Add("Status", query.OrderStatus.Value, Operation.Equal);
             
             if (query.From.HasValue)
-                builder.Add("Created", new DateTimeOffset(query.From.Value).ToUnixTimeMilliseconds().ToString(), Operation.GREATER_THAN_OR_EQUAL);
+                builder.Add("Created", new DateTimeOffset(query.From.Value).ToUnixTimeMilliseconds().ToString(), Operation.GreaterThanOrEqual);
             if (query.To.HasValue)
-                builder.Add("Created", new DateTimeOffset(query.To.Value).ToUnixTimeMilliseconds().ToString(), Operation.LESS_THAN_OR_EQUAL);
+                builder.Add("Created", new DateTimeOffset(query.To.Value).ToUnixTimeMilliseconds().ToString(), Operation.LessThanOrEqual);
             
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.OrderingOrderIndex>(builder.Build())
+            var results = await ctx.UoW().Query<Models.OrderingOrderIndex>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -45,14 +45,14 @@ namespace eShop.Ordering.Order
 
         public async Task Handle(Events.Drafted e, IMessageHandlerContext ctx)
         {
-            var basket = await ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Models.BasketIndex>(e.OrderId)
+            var basket = await ctx.UoW().Get<Basket.Basket.Models.BasketIndex>(e.OrderId)
                 .ConfigureAwait(false);
-            var buyer = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Models.OrderingBuyerIndex>(e.UserName)
+            var buyer = await ctx.UoW().Get<Buyer.Models.OrderingBuyerIndex>(e.UserName)
                 .ConfigureAwait(false);
 
-            var shipping = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.Address.Models.Address>(e.ShippingAddressId).ConfigureAwait(false);
-            var billing = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.Address.Models.Address>(e.BillingAddressId).ConfigureAwait(false);
-            var method = await ctx.App<Infrastructure.IUnitOfWork>().Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
+            var shipping = await ctx.UoW().Get<Buyer.Entities.Address.Models.Address>(e.ShippingAddressId).ConfigureAwait(false);
+            var billing = await ctx.UoW().Get<Buyer.Entities.Address.Models.Address>(e.BillingAddressId).ConfigureAwait(false);
+            var method = await ctx.UoW().Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
             // get all items in basket
             var itemIds = await ctx.Service<Basket.Basket.Entities.Item.Services.ItemsInBasket, string[]>(x => { x.BasketId = e.BasketId; })
@@ -60,7 +60,7 @@ namespace eShop.Ordering.Order
 
             var items = await itemIds.SelectAsync(id =>
             {
-                return ctx.App<Infrastructure.IUnitOfWork>().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
+                return ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
             }).ConfigureAwait(false);
 
             var model = new Models.OrderingOrderIndex
@@ -95,56 +95,56 @@ namespace eShop.Ordering.Order
                 Updated = e.Stamp
             };
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Add(e.OrderId, model).ConfigureAwait(false);
+            await ctx.UoW().Add(e.OrderId, model).ConfigureAwait(false);
         }
 
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Cancelled.Value;
             order.StatusDescription = Status.Cancelled.Description;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Events.Confirm e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Confirmed.Value;
             order.StatusDescription = Status.Confirmed.Description;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Events.Paid e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Paid.Value;
             order.StatusDescription = Status.Paid.Description;
             order.Updated = e.Stamp;
             order.Paid = true;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Events.Shipped e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             order.Status = Status.Shipped.Value;
             order.StatusDescription = Status.Shipped.Description;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Events.AddressChanged e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
-            var billing = await ctx.App<Infrastructure.IUnitOfWork>()
+            var order = await ctx.UoW().Get<Models.OrderingOrder>(e.OrderId).ConfigureAwait(false);
+            var billing = await ctx.UoW()
                 .Get<Buyer.Entities.Address.Models.Address>(e.BillingId).ConfigureAwait(false);
-            var shipping = await ctx.App<Infrastructure.IUnitOfWork>()
+            var shipping = await ctx.UoW()
                 .Get<Buyer.Entities.Address.Models.Address>(e.ShippingId).ConfigureAwait(false);
 
             order.ShippingAddressId = shipping.Id;
@@ -160,37 +160,37 @@ namespace eShop.Ordering.Order
             order.BillingCountry = billing.Country;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
 
         public async Task Handle(Events.PaymentMethodChanged e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var method = await ctx.App<Infrastructure.IUnitOfWork>()
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var method = await ctx.UoW()
                 .Get<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
             order.PaymentMethod = Buyer.Entities.PaymentMethod.CardType.FromValue(method.CardType).Value;
             order.PaymentMethodId = method.Id;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Added e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var product = await ctx.App<Infrastructure.IUnitOfWork>().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var product = await ctx.UoW().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
 
             order.TotalItems++;
             order.TotalQuantity += e.Quantity;
             order.SubTotal += (e.Quantity * product.Price);
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.PriceOverridden e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var item = await ctx.UoW().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
             order.SubTotal -= item.SubTotal;
 
@@ -199,17 +199,17 @@ namespace eShop.Ordering.Order
             order.SubTotal += item.SubTotal;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Removed e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var item = await ctx.App<Infrastructure.IUnitOfWork>().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var item = await ctx.UoW().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
             order.SubTotal -= item.SubTotal;
             order.Updated = e.Stamp;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.OrderId, order).ConfigureAwait(false);
+            await ctx.UoW().Update(e.OrderId, order).ConfigureAwait(false);
         }
     }
 }

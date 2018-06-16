@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Aggregates.UnitOfWork.Query;
 
 namespace Infrastructure
 {
-    public class QueryResult<T> : Infrastructure.IQueryResult<T> where T : class
+    public class QueryResult<T> : IQueryResult<T> where T : class
     {
         public T[] Records { get; set; }
         public long Total { get; set; }
@@ -14,34 +15,43 @@ namespace Infrastructure
 
     public class QueryBuilder
     {
-        internal class FieldQueryDefinition : Infrastructure.FieldQueryDefinition
+        internal class FieldQueryDefinition : IFieldDefinition
         {
             public string Field { get; set; }
             public string Value { get; set; }
-            public Operation Op { get; set; }
+            public string Op { get; set; }
             public double? Boost { get; set; }
         }
 
-        internal class QueryDefinition : Infrastructure.QueryDefinition
+        internal class QueryDefinition : IDefinition
         {
-            public List<Tuple<Group, Infrastructure.FieldQueryDefinition[]>> FieldDefinitions { get; set; }
-            public long Skip { get; set; }
-            public long Take { get; set; }
+            public IGrouped[] Operations { get; set; }
+            public long? Skip { get; set; }
+            public long? Take { get; set; }
+            public ISort[] Sort { get; set; }
+        }
+        internal class GroupedInfo : IGrouped
+        {
+            public string Group { get; set; }
+            public IFieldDefinition[] Definitions { get; set; }
         }
 
         public class GroupedBuilder
         {
+            internal GroupedInfo Grouped => new GroupedInfo { Group = _group.Value, Definitions = _fields.ToArray() };
+
             internal readonly Group _group;
-            internal readonly List<Infrastructure.FieldQueryDefinition> _fields;
+            internal readonly List<FieldQueryDefinition> _fields;
+
             public GroupedBuilder(Group group)
             {
                 _group = group;
-                _fields = new List<Infrastructure.FieldQueryDefinition>();
+                _fields = new List<FieldQueryDefinition>();
             }
 
             public GroupedBuilder Add(string field, string value, Operation op, double? boost = null)
             {
-                _fields.Add(new FieldQueryDefinition { Field = field, Value = value, Op = op, Boost = boost });
+                _fields.Add(new FieldQueryDefinition { Field = field, Value = value, Op = op.Value, Boost = boost });
                 return this;
             }
         }
@@ -55,7 +65,7 @@ namespace Infrastructure
 
         public QueryBuilder Add(string field, string value, Operation op, double? boost = null)
         {
-            _groups.Add(new GroupedBuilder(Group.ALL).Add(field, value, op, boost));
+            _groups.Add(new GroupedBuilder(Group.All).Add(field, value, op, boost));
             return this;
         }
 
@@ -64,15 +74,18 @@ namespace Infrastructure
             return new GroupedBuilder(group);
         }
 
-        public Infrastructure.QueryDefinition Build()
+        public IDefinition Build()
         {
-            var definition = new QueryDefinition();
-            definition.FieldDefinitions = new List<Tuple<Group, Infrastructure.FieldQueryDefinition[]>>();
+            var definitions = new List<GroupedInfo>();
             foreach (var group in _groups)
             {
-                definition.FieldDefinitions.Add(Tuple.Create(group._group, group._fields.ToArray()));
+                definitions.Add(group.Grouped);
             }
-            return definition;
+
+            return new QueryDefinition
+            {
+                Operations = definitions.ToArray()
+            };
         }
     }
 }

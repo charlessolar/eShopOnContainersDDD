@@ -22,38 +22,38 @@ namespace eShop.Marketing.Campaign
                 Description = e.Description,
                 Name = e.Name
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.CampaignId, model);
+            return ctx.UoW().Add(e.CampaignId, model);
         }
 
         public async Task Handle(Events.DescriptionChanged e, IMessageHandlerContext ctx)
         {
-            var campaign = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Campaign>(e.CampaignId)
+            var campaign = await ctx.UoW().Get<Models.Campaign>(e.CampaignId)
                 .ConfigureAwait(false);
 
             campaign.Description = e.Description;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.CampaignId, campaign).ConfigureAwait(false);
+            await ctx.UoW().Update(e.CampaignId, campaign).ConfigureAwait(false);
         }
 
         public async Task Handle(Events.PeriodSet e, IMessageHandlerContext ctx)
         {
-            var campaign = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Campaign>(e.CampaignId)
+            var campaign = await ctx.UoW().Get<Models.Campaign>(e.CampaignId)
                 .ConfigureAwait(false);
 
             campaign.Start = e.Start;
             campaign.End = e.End;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.CampaignId, campaign).ConfigureAwait(false);
+            await ctx.UoW().Update(e.CampaignId, campaign).ConfigureAwait(false);
         }
         public async Task Handle(Events.PictureSet e, IMessageHandlerContext ctx)
         {
-            var campaign = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Campaign>(e.CampaignId)
+            var campaign = await ctx.UoW().Get<Models.Campaign>(e.CampaignId)
                 .ConfigureAwait(false);
 
             campaign.PictureContents = e.Content;
             campaign.PictureContentType = e.ContentType;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.CampaignId, campaign).ConfigureAwait(false);
+            await ctx.UoW().Update(e.CampaignId, campaign).ConfigureAwait(false);
         }
     }
 }

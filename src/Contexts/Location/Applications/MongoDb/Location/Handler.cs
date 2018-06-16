@@ -24,25 +24,25 @@ namespace eShop.Location.Location
                 Description = e.Description,
                 Stamp = e.Stamp
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.LocationId, model);
+            return ctx.UoW().Add(e.LocationId, model);
         }
         public async Task Handle(Events.DescriptionUpdated e, IMessageHandlerContext ctx)
         {
-            var location = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Location>(e.LocationId)
+            var location = await ctx.UoW().Get<Models.Location>(e.LocationId)
                 .ConfigureAwait(false);
 
             location.Description = e.Description;
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.LocationId, location).ConfigureAwait(false);
+            await ctx.UoW().Update(e.LocationId, location).ConfigureAwait(false);
         }
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.Location>(e.LocationId);
+            return ctx.UoW().Delete<Models.Location>(e.LocationId);
         }
 
         public async Task Handle(Entities.Point.Events.Added e, IMessageHandlerContext ctx)
         {
-            var location = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Location>(e.LocationId)
+            var location = await ctx.UoW().Get<Models.Location>(e.LocationId)
                 .ConfigureAwait(false);
 
             location.Points = location.Points.Concat(new[]
@@ -56,16 +56,16 @@ namespace eShop.Location.Location
                 }
             }).ToArray();
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.LocationId, location).ConfigureAwait(false);
+            await ctx.UoW().Update(e.LocationId, location).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Point.Events.Removed e, IMessageHandlerContext ctx)
         {
-            var location = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.Location>(e.LocationId)
+            var location = await ctx.UoW().Get<Models.Location>(e.LocationId)
                 .ConfigureAwait(false);
 
             location.Points = location.Points.Where(x => x.Id != e.PointId).ToArray();
 
-            await ctx.App<Infrastructure.IUnitOfWork>().Update(e.LocationId, location).ConfigureAwait(false);
+            await ctx.UoW().Update(e.LocationId, location).ConfigureAwait(false);
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Aggregates;
 
-namespace eShop.Basket.Basket.Entities.Item.Services
+namespace eShop.Basket.Basket.Services
 {
-    public class ItemsUsingProduct : IService<Guid[]>
+    public class BasketsUsingProduct : IService<Guid[]>
     {
         public Guid ProductId { get; set; }
     }

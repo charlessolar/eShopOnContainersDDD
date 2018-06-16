@@ -25,12 +25,12 @@ namespace eShop.Ordering.Buyer.Entities.Address
                 ZipCode = e.ZipCode
             };
 
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.AddressId, model);
+            return ctx.UoW().Add(e.AddressId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.Address>(e.AddressId);
+            return ctx.UoW().Delete<Models.Address>(e.AddressId);
         }
     }
 }

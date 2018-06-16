@@ -18,11 +18,11 @@ namespace eShop.Catalog.CatalogType
                 Id = e.TypeId,
                 Type = e.Type
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.TypeId, model);
+            return ctx.UoW().Add(e.TypeId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.CatalogType>(e.TypeId);
+            return ctx.UoW().Delete<Models.CatalogType>(e.TypeId);
         }
     }
 }

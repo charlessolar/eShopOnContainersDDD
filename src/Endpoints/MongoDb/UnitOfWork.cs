@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aggregates;
+using Aggregates.UnitOfWork.Query;
 using Infrastructure;
 using Infrastructure.Extensions;
 using MongoDB.Bson;
@@ -20,27 +22,32 @@ namespace eShop
     {
         private readonly IMongoCollection<T> _collection;
         private readonly ILogger _logger;
-        private readonly Dictionary<object, T> _pendingSaves;
-        private readonly Dictionary<object, T> _pendingUpdates;
-        private readonly List<object> _pendingDeletes;
+        private readonly Dictionary<Id, T> _pendingSaves;
+        private readonly Dictionary<Id, T> _pendingUpdates;
+        private readonly List<Id> _pendingDeletes;
 
         public CommitableCollection(IMongoDatabase database)
         {
             _collection = database.GetCollection<T>($"eshop;{typeof(T).FullName.ToLower()}", new MongoCollectionSettings { AssignIdOnInsert = false });
-            _pendingSaves = new Dictionary<object, T>();
-            _pendingUpdates = new Dictionary<object, T>();
-            _pendingDeletes = new List<object>();
+            _pendingSaves = new Dictionary<Id, T>();
+            _pendingUpdates = new Dictionary<Id, T>();
+            _pendingDeletes = new List<Id>();
             _logger = Log.Logger.For($"CommitCollection {typeof(T).FullName}");
         }
 
-        public async Task<T> Get(object id)
+        public Task<T> TryGet(Id id)
         {
             if (id == null)
-                return null;
+                return Task.FromResult((T)null);
+            return Get(id);
+        }
+
+        public async Task<T> Get(Id id)
+        {
             _logger.DebugEvent("Get", "Retreiving document {Id}", id);
 
             FilterDefinition<T> filter;
-            if (id is string)
+            if (id.IsString())
             {
                 filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)id);
             }
@@ -56,13 +63,13 @@ namespace eShop
             return document;
         }
 
-        public void Add(object id, T document)
+        public void Add(Id id, T document)
         {
             _logger.DebugEvent("Add", "Queuing add document {Id}", id);
             _pendingSaves[id] = document;
         }
 
-        public void Update(object id, T document)
+        public void Update(Id id, T document)
         {
             _logger.DebugEvent("Update", "Queuing update document {Id}", id);
             if (_pendingSaves.ContainsKey(id))
@@ -73,7 +80,7 @@ namespace eShop
             _pendingUpdates[id] = document;
         }
 
-        public void Delete(object id)
+        public void Delete(Id id)
         {
             _logger.DebugEvent("Delete", "Queuing delete document {Id}", id);
             _pendingDeletes.Add(id);
@@ -92,7 +99,7 @@ namespace eShop
                 await _pendingUpdates.SelectAsync(doc =>
                 {
                     FilterDefinition<T> filter;
-                    if (doc.Key is string)
+                    if (doc.Key.IsString())
                     {
                         filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)doc.Key);
                     }
@@ -110,7 +117,7 @@ namespace eShop
                 await _pendingDeletes.SelectAsync(doc =>
                 {
                     FilterDefinition<T> filter;
-                    if (doc is string)
+                    if (doc.IsString())
                     {
                         filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)doc);
                     }
@@ -125,7 +132,7 @@ namespace eShop
         }
     }
 
-    public class UnitOfWork : Infrastructure.IUnitOfWork, Aggregates.IUnitOfWork
+    public class UnitOfWork : Infrastructure.IUnitOfWork, Aggregates.UnitOfWork.IUnitOfWork
     {
         public dynamic Bag { get; set; }
 
@@ -171,61 +178,41 @@ namespace eShop
             return collection as CommitableCollection<T>;
         }
 
-        public Task Add<T>(string id, T document) where T : class
+        public Task Add<T>(Id id, T document) where T : class
         {
             var collection = GetOrAddCollection<T>();
             collection.Add(id, document);
             return Task.CompletedTask;
         }
 
-        public Task Add<T>(Guid id, T document) where T : class
-        {
-            var collection = GetOrAddCollection<T>();
-            collection.Add(id, document);
-            return Task.CompletedTask;
-        }
 
-        public Task Update<T>(string id, T document) where T : class
+        public Task Update<T>(Id id, T document) where T : class
         {
             var collection = GetOrAddCollection<T>();
             collection.Update(id, document);
             return Task.CompletedTask;
         }
 
-        public Task Update<T>(Guid id, T document) where T : class
-        {
-            var collection = GetOrAddCollection<T>();
-            collection.Update(id, document);
-            return Task.CompletedTask;
-        }
 
-        public Task<T> Get<T>(string id) where T : class
+        public Task<T> Get<T>(Id id) where T : class
         {
             var collection = GetOrAddCollection<T>();
             return collection.Get(id);
         }
-
-        public Task<T> Get<T>(Guid id) where T : class
+        public Task<T> TryGet<T>(Id id) where T : class
         {
             var collection = GetOrAddCollection<T>();
-            return collection.Get(id);
+            return collection.TryGet(id);
         }
 
-        public Task Delete<T>(string id) where T : class
+        public Task Delete<T>(Id id) where T : class
         {
             var collection = GetOrAddCollection<T>();
             collection.Delete(id);
             return Task.CompletedTask;
         }
 
-        public Task Delete<T>(Guid id) where T : class
-        {
-            var collection = GetOrAddCollection<T>();
-            collection.Delete(id);
-            return Task.CompletedTask;
-        }
-
-        public Task<IQueryResult<T>> Query<T>(QueryDefinition definition) where T : class
+        public Task<IQueryResult<T>> Query<T>(IDefinition definition) where T : class
         {
             throw new NotImplementedException();
         }

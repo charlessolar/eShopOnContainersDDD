@@ -19,7 +19,7 @@ namespace eShop.Catalog.CatalogBrand
         {
             if (query.Id.HasValue)
             {
-                var type = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.CatalogBrand>(query.Id.Value)
+                var type = await ctx.UoW().Get<Models.CatalogBrand>(query.Id.Value)
                     .ConfigureAwait(false);
 
                 await ctx.Result(new[] { type }, 1, 0).ConfigureAwait(false);
@@ -27,10 +27,10 @@ namespace eShop.Catalog.CatalogBrand
             }
 
             var builder = new QueryBuilder();
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.CatalogBrand>(builder.Build())
+            var results = await ctx.UoW().Query<Models.CatalogBrand>(builder.Build())
                 .ConfigureAwait(false);
             if (!string.IsNullOrEmpty(query.Term))
-                builder.Add("Brand", query.Term, Operation.CONTAINS);
+                builder.Add("Brand", query.Term, Operation.Contains);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
         }
@@ -42,11 +42,11 @@ namespace eShop.Catalog.CatalogBrand
                 Id = e.BrandId,
                 Brand = e.Brand
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.BrandId, model);
+            return ctx.UoW().Add(e.BrandId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.CatalogBrand>(e.BrandId);
+            return ctx.UoW().Delete<Models.CatalogBrand>(e.BrandId);
         }
     }
 }

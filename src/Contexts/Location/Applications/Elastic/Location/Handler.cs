@@ -21,11 +21,11 @@ namespace eShop.Location.Location
                 Description = e.Description,
                 Stamp = e.Stamp
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.LocationId, model);
+            return ctx.UoW().Add(e.LocationId, model);
         }
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.Location>(e.LocationId);
+            return ctx.UoW().Delete<Models.Location>(e.LocationId);
         }
 
     }

@@ -20,11 +20,11 @@ namespace eShop.Catalog.CatalogBrand
                 Id = e.BrandId,
                 Brand = e.Brand
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.BrandId, model);
+            return ctx.UoW().Add(e.BrandId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.CatalogBrand>(e.BrandId);
+            return ctx.UoW().Delete<Models.CatalogBrand>(e.BrandId);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace eShop.Catalog.CatalogType
         {
             if (query.Id.HasValue)
             {
-                var type = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.CatalogType>(query.Id.Value)
+                var type = await ctx.UoW().Get<Models.CatalogType>(query.Id.Value)
                     .ConfigureAwait(false);
 
                 await ctx.Result(new[] {type}, 1, 0).ConfigureAwait(false);
@@ -27,10 +27,10 @@ namespace eShop.Catalog.CatalogType
             }
 
             var builder = new QueryBuilder();
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.CatalogType>(builder.Build())
+            var results = await ctx.UoW().Query<Models.CatalogType>(builder.Build())
                 .ConfigureAwait(false);
             if (!string.IsNullOrEmpty(query.Term))
-                builder.Add("Type", query.Term, Operation.CONTAINS);
+                builder.Add("Type", query.Term, Operation.Contains);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
         }
@@ -41,11 +41,11 @@ namespace eShop.Catalog.CatalogType
                 Id = e.TypeId,
                 Type = e.Type
             };
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.TypeId, model);
+            return ctx.UoW().Add(e.TypeId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.CatalogType>(e.TypeId);
+            return ctx.UoW().Delete<Models.CatalogType>(e.TypeId);
         }
     }
 }

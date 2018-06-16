@@ -76,7 +76,7 @@ namespace eShop
                 x.For<IMessageSession>().Use(() => Aggregates.Bus.Instance);
                 x.For<IMongoDatabase>().Use(client.GetDatabase("eShop"));
                 x.For<Infrastructure.IUnitOfWork>().Use<UnitOfWork>();
-                x.For<Aggregates.IAppUnitOfWork>().Add(b => (Aggregates.IAppUnitOfWork)b.GetInstance<Infrastructure.IUnitOfWork>());
+                x.For<Aggregates.UnitOfWork.IApplication>().Add(b => (Aggregates.UnitOfWork.IApplication)b.GetInstance<Infrastructure.IUnitOfWork>());
 
                 x.Scan(y =>
                 {

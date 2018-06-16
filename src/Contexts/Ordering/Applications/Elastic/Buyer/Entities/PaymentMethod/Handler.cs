@@ -19,22 +19,22 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
         {
             if (query.Id.HasValue)
             {
-                var result = await ctx.App<Infrastructure.IUnitOfWork>().Get<Models.PaymentMethod>(query.Id.Value).ConfigureAwait(false);
+                var result = await ctx.UoW().Get<Models.PaymentMethod>(query.Id.Value).ConfigureAwait(false);
 
                 await ctx.Result(new[] { result }, 1, 0).ConfigureAwait(false);
                 return;
             }
 
             var builder = new QueryBuilder();
-            builder.Add("UserName", query.UserName.ToString(), Operation.EQUAL);
+            builder.Add("UserName", query.UserName.ToString(), Operation.Equal);
             if (!string.IsNullOrEmpty(query.Term))
             {
-                var group = builder.Grouped(Group.ANY);
-                group.Add("Alias", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("CardholderName", query.Term, Operation.AUTOCOMPLETE);
-                group.Add("CardType", query.Term, Operation.AUTOCOMPLETE);
+                var group = builder.Grouped(Group.Any);
+                group.Add("Alias", query.Term, Operation.Autocomplete);
+                group.Add("CardholderName", query.Term, Operation.Autocomplete);
+                group.Add("CardType", query.Term, Operation.Autocomplete);
             }
-            var results = await ctx.App<Infrastructure.IUnitOfWork>().Query<Models.PaymentMethod>(builder.Build())
+            var results = await ctx.UoW().Query<Models.PaymentMethod>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -54,12 +54,12 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
                 CardType = e.CardType.Value
             };
 
-            return ctx.App<Infrastructure.IUnitOfWork>().Add(e.PaymentMethodId, model);
+            return ctx.UoW().Add(e.PaymentMethodId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.App<Infrastructure.IUnitOfWork>().Delete<Models.PaymentMethod>(e.PaymentMethodId);
+            return ctx.UoW().Delete<Models.PaymentMethod>(e.PaymentMethodId);
         }
     }
 }

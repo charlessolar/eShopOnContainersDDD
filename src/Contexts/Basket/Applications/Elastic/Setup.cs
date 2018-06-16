@@ -94,31 +94,19 @@ namespace eShop.Basket
                             .Number(s => s.Name(x => x.SubTotal).Type(NumberType.Long))
                     )))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Services.ItemsInBasketHandler.ItemsBasket).FullName.ToLower(), i => i
+            await _client.CreateIndexAsync(typeof(Basket.Services.BasketsUsingProductHandler.ProductBaskets).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
                     .TotalShardsPerNode(3)
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Basket.Entities.Item.Services.ItemsInBasketHandler.ItemsBasket>(map =>
-                    map.Properties(props =>
-                        props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
-                            .Keyword(s => s.Name(x => x.Items).IgnoreAbove(256))
-                    )))).ConfigureAwait(false);
-
-            await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Services.ItemsUsingProductHandler.ProductItems).FullName.ToLower(), i => i
-                .Settings(s => s
-                    .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
-                    .NumberOfReplicas(0)
-                    .Analysis(analysis => analysis.AutoCompleteAnalyzers())
-                )
-                .Mappings(mappings => mappings.Map<Basket.Entities.Item.Services.ItemsUsingProductHandler.ProductItems>(map =>
+                .Mappings(mappings => mappings.Map<Basket.Services.BasketsUsingProductHandler.ProductBaskets>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.Baskets).IgnoreAbove(256))
                     )))).ConfigureAwait(false);
+
             this.Done = true;
             return true;
         }
