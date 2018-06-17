@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.17.314" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.18.315" />
     <PackageReference Include="Bogus" Version="22.1.3" />
   </ItemGroup>
 </Project>
