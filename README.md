@@ -8,7 +8,7 @@ We're hiring developers!  We are currently looking for a couple people to help d
 
 ### Live Demo
 
-[Currently running the app here](http://65.52.205.131) - might occasionally not work but the app is completely recycled every hour
+Currently disabled
 
 ### Wiki
 
