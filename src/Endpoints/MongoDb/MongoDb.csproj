@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.14.18.315" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.14.18.315" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.14.18.315" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.18.315" />
-    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.14.18.315" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.6.1" />
+    <PackageReference Include="Aggregates.NET" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.14.24.321" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
     <PackageReference Include="NServiceBus" Version="7.0.1" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
     <PackageReference Include="NServiceBus.RabbitMQ" Version="5.0.0" />
-    <PackageReference Include="NServiceBus.Serilog" Version="4.0.0" />
+    <PackageReference Include="NServiceBus.Serilog" Version="4.0.1" />
     <PackageReference Include="NServiceBus.StructureMap" Version="7.0.0" />
     <PackageReference Include="Serilog" Version="2.7.1" />
     <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />

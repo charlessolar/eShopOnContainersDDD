@@ -44,7 +44,7 @@ namespace eShop.Identity.User.Services
 
         public async Task<string[]> Handle(UsersWithRole service, IServiceContext ctx)
         {
-            var userroles = await ctx.UoW().Get<UserRoles>(service.RoleId).ConfigureAwait(false);
+            var userroles = await ctx.App().Get<UserRoles>(service.RoleId).ConfigureAwait(false);
 
             return userroles?.Users ?? new string[] { };
         }
