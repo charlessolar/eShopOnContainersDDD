@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.25.322" />
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
   </ItemGroup>
 

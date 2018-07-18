@@ -35,11 +35,28 @@ namespace eShop
             _logger = Log.Logger.For($"CommitCollection {typeof(T).FullName}");
         }
 
-        public Task<T> TryGet(Id id)
+        public async Task<T> TryGet(Id id)
         {
             if (id == null)
-                return Task.FromResult((T)null);
-            return Get(id);
+                return null;
+
+            _logger.DebugEvent("TryGet", "Retreiving document {Id}", id);
+
+            FilterDefinition<T> filter;
+            if (id.IsString())
+            {
+                filter = Builders<T>.Filter.Eq((FieldDefinition<T, string>)"_id", (string)id);
+            }
+            else
+            {
+                filter = Builders<T>.Filter.Eq((FieldDefinition<T, Guid>)"_id", (Guid)id);
+            }
+
+            var result = await _collection.FindAsync(filter).ConfigureAwait(false);
+            var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
+            if (document == null)
+                _logger.WarnEvent("GetFailure", "Document {Id} was not found", id);
+            return document;
         }
 
         public async Task<T> Get(Id id)
@@ -59,7 +76,10 @@ namespace eShop
             var result = await _collection.FindAsync(filter).ConfigureAwait(false);
             var document = await result.FirstOrDefaultAsync<T>().ConfigureAwait(false);
             if (document == null)
+            {
                 _logger.WarnEvent("GetFailure", "Document {Id} was not found", id);
+                throw new ArgumentException($"Document {id} was not found");
+            }
             return document;
         }
 

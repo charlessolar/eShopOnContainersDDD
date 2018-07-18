@@ -15,7 +15,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.25.322" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entities\Marketing.Domain.Entities.csproj" />

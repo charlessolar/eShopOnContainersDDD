@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.14.24.321" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.14.24.321" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.14.24.321" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.24.321" />
-    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.14.24.321" />
+    <PackageReference Include="Aggregates.NET" Version="0.14.25.322" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.14.25.322" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.14.25.322" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.25.322" />
+    <PackageReference Include="Aggregates.NET.StructureMap" Version="0.14.25.322" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
     <PackageReference Include="NEST" Version="6.2.0" />

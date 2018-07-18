@@ -106,17 +106,24 @@ namespace eShop
 
             return Task.CompletedTask;
         }
-
-        public Task<T> TryGet<T>(Id id) where T : class
-        {
-            if (id == null)
-                return Task.FromResult((T)null);
-            return Get<T>(id);
-        }
-
         public async Task<T> Get<T>(Id id) where T : class
         {
             _logger.DebugEvent("Get", "Object {Object} Document {Id}", typeof(T).FullName, id);
+
+            var response = await _client.GetAsync<T>(new Nest.GetRequest<T>(typeof(T).FullName.ToLower(), typeof(T).FullName, ToId(id))).ConfigureAwait(false);
+            if (!response.Found)
+            {
+                _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!", typeof(T).FullName, id);
+                throw new ArgumentException($"Document {id} was not found");
+            }
+
+            _versions[$"{typeof(T).FullName}, {id}"] = response.Version;
+
+            return response.Source;
+        }
+        public async Task<T> TryGet<T>(Id id) where T : class
+        {
+            _logger.DebugEvent("TryGet", "Object {Object} Document {Id}", typeof(T).FullName, id);
             if (id == null)
                 return null;
 
@@ -131,6 +138,7 @@ namespace eShop
 
             return response.Source;
         }
+
         public Task Delete<T>(Id id) where T : class
         {
             if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
