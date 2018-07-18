@@ -60,7 +60,7 @@ namespace eShop.Ordering.Order
                 return ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
             }).ConfigureAwait(false);
 
-            var existing = await ctx.UoW().Get<Models.SalesByState>(IdGenerator(month, address.State)).ConfigureAwait(false);
+            var existing = await ctx.UoW().TryGet<Models.SalesByState>(IdGenerator(month, address.State)).ConfigureAwait(false);
             if (existing == null)
             {
                 existing = new Models.SalesByState

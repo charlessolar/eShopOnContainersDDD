@@ -50,7 +50,7 @@ namespace eShop.Ordering.Order
                 return ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
             }).ConfigureAwait(false);
 
-            var existing = await ctx.UoW().Get<Models.SalesChart>(IdGenerator(day)).ConfigureAwait(false);
+            var existing = await ctx.UoW().TryGet<Models.SalesChart>(IdGenerator(day)).ConfigureAwait(false);
             if(existing == null)
             {
                 existing = new Models.SalesChart

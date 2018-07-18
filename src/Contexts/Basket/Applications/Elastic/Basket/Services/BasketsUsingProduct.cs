@@ -21,7 +21,7 @@ namespace eShop.Basket.Basket.Services
         // it is possible to do queries in mongo so it wouldn't be hard to stop doing this
         public async Task Handle(Entities.Item.Events.ItemAdded e, IMessageHandlerContext ctx)
         {
-            var productitems = await ctx.UoW().Get<ProductBaskets>(e.ProductId)
+            var productitems = await ctx.UoW().TryGet<ProductBaskets>(e.ProductId)
                 .ConfigureAwait(false);
             if (productitems == null)
             {
