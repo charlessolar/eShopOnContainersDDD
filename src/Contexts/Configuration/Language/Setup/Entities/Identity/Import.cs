@@ -55,7 +55,7 @@ namespace eShop.Configuration.Setup.Entities.Identity
                         }).ConfigureAwait(false);
                     }
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
 
             // Define some random users
             var bogus = new Faker<Types.User>()
@@ -89,7 +89,7 @@ namespace eShop.Configuration.Setup.Entities.Identity
                         }).ConfigureAwait(false);
                     }
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
 
             Users = Users.Concat(users).ToArray();
         }

@@ -54,7 +54,7 @@ namespace eShop.Configuration.Setup.Entities.Basket
                     }
                 }
 
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
         }
     }
 }

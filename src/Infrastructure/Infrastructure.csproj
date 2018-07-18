@@ -11,7 +11,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.14.26.323" />
+    <PackageReference Include="Aggregates.NET" Version="0.14.27.324" />
     <PackageReference Include="FluentValidation" Version="7.6.104" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NServiceBus" Version="7.0.1" />

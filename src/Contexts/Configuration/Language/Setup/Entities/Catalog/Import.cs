@@ -57,7 +57,7 @@ namespace eShop.Configuration.Setup.Entities.Catalog
                         Type = type.Type,
                     }).ConfigureAwait(false);
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
 
             await ctx.LocalSaga(async bus =>
             {
@@ -70,7 +70,7 @@ namespace eShop.Configuration.Setup.Entities.Catalog
                         Brand = brand.Brand,
                     }).ConfigureAwait(false);
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
 
             var assembly = Assembly.GetExecutingAssembly();
             await ctx.LocalSaga(async bus =>
@@ -126,7 +126,7 @@ namespace eShop.Configuration.Setup.Entities.Catalog
                         }).ConfigureAwait(false);
                     }
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
         }
     }
 }

@@ -103,7 +103,7 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                         PaymentMethodId = buyer.PaymentMethod.PaymentMethodId
                     }).ConfigureAwait(false);
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
 
             var random = new Random();
             // create orders out of all baskets
@@ -159,7 +159,7 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                         OrderId = orderid
                     }).ConfigureAwait(false);
                 }
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
         }
     }
 }
