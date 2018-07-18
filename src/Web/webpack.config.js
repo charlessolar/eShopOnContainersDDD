@@ -87,7 +87,11 @@ module.exports = ({
       {
         enforce: "pre",
         test: /\.js$/,
-        use: "source-map-loader"
+        use: "source-map-loader",
+        "exclude": [
+          // instead of /\/node_modules\//
+          path.join(process.cwd(), 'node_modules')
+        ]
       },
       {
         test: /\.tsx?$/,
