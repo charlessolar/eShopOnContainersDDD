@@ -19,8 +19,6 @@ namespace eShop
         {
             if (id.IsLong())
                 return new Nest.Id((long)id);
-            if (id.IsGuid())
-                return new Nest.Id((Guid)id);
 
             return new Nest.Id(id.ToString());
         }

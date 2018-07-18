@@ -18,7 +18,7 @@ namespace eShop.Identity.User.Services
     {
         public async Task Handle(Entities.Role.Events.Assigned e, IMessageHandlerContext ctx)
         {
-            var userroles = await ctx.UoW().Get<UserRoles>(e.RoleId).ConfigureAwait(false);
+            var userroles = await ctx.UoW().TryGet<UserRoles>(e.RoleId).ConfigureAwait(false);
             if (userroles == null)
             {
                 userroles = new UserRoles
@@ -44,7 +44,7 @@ namespace eShop.Identity.User.Services
 
         public async Task<string[]> Handle(UsersWithRole service, IServiceContext ctx)
         {
-            var userroles = await ctx.App().Get<UserRoles>(service.RoleId).ConfigureAwait(false);
+            var userroles = await ctx.App().TryGet<UserRoles>(service.RoleId).ConfigureAwait(false);
 
             return userroles?.Users ?? new string[] { };
         }

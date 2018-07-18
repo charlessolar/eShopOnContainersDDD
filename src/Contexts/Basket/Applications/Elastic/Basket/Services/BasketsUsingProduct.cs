@@ -71,7 +71,7 @@ namespace eShop.Basket.Basket.Services
 
         public async Task<Guid[]> Handle(BasketsUsingProduct service, IServiceContext ctx)
         {
-            var productitems = await ctx.App().Get<ProductBaskets>(service.ProductId).ConfigureAwait(false);
+            var productitems = await ctx.App().TryGet<ProductBaskets>(service.ProductId).ConfigureAwait(false);
 
             return productitems?.Baskets ?? new Guid[] { };
         }
