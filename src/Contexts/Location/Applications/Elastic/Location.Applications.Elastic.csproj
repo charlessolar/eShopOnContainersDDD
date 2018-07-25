@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.27.324" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.29.326" />
   </ItemGroup>
 
   <ItemGroup>
