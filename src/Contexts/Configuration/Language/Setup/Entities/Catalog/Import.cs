@@ -46,87 +46,83 @@ namespace eShop.Configuration.Setup.Entities.Catalog
 
         public static async Task Seed(IMessageHandlerContext ctx)
         {
-            await ctx.LocalSaga(async bus =>
-            {
-                // Create types
-                foreach (var type in Types)
-                {
-                    await bus.CommandToDomain(new eShop.Catalog.CatalogType.Commands.Define
-                    {
-                        TypeId = type.Id,
-                        Type = type.Type,
-                    }).ConfigureAwait(false);
-                }
-            }, true).ConfigureAwait(false);
+            var saga = ctx.Saga(Guid.NewGuid());
 
-            await ctx.LocalSaga(async bus =>
+            // Create types
+            foreach (var type in Types)
             {
-                // Create brands
-                foreach (var brand in Brands)
+                saga.Command(new eShop.Catalog.CatalogType.Commands.Define
                 {
-                    await bus.CommandToDomain(new eShop.Catalog.CatalogBrand.Commands.Define
-                    {
-                        BrandId = brand.Id,
-                        Brand = brand.Brand,
-                    }).ConfigureAwait(false);
-                }
-            }, true).ConfigureAwait(false);
+                    TypeId = type.Id,
+                    Type = type.Type,
+                });
+            }
+            await saga.Start().ConfigureAwait(false);
+
+            var saga2 = ctx.Saga(Guid.NewGuid());
+            // Create brands
+            foreach (var brand in Brands)
+            {
+                saga2.Command(new eShop.Catalog.CatalogBrand.Commands.Define
+                {
+                    BrandId = brand.Id,
+                    Brand = brand.Brand,
+                });
+            }
+            await saga2.Start().ConfigureAwait(false);
 
             var assembly = Assembly.GetExecutingAssembly();
-            await ctx.LocalSaga(async bus =>
+            var saga3 = ctx.Saga(Guid.NewGuid());
+            // Create products
+            foreach (var product in Products)
             {
-                // Create products
-                foreach (var product in Products)
+                saga3.Command(new eShop.Catalog.Product.Commands.Add
                 {
-                    await bus.CommandToDomain(new eShop.Catalog.Product.Commands.Add
+                    ProductId = product.Id,
+                    CatalogBrandId = product.CatalogBrandId,
+                    CatalogTypeId = product.CatalogTypeId,
+                    Name = product.Name,
+                    Price = product.Price
+                }).Command(new eShop.Catalog.Product.Commands.UpdateDescription
+                {
+                    ProductId = product.Id,
+                    Description = product.Description
+                });
+
+                if (product.AvailableStock > 0)
+                    saga3.Command(new eShop.Catalog.Product.Commands.UpdateStock
                     {
                         ProductId = product.Id,
-                        CatalogBrandId = product.CatalogBrandId,
-                        CatalogTypeId = product.CatalogTypeId,
-                        Name = product.Name,
-                        Price = product.Price
-                    }).ConfigureAwait(false);
-
-                    await bus.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateDescription
+                        Stock = product.AvailableStock
+                    });
+                if (product.RestockThreshold > 0 || product.MaxStockThreshold > 0)
+                    saga3.Command(new eShop.Catalog.Product.Commands.UpdateThresholds
                     {
                         ProductId = product.Id,
-                        Description = product.Description
-                    }).ConfigureAwait(false);
+                        RestockThreshold = product.RestockThreshold,
+                        MaxStockThreshold = product.MaxStockThreshold
+                    });
 
-                    if (product.AvailableStock > 0)
-                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateStock
-                        {
-                            ProductId = product.Id,
-                            Stock = product.AvailableStock
-                        }).ConfigureAwait(false);
-                    if (product.RestockThreshold > 0 || product.MaxStockThreshold > 0)
-                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.UpdateThresholds
-                        {
-                            ProductId = product.Id,
-                            RestockThreshold = product.RestockThreshold,
-                            MaxStockThreshold = product.MaxStockThreshold
-                        }).ConfigureAwait(false);
-
-                    if (product.OnReorder)
-                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.MarkReordered
-                        {
-                            ProductId = product.Id,
-                        }).ConfigureAwait(false);
-
-                    var stream = assembly.GetManifestResourceStream($"eShop.Configuration.Setup.Entities.Catalog.Pics.{product.Picture}");
-                    using (var memory = new MemoryStream())
+                if (product.OnReorder)
+                    saga3.Command(new eShop.Catalog.Product.Commands.MarkReordered
                     {
-                        await stream.CopyToAsync(memory).ConfigureAwait(false);
+                        ProductId = product.Id,
+                    });
 
-                        await bus.CommandToDomain(new eShop.Catalog.Product.Commands.SetPicture
-                        {
-                            ProductId = product.Id,
-                            Content = Convert.ToBase64String(memory.ToArray()),
-                            ContentType = "image/png"
-                        }).ConfigureAwait(false);
-                    }
+                var stream = assembly.GetManifestResourceStream($"eShop.Configuration.Setup.Entities.Catalog.Pics.{product.Picture}");
+                using (var memory = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memory).ConfigureAwait(false);
+
+                    saga3.Command(new eShop.Catalog.Product.Commands.SetPicture
+                    {
+                        ProductId = product.Id,
+                        Content = Convert.ToBase64String(memory.ToArray()),
+                        ContentType = "image/png"
+                    });
                 }
-            }, true).ConfigureAwait(false);
+            }
+            await saga3.Start().ConfigureAwait(false);
         }
     }
 }

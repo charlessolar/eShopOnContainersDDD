@@ -69,9 +69,10 @@ namespace eShop
                 }
 
                 // refresh all indicies which were "inserted" into so we can GET by Id immediately
-                var indices = _pendingDocs.Values.Where(x => x.Operation == "index");
-                if (indices.Any())
-                    await _client.RefreshAsync(indices.Select(x => x.Index).ToArray()).ConfigureAwait(false);
+                // not needed with latest ES versions?
+                //var indices = _pendingDocs.Values.Where(x => x.Operation == "index");
+                //if (indices.Any())
+                //    await _client.RefreshAsync(indices.Select(x => x.Index).ToArray()).ConfigureAwait(false);
             }
         }
 
@@ -108,7 +109,7 @@ namespace eShop
         {
             _logger.DebugEvent("Get", "Object {Object} Document {Id}", typeof(T).FullName, id);
 
-            var response = await _client.GetAsync<T>(new Nest.GetRequest<T>(typeof(T).FullName.ToLower(), typeof(T).FullName, ToId(id))).ConfigureAwait(false);
+            var response = await _client.GetAsync<T>(new Nest.GetRequest<T>(typeof(T).FullName.ToLower(), ToId(id))).ConfigureAwait(false);
             if (!response.Found)
             {
                 _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!", typeof(T).FullName, id);
@@ -125,7 +126,7 @@ namespace eShop
             if (id == null)
                 return null;
 
-            var response = await _client.GetAsync<T>(new Nest.GetRequest<T>(typeof(T).FullName.ToLower(), typeof(T).FullName, ToId(id))).ConfigureAwait(false);
+            var response = await _client.GetAsync<T>(new Nest.GetRequest<T>(typeof(T).FullName.ToLower(), ToId(id))).ConfigureAwait(false);
             if (!response.Found)
             {
                 _logger.WarnEvent("GetFailure", "Object {Object} Document {Id} not found!", typeof(T).FullName, id);

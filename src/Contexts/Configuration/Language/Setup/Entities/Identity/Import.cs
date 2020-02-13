@@ -20,42 +20,41 @@ namespace eShop.Configuration.Setup.Entities.Identity
         public static async Task Seed(IMessageHandlerContext ctx)
         {
             var roleIds = new Dictionary<string, Guid>();
-            
-            await ctx.LocalSaga(async bus =>
+
+            var saga = ctx.Saga(Guid.NewGuid());
+            // define all used roles
+            foreach (var role in Users.SelectMany(x => x.Roles).Distinct())
             {
-                // define all used roles
-                foreach (var role in Users.SelectMany(x => x.Roles).Distinct())
-                {
-                    var id = Guid.NewGuid();
-                    roleIds[role] = id;
-                    
-                    await bus.CommandToDomain(new eShop.Identity.Role.Commands.Define
-                    {
-                        RoleId = id,
-                        Name = role
-                    }).ConfigureAwait(false);
-                }
+                var id = Guid.NewGuid();
+                roleIds[role] = id;
 
-                // define all defined users
-                foreach (var user in Users)
+                saga.Command(new eShop.Identity.Role.Commands.Define
                 {
-                    await bus.CommandToDomain(new eShop.Identity.User.Commands.Register
+                    RoleId = id,
+                    Name = role
+                });
+            }
+
+            // define all defined users
+            foreach (var user in Users)
+            {
+                saga.Command(new eShop.Identity.User.Commands.Register
+                {
+                    GivenName = user.GivenName,
+                    UserName = user.UserName,
+                    Password = user.Password
+                });
+
+                foreach (var role in user.Roles)
+                {
+                    saga.Command(new eShop.Identity.User.Entities.Role.Commands.Assign
                     {
-                        GivenName = user.GivenName,
                         UserName = user.UserName,
-                        Password = user.Password
-                    }).ConfigureAwait(false);
-
-                    foreach(var role in user.Roles)
-                    {
-                        await bus.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
-                        {
-                            UserName = user.UserName,
-                            RoleId = roleIds[role]
-                        }).ConfigureAwait(false);
-                    }
+                        RoleId = roleIds[role]
+                    });
                 }
-            }, true).ConfigureAwait(false);
+            }
+            await saga.Start().ConfigureAwait(false);
 
             // Define some random users
             var bogus = new Faker<Types.User>()
@@ -69,27 +68,26 @@ namespace eShop.Configuration.Setup.Entities.Identity
                 });
 
             var users = bogus.Generate(20);
-            await ctx.LocalSaga(async bus =>
+            var saga2 = ctx.Saga(Guid.NewGuid());
+            foreach (var user in users)
             {
-                foreach(var user in users)
+                saga2.Command(new eShop.Identity.User.Commands.Register
                 {
-                    await bus.CommandToDomain(new eShop.Identity.User.Commands.Register
-                    {
-                        GivenName = user.GivenName,
-                        UserName = user.UserName,
-                        Password = user.Password
-                    }).ConfigureAwait(false);
+                    GivenName = user.GivenName,
+                    UserName = user.UserName,
+                    Password = user.Password
+                });
 
-                    foreach (var role in user.Roles)
+                foreach (var role in user.Roles)
+                {
+                    saga2.Command(new eShop.Identity.User.Entities.Role.Commands.Assign
                     {
-                        await bus.CommandToDomain(new eShop.Identity.User.Entities.Role.Commands.Assign
-                        {
-                            UserName = user.UserName,
-                            RoleId = roleIds[role]
-                        }).ConfigureAwait(false);
-                    }
+                        UserName = user.UserName,
+                        RoleId = roleIds[role]
+                    });
                 }
-            }, true).ConfigureAwait(false);
+            }
+            await saga2.Start().ConfigureAwait(false);
 
             Users = Users.Concat(users).ToArray();
         }

@@ -20,10 +20,10 @@ namespace eShop.Identity
         public async Task<bool> Initialize()
         {
 
-            await _client.CreateIndexAsync(typeof(Role.Models.RoleIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Role.Models.RoleIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -34,19 +34,19 @@ namespace eShop.Identity
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<Role.Models.RoleIndex>(map =>
+                .Map<Role.Models.RoleIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Name").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Number(s => s.Name("Users").Type(NumberType.Long).IgnoreMalformed())
                             .Boolean(s => s.Name("Disabled"))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
 
-            await _client.CreateIndexAsync(typeof(User.Models.User).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(User.Models.User).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -57,19 +57,19 @@ namespace eShop.Identity
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<User.Models.User>(map =>
+                .Map<User.Models.User>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("GivenName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Boolean(s => s.Name("Disabled"))
                             .Keyword(s => s.Name("Roles").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Number(s => s.Name("LastLogin").Type(NumberType.Long).IgnoreMalformed())
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(User.Services.UsersWithRoleHandler.UserRoles).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(User.Services.UsersWithRoleHandler.UserRoles).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -80,11 +80,11 @@ namespace eShop.Identity
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<User.Models.User>(map =>
+                .Map<User.Models.User>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("RoleId").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Users").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
             this.Done = true;
             return true;

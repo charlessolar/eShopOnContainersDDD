@@ -26,35 +26,34 @@ namespace eShop.Configuration.Setup.Entities.Basket
                 Products = Catalog.Import.Products.RandomPicks(3).Select(p => Tuple.Create(p.Id, (long)random.Next(3) + 1)).ToArray()
             }).ToArray();
 
-            await ctx.LocalSaga(async bus =>
-            {
+            var saga = ctx.Saga(Guid.NewGuid());
 
-                foreach(var basket in Baskets)
-                { 
-                    await bus.CommandToDomain(new eShop.Basket.Basket.Commands.Initiate
+            foreach (var basket in Baskets)
+            {
+                saga.Command(new eShop.Basket.Basket.Commands.Initiate
+                {
+                    BasketId = basket.Id,
+                    UserName = basket.UserName
+                });
+
+                foreach (var product in basket.Products)
+                {
+                    saga.Command(new eShop.Basket.Basket.Entities.Item.Commands.AddItem
                     {
                         BasketId = basket.Id,
-                        UserName = basket.UserName
-                    }).ConfigureAwait(false);
+                        ProductId = product.Item1
+                    });
 
-                    foreach(var product in basket.Products)
+                    saga.Command(new eShop.Basket.Basket.Entities.Item.Commands.UpdateQuantity
                     {
-                        await bus.CommandToDomain(new eShop.Basket.Basket.Entities.Item.Commands.AddItem
-                        {
-                            BasketId = basket.Id,
-                            ProductId = product.Item1
-                        }).ConfigureAwait(false);
-
-                        await bus.CommandToDomain(new eShop.Basket.Basket.Entities.Item.Commands.UpdateQuantity
-                        {
-                            BasketId = basket.Id,
-                            ProductId = product.Item1,
-                            Quantity = product.Item2
-                        }).ConfigureAwait(false);
-                    }
+                        BasketId = basket.Id,
+                        ProductId = product.Item1,
+                        Quantity = product.Item2
+                    });
                 }
+            }
 
-            }, true).ConfigureAwait(false);
+            await saga.Start().ConfigureAwait(false);
         }
     }
 }

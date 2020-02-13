@@ -54,14 +54,13 @@ namespace eShop.Basket
 
         public async Task<bool> Initialize()
         {
-            await _client.CreateIndexAsync(typeof(Basket.Models.BasketIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Basket.Models.BasketIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Basket.Models.BasketIndex>(map =>
+                .Map<Basket.Models.BasketIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.CustomerId).IgnoreAbove(256))
@@ -71,16 +70,16 @@ namespace eShop.Basket
                             .Number(s => s.Name(x => x.SubTotal).Type(NumberType.Long))
                             .Date(s => s.Name(x => x.Created).Format("epoch_millis"))
                             .Date(s => s.Name(x => x.Updated).Format("epoch_millis"))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Basket.Entities.Item.Models.BasketItemIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Basket.Entities.Item.Models.BasketItemIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Basket.Entities.Item.Models.BasketItemIndex>(map =>
+                .Map<Basket.Entities.Item.Models.BasketItemIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.BasketId).IgnoreAbove(256))
@@ -92,20 +91,20 @@ namespace eShop.Basket
                             .Number(s => s.Name(x => x.ProductPrice).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.Quantity).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.SubTotal).Type(NumberType.Long))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Basket.Services.BasketsUsingProductHandler.ProductBaskets).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Basket.Services.BasketsUsingProductHandler.ProductBaskets).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Basket.Services.BasketsUsingProductHandler.ProductBaskets>(map =>
+                .Map<Basket.Services.BasketsUsingProductHandler.ProductBaskets>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.Baskets).IgnoreAbove(256))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
             this.Done = true;
             return true;

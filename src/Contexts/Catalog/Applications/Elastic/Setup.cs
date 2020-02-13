@@ -20,10 +20,10 @@ namespace eShop.Catalog
 
         public async Task<bool> Initialize()
         {
-            await _client.CreateIndexAsync(typeof(CatalogBrand.Models.CatalogBrand).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(CatalogBrand.Models.CatalogBrand).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -34,16 +34,16 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<CatalogBrand.Models.CatalogBrand>(map =>
+                .Map<CatalogBrand.Models.CatalogBrand>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Brand").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(CatalogType.Models.CatalogType).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(CatalogType.Models.CatalogType).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -54,16 +54,16 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<CatalogType.Models.CatalogType>(map =>
+                .Map<CatalogType.Models.CatalogType>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Type").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Product.Models.CatalogProductIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Product.Models.CatalogProductIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -74,7 +74,7 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<Product.Models.CatalogProductIndex>(map =>
+                .Map<Product.Models.CatalogProductIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("Name").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
@@ -90,7 +90,7 @@ namespace eShop.Catalog
                             .Boolean(s => s.Name("OnReorder"))
                             .Binary(s => s.Name("PictureContents"))
                             .Keyword(s => s.Name("PictureContentType").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
             this.Done = true;
             return true;

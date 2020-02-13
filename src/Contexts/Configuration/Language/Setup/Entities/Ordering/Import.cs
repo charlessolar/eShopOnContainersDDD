@@ -58,108 +58,101 @@ namespace eShop.Configuration.Setup.Entities.Ordering
                 };
             }).ToArray();
 
-            await ctx.LocalSaga(async bus =>
+            var saga = ctx.Saga(Guid.NewGuid());
+
+            foreach (var buyer in Buyers)
             {
-                foreach (var buyer in Buyers)
+                saga.Command(new eShop.Ordering.Buyer.Commands.Initiate
                 {
-                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Commands.Initiate
-                    {
-                        GivenName = buyer.GivenName,
-                        UserName = buyer.UserName
-                    }).ConfigureAwait(false);
-                    
-                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Entities.Address.Commands.Add
-                    {
-                        AddressId = buyer.Address.AddressId,
-                        Street = buyer.Address.Street,
-                        City = buyer.Address.City,
-                        State = buyer.Address.State,
-                        ZipCode = buyer.Address.ZipCode,
-                        Country = buyer.Address.Country,
-                        Alias = buyer.Address.Alias,
-                        UserName = buyer.UserName
-                    }).ConfigureAwait(false);
-                    
-                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Entities.PaymentMethod.Commands.Add
-                    {
-                        PaymentMethodId = buyer.PaymentMethod.PaymentMethodId,
-                        CardholderName = buyer.PaymentMethod.CardholderName,
-                        CardNumber = buyer.PaymentMethod.CardNumber,
-                        CardType = buyer.PaymentMethod.CardType,
-                        Expiration= buyer.PaymentMethod.Expiration,
-                        SecurityNumber = buyer.PaymentMethod.SecurityNumber,
-                        Alias = buyer.PaymentMethod.Alias,
-                        UserName = buyer.UserName
-                    }).ConfigureAwait(false);
+                    GivenName = buyer.GivenName,
+                    UserName = buyer.UserName
+                }).Command(new eShop.Ordering.Buyer.Entities.Address.Commands.Add
+                {
+                    AddressId = buyer.Address.AddressId,
+                    Street = buyer.Address.Street,
+                    City = buyer.Address.City,
+                    State = buyer.Address.State,
+                    ZipCode = buyer.Address.ZipCode,
+                    Country = buyer.Address.Country,
+                    Alias = buyer.Address.Alias,
+                    UserName = buyer.UserName
+                }).Command(new eShop.Ordering.Buyer.Entities.PaymentMethod.Commands.Add
+                {
+                    PaymentMethodId = buyer.PaymentMethod.PaymentMethodId,
+                    CardholderName = buyer.PaymentMethod.CardholderName,
+                    CardNumber = buyer.PaymentMethod.CardNumber,
+                    CardType = buyer.PaymentMethod.CardType,
+                    Expiration = buyer.PaymentMethod.Expiration,
+                    SecurityNumber = buyer.PaymentMethod.SecurityNumber,
+                    Alias = buyer.PaymentMethod.Alias,
+                    UserName = buyer.UserName
+                }).Command(new eShop.Ordering.Buyer.Commands.SetPreferredAddress
+                {
+                    UserName = buyer.UserName,
+                    AddressId = buyer.Address.AddressId
+                }).Command(new eShop.Ordering.Buyer.Commands.SetPreferredPaymentMethod
+                {
+                    UserName = buyer.UserName,
+                    PaymentMethodId = buyer.PaymentMethod.PaymentMethodId
+                });
+            }
+            await saga.Start().ConfigureAwait(false);
 
-                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Commands.SetPreferredAddress
-                    {
-                        UserName = buyer.UserName,
-                        AddressId = buyer.Address.AddressId
-                    }).ConfigureAwait(false);
-                    await bus.CommandToDomain(new eShop.Ordering.Buyer.Commands.SetPreferredPaymentMethod
-                    {
-                        UserName = buyer.UserName,
-                        PaymentMethodId = buyer.PaymentMethod.PaymentMethodId
-                    }).ConfigureAwait(false);
-                }
-            }, true).ConfigureAwait(false);
 
+            var saga2 = ctx.Saga(Guid.NewGuid());
             var random = new Random();
             // create orders out of all baskets
-            await ctx.LocalSaga(async bus =>
+            foreach (var basket in Basket.Import.Baskets)
             {
-                foreach (var basket in Basket.Import.Baskets)
+                var buyer = Buyers.Single(x => x.UserName == basket.UserName);
+
+                var orderid = Guid.NewGuid();
+                saga2.Command(new eShop.Ordering.Order.Commands.Draft
                 {
-                    var buyer = Buyers.Single(x => x.UserName == basket.UserName);
+                    BasketId = basket.Id,
+                    OrderId = orderid,
+                    UserName = basket.UserName,
+                    BillingAddressId = buyer.Address.AddressId,
+                    ShippingAddressId = buyer.Address.AddressId,
+                    PaymentMethodId = buyer.PaymentMethod.PaymentMethodId,
+                    Stamp = DateTime.UtcNow.RandomDateTimeBackward(TimeSpan.FromDays(1), TimeSpan.FromDays(14)).ToUnix()
+                });
 
-                    var orderid = Guid.NewGuid();
-                    await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Draft
-                    {
-                        BasketId = basket.Id,
-                        OrderId = orderid,
-                        UserName = basket.UserName,
-                        BillingAddressId = buyer.Address.AddressId,
-                        ShippingAddressId = buyer.Address.AddressId,
-                        PaymentMethodId = buyer.PaymentMethod.PaymentMethodId,
-                        Stamp = DateTime.UtcNow.RandomDateTimeBackward(TimeSpan.FromDays(1), TimeSpan.FromDays(14)).ToUnix()
-                    }).ConfigureAwait(false);
-
-                    // Use random below to vary the status of generated orders
-                    if(random.Next(3) == 0)
-                    {
-                        await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Cancel
-                        {
-                            OrderId = orderid
-                        }).ConfigureAwait(false);
-                        continue;
-                    }
-
-                    if (random.Next(2) != 0)
-                        continue;
-
-                    await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Confirm
+                // Use random below to vary the status of generated orders
+                if (random.Next(3) == 0)
+                {
+                    saga2.Command(new eShop.Ordering.Order.Commands.Cancel
                     {
                         OrderId = orderid
-                    }).ConfigureAwait(false);
-
-                    if (random.Next(2) != 0)
-                        continue;
-
-                    await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Pay
-                    {
-                        OrderId = orderid
-                    }).ConfigureAwait(false);
-
-                    if (random.Next(2) != 0)
-                        continue;
-
-                    await bus.CommandToDomain(new eShop.Ordering.Order.Commands.Ship
-                    {
-                        OrderId = orderid
-                    }).ConfigureAwait(false);
+                    });
+                    continue;
                 }
-            }, true).ConfigureAwait(false);
+
+                if (random.Next(2) != 0)
+                    continue;
+
+                saga2.Command(new eShop.Ordering.Order.Commands.Confirm
+                {
+                    OrderId = orderid
+                });
+
+                if (random.Next(2) != 0)
+                    continue;
+
+                saga2.Command(new eShop.Ordering.Order.Commands.Pay
+                {
+                    OrderId = orderid
+                });
+
+                if (random.Next(2) != 0)
+                    continue;
+
+                saga2.Command(new eShop.Ordering.Order.Commands.Ship
+                {
+                    OrderId = orderid
+                });
+            }
+            await saga2.Start().ConfigureAwait(false);
         }
     }
 }

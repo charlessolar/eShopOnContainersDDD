@@ -21,13 +21,13 @@ namespace eShop.Configuration.Setup
         }
         public async Task Handle(Events.Seeded e, IMessageHandlerContext ctx)
         {
-            await ctx.LocalSaga(async bus =>
-            {
-                await bus.CommandToDomain(new Entities.Identity.Commands.Seed(), timeout: false).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Catalog.Commands.Seed(), timeout: false).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Basket.Commands.Seed(), timeout: false).ConfigureAwait(false);
-                await bus.CommandToDomain(new Entities.Ordering.Commands.Seed(), timeout: false).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+            var saga = ctx.Saga(Guid.NewGuid());
+
+            saga.Command(new Entities.Identity.Commands.Seed())
+                .Command(new Entities.Catalog.Commands.Seed())
+                .Command(new Entities.Basket.Commands.Seed())
+                .Command(new Entities.Ordering.Commands.Seed());
+            await saga.Start().ConfigureAwait(false);
         }
     }
 }

@@ -132,7 +132,7 @@ namespace eShop
                 .EventStore(new[] { client })
                 .NewtonsoftJson()
                 .NServiceBus(config)
-                .SetUniqueAddress(Defaults.Instance.ToString())
+                .SetUniqueAddress(Aggregates.Defaults.Instance.ToString())
                 .SetParallelEvents(1)
                 .SetRetries(20)
             ).ConfigureAwait(false);
@@ -165,7 +165,6 @@ namespace eShop
                 .BasicAuthentication(user, password)
                 .DefaultIndex("eShop")
                 .DefaultFieldNameInferrer(field => regex.Replace(field, ""))
-                .DefaultTypeNameInferrer(type => type.FullName)
                 .DisableDirectStreaming();
 
             return new ElasticClient(settings);

@@ -20,10 +20,10 @@ namespace eShop.Catalog
 
         public async Task<bool> Initialize()
         {
-            await _client.CreateIndexAsync(typeof(Payment.Payment.Models.PaymentIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Payment.Payment.Models.PaymentIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis
                         .TokenFilters(f => f.NGram("ngram", d => d.MinGram(3).MaxGram(4)))
@@ -34,7 +34,7 @@ namespace eShop.Catalog
                         )
                     )
                 )
-                .Mappings(mappings => mappings.Map<Payment.Payment.Models.PaymentIndex>(map =>
+                .Map<Payment.Payment.Models.PaymentIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name("Id").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
                             .Keyword(s => s.Name("UserName").IgnoreAbove(256).Norms(false).IndexOptions(IndexOptions.Docs))
@@ -49,7 +49,7 @@ namespace eShop.Catalog
                             .Number(s => s.Name("Created").Type(NumberType.Long))
                             .Number(s => s.Name("Updated").Type(NumberType.Long))
                             .Number(s => s.Name("Settled").Type(NumberType.Long))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
 
             this.Done = true;

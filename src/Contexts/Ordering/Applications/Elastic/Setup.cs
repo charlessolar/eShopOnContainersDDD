@@ -54,14 +54,14 @@ namespace eShop.Ordering
 
         public async Task<bool> Initialize()
         {
-            await _client.CreateIndexAsync(typeof(Buyer.Models.OrderingBuyerIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Buyer.Models.OrderingBuyerIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Buyer.Models.OrderingBuyerIndex>(map =>
+                .Map<Buyer.Models.OrderingBuyerIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Text(s => s.Name(x => x.GivenName).Fields(x => x.AutoCompleteFields()))
@@ -74,16 +74,16 @@ namespace eShop.Ordering
                             .Text(s => s.Name(x => x.PreferredPaymentCardholder).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.PreferredPaymentMethod).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.PreferredPaymentExpiration).Fields(x => x.AutoCompleteFields()))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Buyer.Entities.Address.Models.Address).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Buyer.Entities.Address.Models.Address).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Buyer.Entities.Address.Models.Address>(map =>
+                .Map<Buyer.Entities.Address.Models.Address>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
@@ -93,16 +93,16 @@ namespace eShop.Ordering
                             .Text(s => s.Name(x => x.State).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.Country).Fields(x => x.AutoCompleteFields()))
                             .Text(s => s.Name(x => x.ZipCode).Fields(x => x.AutoCompleteFields()))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Buyer.Entities.PaymentMethod.Models.PaymentMethod).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Buyer.Entities.PaymentMethod.Models.PaymentMethod).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(map =>
+                .Map<Buyer.Entities.PaymentMethod.Models.PaymentMethod>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
@@ -112,17 +112,17 @@ namespace eShop.Ordering
                             .Text(s => s.Name(x => x.CardholderName).Fields(x => x.AutoCompleteFields()))
                             .Date(s => s.Name(x => x.Expiration))
                             .Text(s => s.Name(x => x.CardType).Fields(x => x.AutoCompleteFields()))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
 
-            await _client.CreateIndexAsync(typeof(Order.Models.OrderingOrder).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Order.Models.OrderingOrder).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Order.Models.OrderingOrder>(map =>
+                .Map<Order.Models.OrderingOrder>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
@@ -168,16 +168,16 @@ namespace eShop.Ordering
                                     .Number(t => t.Name(x => x.AdditionalTaxes).Type(NumberType.Long))
                                     .Number(t => t.Name(x => x.Total).Type(NumberType.Long))
                                     ))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Order.Models.OrderingOrderIndex).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Order.Models.OrderingOrderIndex).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Order.Models.OrderingOrderIndex>(map =>
+                .Map<Order.Models.OrderingOrderIndex>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.UserName).IgnoreAbove(256))
@@ -206,16 +206,16 @@ namespace eShop.Ordering
                             .Date(s => s.Name(x => x.Created).Format("epoch_millis"))
                             .Date(s => s.Name(x => x.Updated).Format("epoch_millis"))
                             .Boolean(s => s.Name(x => x.Paid))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Order.Entities.Item.Models.OrderingOrderItem).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Order.Entities.Item.Models.OrderingOrderItem).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Order.Entities.Item.Models.OrderingOrderItem>(map =>
+                .Map<Order.Entities.Item.Models.OrderingOrderItem>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.OrderId).IgnoreAbove(256))
@@ -231,52 +231,52 @@ namespace eShop.Ordering
                             .Number(s => s.Name(x => x.AdditionalFees).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.AdditionalTaxes).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.Total).Type(NumberType.Long))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Order.Models.SalesByState).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Order.Models.SalesByState).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Order.Models.SalesByState>(map =>
+                .Map<Order.Models.SalesByState>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.State).IgnoreAbove(256))
                             .Number(s => s.Name(x => x.Relevancy).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.Value).Type(NumberType.Long))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Order.Models.SalesChart).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Order.Models.SalesChart).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Order.Models.SalesChart>(map =>
+                .Map<Order.Models.SalesChart>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.Label).IgnoreAbove(256))
                             .Number(s => s.Name(x => x.Relevancy).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.Value).Type(NumberType.Long))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
 
-            await _client.CreateIndexAsync(typeof(Order.Models.SalesWeekOverWeek).FullName.ToLower(), i => i
+            await _client.Indices.CreateAsync(typeof(Order.Models.SalesWeekOverWeek).FullName.ToLower(), i => i
                 .Settings(s => s
                     .NumberOfShards(3)
-                    .TotalShardsPerNode(3)
+                    
                     .NumberOfReplicas(0)
                     .Analysis(analysis => analysis.AutoCompleteAnalyzers())
                 )
-                .Mappings(mappings => mappings.Map<Order.Models.SalesWeekOverWeek>(map =>
+                .Map<Order.Models.SalesWeekOverWeek>(map =>
                     map.Properties(props =>
                         props.Keyword(s => s.Name(x => x.Id).IgnoreAbove(256))
                             .Keyword(s => s.Name(x => x.DayOfWeek).IgnoreAbove(256))
                             .Number(s => s.Name(x => x.Relevancy).Type(NumberType.Long))
                             .Number(s => s.Name(x => x.Value).Type(NumberType.Long))
-                    )))).ConfigureAwait(false);
+                    ))).ConfigureAwait(false);
             this.Done = true;
             return true;
         }
