@@ -57,7 +57,7 @@
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cleanup-plugin": "^0.5.1",
     "webpack-cli": "^3.0.6",
-    "webpack-dev-server": "^3.1.4",
+    "webpack-dev-server": "^3.1.11",
     "webpack-hud": "^0.1.1",
     "yarn": "^1.17.3"
   },
