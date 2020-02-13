@@ -2,7 +2,7 @@
   <Import Project="../../../../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>eShop.Catalog</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Catalog</Title>
@@ -18,14 +18,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.Testing" Version="0.14.29.326" />
-    <PackageReference Include="AutoFixture" Version="4.5.0" />
-    <PackageReference Include="AutoFixture.AutoFakeItEasy" Version="4.5.0" />
-    <PackageReference Include="AutoFixture.Xunit2" Version="4.5.0" />
-    <PackageReference Include="FakeItEasy" Version="4.7.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
-    <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <PackageReference Include="Aggregates.NET.Testing" Version="0.15.36.892" />
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.AutoFakeItEasy" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.11.0" />
+    <PackageReference Include="FakeItEasy" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 

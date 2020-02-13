@@ -2,7 +2,7 @@
   <Import Project="../../../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>eShop.Configuration</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Configuration</Title>
@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.29.326" />
-    <PackageReference Include="Bogus" Version="22.3.2" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.15.36.892" />
+    <PackageReference Include="Bogus" Version="29.0.1" />
   </ItemGroup>
 </Project>

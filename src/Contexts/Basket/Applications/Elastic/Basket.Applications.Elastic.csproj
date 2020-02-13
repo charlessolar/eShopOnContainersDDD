@@ -2,7 +2,7 @@
   <Import Project="../../../../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>eShop.Basket</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Basket</Title>
@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.14.29.326" />
-    <PackageReference Include="NEST" Version="6.2.0" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.15.36.892" />
+    <PackageReference Include="NEST" Version="7.5.1" />
   </ItemGroup>
 
   <ItemGroup>
