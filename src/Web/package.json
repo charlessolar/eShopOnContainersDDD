@@ -75,7 +75,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "jvectormap": "^2.0.4",
     "keycode": "^2.2.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "luxon": "^1.22.0",
     "mobx": "^5.15.4",
     "mobx-logger": "^0.7.1",
