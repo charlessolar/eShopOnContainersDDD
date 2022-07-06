@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 
 services:
   domain:
@@ -31,24 +31,16 @@ services:
       - elasticdb
     restart: always
   presentation:
-    image: eshop/presentation:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Endpoints/Presentation/Dockerfile
-    depends_on:
-      - rabbitmq
-    ports:
-      - "8080:80"
-    restart: always
-  frontend:
-    image: eshop/frontend:${TAG:-latest}
+    image: eshop/web:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Web/Dockerfile
     depends_on:
-      - presentation
+      - rabbitmq
     ports:
-      - "80:80"
+      - "8080:80"
+      - "4443:443"
+    restart: always
 
   # windows image
   #rabbitmq:
@@ -65,18 +57,21 @@ services:
       - "5672:5672"
     restart: always
   eventstore:
-    image: eventstore/eventstore
+    image: eventstore/eventstore:latest
+    environment:
+      - EVENTSTORE_INSECURE=TRUE
+      - EVENTSTORE_RUN_PROJECTIONS=ALL
     ports:
       - "1113:1113"
       - "2113:2113"
     restart: always
   mongodb:
-    image: mongo:3.7-jessie
+    image: mongo:4.4-focal
     ports:
       - "27017:27017"
     restart: always
   elasticdb:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:8.3.1
     environment:
       - cluster.name=eshop
       - bootstrap.memory_lock=true

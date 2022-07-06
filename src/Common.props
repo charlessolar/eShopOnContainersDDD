@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RepositoryUrl>https://github.com/volak/eShopOnContainersDDD</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/volak/eShopOnContainersDDD</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/charlessolar/eShopOnContainersDDD</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/charlessolar/eShopOnContainersDDD</PackageProjectUrl>
   </PropertyGroup>
 </Project>

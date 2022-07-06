@@ -2,7 +2,7 @@
   <Import Project="../../../../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>eShop.Identity</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Identity</Title>
@@ -13,10 +13,6 @@
     <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.8.0" />
   </ItemGroup>
 
   <ItemGroup>

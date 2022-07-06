@@ -1,9 +1,8 @@
-version: '3.4'
+version: '3.7'
 
 networks:
   default:
-    external:
-      name: nat
+    name: nat
 services:
   domain:
     environment:
@@ -40,7 +39,3 @@ services:
       - ESHOP_RabbitPassword=${RABBIT_PASSWORD}
       - ESHOP_ServiceStackLicense=${SERVICESTACK_LICENSE}
       - ESHOP_HostServer=http://${HOST_SERVER:-localhost}
-  frontend:
-    build:
-      args:
-        API_SERVER: http://${HOST_SERVER:-localhost}:8080

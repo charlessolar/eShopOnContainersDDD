@@ -2,7 +2,7 @@
   <Import Project="../../../../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>eShop.Location</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Title>eShop.Location</Title>
@@ -18,9 +18,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\..\Language\Location.Language.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.8.0" />
   </ItemGroup>
 </Project>
