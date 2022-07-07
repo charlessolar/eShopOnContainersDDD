@@ -1,4 +1,4 @@
-﻿using Aggregates;
+﻿using Aggregates.Domain;
 using NServiceBus;
 using System;
 using System.Collections.Generic;

@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../Common.props" />
+  <Import Project="../../Common.props" />
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>

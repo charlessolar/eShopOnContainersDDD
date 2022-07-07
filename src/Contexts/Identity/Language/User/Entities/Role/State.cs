@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Identity.User.Entities.Role
 {
-    public class State : Aggregates.State<State>
+    public class State : Aggregates.State<State, User.State>
     {
     }
 }

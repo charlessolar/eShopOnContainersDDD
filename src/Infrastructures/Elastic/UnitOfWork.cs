@@ -13,7 +13,7 @@ using Serilog;
 
 namespace eShop
 {
-    public class UnitOfWork : Infrastructure.IUnitOfWork, Aggregates.UnitOfWork.IUnitOfWork
+    public class UnitOfWork : Aggregates.UnitOfWork.IApplicationUnitOfWork, Aggregates.UnitOfWork.IBaseUnitOfWork
     {
         public static Nest.Id ToId(Id id)
         {
@@ -22,8 +22,6 @@ namespace eShop
 
             return new Nest.Id(id.ToString());
         }
-
-        public dynamic Bag { get; set; }
 
         private readonly Nest.IElasticClient _client;
         private readonly ILogger _logger;
@@ -41,8 +39,6 @@ namespace eShop
 
         public Task Begin()
         {
-            if (!Aggregates.Dynamic.ContainsProperty(Bag, "Saved"))
-                Bag.Saved = new HashSet<string>();
             return Task.CompletedTask;
         }
 
@@ -62,9 +58,6 @@ namespace eShop
                 var response = await _client.BulkAsync(pending).ConfigureAwait(false);
                 if (response.Errors)
                 {
-                    foreach (var item in response.Items.Select(x => $"{x.Type}, {x.Id}").Except(response.ItemsWithErrors.Select(x => $"{x.Type}, {x.Id}")))
-                        Bag.Saved.Add(item);
-
                     throw new StorageException(response.DebugInformation);
                 }
 
@@ -78,9 +71,6 @@ namespace eShop
 
         public Task Add<T>(Id id, T document) where T : class
         {
-            if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
-                return Task.CompletedTask;
-
             _logger.DebugEvent("Index", "Object {Object} Document {Id}", typeof(T).FullName, id);
             _pendingDocs[$"{typeof(T).FullName}, {id}"] = new Nest.BulkIndexDescriptor<T>().Index(typeof(T).FullName.ToLower()).Id(ToId(id)).Document(document);
 
@@ -89,9 +79,6 @@ namespace eShop
 
         public Task Update<T>(Id id, T document) where T : class
         {
-            if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
-                return Task.CompletedTask;
-
             var descriptor = new Nest.BulkUpdateDescriptor<T, object>().Index(typeof(T).FullName.ToLower()).Id(ToId(id))
                 .Doc(document);
             if (_versions.ContainsKey($"{typeof(T).FullName}, {id}"))
@@ -140,9 +127,6 @@ namespace eShop
 
         public Task Delete<T>(Id id) where T : class
         {
-            if (Bag.Saved.Contains($"{typeof(T).FullName}, {id}"))
-                return Task.CompletedTask;
-
             _logger.DebugEvent("Delete", "Object {Object} Document {Id}", typeof(T).FullName, id);
             var operation = new Nest.BulkDeleteOperation<T>(ToId(id));
             operation.Index = typeof(T).FullName.ToLower();

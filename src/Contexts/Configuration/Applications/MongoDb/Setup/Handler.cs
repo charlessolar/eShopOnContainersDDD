@@ -19,7 +19,7 @@ namespace eShop.Configuration.Setup
     {
         public async Task Handle(Queries.Status query, IMessageHandlerContext ctx)
         {
-            var model = await ctx.UoW().Get<Models.ConfigurationStatus>("setup").ConfigureAwait(false);
+            var model = await ctx.Uow().Get<Models.ConfigurationStatus>("setup").ConfigureAwait(false);
             await ctx.Result(model ?? new Models.ConfigurationStatus { IsSetup = false }).ConfigureAwait(false);
         }
         public Task Handle(Events.Seeded e, IMessageHandlerContext ctx)

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Aggregates;
+using Aggregates.Domain;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
 

@@ -9,10 +9,10 @@ namespace eShop
 {
     public class Mutator : IMutate
     {
-        private readonly Aggregates.UnitOfWork.IDomain _uow;
+        private readonly Aggregates.UnitOfWork.IDomainUnitOfWork _uow;
 
 
-        public Mutator(Aggregates.UnitOfWork.IDomain uow)
+        public Mutator(Aggregates.UnitOfWork.IDomainUnitOfWork uow)
         {
             _uow = uow;
         }

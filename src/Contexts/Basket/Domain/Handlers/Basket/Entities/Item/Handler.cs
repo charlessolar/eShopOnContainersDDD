@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using NServiceBus;
-using Aggregates;
+using Aggregates.Domain;
 
 namespace eShop.Basket.Basket.Entities.Item
 {

@@ -152,7 +152,7 @@ namespace eShop
         }
     }
 
-    public class UnitOfWork : Infrastructure.IUnitOfWork, Aggregates.UnitOfWork.IUnitOfWork
+    public class UnitOfWork : Aggregates.UnitOfWork.IApplicationUnitOfWork, Aggregates.UnitOfWork.IBaseUnitOfWork
     {
         public dynamic Bag { get; set; }
 
@@ -170,8 +170,6 @@ namespace eShop
 
         public Task Begin()
         {
-            if (!Aggregates.Dynamic.ContainsProperty(Bag, "Saved"))
-                Bag.Saved = new HashSet<string>();
             return Task.CompletedTask;
         }
 

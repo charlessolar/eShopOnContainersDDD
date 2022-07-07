@@ -1,8 +1,8 @@
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/runtime:6.0-bullseye-slim AS base
 
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
 WORKDIR /src
 COPY ["/", "/"]
 RUN dotnet restore "Endpoints/Domain/Domain.csproj"

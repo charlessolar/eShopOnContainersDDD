@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.Marketing.Campaign.Entities.Rule
 {
-    public class State : Aggregates.State<State>
+    public class State : Aggregates.State<State, Campaign.State>
     {
     }
 }

@@ -12,13 +12,16 @@
     <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.17.10.101" />
     <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.10.101" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
     <PackageReference Include="NServiceBus" Version="7.7.3" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.4.0" />
-    <PackageReference Include="NServiceBus.RabbitMQ" Version="5.1.2" />
+    <PackageReference Include="NServiceBus.Extensions.DependencyInjection" Version="1.0.1" />
+    <PackageReference Include="NServiceBus.Extensions.Logging" Version="1.0.0" />
     <PackageReference Include="NServiceBus.RabbitMQ" Version="6.1.1" />
     <PackageReference Include="NServiceBus.Serilog" Version="8.1.0" />
-    <PackageReference Include="NServiceBus.StructureMap" Version="7.1.0" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
@@ -35,6 +38,10 @@
     <ProjectReference Include="..\..\Contexts\Marketing\Domain\Handlers\Marketing.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Ordering\Domain\Handlers\Ordering.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Payment\Domain\Handlers\Payment.Domain.Handlers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

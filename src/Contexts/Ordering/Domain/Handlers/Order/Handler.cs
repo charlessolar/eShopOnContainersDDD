@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Aggregates;
+using Aggregates.Domain;
 using NServiceBus;
 
 namespace eShop.Ordering.Order

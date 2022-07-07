@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contexts", "Contexts", "{DA850A05-CE02-4929-B583-F8F6E42482C7}"
 EndProject
@@ -61,7 +61,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{BEB050
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4DE5E812-850D-47D8-90AC-2A853D399947}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{FE991B35-C906-4EBD-8C0B-76C3E1299E03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructures\Infrastructure\Infrastructure.csproj", "{FE991B35-C906-4EBD-8C0B-76C3E1299E03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Domain.Handlers", "src\Contexts\Basket\Domain\Handlers\Basket.Domain.Handlers.csproj", "{554E65A4-012E-48BA-A8A8-A330AA40D160}"
 EndProject
@@ -182,6 +182,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain.Tests", "src\Contexts\Ordering\Domain\Tests\Ordering.Domain.Tests.csproj", "{46F59608-AD45-4E86-A773-52D55099C6F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Applications.Tests", "src\Contexts\Basket\Applications\Tests\Basket.Applications.Tests.csproj", "{C60931FC-47BF-498D-8BCB-29F447BA7856}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{83F87853-8563-474E-A682-03107CED4918}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Elastic", "src\Infrastructures\Elastic\Infrastructure.Elastic.csproj", "{DE0523FE-172B-4756-8750-90477ECDF074}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.MongoDb", "src\Infrastructures\MongoDb\Infrastructure.MongoDb.csproj", "{C2666FFF-8290-4754-971C-78E5FBCCED3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -413,6 +419,14 @@ Global
 		{C60931FC-47BF-498D-8BCB-29F447BA7856}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C60931FC-47BF-498D-8BCB-29F447BA7856}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C60931FC-47BF-498D-8BCB-29F447BA7856}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0523FE-172B-4756-8750-90477ECDF074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0523FE-172B-4756-8750-90477ECDF074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0523FE-172B-4756-8750-90477ECDF074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0523FE-172B-4756-8750-90477ECDF074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2666FFF-8290-4754-971C-78E5FBCCED3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2666FFF-8290-4754-971C-78E5FBCCED3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2666FFF-8290-4754-971C-78E5FBCCED3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2666FFF-8290-4754-971C-78E5FBCCED3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -446,6 +460,7 @@ Global
 		{2A8C2A7F-90CC-4640-A99B-C6D240DCDD21} = {F04D5FB8-0F66-4CB6-A1CB-5E7233E06A8A}
 		{BEB0503A-0C64-4C2B-B078-926470B83ABB} = {F04D5FB8-0F66-4CB6-A1CB-5E7233E06A8A}
 		{4DE5E812-850D-47D8-90AC-2A853D399947} = {F04D5FB8-0F66-4CB6-A1CB-5E7233E06A8A}
+		{FE991B35-C906-4EBD-8C0B-76C3E1299E03} = {83F87853-8563-474E-A682-03107CED4918}
 		{554E65A4-012E-48BA-A8A8-A330AA40D160} = {CD58E233-E690-4074-844C-09EE929B3178}
 		{B2A1CCAA-1183-48C1-8E66-2C0E088F3C46} = {CD58E233-E690-4074-844C-09EE929B3178}
 		{B507BF61-820E-40BE-B395-A065A30E9F48} = {495D7C2A-F1B5-459E-955E-BE5302BB050F}
@@ -505,6 +520,8 @@ Global
 		{C8A59E14-89E9-453C-AC3E-98EDD51F0FDB} = {EECF3AE9-7073-4149-AEE6-B30C185E5CEE}
 		{46F59608-AD45-4E86-A773-52D55099C6F0} = {5305EA5C-8C99-4B17-B19E-4C4C12B98045}
 		{C60931FC-47BF-498D-8BCB-29F447BA7856} = {B5581F10-6B8C-4FF0-8190-F15EC2401631}
+		{DE0523FE-172B-4756-8750-90477ECDF074} = {83F87853-8563-474E-A682-03107CED4918}
+		{C2666FFF-8290-4754-971C-78E5FBCCED3B} = {83F87853-8563-474E-A682-03107CED4918}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E0FE21F-D8B6-4D1E-85B5-9B2A2EFBEDAE}
