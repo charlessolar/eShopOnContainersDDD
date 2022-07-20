@@ -1,4 +1,5 @@
 ﻿using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -31,7 +32,7 @@ namespace eShop.Ordering.Order
             if (query.To.HasValue)
                 builder.Add("Relevancy", query.To.Value.ToUnix().ToString(), Operation.LessThanOrEqual);
 
-            var results = await ctx.UoW().Query<Models.SalesByState>(builder.Build())
+            var results = await ctx.Uow().Query<Models.SalesByState>(builder.Build())
                 .ConfigureAwait(false);
 
             var records = results.Records.GroupBy(x => x.State).Select(x => new Models.SalesByState
@@ -49,7 +50,7 @@ namespace eShop.Ordering.Order
             var day = e.Stamp.FromUnix().Date;
             var month = new DateTime(day.Year, day.Month, 1);
 
-            var address = await ctx.UoW().Get<Buyer.Entities.Address.Models.Address>(e.ShippingAddressId).ConfigureAwait(false);
+            var address = await ctx.Uow().Get<Buyer.Entities.Address.Models.Address>(e.ShippingAddressId).ConfigureAwait(false);
 
             // get all items in basket
             var itemIds = await ctx.Service<Basket.Basket.Entities.Item.Services.ItemsInBasket, string[]>(x => { x.BasketId = e.BasketId; })
@@ -57,10 +58,10 @@ namespace eShop.Ordering.Order
 
             var items = await itemIds.SelectAsync(id =>
             {
-                return ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
+                return ctx.Uow().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id);
             }).ConfigureAwait(false);
 
-            var existing = await ctx.UoW().TryGet<Models.SalesByState>(IdGenerator(month, address.State)).ConfigureAwait(false);
+            var existing = await ctx.Uow().TryGet<Models.SalesByState>(IdGenerator(month, address.State)).ConfigureAwait(false);
             if (existing == null)
             {
                 existing = new Models.SalesByState
@@ -70,47 +71,47 @@ namespace eShop.Ordering.Order
                     State = address.State,
                     Value = items.Sum(x => x.SubTotal)
                 };
-                await ctx.UoW().Add(existing.Id, existing).ConfigureAwait(false);
+                await ctx.Uow().Add(existing.Id, existing).ConfigureAwait(false);
             }
             else
             {
                 // todo: add additional fees when additional fees exist
                 existing.Value += items.Sum(x => x.SubTotal);
-                await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
+                await ctx.Uow().Update(existing.Id, existing).ConfigureAwait(false);
             }
         }
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var order = await ctx.Uow().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
 
             var day = order.Created.FromUnix().Date;
             var month = new DateTime(day.Year, day.Month, 1);
 
-            var existing = await ctx.UoW().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
+            var existing = await ctx.Uow().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
             existing.Value -= order.Total;
-            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.Uow().Update(existing.Id, existing).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Added e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var product = await ctx.UoW().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
+            var order = await ctx.Uow().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var product = await ctx.Uow().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId).ConfigureAwait(false);
 
             var day = order.Created.FromUnix().Date;
             var month = new DateTime(day.Year, day.Month, 1);
 
-            var existing = await ctx.UoW().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
+            var existing = await ctx.Uow().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
             existing.Value += product.Price * e.Quantity;
-            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.Uow().Update(existing.Id, existing).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.PriceOverridden e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var orderItem = await ctx.UoW().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.Uow().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var orderItem = await ctx.Uow().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
             var day = order.Created.FromUnix().Date;
             var month = new DateTime(day.Year, day.Month, 1);
 
-            var existing = await ctx.UoW().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
+            var existing = await ctx.Uow().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
             // remove existing value
             existing.Value -= orderItem.Total;
 
@@ -119,21 +120,21 @@ namespace eShop.Ordering.Order
             // add updated total
             existing.Value += orderItem.Total;
 
-            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.Uow().Update(existing.Id, existing).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Item.Events.Removed e, IMessageHandlerContext ctx)
         {
-            var order = await ctx.UoW().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var orderItem = await ctx.UoW().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var order = await ctx.Uow().Get<Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var orderItem = await ctx.Uow().Get<Entities.Item.Models.OrderingOrderItem>(Entities.Item.Handler.ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
 
             var day = order.Created.FromUnix().Date;
             var month = new DateTime(day.Year, day.Month, 1);
 
-            var existing = await ctx.UoW().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
+            var existing = await ctx.Uow().Get<Models.SalesByState>(IdGenerator(month, order.ShippingState)).ConfigureAwait(false);
             // remove existing value
             existing.Value -= orderItem.Total;
 
-            await ctx.UoW().Update(existing.Id, existing).ConfigureAwait(false);
+            await ctx.Uow().Update(existing.Id, existing).ConfigureAwait(false);
         }
     }
 }

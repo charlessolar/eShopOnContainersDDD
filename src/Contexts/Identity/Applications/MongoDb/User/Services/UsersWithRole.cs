@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Aggregates.Extensions;
 using NServiceBus;
 using Infrastructure.Extensions;
@@ -18,7 +19,7 @@ namespace eShop.Identity.User.Services
     {
         public async Task Handle(Entities.Role.Events.Assigned e, IMessageHandlerContext ctx)
         {
-            var userroles = await ctx.UoW().TryGet<UserRoles>(e.RoleId).ConfigureAwait(false);
+            var userroles = await ctx.Uow().TryGet<UserRoles>(e.RoleId).ConfigureAwait(false);
             if (userroles == null)
             {
                 userroles = new UserRoles
@@ -26,25 +27,25 @@ namespace eShop.Identity.User.Services
                     RoleId = e.RoleId,
                     Users = new string[] { e.UserName }
                 };
-                await ctx.UoW().Add(e.RoleId, userroles).ConfigureAwait(false);
+                await ctx.Uow().Add(e.RoleId, userroles).ConfigureAwait(false);
             }
             else
             {
                 userroles.Users = userroles.Users.TryAdd(e.UserName);
-                await ctx.UoW().Update(e.RoleId, userroles).ConfigureAwait(false);
+                await ctx.Uow().Update(e.RoleId, userroles).ConfigureAwait(false);
             }
         }
 
         public async Task Handle(Entities.Role.Events.Revoked e, IMessageHandlerContext ctx)
         {
-            var userroles = await ctx.UoW().Get<UserRoles>(e.RoleId).ConfigureAwait(false);
+            var userroles = await ctx.Uow().Get<UserRoles>(e.RoleId).ConfigureAwait(false);
             userroles.Users = userroles.Users.TryRemove(e.UserName);
-            await ctx.UoW().Update(e.RoleId, userroles).ConfigureAwait(false);
+            await ctx.Uow().Update(e.RoleId, userroles).ConfigureAwait(false);
         }
 
         public async Task<string[]> Handle(UsersWithRole service, IServiceContext ctx)
         {
-            var userroles = await ctx.App().TryGet<UserRoles>(service.RoleId).ConfigureAwait(false);
+            var userroles = await ctx.Uow().TryGet<UserRoles>(service.RoleId).ConfigureAwait(false);
 
             return userroles?.Users ?? new string[] { };
         }

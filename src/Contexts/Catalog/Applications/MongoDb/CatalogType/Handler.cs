@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using NServiceBus;
 
 namespace eShop.Catalog.CatalogType
@@ -18,11 +19,11 @@ namespace eShop.Catalog.CatalogType
                 Id = e.TypeId,
                 Type = e.Type
             };
-            return ctx.UoW().Add(e.TypeId, model);
+            return ctx.Uow().Add(e.TypeId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.CatalogType>(e.TypeId);
+            return ctx.Uow().Delete<Models.CatalogType>(e.TypeId);
         }
     }
 }

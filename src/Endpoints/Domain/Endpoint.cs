@@ -43,7 +43,6 @@ var host = Host.CreateDefaultBuilder(args)
         {
             builder.ClearProviders();
             builder.AddConfiguration(context.Configuration.GetSection("Logging"));
-            builder.AddFile(o => o.RootPath = AppContext.BaseDirectory);
         });
     }).Build();
 

@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.17.10.101" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.17.10.101" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.17.10.101" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.10.101" />
+    <PackageReference Include="Aggregates.NET" Version="0.17.11.102" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.17.11.102" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.17.11.102" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.11.102" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
@@ -35,12 +35,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Contexts\Basket\Applications\MongoDb\Basket.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Catalog\Applications\MongoDb\Catalog.Applications.MongoDb.csproj" />
-    <ProjectReference Include="..\..\Contexts\Configuration\Applications\MongoDb\Configuration.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Identity\Applications\MongoDb\Identity.Applications.MongoDb.csproj" />
-    <ProjectReference Include="..\..\Contexts\Location\Applications\MongoDb\Location.Applications.MongoDb.csproj" />
-    <ProjectReference Include="..\..\Contexts\Marketing\Applications\MongoDb\Marketing.Applications.MongoDb.csproj" />
     <ProjectReference Include="..\..\Contexts\Ordering\Applications\MongoDb\Ordering.Applications.MongoDb.csproj" />
-    <ProjectReference Include="..\..\Infrastructures\MongoDb\Infrastructure.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

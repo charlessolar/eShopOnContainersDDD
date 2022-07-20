@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -25,7 +26,7 @@ namespace eShop.Ordering.Order.Entities.Item
             var builder = new QueryBuilder();
             builder.Add("OrderId", query.OrderId.ToString(), Operation.Equal);
 
-            var results = await ctx.UoW().Query<Models.OrderingOrderItem>(builder.Build())
+            var results = await ctx.Uow().Query<Models.OrderingOrderItem>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -40,7 +41,7 @@ namespace eShop.Ordering.Order.Entities.Item
             // add the items to order
             foreach (var id in itemIds)
             {
-                var item = await ctx.UoW().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id).ConfigureAwait(false);
+                var item = await ctx.Uow().Get<Basket.Basket.Entities.Item.Models.BasketItemIndex>(id).ConfigureAwait(false);
 
                 var model = new Models.OrderingOrderItem
                 {
@@ -55,13 +56,13 @@ namespace eShop.Ordering.Order.Entities.Item
                     Quantity = item.Quantity,
                 };
 
-                await ctx.UoW().Add(model.Id, model).ConfigureAwait(false);
+                await ctx.Uow().Add(model.Id, model).ConfigureAwait(false);
             }
         }
 
         public async Task Handle(Events.Added e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.UoW()
+            var product = await ctx.Uow()
                 .Get<Catalog.Product.Models.CatalogProduct>(e.ProductId).ConfigureAwait(false);
 
             var model = new Models.OrderingOrderItem
@@ -77,19 +78,19 @@ namespace eShop.Ordering.Order.Entities.Item
                 Quantity = e.Quantity
             };
 
-            await ctx.UoW().Add(model.Id, model).ConfigureAwait(false);
+            await ctx.Uow().Add(model.Id, model).ConfigureAwait(false);
         }
 
         public async Task Handle(Events.PriceOverridden e, IMessageHandlerContext ctx)
         {
-            var orderitem = await ctx.UoW().Get<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
+            var orderitem = await ctx.Uow().Get<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId)).ConfigureAwait(false);
             orderitem.Price = e.Price;
-            await ctx.UoW().Update(orderitem.Id, orderitem).ConfigureAwait(false);
+            await ctx.Uow().Update(orderitem.Id, orderitem).ConfigureAwait(false);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId));
+            return ctx.Uow().Delete<Models.OrderingOrderItem>(ItemIdGenerator(e.OrderId, e.ProductId));
         }
     }
 }

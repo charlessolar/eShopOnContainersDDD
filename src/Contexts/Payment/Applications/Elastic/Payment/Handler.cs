@@ -1,4 +1,5 @@
 ﻿using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -21,7 +22,7 @@ namespace eShop.Payment.Payment
         {
             var builder = new QueryBuilder();
 
-            var results = await ctx.UoW().Query<Models.PaymentIndex>(builder.Build())
+            var results = await ctx.Uow().Query<Models.PaymentIndex>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -31,7 +32,7 @@ namespace eShop.Payment.Payment
             var builder = new QueryBuilder();
             builder.Add("UserName", query.UserName.ToString(), Operation.Equal);
 
-            var results = await ctx.UoW().Query<Models.PaymentIndex>(builder.Build())
+            var results = await ctx.Uow().Query<Models.PaymentIndex>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -39,9 +40,9 @@ namespace eShop.Payment.Payment
 
         public async Task Handle(Events.Charged e, IMessageHandlerContext ctx)
         {
-            var buyer = await ctx.UoW().Get<Ordering.Buyer.Models.OrderingBuyerIndex>(e.UserName).ConfigureAwait(false);
-            var order = await ctx.UoW().Get<Ordering.Order.Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
-            var method = await ctx.UoW().Get<Ordering.Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
+            var buyer = await ctx.Uow().Get<Ordering.Buyer.Models.OrderingBuyerIndex>(e.UserName).ConfigureAwait(false);
+            var order = await ctx.Uow().Get<Ordering.Order.Models.OrderingOrderIndex>(e.OrderId).ConfigureAwait(false);
+            var method = await ctx.Uow().Get<Ordering.Buyer.Entities.PaymentMethod.Models.PaymentMethod>(e.PaymentMethodId).ConfigureAwait(false);
 
             var model = new Models.PaymentIndex
             {
@@ -59,23 +60,23 @@ namespace eShop.Payment.Payment
                 Updated = e.Stamp,
             };
 
-            await ctx.UoW().Add(model.Id, model).ConfigureAwait(false);
+            await ctx.Uow().Add(model.Id, model).ConfigureAwait(false);
         }
         public async Task Handle(Events.Settled e, IMessageHandlerContext ctx)
         {
-            var method = await ctx.UoW().Get<Models.PaymentIndex>(e.PaymentId).ConfigureAwait(false);
+            var method = await ctx.Uow().Get<Models.PaymentIndex>(e.PaymentId).ConfigureAwait(false);
             method.Status = Status.Settled.Value;
             method.StatusDescription = Status.Settled.Description;
 
-            await ctx.UoW().Update(method.Id, method).ConfigureAwait(false);
+            await ctx.Uow().Update(method.Id, method).ConfigureAwait(false);
         }
         public async Task Handle(Events.Canceled e, IMessageHandlerContext ctx)
         {
-            var method = await ctx.UoW().Get<Models.PaymentIndex>(e.PaymentId).ConfigureAwait(false);
+            var method = await ctx.Uow().Get<Models.PaymentIndex>(e.PaymentId).ConfigureAwait(false);
             method.Status = Status.Cancelled.Value;
             method.StatusDescription = Status.Cancelled.Description;
 
-            await ctx.UoW().Update(method.Id, method).ConfigureAwait(false);
+            await ctx.Uow().Update(method.Id, method).ConfigureAwait(false);
         }
     }
 }

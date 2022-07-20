@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -26,7 +27,7 @@ namespace eShop.Basket.Basket.Entities.Item
             var builder = new QueryBuilder();
             builder.Add("BasketId", query.BasketId.ToString(), Operation.Equal);
 
-            var results = await ctx.UoW().Query<Models.BasketItemIndex>(builder.Build())
+            var results = await ctx.Uow().Query<Models.BasketItemIndex>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -34,7 +35,7 @@ namespace eShop.Basket.Basket.Entities.Item
 
         public async Task Handle(Events.ItemAdded e, IMessageHandlerContext ctx)
         {
-            var product = await ctx.UoW().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId)
+            var product = await ctx.Uow().Get<Catalog.Product.Models.CatalogProductIndex>(e.ProductId)
                 .ConfigureAwait(false);
             var model = new Models.BasketItemIndex
             {
@@ -48,19 +49,19 @@ namespace eShop.Basket.Basket.Entities.Item
                 ProductPrice = product.Price,
                 Quantity = 1,
             };
-            await ctx.UoW().Add(model.Id, model).ConfigureAwait(false);
+            await ctx.Uow().Add(model.Id, model).ConfigureAwait(false);
         }
         public Task Handle(Events.ItemRemoved e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.BasketItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId));
+            return ctx.Uow().Delete<Models.BasketItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId));
         }
         public async Task Handle(Events.QuantityUpdated e, IMessageHandlerContext ctx)
         {
-            var item = await ctx.UoW().Get<Models.BasketItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
+            var item = await ctx.Uow().Get<Models.BasketItemIndex>(ItemIdGenerator(e.BasketId, e.ProductId)).ConfigureAwait(false);
 
             item.Quantity = e.Quantity;
 
-            await ctx.UoW().Update(ItemIdGenerator(e.BasketId, e.ProductId), item).ConfigureAwait(false);
+            await ctx.Uow().Update(ItemIdGenerator(e.BasketId, e.ProductId), item).ConfigureAwait(false);
         }
         public async Task Handle(Catalog.Product.Events.DescriptionUpdated e, IMessageHandlerContext ctx)
         {
@@ -71,10 +72,10 @@ namespace eShop.Basket.Basket.Entities.Item
             // Update the description for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.UoW().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var item = await ctx.Uow().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
                 item.ProductDescription = e.Description;
 
-                await ctx.UoW().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
+                await ctx.Uow().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
             }
         }
         public async Task Handle(Catalog.Product.Events.PictureSet e, IMessageHandlerContext ctx)
@@ -86,11 +87,11 @@ namespace eShop.Basket.Basket.Entities.Item
             // Update the description for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.UoW().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var item = await ctx.Uow().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
                 item.ProductPictureContents = e.Content;
                 item.ProductPictureContentType = e.ContentType;
 
-                await ctx.UoW().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
+                await ctx.Uow().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
             }
         }
         public async Task Handle(Catalog.Product.Events.PriceUpdated e, IMessageHandlerContext ctx)
@@ -102,10 +103,10 @@ namespace eShop.Basket.Basket.Entities.Item
             // Update the description for all baskets
             foreach (var id in basketIds)
             {
-                var item = await ctx.UoW().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
+                var item = await ctx.Uow().Get<Models.BasketItemIndex>(ItemIdGenerator(id, e.ProductId)).ConfigureAwait(false);
                 item.ProductPrice = e.Price;
 
-                await ctx.UoW().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
+                await ctx.Uow().Update(ItemIdGenerator(id, e.ProductId), item).ConfigureAwait(false);
             }
         }
 

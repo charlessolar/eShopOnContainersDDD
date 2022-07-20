@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using NServiceBus;
 
 namespace eShop.Ordering.Buyer.Entities.PaymentMethod
@@ -25,12 +26,12 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
                 CardType = e.CardType.Value
             };
 
-            return ctx.UoW().Add(e.PaymentMethodId, model);
+            return ctx.Uow().Add(e.PaymentMethodId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.PaymentMethod>(e.PaymentMethodId);
+            return ctx.Uow().Delete<Models.PaymentMethod>(e.PaymentMethodId);
         }
     }
 }

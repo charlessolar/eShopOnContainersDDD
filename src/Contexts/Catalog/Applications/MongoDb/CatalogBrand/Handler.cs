@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
 using NServiceBus;
@@ -20,11 +21,11 @@ namespace eShop.Catalog.CatalogBrand
                 Id = e.BrandId,
                 Brand = e.Brand
             };
-            return ctx.UoW().Add(e.BrandId, model);
+            return ctx.Uow().Add(e.BrandId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.CatalogBrand>(e.BrandId);
+            return ctx.Uow().Delete<Models.CatalogBrand>(e.BrandId);
         }
     }
 }

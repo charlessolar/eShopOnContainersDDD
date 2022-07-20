@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -19,7 +20,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
         {
             if(query.Id.HasValue)
             {
-                var result = await ctx.UoW().Get<Models.Address>(query.Id.Value).ConfigureAwait(false);
+                var result = await ctx.Uow().Get<Models.Address>(query.Id.Value).ConfigureAwait(false);
 
                 await ctx.Result(new[] { result }, 1, 0).ConfigureAwait(false);
                 return;
@@ -38,7 +39,7 @@ namespace eShop.Ordering.Buyer.Entities.Address
                 group.Add("ZipCode", query.Term, Operation.Autocomplete);
             }
 
-            var results = await ctx.UoW().Query<Models.Address>(builder.Build())
+            var results = await ctx.Uow().Query<Models.Address>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -58,12 +59,12 @@ namespace eShop.Ordering.Buyer.Entities.Address
                 ZipCode = e.ZipCode
             };
 
-            return ctx.UoW().Add(e.AddressId, model);
+            return ctx.Uow().Add(e.AddressId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.Address>(e.AddressId);
+            return ctx.Uow().Delete<Models.Address>(e.AddressId);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using NServiceBus;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -20,7 +21,7 @@ namespace eShop.Identity.User
     {
         public async Task Handle(Queries.Identity query, IMessageHandlerContext ctx)
         {
-            var model = await ctx.UoW().Get<Models.User>(query.UserName)
+            var model = await ctx.Uow().Get<Models.User>(query.UserName)
                 .ConfigureAwait(false);
 
             await ctx.Result(model).ConfigureAwait(false);
@@ -33,46 +34,46 @@ namespace eShop.Identity.User
                 GivenName = e.GivenName
             };
 
-            return ctx.UoW().Add(e.UserName, model);
+            return ctx.Uow().Add(e.UserName, model);
         }
 
         public async Task Handle(Events.Disabled e, IMessageHandlerContext ctx)
         {
-            var user = await ctx.UoW().Get<Models.User>(e.UserName).ConfigureAwait(false);
+            var user = await ctx.Uow().Get<Models.User>(e.UserName).ConfigureAwait(false);
             user.Disabled = true;
 
-            await ctx.UoW().Update(user.Id, user).ConfigureAwait(false);
+            await ctx.Uow().Update(user.Id, user).ConfigureAwait(false);
         }
         public async Task Handle(Events.NameChanged e, IMessageHandlerContext ctx)
         {
-            var user = await ctx.UoW().Get<Models.User>(e.UserName).ConfigureAwait(false);
+            var user = await ctx.Uow().Get<Models.User>(e.UserName).ConfigureAwait(false);
             user.GivenName = e.GivenName;
 
-            await ctx.UoW().Update(user.Id, user).ConfigureAwait(false);
+            await ctx.Uow().Update(user.Id, user).ConfigureAwait(false);
         }
 
         public async Task Handle(Events.Enabled e, IMessageHandlerContext ctx)
         {
-            var user = await ctx.UoW().Get<Models.User>(e.UserName).ConfigureAwait(false);
+            var user = await ctx.Uow().Get<Models.User>(e.UserName).ConfigureAwait(false);
             user.Disabled = false;
 
-            await ctx.UoW().Update(user.Id, user).ConfigureAwait(false);
+            await ctx.Uow().Update(user.Id, user).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Role.Events.Assigned e, IMessageHandlerContext ctx)
         {
-            var user = await ctx.UoW().Get<Models.User>(e.UserName).ConfigureAwait(false);
-            var role = await ctx.UoW().Get<Role.Models.Role>(e.RoleId).ConfigureAwait(false);
+            var user = await ctx.Uow().Get<Models.User>(e.UserName).ConfigureAwait(false);
+            var role = await ctx.Uow().Get<Role.Models.Role>(e.RoleId).ConfigureAwait(false);
             user.Roles = user.Roles.TryAdd(role.Name);
 
-            await ctx.UoW().Update(user.Id, user).ConfigureAwait(false);
+            await ctx.Uow().Update(user.Id, user).ConfigureAwait(false);
         }
         public async Task Handle(Entities.Role.Events.Revoked e, IMessageHandlerContext ctx)
         {
-            var user = await ctx.UoW().Get<Models.User>(e.UserName).ConfigureAwait(false);
-            var role = await ctx.UoW().Get<Role.Models.Role>(e.RoleId).ConfigureAwait(false);
+            var user = await ctx.Uow().Get<Models.User>(e.UserName).ConfigureAwait(false);
+            var role = await ctx.Uow().Get<Role.Models.Role>(e.RoleId).ConfigureAwait(false);
             user.Roles = user.Roles.TryRemove(role.Name);
 
-            await ctx.UoW().Update(user.Id, user).ConfigureAwait(false);
+            await ctx.Uow().Update(user.Id, user).ConfigureAwait(false);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -19,7 +20,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
         {
             if (query.Id.HasValue)
             {
-                var result = await ctx.UoW().Get<Models.PaymentMethod>(query.Id.Value).ConfigureAwait(false);
+                var result = await ctx.Uow().Get<Models.PaymentMethod>(query.Id.Value).ConfigureAwait(false);
 
                 await ctx.Result(new[] { result }, 1, 0).ConfigureAwait(false);
                 return;
@@ -34,7 +35,7 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
                 group.Add("CardholderName", query.Term, Operation.Autocomplete);
                 group.Add("CardType", query.Term, Operation.Autocomplete);
             }
-            var results = await ctx.UoW().Query<Models.PaymentMethod>(builder.Build())
+            var results = await ctx.Uow().Query<Models.PaymentMethod>(builder.Build())
                 .ConfigureAwait(false);
 
             await ctx.Result(results.Records, results.Total, results.ElapsedMs).ConfigureAwait(false);
@@ -54,12 +55,12 @@ namespace eShop.Ordering.Buyer.Entities.PaymentMethod
                 CardType = e.CardType.Value
             };
 
-            return ctx.UoW().Add(e.PaymentMethodId, model);
+            return ctx.Uow().Add(e.PaymentMethodId, model);
         }
 
         public Task Handle(Events.Removed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.PaymentMethod>(e.PaymentMethodId);
+            return ctx.Uow().Delete<Models.PaymentMethod>(e.PaymentMethodId);
         }
     }
 }

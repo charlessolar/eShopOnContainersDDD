@@ -10,13 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\OrderingAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.10.101" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.11.102" />
     <PackageReference Include="MongoDB.Driver" Version="2.16.1" />
   </ItemGroup>
 

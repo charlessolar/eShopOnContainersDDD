@@ -4,4 +4,10 @@
     <RepositoryUrl>https://github.com/charlessolar/eShopOnContainersDDD</RepositoryUrl>
     <PackageProjectUrl>https://github.com/charlessolar/eShopOnContainersDDD</PackageProjectUrl>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -39,7 +39,7 @@ var host = Host.CreateDefaultBuilder(args)
     .AddAggregatesNet(c => c
             .EventStore(es => es.AddClient(GetEventStoreConnectionString(configuration), "MongoDb"))
             .NewtonsoftJson()
-            .Application<eShop.UnitOfWork>()
+            .Application<Infrastructure.UnitOfWork.IMongoDb, eShop.UnitOfWork>()
             .NServiceBus(endpointConfiguration)
             .SetCommandDestination("Domain"))
     .ConfigureServices((context, services) =>

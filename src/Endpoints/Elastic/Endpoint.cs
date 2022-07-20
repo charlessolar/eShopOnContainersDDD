@@ -41,7 +41,7 @@ var host = Host.CreateDefaultBuilder(args)
     .AddAggregatesNet(c => c
             .EventStore(es => es.AddClient(GetEventStoreConnectionString(configuration), "Elastic"))
             .NewtonsoftJson()
-            .Application<eShop.UnitOfWork>()
+            .Application<Infrastructure.UnitOfWork.IElastic, eShop.UnitOfWork>()
             .NServiceBus(endpointConfiguration)
             .SetCommandDestination("Domain"))
     .ConfigureServices((context, services) =>

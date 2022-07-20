@@ -10,12 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\CatalogAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.10.101" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.11.102" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Language\Catalog.Language.csproj" />

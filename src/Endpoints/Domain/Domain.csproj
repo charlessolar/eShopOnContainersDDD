@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aggregates.NET" Version="0.17.10.101" />
-    <PackageReference Include="Aggregates.NET.EventStore" Version="0.17.10.101" />
-    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.17.10.101" />
-    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.10.101" />
+    <PackageReference Include="Aggregates.NET" Version="0.17.11.102" />
+    <PackageReference Include="Aggregates.NET.EventStore" Version="0.17.11.102" />
+    <PackageReference Include="Aggregates.NET.NewtonsoftJson" Version="0.17.11.102" />
+    <PackageReference Include="Aggregates.NET.NServiceBus" Version="0.17.11.102" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
@@ -32,10 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Contexts\Basket\Domain\Handlers\Basket.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Catalog\Domain\Handlers\Catalog.Domain.Handlers.csproj" />
-    <ProjectReference Include="..\..\Contexts\Configuration\Domain\Handlers\Configuration.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Identity\Domain\Handlers\Identity.Domain.Handlers.csproj" />
-    <ProjectReference Include="..\..\Contexts\Location\Domain\Handlers\Location.Domain.Handlers.csproj" />
-    <ProjectReference Include="..\..\Contexts\Marketing\Domain\Handlers\Marketing.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Ordering\Domain\Handlers\Ordering.Domain.Handlers.csproj" />
     <ProjectReference Include="..\..\Contexts\Payment\Domain\Handlers\Payment.Domain.Handlers.csproj" />
   </ItemGroup>

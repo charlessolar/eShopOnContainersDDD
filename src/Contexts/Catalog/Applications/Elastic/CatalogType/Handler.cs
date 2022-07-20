@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Aggregates;
+using Aggregates.Application;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Queries;
@@ -19,7 +20,7 @@ namespace eShop.Catalog.CatalogType
         {
             if (query.Id.HasValue)
             {
-                var type = await ctx.UoW().Get<Models.CatalogType>(query.Id.Value)
+                var type = await ctx.Uow().Get<Models.CatalogType>(query.Id.Value)
                     .ConfigureAwait(false);
 
                 await ctx.Result(new[] {type}, 1, 0).ConfigureAwait(false);
@@ -27,7 +28,7 @@ namespace eShop.Catalog.CatalogType
             }
 
             var builder = new QueryBuilder();
-            var results = await ctx.UoW().Query<Models.CatalogType>(builder.Build())
+            var results = await ctx.Uow().Query<Models.CatalogType>(builder.Build())
                 .ConfigureAwait(false);
             if (!string.IsNullOrEmpty(query.Term))
                 builder.Add("Type", query.Term, Operation.Contains);
@@ -41,11 +42,11 @@ namespace eShop.Catalog.CatalogType
                 Id = e.TypeId,
                 Type = e.Type
             };
-            return ctx.UoW().Add(e.TypeId, model);
+            return ctx.Uow().Add(e.TypeId, model);
         }
         public Task Handle(Events.Destroyed e, IMessageHandlerContext ctx)
         {
-            return ctx.UoW().Delete<Models.CatalogType>(e.TypeId);
+            return ctx.Uow().Delete<Models.CatalogType>(e.TypeId);
         }
     }
 }
