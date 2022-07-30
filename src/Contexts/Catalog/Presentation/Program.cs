@@ -1,4 +1,3 @@
-using Basket.Extensions;
 using Catalog.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;

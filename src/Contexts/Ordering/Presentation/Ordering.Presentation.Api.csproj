@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Language\Ordering.Language.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Language\Ordering.Language.csproj" />
   </ItemGroup>
 
 </Project>

@@ -113,8 +113,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain.Tests", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Applications.Tests", "src\Contexts\Basket\Applications\Tests\Basket.Applications.Tests.csproj", "{C60931FC-47BF-498D-8BCB-29F447BA7856}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{6D16AC71-2E54-48FA-A316-DC2676532C24}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Presentation.Api", "src\Contexts\Basket\Presentation\Basket.Presentation.Api.csproj", "{420C2378-B0F0-48F4-BAC9-CCF14EC7400C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Presentation.Api", "src\Contexts\Catalog\Presentation\Catalog.Presentation.Api.csproj", "{AB532219-0DFD-4550-94AB-D41B19427EF9}"
@@ -125,7 +123,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Presentation.Api",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Presentation.Api", "src\Contexts\Payment\Presentation\Payment.Presentation.Api.csproj", "{5DF7A55D-2D6C-45E7-A474-6283DF7CB8CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "src\Frontend\Frontend.csproj", "{74697EEA-B0AF-4822-8D51-FA31CE1546EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "src\Frontend\Frontend.csproj", "{74697EEA-B0AF-4822-8D51-FA31CE1546EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Aggregates.NET" Version="0.17.11.102" />
     <PackageReference Include="FluentValidation" Version="11.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

@@ -1,7 +1,6 @@
-using Basket.Extensions;
+using Ordering.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Ordering.Extensions;
 using Serilog;
 using System.Net;
 
