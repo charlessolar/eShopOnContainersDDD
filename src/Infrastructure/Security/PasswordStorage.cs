@@ -43,13 +43,10 @@ namespace Infrastructure.Security
         public static string CreateHash(string password)
         {
             // Generate a random salt
-            byte[] salt = new byte[SaltBytes];
+            byte[] salt = default;
             try
             {
-                using (RNGCryptoServiceProvider csprng = new RNGCryptoServiceProvider())
-                {
-                    csprng.GetBytes(salt);
-                }
+                salt = RandomNumberGenerator.GetBytes(SaltBytes);
             }
             catch (CryptographicException ex)
             {

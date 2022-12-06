@@ -1,5 +1,9 @@
-﻿using Basket.Filters;
+﻿using Aggregates;
+using Basket.API.Infrastructure.Filters;
+using Basket.Controllers;
+using Basket.Filters;
 using HealthChecks.UI.Client;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -18,10 +22,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public virtual IServiceProvider ConfigureServices(IServiceCollection services)
     {
-
         services.AddControllers(options =>
         {
             options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            options.Filters.Add(typeof(ValidateModelStateFilter));
 
         }) // Added for functional tests
             .AddApplicationPart(typeof(BasketController).Assembly)
@@ -75,7 +79,18 @@ public class Startup
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services.AddOptions();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder => builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+        });
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+        return services.BuildServiceProvider();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -147,6 +162,8 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
     }
+
+
 
 
 }

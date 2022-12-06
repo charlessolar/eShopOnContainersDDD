@@ -1,12 +1,19 @@
+using Aggregates;
 using Catalog.Extensions;
+using Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
+using Serilog.Events;
 using System.Net;
 
 var configuration = GetConfiguration();
 
-Log.Logger = CreateSerilogLogger(configuration);
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 try
 {
@@ -28,8 +35,12 @@ finally
     Log.CloseAndFlush();
 }
 
-IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
-    WebHost.CreateDefaultBuilder(args)
+IHost BuildWebHost(IConfiguration configuration, string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog(CreateSerilogLogger);
+    ConfigureNServiceBus(builder, configuration);
+    builder.WebHost
         .CaptureStartupErrors(false)
         .ConfigureKestrel(options =>
         {
@@ -52,24 +63,65 @@ IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             options.NotFilteredPaths.AddRange(new[] { "/hc", "/liveness" });
         })
         .UseStartup<Startup>()
-        .UseContentRoot(Directory.GetCurrentDirectory())
-        .UseSerilog()
-        .Build();
+        .UseContentRoot(Directory.GetCurrentDirectory());
 
-
-Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+    var host = builder.Build();
+    host.UseSerilogRequestLogging();
+    return host;
+}
+void ConfigureNServiceBus(WebApplicationBuilder builder, IConfiguration configuration)
 {
+
+    var endpointConfiguration = new EndpointConfiguration("Web");
+
+    var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
+    transport.UseConventionalRoutingTopology(QueueType.Classic);
+    transport.ConnectionString(GetRabbitConnectionString(configuration));
+
+    endpointConfiguration.Pipeline.Register(
+                behavior: typeof(IncomingLoggingMessageBehavior),
+                description: "Logs incoming messages"
+            );
+    endpointConfiguration.Pipeline.Register(
+                behavior: typeof(OutgoingLoggingMessageBehavior),
+                description: "Logs outgoing messages"
+            );
+
+    builder.Host
+        .AddAggregatesNet(c => c
+                .NewtonsoftJson()
+                .NServiceBus(endpointConfiguration)
+                .SetCommandDestination("Domain"));
+}
+string GetRabbitConnectionString(IConfiguration config)
+{
+    var host = config["RabbitConnection"];
+    var user = config["RabbitUserName"];
+    var password = config["RabbitPassword"];
+
+    if (string.IsNullOrEmpty(user))
+        return $"host={host}";
+
+    return $"host={host};username={user};password={password};";
+}
+
+void CreateSerilogLogger(HostBuilderContext context, IServiceProvider services, LoggerConfiguration logConfiguration)
+{
+    var configuration = context.Configuration;
     var seqServerUrl = configuration["Serilog:SeqServerUrl"];
     var logstashUrl = configuration["Serilog:LogstashgUrl"];
-    return new LoggerConfiguration()
+    logConfiguration
         .MinimumLevel.Verbose()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
         .Enrich.WithProperty("ApplicationContext", Program.AppName)
+        .ReadFrom.Configuration(configuration)
+        .ReadFrom.Services(services)
         .Enrich.FromLogContext()
         .WriteTo.Console()
         .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
-        .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
-        .ReadFrom.Configuration(configuration)
-        .CreateLogger();
+        .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl, queueLimitBytes: null);
+
 }
 
 IConfiguration GetConfiguration()

@@ -20,9 +20,8 @@ var configuration = configurationBuilder.Build();
 
 var endpointConfiguration = new EndpointConfiguration("Elastic");
 
-endpointConfiguration.UsePersistence<InMemoryPersistence>();
 var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
-transport.UseConventionalRoutingTopology();
+transport.UseConventionalRoutingTopology(QueueType.Quorum);
 transport.ConnectionString(GetRabbitConnectionString(configuration));
 
 endpointConfiguration.Pipeline.Register(
